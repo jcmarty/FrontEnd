@@ -3,7 +3,6 @@ import Router from "vue-router";
 import App from "./App.vue";
 import Login from "./views/Login.vue";
 import Admin from "./views/Admin.vue";
-import Registrar from "./views/Registrar.vue";
 import Dashboard from "./components/Dashboard.vue";
 import SubjectsManager from "./components/SubjectsManager.vue";
 import InstructorManager from "./components/InstructorManager.vue";
@@ -25,9 +24,6 @@ import StrandsManager from "./components/StrandsManager.vue";
 import TrackManager from "./components/TrackManager.vue";
 import AcademicYearManager from "./components/AcademicYearManager.vue";
 import UserAccountManager from  "./components/UserAccountManager.vue";
-import StudentRegistration from "./components/enrollment/StudentRegistrationManager.vue";
-import StudentEnrollment from "./components/enrollment/StudentEnrollmentManager.vue";
-import StudentGrades from "./components/enrollment/StudentGrades.vue";
 Vue.use(Router);
 
 
@@ -44,15 +40,6 @@ export default new Router({
       component: Login,
       meta: {
         guest: true
-      }
-    },
-    {
-      path: "/registrar",
-      name: "registrar",
-      component: Registrar,
-      meta: {
-        requiresAuth: true,
-        is_registrar: true
       }
     },
     {
@@ -237,30 +224,7 @@ export default new Router({
             setTimeout(() => next(), 2000);
           },
         },
-        {
-          path: 'StudentRegistration',
-          name: 'StudentRegistration',
-          component: StudentRegistration,
-          beforeEnter(to, from, next){
-            setTimeout(() => next(), 2000);
-          },
-        },
-        {
-          path: 'StudentEnrollment',
-          name: 'StudentEnrollment',
-          component: StudentEnrollment,
-          beforeEnter(to, from, next){
-            setTimeout(() => next(), 2000);
-          }
-        },
-        {
-          path: 'StudentGrades',
-          name: 'StudentGrades',
-          component: StudentGrades,
-          beforeEnter(to, from, next){
-            setTimeout(() => next(), 2000);
-          }
-        }
+
       ]
     }
   ]

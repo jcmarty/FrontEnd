@@ -90,14 +90,10 @@
                 //save state user in store
                 this.$store.dispatch('setUser', response.data.user);
                 //redirect page to admin page
-
-                if (response.data.user.role === "System Administrator"){
                   this.$router.replace("/admin");
-                }
-                else if(response.data.user.role === "Registrar"){
-                  this.$router.replace("/registrar");
-                }
-                console.log(response.data.user)
+
+                  console.log(response.data.user)
+
             })
             .catch(error => {
               if(error.response.status==401){
