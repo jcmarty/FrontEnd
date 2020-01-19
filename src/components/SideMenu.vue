@@ -49,6 +49,7 @@
                 <b-collapse tag="ul" class="nav child_menu" id="student" accordion="sideMenuSubAccordion">
                   <router-link tag="li" to="/manage/registration/student"><a class="super_child_menu">Registration</a></router-link>
                   <router-link tag="li" to="/manage/enrollment/student"><a class="super_child_menu">Enrollment</a></router-link>
+                  <router-link tag="li" to="/manage/grades/student"><a class="super_child_menu">Grades</a></router-link>
                 </b-collapse>
               </li>
             </b-collapse>

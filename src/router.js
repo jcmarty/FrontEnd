@@ -26,6 +26,7 @@ import AcademicYearManager from "./components/AcademicYearManager.vue";
 import UserAccountManager from  "./components/UserAccountManager.vue";
 import StudentRegistrationManager from "./components/StudentRegistrationManager.vue";
 import StudentEnrollmentManager from "./components/StudentEnrollmentManager.vue";
+import StudentGradesManager from "./components/StudentGradesManager.vue";
 Vue.use(Router);
 
 
@@ -238,6 +239,14 @@ export default new Router({
           path: '/manage/enrollment/student',
           name: 'StudentEnrollmentManager',
           component: StudentEnrollmentManager,
+          beforeEnter(to, from, next){
+            setTimeout(() => next(), 2000);
+          },
+        },
+        {
+          path: '/manage/grades/student',
+          name: 'StudentGradesManager',
+          component: StudentGradesManager,
           beforeEnter(to, from, next){
             setTimeout(() => next(), 2000);
           },
