@@ -2,275 +2,6 @@
   <div>
     <h1>Manage Student Registration</h1>
     <div>
-      <b-modal id="editInstructorModal" ref="editInstructorModal"
-        title="Edit Instructor Information" size="xl" hide-footer>
-        <!-- An alert for displaying success messages -->
-        <b-alert variant="success"
-          :show="updateSuccessCountDown"
-          @dismissed="updateSuccessCountDown=0"
-          dismissible fade>
-            {{alertMessage}}
-        </b-alert>
-
-        <!-- An alert for displaying warning and/or error messages -->
-        <b-alert variant="danger"
-          :show="updateErrorCountDown"
-          @dismissed="updateErrorCountDown=0"
-          dismissible fade>
-            <p>{{alertMessage}}</p>
-            <ul>
-              <li v-for="error in errors">{{ error }}</li>
-            </ul>
-        </b-alert>
-
-        <b-tabs v-model="tabIndex">
-          <b-tab title="Personal Information">
-            <!-- Start of Student information form update -->
-              <b-form>
-                <b-form-row>
-                  <b-col cols="12" md="6" lg="3">
-                    <b-form-group
-                      class="academicyear"
-                      label="Academic Year"
-                      label-for="academicYear">
-                      <b-form-select
-                        v-model="instructor.gender"
-                        :options="genderOptions">
-                      </b-form-select>
-                    </b-form-group>
-                  </b-col>
-
-                  <b-col cols="12" md="6" lg="3">
-                    <b-form-group
-                      class="semester"
-                      label="Semester"
-                      label-for="Semester">
-                      <b-form-select
-                        v-model="instructor.gender"
-                        :options="genderOptions">
-                      </b-form-select>
-                    </b-form-group>
-                  </b-col>
-
-                  <b-col cols="12" md="6" lg="3">
-                    <b-form-group
-                      class="lastname"
-                      label="Last Name"
-                      label-for="lastName">
-                      <b-form-input
-                        type="text"
-                        v-model="instructor.middle_name"
-                        id="lastName">
-                      </b-form-input>
-                    </b-form-group>
-                  </b-col>
-
-                  <b-col cols="12" md="6" lg="3">
-                    <b-form-group
-                      class="firstname"
-                      label="First Name"
-                      label-for="firstName">
-                      <b-form-input
-                        type="text"
-                        v-model="instructor.middle_name"
-                        id="firstName">
-                      </b-form-input>
-                    </b-form-group>
-                  </b-col>
-
-                  <b-col cols="12" md="6" lg="3">
-                    <b-form-group
-                      class="middlename"
-                      label="Middle Name"
-                      label-for="middleName">
-                      <b-form-input
-                        type="text"
-                        v-model="instructor.last_name"
-                        id="middleName">
-                      </b-form-input>
-                    </b-form-group>
-                  </b-col>
-
-                  <b-col cols="12" md="6" lg="3">
-                    <b-form-group
-                      class="suffixname"
-                      label="Suffix Name"
-                      label-for="suffixName">
-                      <b-form-input
-                        type="text"
-                        v-model="instructor.last_name"
-                        id="suffixName">
-                      </b-form-input>
-                    </b-form-group>
-                  </b-col>
-
-                  <b-col cols="12" md="6" lg="3">
-                    <b-form-group
-                      class="course"
-                      label="Course"
-                      label-for="Course">
-                      <b-form-select
-                        v-model="instructor.gender"
-                        :options="genderOptions">
-                      </b-form-select>
-                    </b-form-group>
-                  </b-col>
-
-                  <b-col cols="12" md="6" lg="3">
-                    <b-form-group
-                      class="yearlevel"
-                      label="Year Level"
-                      label-for="yearLevel">
-                      <b-form-select
-                        v-model="instructor.gender"
-                        :options="genderOptions">
-                      </b-form-select>
-                    </b-form-group>
-                  </b-col>
-
-                  <b-col cols="12" md="6" lg="3">
-                    <b-form-group
-                      class="studentstatus"
-                      label="Student Status"
-                      label-for="studentStatus">
-                      <b-form-select
-                        v-model="instructor.gender"
-                        :options="genderOptions">
-                      </b-form-select>
-                    </b-form-group>
-                  </b-col>
-
-                  <b-col cols="12" md="6" lg="3">
-                    <b-form-group
-                      class="academicstatus"
-                      label="Academic Status"
-                      label-for="academicStatus">
-                      <b-form-select
-                        v-model="instructor.gender"
-                        :options="genderOptions">
-                      </b-form-select>
-                    </b-form-group>
-                  </b-col>
-
-                  <b-col cols="12" md="6" lg="3">
-                    <b-form-group
-                      class="schoollastattended"
-                      label="School Last Attended"
-                      label-for="schoolLastAttended">
-                      <b-form-input
-                        type="text"
-                        v-model="instructor.last_name"
-                        id="schoolLastAttemded">
-                      </b-form-input>
-                    </b-form-group>
-                  </b-col>
-
-                  <b-col cols="12" md="6" lg="3">
-                    <b-form-group
-                      class="schooladdress"
-                      label="School Address"
-                      label-for="schoolAddress">
-                      <b-form-input
-                        type="text"
-                        v-model="instructor.last_name"
-                        id="schoolAddress">
-                      </b-form-input>
-                    </b-form-group>
-                  </b-col>
-                </b-form-row>
-
-                <b-form-row>
-                  <b-col>
-                    <b-button variant="danger" @click="hideModal('editInstructorModal')">
-                      Back
-                    </b-button>
-                  </b-col>
-                  <b-col class="d-flex justify-content-end">
-                    <b-button variant="primary" @click="nextTab">
-                      Next
-                    </b-button>
-                  </b-col>
-                </b-form-row>
-              </b-form>
-              <!-- End of Student Information form update -->
-          </b-tab>
-
-          <b-tab title="Educational Attainment">
-            <b-form>
-              <b-form-row>
-                <b-col cols="12" md="6" lg="4">
-                  <b-form-group
-                    class="educational_attainment"
-                    label="Educational Attainment"
-                    label-for="educational_attainment">
-                    <b-form-textarea
-                      id="educational_attainment"
-                      v-model="instructor.educational_attainment"
-                      rows="3"
-                      max-rows="6">
-                    </b-form-textarea>
-                  </b-form-group>
-                </b-col>
-                <b-col cols="12" md="6" lg="4">
-                  <b-form-group
-                    class="certifications"
-                    label="Certifications"
-                    label-for="certifications">
-                    <b-form-textarea
-                      id="certifications"
-                      v-model="instructor.certifications"
-                      rows="3"
-                      max-rows="6">
-                    </b-form-textarea>
-                  </b-form-group>
-                </b-col>
-                <b-col cols="12" md="6" lg="4">
-                  <b-form-group
-                    class="work_experience"
-                    label="Work Experience"
-                    label-for="work_experience">
-                    <b-form-textarea
-                      id="work_experience"
-                      v-model="instructor.work_experience"
-                      rows="3"
-                      max-rows="6">
-                    </b-form-textarea>
-                  </b-form-group>
-                </b-col>
-              </b-form-row>
-              <b-form-row>
-                <b-col>
-                  <b-button variant="primary" @click="tabIndex--">
-                    Previous
-                  </b-button>
-                </b-col>
-                <b-col class="d-flex justify-content-end">
-                  <!--TODO:
-                      ONLY call updateInstructor method if at
-                      least one instructor information was changed -->
-                  <b-button variant="primary" @click="updateInstructor">
-                    Update
-                  </b-button>
-                </b-col>
-              </b-form-row>
-            </b-form>
-          </b-tab>
-        </b-tabs>
-      </b-modal>
-
-      <b-modal id="deleteInstructorModal" ref="deleteInstructorModal" title="Delete Instructor" size="lg">
-        <p>Are you sure you want to remove {{ this.instructor.first_name }} {{ this.instructor.last_name }}?</p>
-        <template v-slot:modal-footer="{ cancel, ok }">
-          <!-- Emulate built in modal footer ok and cancel button actions -->
-          <b-button size="sm" variant="danger" @click="hideModal('deleteInstructorModal')">
-            Cancel
-          </b-button>
-          <b-button size="sm" variant="success" @click="deleteInstructor()">
-            Delete
-          </b-button>
-        </template>
-      </b-modal>
-
       <!-- An alert for displaying success messages -->
       <b-alert variant="success"
         :show="dismissSuccessCountDown"
@@ -291,7 +22,7 @@
       </b-alert>
 
       <!-- Tab Group with forms for registration of students -->
-      <b-tabs v-if="showForm" v-model="tabIndex">
+      <b-tabs v-model="tabIndex">
         <b-tab title="Student Information">
         <!-- Start form Student information -->
           <b-form>
@@ -302,7 +33,6 @@
                   label="Academic Year"
                   label-for="academicYear">
                   <b-form-select
-                    v-model="instructor.gender"
                     :options="genderOptions">
                   </b-form-select>
                 </b-form-group>
@@ -314,7 +44,6 @@
                   label="Semester"
                   label-for="Semester">
                   <b-form-select
-                    v-model="instructor.gender"
                     :options="genderOptions">
                   </b-form-select>
                 </b-form-group>
@@ -327,7 +56,6 @@
                   label-for="lastName">
                   <b-form-input
                     type="text"
-                    v-model="instructor.middle_name"
                     id="lastName">
                   </b-form-input>
                 </b-form-group>
@@ -340,7 +68,6 @@
                   label-for="firstName">
                   <b-form-input
                     type="text"
-                    v-model="instructor.middle_name"
                     id="firstName">
                   </b-form-input>
                 </b-form-group>
@@ -353,7 +80,6 @@
                   label-for="middleName">
                   <b-form-input
                     type="text"
-                    v-model="instructor.last_name"
                     id="middleName">
                   </b-form-input>
                 </b-form-group>
@@ -366,7 +92,6 @@
                   label-for="suffixName">
                   <b-form-input
                     type="text"
-                    v-model="instructor.last_name"
                     id="suffixName">
                   </b-form-input>
                 </b-form-group>
@@ -378,7 +103,6 @@
                   label="Course"
                   label-for="Course">
                   <b-form-select
-                    v-model="instructor.gender"
                     :options="genderOptions">
                   </b-form-select>
                 </b-form-group>
@@ -390,7 +114,6 @@
                   label="Year Level"
                   label-for="yearLevel">
                   <b-form-select
-                    v-model="instructor.gender"
                     :options="genderOptions">
                   </b-form-select>
                 </b-form-group>
@@ -402,8 +125,7 @@
                   label="Student Status"
                   label-for="studentStatus">
                   <b-form-select
-                    v-model="instructor.gender"
-                    :options="genderOptions">
+                    :options="StudentStatusOptions">
                   </b-form-select>
                 </b-form-group>
               </b-col>
@@ -414,8 +136,7 @@
                   label="Academic Status"
                   label-for="academicStatus">
                   <b-form-select
-                    v-model="instructor.gender"
-                    :options="genderOptions">
+                    :options="AcademicStatusOptions">
                   </b-form-select>
                 </b-form-group>
               </b-col>
@@ -427,7 +148,6 @@
                   label-for="schoolLastAttended">
                   <b-form-input
                     type="text"
-                    v-model="instructor.last_name"
                     id="schoolLastAttemded">
                   </b-form-input>
                 </b-form-group>
@@ -440,7 +160,6 @@
                   label-for="schoolAddress">
                   <b-form-input
                     type="text"
-                    v-model="instructor.last_name"
                     id="schoolAddress">
                   </b-form-input>
                 </b-form-group>
@@ -476,63 +195,102 @@
                   label-for="presentAddress">
                   <b-form-input
                     type="text"
-                    v-model="instructor.email"
                     id="presentAddress"
                     required>
                   </b-form-input>
                 </b-form-group>
             </b-col>
 
-              <b-col cols="12" md="6" lg="3">
-                <b-form-group
-                  class="postalcode"
-                  label="Postal Code"
-                  label-for="postalCode">
-                  <b-form-input
-                    type="number"
-                    v-model="instructor.email"
-                    id="postalCode"
-                    required>
-                  </b-form-input>
-                </b-form-group>
-              </b-col>
+            <b-col cols="12" md="6" lg="3">
+              <b-form-group
+                class="barangay"
+                label="Barangay"
+                label-for="Barangay">
+                <b-form-input
+                  type="text"
+                  id="Barangay"
+                  required>
+                </b-form-input>
+              </b-form-group>
+            </b-col>
 
-              <b-col cols="12" md="6" lg="3">
+            <b-col cols="12" md="6" lg="3">
+              <b-form-group
+                class="citymunicipality"
+                label="City / Municipality"
+                label-for="cityMunicipality">
+                <b-form-input
+                  type="text"
+                  id="cityMunicipality"
+                  required>
+                </b-form-input>
+              </b-form-group>
+            </b-col>
+
+            <b-col cols="12" md="6" lg="2">
+              <b-form-group
+                class="province"
+                label="Province"
+                label-for="Province">
+                <b-form-input
+                  type="text"
+                  id="Province"
+                  required>
+                </b-form-input>
+              </b-form-group>
+            </b-col>
+
+            <b-col cols="12" md="6" lg="1">
+              <b-form-group
+                class="postalcode"
+                label="Postal Code"
+                label-for="postalCode">
+                <b-form-input
+                  type="text"
+                  id="postalCode"
+                  required>
+                </b-form-input>
+              </b-form-group>
+            </b-col>
+
+          </b-form-row>
+
+          <b-form-row>
+
+
+              <b-col cols="12" md="6" lg="4">
                 <b-form-group
                   class="emailaddress"
                   label="Email Address"
                   label-for="emailAddress">
                   <b-form-input
                     type="email"
-                    v-model="instructor.email"
                     id="emailAddress"
                     required>
                   </b-form-input>
                 </b-form-group>
               </b-col>
 
-              <b-col cols="12" md="6" lg="3">
+              <b-col cols="12" md="6" lg="2">
                 <b-form-group
                   class="cellphoneno"
                   label="Cellphone No."
                   label-for="cellphoneNo">
                   <b-form-input
                     type="number"
-                    v-model="instructor.email"
                     id="cellphoneNo"
                     required>
                   </b-form-input>
                 </b-form-group>
               </b-col>
 
-              <b-col cols="12" md="6" lg="3">
+              <b-col cols="12" md="6" lg="2">
                 <b-form-group
                   class="telephoneno"
                   label="Telephone No."
                   label-for="telephoneNo">
                   <b-form-input
                     type="text"
-                    v-model="instructor.email"
                     id="telephoneNo"
                     required>
                   </b-form-input>
@@ -545,7 +303,6 @@
                   label="Birth Date"
                   label-for="birthDate">
                   <datepicker
-                    v-model="instructor.birth_date"
                     id="birthDate"
                     :clear-button="true"
                     :calendar-button="true"
@@ -556,14 +313,13 @@
                 </b-form-group>
               </b-col>
 
-              <b-col cols="12" md="6" lg="3">
+              <b-col cols="12" md="6" lg="2">
                 <b-form-group
                   class="age"
                   label="Age"
                   label-for="Age">
                   <b-form-input
                     type="text"
-                    v-model="instructor.email"
                     id="Age"
                     required>
                   </b-form-input>
@@ -577,7 +333,6 @@
                   label-for="placeofBirth">
                   <b-form-input
                     type="text"
-                    v-model="instructor.email"
                     id="placeofBirth"
                     required>
                   </b-form-input>
@@ -590,7 +345,6 @@
                   label="Gender"
                   label-for="Gender">
                   <b-form-select
-                    v-model="instructor.gender"
                     :options="genderOptions">
                   </b-form-select>
                 </b-form-group>
@@ -603,7 +357,6 @@
                   label-for="bloodType">
                   <b-form-input
                     type="text"
-                    v-model="instructor.email"
                     id="bloodType"
                     required>
                   </b-form-input>
@@ -613,11 +366,10 @@
               <b-col cols="12" md="6" lg="3">
                 <b-form-group
                   class="citizenship"
-                  label="Cityizenship"
+                  label="Citizenship"
                   label-for="citizenShip">
                   <b-form-input
                     type="text"
-                    v-model="instructor.email"
                     id="citizenShip"
                     required>
                   </b-form-input>
@@ -631,7 +383,6 @@
                   label-for="civilStatus">
                   <b-form-input
                     type="text"
-                    v-model="instructor.email"
                     id="civilStatus"
                     required>
                   </b-form-input>
@@ -666,7 +417,6 @@
                   label-for="fathersName">
                   <b-form-input
                     type="text"
-                    v-model="instructor.contact_no"
                     id="fathersName">
                   </b-form-input>
                 </b-form-group>
@@ -679,7 +429,6 @@
                   label-for="mothersName">
                   <b-form-input
                     type="text"
-                    v-model="instructor.address"
                     id="mothersName">
                   </b-form-input>
                 </b-form-group>
@@ -694,7 +443,6 @@
                   label-for="contactPerson">
                   <b-form-input
                     type="number"
-                    v-model="instructor.city"
                     id="contactPerson">
                   </b-form-input>
                 </b-form-group>
@@ -707,7 +455,6 @@
                   label-for="contactNumber">
                   <b-form-input
                     type="text"
-                    v-model="instructor.postal_code"
                     id="contactNumber">
                   </b-form-input>
                 </b-form-group>
@@ -720,7 +467,6 @@
                   label-for="contactAddress">
                   <b-form-input
                     type="text"
-                    v-model="instructor.province"
                     id="contactAddress">
                   </b-form-input>
                 </b-form-group>
@@ -744,19 +490,19 @@
       </b-tabs>
     </div>
 
-    <b-button variant="success" size="sm" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
-      Add New Instructor
-    </b-button>
 
-    <!-- Data Grid for displaying list of instructors -->
-    <ag-grid-vue class="ag-theme-material"
-      :columnDefs="personalInfoColumnDefs"
-      :rowData="personalInfoRowData"
-      :animateRows="true"
-      :pagination="true"
-      :paginationPageSize="10"
-      :gridOptions="gridOptions">
-    </ag-grid-vue>
+    <b-form-row>
+      <h5>Pre Registered Students</h5>
+      <ag-grid-vue class="ag-theme-material"
+        :columnDefs="PreregisteredColDef"
+        :rowData="PreregisteredRowData"
+        :animateRows="true"
+        :pagination="true"
+        :paginationPageSize="10"
+        :gridOptions="gridOptions">
+      </ag-grid-vue>
+    </b-form-row>
+
 
   </div>
 </template>
@@ -768,16 +514,12 @@
   import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue';
   import '../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
   import '../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
-  import InstructorActionButtons from "./ActionButtons/InstructorActionButtons.vue";
-  import PreferredSubjectButtons from "./ActionButtons/PreferredSubjectButtons.vue";
 
   export default{
     name: 'StudentRegistrationManager',
     components: {
       AgGridVue,
       Datepicker,
-      InstructorActionButtons,
-      PreferredSubjectButtons,
       VueTimepicker
     },
     data() {
@@ -786,63 +528,24 @@
         tabIndex: 0,
         secondTabDisabled: true,
         lastTabsDisabled: true,
-        personalInfoColumnDefs: null,
-        personalInfoRowData: null,
-        preferredSubjectsColumnDefs: null,
-        preferredSubjectsRowData: null,
-        timeAvailabilityColumnDefs: null,
-        timeAvailabilityRowData: null,
-        instructorId: null,
-        instructor: {
-          employee_id: null,
-          first_name: null,
-          middle_name: null,
-          last_name: null,
-          birth_date: null,
-          gender: null,
-          email: null,
-          contact_no: null,
-          address: null,
-          city: null,
-          province: null,
-          postal_code: null,
-          work_experience: null,
-          certifications: null,
-          educational_attainment: null,
-          availabilities: [],
-          preferred_subjects: [],
-          active: 1
-        },
-        subjectOptions: [],
+        PreregisteredColDef: null,
+        PreregisteredRowData: null,
         academicYearOptions: [],
         semesterOptions: [],
-        newPreferredSubject: {
-          subject_id: null,
-          academic_year_id: null,
-          semester_id: null,
-          active: 1
-        },
         genderOptions: [
           {value: 'Male', text: 'Male'},
           {value: 'Female', text: 'Female'}
         ],
-        dayOptions: [
-          {value: 'Monday', text: 'Monday'},
-          {value: 'Tuesday', text: 'Tuesday'},
-          {value: 'Wednesday', text: 'Wednesday'},
-          {value: 'Thursday', text: 'Thursday'},
-          {value: 'Friday', text: 'Friday'},
-          {value: 'Saturday', text: 'Saturday'},
+        StudentStatusOptions: [
+          {value: 'Old', text: 'Old'},
+          {value: 'New', text: 'New'},
+          {value: 'Transferee', text: 'Transferee'}
         ],
-        newTimeAvailability: {
-          instructor_id: null,
-          academic_year_id: null,
-          semester_id: null,
-          day: null,
-          time_start: null,
-          time_end: null,
-          active: 1
-        },
+        AcademicStatusOptions: [
+          {value: 'Regular', text: 'Regular'},
+          {value: 'Irregular', text: 'Irregular'}
+
+        ],
         calendarIcon: "fa fa-calendar",
         birthDateFormat: "MMM dd, yyyy",
         showForm: false,
@@ -857,251 +560,73 @@
     },
     beforeMount(){
       this.gridOptions = {
-        context: {
-            componentParent: this
-        }
+          context: {
+              componentParent: this
+          }
       };
-      this.subjectsGridOptions = {
-        context: {
-            componentParent: this
-        }
-      }
-      this.timeAvailabilityColumnDefs = [
-        {headerName: 'Day', field: 'day', sortable: true, filter: true},
-        {headerName: 'Start', field: 'time_start', sortable: true, filter: true},
-        {headerName: 'End', field: 'time_end', sortable: true, filter: true},
-        {headerName: 'Academic Year', field: 'academic_year', sortable: true, filter: true},
-        {headerName: 'Semester', field: 'semester', sortable: true, filter: true}
+
+      this.PreregisteredColDef = [
+          {headerName: 'ID', field: 'id', sortable: true, filter: true, width: 150},
+          {headerName: 'First Name', field: 'first_name', sortable: true, filter: true, width: 150,},
+          {headerName: 'Middle Name', field: 'middle_name', sortable: true, filter: true, width: 150,},
+          {headerName: 'Last Name', field: 'last_name', sortable: true, filter: true, width: 150,},
+          {headerName: 'Suffix Name', field: 'suffix_name', sortable: true, filter: true, width: 150,},
+          {headerName: 'Gender', field: 'gender', sortable: true, filter: true, width: 150,},
+          {headerName: 'Address', field: 'address', sortable: true, filter: true, width: 150,},
+          {headerName: 'Civil Status', field: 'civil_status', sortable: true, filter: true, width: 150,},
+          {headerName: 'City', field: 'city', sortable: true, filter: true, width: 150,},
+          {headerName: 'Postal', field: 'postal', sortable: true, filter: true, width: 150,},
+          {headerName: 'Province', field: 'province', sortable: true, filter: true, width: 150,},
+          {headerName: 'Telephone', field: 'telephone', sortable: true, filter: true, width: 150,},
+          {headerName: 'Cellphone', field: 'cellphone', sortable: true, filter: true, width: 150,},
+          {headerName: 'Email', field: 'email', sortable: true, filter: true, width: 150,},
+          {headerName: 'Birthdate', field: 'birthdate', sortable: true, filter: true, width: 150,},
+          {headerName: 'Birth Place', field: 'birth_place', sortable: true, filter: true, width: 150,},
       ];
-      this.preferredSubjectsColumnDefs = [
-        {headerName: 'Subject Code', field: 'subject_id', sortable: true, filter: true},
-        {headerName: 'Description', field: 'subject_description', sortable: true, filter: true},
-        {headerName: 'Academic Year', field: 'academic_year', sortable: true, filter: true},
-        {headerName: 'Semester', field: 'semester', sortable: true, filter: true},
-        {headerName: 'Actions', field: 'id', width: 350, cellRendererFramework: 'PreferredSubjectButtons'}
-      ];
-      this.personalInfoColumnDefs = [
-        {headerName: 'Employee ID', field: 'employee_id', sortable: true, filter: true},
-        {headerName: 'Firstname', field: 'first_name', sortable: true, filter: true},
-        {headerName: 'Middlename', field: 'middle_name'},
-        {headerName: 'Lastname', field: 'last_name', sortable: true, filter: true},
-        {headerName: 'Birth Date', field: 'birth_date', sortable: true, filter: true},
-        {headerName: 'Gender', field: 'gender', sortable: true, filter: true},
-        {headerName: 'Email', field: 'email', sortable: true},
-        {headerName: 'Contact No', field: 'contact_no'},
-        {headerName: 'Address', field: 'address'},
-        {headerName: 'City', field: 'city', sortable: true, filter: true},
-        {headerName: 'Province', field: 'province', sortable: true, filter: true},
-        {headerName: 'Work Experience', field: 'work_experience'},
-        {headerName: 'Certifications', field: 'certifications'},
-        {headerName: 'Highest Educational Attainment', field: 'educational_attainment'},
-        {headerName: 'Status', field: 'active', width: 120,
-          cellRenderer: (data) => {
-            if(data.value === 1){
-              return 'Active';
-            } else {
-              return 'Inactive';
-            }
-          }},
-        {headerName: 'Actions', field: 'id', width: 350, cellRendererFramework: 'InstructorActionButtons'}
-      ];
+
+
     },
     mounted () {
-      this.gridApi = this.gridOptions.api;
-      this.subjectsGidApi = this.subjectsGridOptions.api;
-      this.getInstructors();
-      this.getSubjects();
-      if(this.instructorId != null){
-        this.getPreferredSubjects();
-        this.getTimeAvailabilities();
-      }
-      this.getAcademicYears();
       this.getSemesters();
-      this.newPreferredSubject.academic_year_id = this.settings.current_ay;
-      this.newPreferredSubject.semester_id = this.settings.current_sem;
-      this.newTimeAvailability.academic_year_id = this.settings.current_ay;
-      this.newTimeAvailability.semester_id = this.settings.current_sem;
     },
     methods:{
-      clearInstructorData: function(){
-        this.id = null;
-        this.instructor = {
-          employee_id: null,
-          first_name: null,
-          middle_name: null,
-          last_name: null,
-          birth_date: null,
-          gender: null,
-          email: null,
-          contact_no: null,
-          address: null,
-          city: null,
-          province: null,
-          postal_code: null,
-          work_experience: null,
-          certifications: null,
-          educational_attainment: null,
-          availabilities: [],
-          preferred_subjects: [],
-          active: 1
-        };
-      },
-      hideModal: function($modal){
-        this.clearInstructorData();
-        this.$refs[$modal].hide();
-      },
-      nextTab: function(){
-        this.secondTabDisabled = false;
-        this.tabIndex++;
-      },
-      getTimeAvailabilities: function(){
-        Axios
-          .get('http://localhost/api/v1/instructors/' + this.instructorId + '/availabilities', {
-            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-          })
-          .then(response => {
-            //console.log(response.data);
-            this.timeAvailabilityRowData = response.data;
-
-          })
-          .catch(error => {
-            console.log(error.response);
-          })
-      },
-      addTimeAvailability: function(){
-        this.errors = [];
-        // timepicker is returning an OBJECT in 12-hr format (hh:mm A)
-        // use moment to convert and format object to time in 24-hr format (HH:mm)
-        this.newTimeAvailability.time_start
-          = moment(this.newTimeAvailability.time_start.hh + ":"
-            + this.newTimeAvailability.time_start.mm + " "
-            + this.newTimeAvailability.time_start.A, ["hh:mm A"]).format("HH:mm");
-        this.newTimeAvailability.time_end
-          = moment(this.newTimeAvailability.time_end.hh
-            + ":" + this.newTimeAvailability.time_end.mm + " "
-            + this.newTimeAvailability.time_end.A, ["hh:mm A"]).format("HH:mm");
-        Axios
-          .post('http://localhost/api/v1/instructors/' + this.instructorId + '/availabilities', this.newTimeAvailability, {
-            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-          })
-          .then(response => {
-            this.alertMessage = response.data.message;
-            this.dismissSuccessCountDown = this.dismissSecs;
-            // reset time_start and time_end by converting time_start and time_end back to empty objects
-            this.newTimeAvailability.time_start = {"HH":"","H":"","hh":"","h":"","a":"","A":"","kk":"","k":"","m":"","mm":"","s":"","ss":""};
-            this.newTimeAvailability.time_end = {"HH":"","H":"","hh":"","h":"","a":"","A":"","kk":"","k":"","m":"","mm":"","s":"","ss":""};
-            this.getTimeAvailabilities();
-          })
-          .catch(error => {
-            this.alertMessage = error.response.data.message;
-            const values = Object.values(error.response.data.errors);
-            for(const val of values){
-              for(const err of val){
-                this.errors.push(err);
-              }
-            }
-            this.dismissErrorCountDown = this.dismissSecs;
-          })
-      },
-      getPreferredSubjects: function(){
-        Axios
-          .get('http://localhost/api/v1/instructors/' + this.instructorId + '/preferred_subjects', {
-            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-          })
-          .then(response => {
-            //console.log(response.data);
-            this.preferredSubjectsRowData = response.data;
-          })
-          .catch(error => {
-            console.log(error.response);
-          })
-      },
-      addPreferredSubject: function($source){
-        this.errors = [];
-        Axios
-          .post('http://localhost/api/v1/instructors/' + this.instructorId + '/preferred_subjects', this.newPreferredSubject, {
-            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-          })
-          .then(response => {
-            this.alertMessage = response.data.message;
-            if($source == 'update'){
-              this.updateSuccessCountDown = this.dismissSecs;
-            } else {
-              this.dismissSuccessCountDown = this.dismissSecs;
-            }
-            this.getPreferredSubjects();
-          })
-          .catch(error => {
-            this.alertMessage = error.response.data.message;
-            const values = Object.values(error.response.data.errors);
-            for(const val of values){
-              for(const err of val){
-                this.errors.push(err);
-              }
-            }
-            this.dismissErrorCountDown = this.dismissSecs;
-          })
-      },
-      getSubjects: function(){
-        Axios
-          .get('http://localhost/api/v1/subjects', {
-            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-          })
-          .then(response => {
-            //console.log(response.data);
-            for(const subject of response.data){
-              this.subjectOptions.push({value: subject.id, text: subject.subject_description});
-            }
-          })
-          .catch(error => {
-            console.log(error.response);
-          })
-      },
-      getAcademicYears: function(){
-        Axios
-          .get('http://localhost/api/v1/academic_years', {
-            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-          })
-          .then(response => {
-            //console.log(response.data);
-            for(const ay of response.data){
-              this.academicYearOptions.push({value: ay.id, text: ay.academic_year});
-            }
-          })
-          .catch(error => {
-            console.log(error.response.data.message);
-          })
-      },
       getSemesters: function(){
         Axios
           .get('http://localhost/api/v1/semesters', {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
-          .then(response => {
-            for(const sem of response.data){
-              this.semesterOptions.push({value: sem.id, text: sem.semester});
-            }
-          })
-          .catch(error => {
-            console.log(error.response.data.message);
+      },
+
+      getAY: function(){
+        Axios
+          .get('http://localhost/api/v1/academic_years', {
+            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
       },
-      getInstructors: function(){
+
+      getCourse: function(){
         Axios
-          .get('http://localhost/api/v1/instructors', {
+          .get('http://localhost/api/v1/courses', {
+            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+          })
+      },
+
+      getCourse: function(){
+        Axios
+          .get('http://localhost/api/v1/students', {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
-            //console.log(response.data);
-            this.personalInfoRowData = response.data;
-          })
-          .catch(error => {
-            this.alertMessage = error.response.data.message;
-            this.dismissErrorCountDown = this.dismissSecs;
+            //console.log(response.data.data);
+            this.PreregisteredRowData = response.data;
           })
       },
+    },
+      nextTab: function(){
+        this.secondTabDisabled = false;
+        this.tabIndex++;
+      },
       toggleForm: function(){
-        this.clearInstructorData();
         // toggle form visibility
         if(this.showForm){
           this.showForm = false;
@@ -1109,99 +634,5 @@
           this.showForm = true;
         }
       },
-      addInstructor: function(){
-        this.errors = [];
-        // Datepicker returns a date format that is different from what is required by the api/db
-        // Use moment to format the date
-        // TODO: check if format is correct; console is returning a deprecation warning
-        this.instructor.birth_date = moment(String(this.instructor.birth_date)).format('YYYY-MM-DD');
-        Axios
-          .post('http://localhost/api/v1/instructors', this.instructor, {
-            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-          })
-          .then(response => {
-            this.alertMessage = response.data.message;
-            this.dismissSuccessCountDown = this.dismissSecs;
-            this.instructorId = response.data.last_insert_id;
-            this.getPreferredSubjects();
-            this.getTimeAvailabilities();
-            this.getInstructors();
-            this.lastTabsDisabled = false;
-            // TODO: FIX THIS; next tab is not being activated after adding new instructor
-            this.tabIndex++;
-            console.log(
-              this.instructorId
-            )
-          })
-          .catch(error => {
-            this.alertMessage = error.response.data.message;
-            const values = Object.values(error.response.data.errors);
-            for(const val of values){
-              for(const err of val){
-                this.errors.push(err);
-              }
-            }
-            this.dismissErrorCountDown = this.dismissSecs;
-          })
-      },
-      updateInstructor: function(){
-        this.errors = [];
-        Axios
-          .put('http://localhost/api/v1/instructors/' + this.instructorId, this.instructor, {
-            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-          })
-          .then(response => {
-            this.getSubjects();
-            this.alertMessage = response.data.message;
-            this.dismissSuccessCountDown = this.dismissSecs;
-            this.getPreferredSubjects();
-            this.getTimeAvailabilities();
-            this.getInstructors();
-            this.$refs['editInstructorModal'].hide();
-          })
-          .catch(error => {
-            this.alertMessage = error.response.data.message;
-            const values = Object.values(error.response.data.errors);
-            for(const val of values){
-              for(const err of val){
-                this.errors.push(err);
-              }
-            }
-            this.updateErrorCountDown = this.dismissSecs;
-          });
-      },
-      deleteInstructor: function(){
-        this.errors = [];
-        Axios
-          .delete('http://localhost/api/v1/instructors/' + this.instructorId, {
-            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-          })
-          .then(response => {
-            this.getInstructors();
-            this.alertMessage = response.data.message;
-            this.dismissSuccessCountDown = this.dismissSecs;
-          })
-          .catch(error => {
-            // TODO:  Hide integrity constraint errors
-            //        and other database errors that hackers could
-            //        use to infiltrate our system.
-            //        Display a more user-friendly message instead.
-            //        Example:  Failed to remove <instructor name> from
-            //                  the database.  They might already have
-            //                  classes or other related records.  Please
-            //                  delete those records first before removing
-            //                  this instructor from the database.
-            this.alertMessage = error.response.data.message;
-            /*const values = Object.values(error.response.data.errors);
-            for(const val of values){
-              for(const err of val){
-                this.errors.push(err);
-              }
-            }*/
-            this.dismissErrorCountDown = this.dismissSecs;
-          });
-        this.$refs['deleteInstructorModal'].hide();
-      }
     }
-  }
 </script>
