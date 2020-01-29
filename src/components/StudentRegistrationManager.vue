@@ -486,7 +486,7 @@
                   <b-form-input
                     type="text"
                     v-model="Students.contact_number"
-                    id="contactNumber">
+                    id="contact_Number">
                   </b-form-input>
                 </b-form-group>
               </b-col>
@@ -499,7 +499,7 @@
                   <b-form-input
                     type="text"
                     v-model="Students.contact_address"
-                    id="contactAddress">
+                    id="contact_Address">
                   </b-form-input>
                 </b-form-group>
               </b-col>
@@ -559,7 +559,7 @@
               </b-col>
               <b-col class="d-flex justify-content-end">
                 <b-button variant="primary" @click="RegStudents">
-                  Next
+                  Register
                 </b-button>
               </b-col>
             </b-form-row>
@@ -666,6 +666,7 @@
           student_status: null,
           school_last_attended: null,
           school_address: null,
+          student_number: null,
 
         }
       }
@@ -714,6 +715,38 @@
       lastTab: function(){
         this.lastTabsDisabled = false;
         this.tabIndex++;
+      },
+
+      clearField: function(){
+        this.Students ={
+          first_name: null,
+          middle_name: null,
+          last_name: null,
+          suffix_name: null,
+          gender: null,
+          address: null,
+          civil_status: null,
+          city: null,
+          postal: null,
+          province: null,
+          telephone: null,
+          cellphone: null,
+          email: null,
+          birth_date: null,
+          birth_place: null,
+          father_name: null,
+          mother_name: null,
+          contact_person: null,
+          contact_address: null,
+          contact_number: null,
+          blood_type: null,
+          active: 1,
+          academic_status: null,
+          student_status: null,
+          school_last_attended: null,
+          school_address: null,
+          student_number: null,
+        }
       },
 
       getSemesters: function(){
@@ -796,7 +829,9 @@
               student_status: null,
               school_last_attended: null,
               school_address: null,
+              student_number: null,
             };
+            this.clearField();
           })
       },
 
