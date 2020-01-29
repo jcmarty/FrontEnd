@@ -9,8 +9,6 @@
         dismissible fade>
           {{alertMessage}}
       </b-alert>
-
-      <!-- An alert for displaying warning and/or error messages -->
       <b-alert variant="danger"
         :show="dismissErrorCountDown"
         @dismissed="dismissErrorCountDown=0"
@@ -33,7 +31,10 @@
                   label="Academic Year"
                   label-for="academicYear">
                   <b-form-select
-                    :options="genderOptions">
+                    id="academicYear"
+                    @change="getAY()">
+                    <option v-for="Ay in AYrowData"
+                    v-bind:value="Ay.id">{{Ay.current_ay}}</option>
                   </b-form-select>
                 </b-form-group>
               </b-col>
@@ -44,7 +45,10 @@
                   label="Semester"
                   label-for="Semester">
                   <b-form-select
-                    :options="genderOptions">
+                    id="Semester"
+                    @change="getSemesters()">
+                    <option v-for="sem in SemRowData"
+                    v-bind:value="sem.id">{{sem.semester}}</option>
                   </b-form-select>
                 </b-form-group>
               </b-col>
@@ -56,6 +60,7 @@
                   label-for="lastName">
                   <b-form-input
                     type="text"
+                    v-model="Students.last_name"
                     id="lastName">
                   </b-form-input>
                 </b-form-group>
@@ -68,6 +73,7 @@
                   label-for="firstName">
                   <b-form-input
                     type="text"
+                    v-model="Students.first_name"
                     id="firstName">
                   </b-form-input>
                 </b-form-group>
@@ -80,6 +86,7 @@
                   label-for="middleName">
                   <b-form-input
                     type="text"
+                    v-model="Students.middle_name"
                     id="middleName">
                   </b-form-input>
                 </b-form-group>
@@ -92,6 +99,7 @@
                   label-for="suffixName">
                   <b-form-input
                     type="text"
+                    v-model="Students.suffix_name"
                     id="suffixName">
                   </b-form-input>
                 </b-form-group>
@@ -103,7 +111,10 @@
                   label="Course"
                   label-for="Course">
                   <b-form-select
-                    :options="genderOptions">
+                    id="Course"
+                    @change="getCourse()">
+                    <option v-for="course in CourseRowData"
+                    v-bind:value="course.id">{{course.course_code}}</option>
                   </b-form-select>
                 </b-form-group>
               </b-col>
@@ -125,6 +136,7 @@
                   label="Student Status"
                   label-for="studentStatus">
                   <b-form-select
+                    v-model="Students.student_status"
                     :options="StudentStatusOptions">
                   </b-form-select>
                 </b-form-group>
@@ -136,6 +148,7 @@
                   label="Academic Status"
                   label-for="academicStatus">
                   <b-form-select
+                    v-model="Students.academic_status"
                     :options="AcademicStatusOptions">
                   </b-form-select>
                 </b-form-group>
@@ -147,8 +160,9 @@
                   label="School Last Attended"
                   label-for="schoolLastAttended">
                   <b-form-input
+                    v-model="Students.school_last_attended"
                     type="text"
-                    id="schoolLastAttemded">
+                    id="schoolLastAttended">
                   </b-form-input>
                 </b-form-group>
               </b-col>
@@ -160,6 +174,7 @@
                   label-for="schoolAddress">
                   <b-form-input
                     type="text"
+                    v-model="Students.school_address"
                     id="schoolAddress">
                   </b-form-input>
                 </b-form-group>
@@ -173,7 +188,7 @@
                 </b-button>
               </b-col>
               <b-col class="d-flex justify-content-end">
-                <b-button variant="primary" @click="nextTab">
+                <b-button variant="primary" @click="secondTab">
                   Next
                 </b-button>
               </b-col>
@@ -184,7 +199,7 @@
         <!-- End of student information form -->
 
 
-        <b-tab title="Personal Information" >
+        <b-tab title="Personal Information" :disabled="secondTabDisabled">
             <!-- Start of Personal Information Form -->
           <b-form>
             <b-form-row>
@@ -195,6 +210,7 @@
                   label-for="presentAddress">
                   <b-form-input
                     type="text"
+                    v-model="Students.address"
                     id="presentAddress"
                     required>
                   </b-form-input>
@@ -221,6 +237,7 @@
                 label-for="cityMunicipality">
                 <b-form-input
                   type="text"
+                  v-model="Students.city"
                   id="cityMunicipality"
                   required>
                 </b-form-input>
@@ -234,6 +251,7 @@
                 label-for="Province">
                 <b-form-input
                   type="text"
+                  v-model="Students.province"
                   id="Province"
                   required>
                 </b-form-input>
@@ -247,6 +265,7 @@
                 label-for="postalCode">
                 <b-form-input
                   type="text"
+                  v-model="Students.postal"
                   id="postalCode"
                   required>
                 </b-form-input>
@@ -265,6 +284,7 @@
                   label-for="emailAddress">
                   <b-form-input
                     type="email"
+                    v-model="Students.email"
                     id="emailAddress"
                     required>
                   </b-form-input>
@@ -278,6 +298,7 @@
                   label-for="cellphoneNo">
                   <b-form-input
                     type="number"
+                    v-model="Students.cellphone"
                     id="cellphoneNo"
                     required>
                   </b-form-input>
@@ -291,6 +312,7 @@
                   label-for="telephoneNo">
                   <b-form-input
                     type="text"
+                    v-model="Students.telephone"
                     id="telephoneNo"
                     required>
                   </b-form-input>
@@ -303,6 +325,7 @@
                   label="Birth Date"
                   label-for="birthDate">
                   <datepicker
+                    v-model="Students.birth_date"
                     id="birthDate"
                     :clear-button="true"
                     :calendar-button="true"
@@ -333,6 +356,7 @@
                   label-for="placeofBirth">
                   <b-form-input
                     type="text"
+                    v-model="Students.birth_place"
                     id="placeofBirth"
                     required>
                   </b-form-input>
@@ -345,6 +369,7 @@
                   label="Gender"
                   label-for="Gender">
                   <b-form-select
+                    v-model="Students.gender"
                     :options="genderOptions">
                   </b-form-select>
                 </b-form-group>
@@ -357,6 +382,7 @@
                   label-for="bloodType">
                   <b-form-input
                     type="text"
+                    v-model="Students.blood_type"
                     id="bloodType"
                     required>
                   </b-form-input>
@@ -383,6 +409,7 @@
                   label-for="civilStatus">
                   <b-form-input
                     type="text"
+                    v-model="Students.civil_status"
                     id="civilStatus"
                     required>
                   </b-form-input>
@@ -397,7 +424,7 @@
                   </b-button>
                 </b-col>
                 <b-col class="d-flex justify-content-end">
-                  <b-button variant="primary" @click="nextTab">
+                  <b-button variant="primary" @click="lastTab">
                     Next
                   </b-button>
                 </b-col>
@@ -406,7 +433,7 @@
           <!-- End of Personal Information Form -->
         </b-tab>
 
-        <b-tab title="Parents Information" >
+        <b-tab title="Parents / GuardianInformation" :disabled="lastTabsDisabled">
           <!-- Start of Parents Information Form -->
           <b-form>
             <b-form-row>
@@ -417,6 +444,7 @@
                   label-for="fathersName">
                   <b-form-input
                     type="text"
+                    v-model="Students.father_name"
                     id="fathersName">
                   </b-form-input>
                 </b-form-group>
@@ -429,6 +457,7 @@
                   label-for="mothersName">
                   <b-form-input
                     type="text"
+                    v-model="Students.mother_name"
                     id="mothersName">
                   </b-form-input>
                 </b-form-group>
@@ -442,7 +471,8 @@
                   label="Contact Person:"
                   label-for="contactPerson">
                   <b-form-input
-                    type="number"
+                    type="text"
+                    v-model="Students.contact_person"
                     id="contactPerson">
                   </b-form-input>
                 </b-form-group>
@@ -455,6 +485,7 @@
                   label-for="contactNumber">
                   <b-form-input
                     type="text"
+                    v-model="Students.contact_number"
                     id="contactNumber">
                   </b-form-input>
                 </b-form-group>
@@ -467,12 +498,59 @@
                   label-for="contactAddress">
                   <b-form-input
                     type="text"
+                    v-model="Students.contact_address"
                     id="contactAddress">
                   </b-form-input>
                 </b-form-group>
               </b-col>
+
+              <b-form-group label="Guardian Information">
+                 <b-col cols="12" md="6" lg="6"><b-form-radio v-model="selected" name="some-radios" value="A">Same as Mother Information</b-form-radio></b-col>
+                 <b-col cols="12" md="6" lg="6"><b-form-radio v-model="selected" name="some-radios" value="A">Same as Father Information</b-form-radio></b-col>
+              </b-form-group>
             </b-form-row>
 
+            <b-form-row>
+              <b-col cols="12" md="6" lg="6">
+                <b-form-group
+                  class="guardianname"
+                  label="Guardian's Name:"
+                  label-for="guardianName">
+                  <b-form-input
+                    type="text"
+                    id="guardianName">
+                  </b-form-input>
+                </b-form-group>
+              </b-col>
+          </b-form-row>
+
+
+            <b-form-row>
+
+            <b-col cols="12" md="6" lg="3">
+              <b-form-group
+                class="contactnumber"
+                label="Contact Number"
+                label-for="contactNumber">
+                <b-form-input
+                  type="text"
+                  id="contactNumber">
+                </b-form-input>
+              </b-form-group>
+            </b-col>
+
+            <b-col cols="12" md="6" lg="6">
+              <b-form-group
+                class="contactaddress"
+                label="Contact Address:"
+                label-for="contactAddress">
+                <b-form-input
+                  type="text"
+                  id="contactAddress">
+                </b-form-input>
+              </b-form-group>
+            </b-col>
+          </b-form-row>
             <b-form-row>
               <b-col>
                 <b-button variant="primary" @click="tabIndex--">
@@ -480,7 +558,7 @@
                 </b-button>
               </b-col>
               <b-col class="d-flex justify-content-end">
-                <b-button variant="primary" @click="tabIndex++">
+                <b-button variant="primary" @click="RegStudents">
                   Next
                 </b-button>
               </b-col>
@@ -495,7 +573,7 @@
       <h5>Pre Registered Students</h5>
       <ag-grid-vue class="ag-theme-material"
         :columnDefs="PreregisteredColDef"
-        :rowData="PreregisteredRowData"
+        :rowData="studentsrowdata"
         :animateRows="true"
         :pagination="true"
         :paginationPageSize="10"
@@ -526,10 +604,14 @@
       return{
         settings: this.$store.getters.getSettings,
         tabIndex: 0,
+        selected: null,
         secondTabDisabled: true,
         lastTabsDisabled: true,
         PreregisteredColDef: null,
         PreregisteredRowData: null,
+        AYrowData: null,
+        SemRowData: null,
+        CourseRowData: null,
         academicYearOptions: [],
         semesterOptions: [],
         genderOptions: [
@@ -556,6 +638,36 @@
         dismissErrorCountDown: 0,
         updateSuccessCountDown: 0,
         updateErrorCountDown: 0,
+        studentsrowdata: null,
+        Students: {
+          first_name: null,
+          middle_name: null,
+          last_name: null,
+          suffix_name: null,
+          gender: null,
+          address: null,
+          civil_status: null,
+          city: null,
+          postal: null,
+          province: null,
+          telephone: null,
+          cellphone: null,
+          email: null,
+          birth_date: null,
+          birth_place: null,
+          father_name: null,
+          mother_name: null,
+          contact_person: null,
+          contact_address: null,
+          contact_number: null,
+          blood_type: null,
+          active: 1,
+          academic_status: null,
+          student_status: null,
+          school_last_attended: null,
+          school_address: null,
+
+        }
       }
     },
     beforeMount(){
@@ -588,19 +700,41 @@
     },
     mounted () {
       this.getSemesters();
+      this.getAY();
+      this.getCourse();
+      this.getStudents();
     },
     methods:{
+
+      secondTab: function(){
+        this.secondTabDisabled = false;
+        this.tabIndex++;
+      },
+
+      lastTab: function(){
+        this.lastTabsDisabled = false;
+        this.tabIndex++;
+      },
+
       getSemesters: function(){
         Axios
           .get('http://localhost/api/v1/semesters', {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
+          .then(response => {
+            //console.log(response.data.data);
+            this.SemRowData = response.data;
+          })
       },
 
       getAY: function(){
         Axios
-          .get('http://localhost/api/v1/academic_years', {
+          .get('http://localhost/api/v1/settings', {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+          })
+          .then(response => {
+            //console.log(response.data.data);
+            this.AYrowData = response.data;
           })
       },
 
@@ -609,23 +743,64 @@
           .get('http://localhost/api/v1/courses', {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
+          .then(response => {
+            //console.log(response.data.data);
+            this.CourseRowData = response.data;
+          })
       },
 
-      getCourse: function(){
+      getStudents: function(){
         Axios
           .get('http://localhost/api/v1/students', {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
             //console.log(response.data.data);
-            this.PreregisteredRowData = response.data;
+            this.studentsrowdata = response.data;
           })
       },
-    },
-      nextTab: function(){
-        this.secondTabDisabled = false;
-        this.tabIndex++;
+
+      RegStudents: function(){
+        Axios
+          .post('http://localhost/api/v1/students', this.Students, {
+            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+          })
+          .then(response => {
+            this.getStudents();
+            this.alertMessage = response.data.message;
+            this.dismissSuccessCountDown = this.dismissSecs;
+            this.Students = {
+              first_name: null,
+              middle_name: null,
+              last_name: null,
+              suffix_name: null,
+              gender: null,
+              address: null,
+              civil_status: null,
+              city: null,
+              postal: null,
+              province: null,
+              telephone: null,
+              cellphone: null,
+              email: null,
+              birth_date: null,
+              birth_place: null,
+              father_name: null,
+              mother_name: null,
+              contact_person: null,
+              contact_address: null,
+              contact_number: null,
+              blood_type: null,
+              active: 1,
+              academic_status: null,
+              student_status: null,
+              school_last_attended: null,
+              school_address: null,
+            };
+          })
       },
+
+
       toggleForm: function(){
         // toggle form visibility
         if(this.showForm){
@@ -634,5 +809,6 @@
           this.showForm = true;
         }
       },
+    },
     }
 </script>
