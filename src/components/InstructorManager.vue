@@ -296,9 +296,9 @@
       <!-- Tab Group with forms for adding new instructor/s -->
       <b-tabs v-if="showForm" v-model="tabIndex">
         <b-tab title="Personal Information">
+          <!-- Start form personal information -->
+          <!-- 1st Form 1 Personal Information Start -->
           <b-form>
-            <!-- Start form personal information -->
-            <!-- 1st Form 1 Personal Information Start -->
             <b-form-row>
               <b-col cols="12" md="6" lg="3">
                 <b-form-group

@@ -45,6 +45,13 @@
               <router-link tag="li" to="/manage/track"><a>Track</a></router-link>
               <router-link tag="li" to="/manage/instructor"><a>Instructor</a></router-link>
               <router-link tag="li" to="/manage/useraccount"><a>User Accounts</a></router-link>
+              <li v-b-toggle.student><a>Student<span class="fa fa-chevron-down"></span></a>
+                <b-collapse tag="ul" class="nav child_menu" id="student" accordion="sideMenuSubAccordion">
+                  <router-link tag="li" to="/manage/registration/student"><a class="super_child_menu">Registration</a></router-link>
+                  <router-link tag="li" to="/manage/enrollment/student"><a class="super_child_menu">Enrollment</a></router-link>
+                  <router-link tag="li" to="/manage/grades/student"><a class="super_child_menu">Grades</a></router-link>
+                </b-collapse>
+              </li>
             </b-collapse>
           </li>
           <li v-bind:class="{active : currentCategory=='reports'}"><a v-b-toggle.reports><i class="fa fa-desktop"></i>View Report<span class="fa fa-chevron-down"></span></a>
