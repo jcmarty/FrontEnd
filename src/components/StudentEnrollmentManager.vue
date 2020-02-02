@@ -15,7 +15,7 @@
               label-for="studentNo">
               <b-form-input
                 type="text"
-                v-model="semesters.semester"
+                v-bind:value="RegStudent.student_number"
                 id="studentNo"
                 required></b-form-input>
             </b-form-group>
@@ -54,7 +54,7 @@
               label-for="fullName">
               <b-form-input
                 type="text"
-                v-model="semesters.semester"
+                v-bind:value=" RegStudent.name "
                 id="fullName"
                 required></b-form-input>
             </b-form-group>
@@ -187,6 +187,11 @@
         semesters:{
           semester:null
         },
+        RegStudent:{
+          id: null,
+          name: null,
+          student_number:null,
+        },
         showForm: false,
         alertMessage: "",
         errors: [],
@@ -215,10 +220,18 @@
           {headerName: 'Action', field: 'subject_description', cellRendererFramework: 'SemestersActionButtons'}
       ];
 
-
     },
     mounted () {
       this.getSemesters();
+    },
+
+    created() {
+        console.log(this.$route.params);
+        this.RegStudent = {
+          id: this.$route.params.id,
+          name: this.$route.params.first_name + " " + this.$route.params.last_name,
+          student_number: this.$route.params.student_number,
+        }
     },
     methods:{
       getSemesters: function(){
@@ -257,6 +270,22 @@
             this.dismissErrorCountDown = this.dismissSecs;
           })
       },
+
+      getRegisteredStudent: function(){
+        Axios
+          .get('http://localhost/api/v1/students/' + this.RegStudent.id,  {
+            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+          })
+          .then(response => {
+            //console.log(response.data);
+            this.rowData = response.data;
+
+          })
+          .catch(error => {
+            console.log(error.response);
+          })
+      },
+
       toggleForm: function(){
         if(this.showForm){
           this.showForm = false;

@@ -1,7 +1,7 @@
 <template>
     <div>
-      <b-button variant='primary' size='sm' @click='setFormValues()' v-b-modal.EditStudentModal>Enroll</b-button>
-      <b-button variant='info' size='sm' @click='setFormValues()' v-b-modal.EditStudentModal>View</b-button>
+      <b-button variant="primary" size='sm' :to="{ name: 'StudentEnrollmentManager', params: { id: params.data.id, student_number: params.data.student_number, first_name: params.data.first_name, last_name: params.data.last_name } }">Enroll</b-button>
+      <b-button variant='info' size='sm' @click='setFormValues()' v-b-modal.EditStudentModal>Edit</b-button>
 
     </div>
 </template>
@@ -12,7 +12,8 @@
         methods: {
           setFormValues: function(){
             console.log(this.params.data.id);
-            this.params.context.componentParent.instructorId = this.params.data.id;
+            this.params.context.componentParent.id = this.params.data.id;
+            this.params.context.componentParent.Students.student_number = this.params.data.student_number;
             this.params.context.componentParent.Students.first_name = this.params.data.first_name;
             this.params.context.componentParent.Students.middle_name = this.params.data.middle_name;
             this.params.context.componentParent.Students.last_name = this.params.data.last_name;

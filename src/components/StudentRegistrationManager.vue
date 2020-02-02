@@ -2,6 +2,7 @@
   <div>
     <h1>Manage Student Registration</h1>
     <div>
+      <!-- Update Student intermation Modal -->
       <b-modal id="EditStudentModal" ref="EditStudentModal"
       title="Edit Student Information" size="xl" hide-footer>
 
@@ -115,8 +116,8 @@
 
               <b-form-row>
                 <b-col>
-                  <b-button variant="danger" @click="hideModal('editInstructorModal')">
-                    Back
+                  <b-button variant="danger" @click="hideModal('EditStudentModal')">
+                    cancel
                   </b-button>
                 </b-col>
                 <b-col class="d-flex justify-content-end">
@@ -207,12 +208,9 @@
                   </b-form-input>
                 </b-form-group>
               </b-col>
-
             </b-form-row>
 
             <b-form-row>
-
-
                 <b-col cols="12" md="6" lg="4">
                   <b-form-group
                     class="emailaddress"
@@ -355,8 +353,8 @@
 
                 <b-form-row>
                   <b-col>
-                    <b-button variant="danger" @click="">
-                      Back
+                    <b-button variant="danger" @click="tabIndex--">
+                      Previous
                     </b-button>
                   </b-col>
                   <b-col class="d-flex justify-content-end">
@@ -518,8 +516,8 @@
                   </b-button>
                 </b-col>
                 <b-col class="d-flex justify-content-end">
-                  <b-button variant="primary" @click="RegStudents">
-                    Register
+                  <b-button variant="primary" @click="UpdateStudents()">
+                    Update
                   </b-button>
                 </b-col>
               </b-form-row>
@@ -527,6 +525,7 @@
           </b-tab>
         </b-tabs>
       </b-modal>
+      <!-- End of modal update -->
 
       <!-- An alert for displaying success messages -->
       <b-alert variant="success"
@@ -547,6 +546,7 @@
           </ul>
       </b-alert>
 
+      <!-- start of register students -->
       <!-- Tab Group with forms for registration of students -->
       <b-tabs v-model="tabIndex">
         <b-tab title="Student Information">
@@ -638,8 +638,8 @@
 
             <b-form-row>
               <b-col>
-                <b-button variant="danger" @click="hideModal('editInstructorModal')">
-                  Back
+                <b-button variant="danger" @click="CancelRegister">
+                  cancel
                 </b-button>
               </b-col>
               <b-col class="d-flex justify-content-end">
@@ -730,12 +730,9 @@
                 </b-form-input>
               </b-form-group>
             </b-col>
-
           </b-form-row>
 
           <b-form-row>
-
-
               <b-col cols="12" md="6" lg="4">
                 <b-form-group
                   class="emailaddress"
@@ -878,8 +875,8 @@
 
               <b-form-row>
                 <b-col>
-                  <b-button variant="danger" @click="">
-                    Back
+                  <b-button variant="danger" @click="tabIndex--">
+                    Previous
                   </b-button>
                 </b-col>
                 <b-col class="d-flex justify-content-end">
@@ -1164,7 +1161,8 @@
       };
 
       this.studentColDef = [
-          {headerName: 'ID', field: 'id', sortable: true, filter: true, width: 150},
+          {headerName: 'ID', field: 'id', sortable: true, filter: true, width: 100},
+          {headerName: 'Student Number', field: 'student_number', sortable: true, filter: true, width: 180,},
           {headerName: 'First Name', field: 'first_name', sortable: true, filter: true, width: 150,},
           {headerName: 'Middle Name', field: 'middle_name', sortable: true, filter: true, width: 150,},
           {headerName: 'Last Name', field: 'last_name', sortable: true, filter: true, width: 150,},
@@ -1199,6 +1197,11 @@
       lastTab: function(){
         this.lastTabsDisabled = false;
         this.tabIndex++;
+      },
+
+      hideModal: function($modal){
+        this.ClearStudentFields();
+        this.$refs[$modal].hide();
       },
 
       getSemesters: function(){
@@ -1244,6 +1247,59 @@
             this.StudentRowData = response.data;
           })
       },
+
+      UpdateStudents: function(){
+        this.errors = [];
+        Axios
+          .put('http://localhost/api/v1/students/'+ this.id, this.Students, {
+            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+          })
+          .then(response => {
+            this.getStudents();
+            this.alertMessage = response.data.message;
+            this.dismissSuccessCountDown = this.dismissSecs;
+            this.Students = {
+              student_number: null,
+              first_name: null,
+              middle_name: null,
+              last_name: null,
+              suffix_name: null,
+              gender: null,
+              address: null,
+              civil_status: null,
+              city: null,
+              postal: null,
+              province: null,
+              telephone: null,
+              cellphone: null,
+              email: null,
+              birth_date: null,
+              birth_place: null,
+              father_name: null,
+              mother_name: null,
+              contact_person: null,
+              contact_address: null,
+              contact_number: null,
+              blood_type: null,
+              photo_url: null,
+              user_id: null,
+              school_last_attended: null,
+              school_address: null,
+              active: 1,
+            };
+          })
+          .catch(error => {
+            this.alertMessage = error.response.data.message;
+            const values = Object.values(error.response.data.errors);
+            for(const val of values){
+              for(const err of val){
+                this.errors.push(err);
+              }
+            }
+            this.dismissErrorCountDown = this.dismissSecs;
+          });
+          this.$refs['EditStudentModal'].hide();
+        },
 
       RegStudents: function(){
         Axios
@@ -1294,6 +1350,41 @@
             }
             this.dismissErrorCountDown = this.dismissSecs;
           })
+      },
+      ClearStudentFields: function(){
+        this.Students = {
+          student_number: null,
+          first_name: null,
+          middle_name: null,
+          last_name: null,
+          suffix_name: null,
+          gender: null,
+          address: null,
+          civil_status: null,
+          city: null,
+          postal: null,
+          province: null,
+          telephone: null,
+          cellphone: null,
+          email: null,
+          birth_date: null,
+          birth_place: null,
+          father_name: null,
+          mother_name: null,
+          contact_person: null,
+          contact_address: null,
+          contact_number: null,
+          blood_type: null,
+          photo_url: null,
+          user_id: null,
+          school_last_attended: null,
+          school_address: null,
+          active: 1,
+        };
+      },
+
+      CancelRegister: function(){
+        this.ClearStudentFields();
       },
 
 
