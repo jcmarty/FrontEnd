@@ -48,7 +48,7 @@
               <b-form-select
                 id="Semester"
                 v-model="selectedSemester"
-                @change="">
+                @change="changeSemester">
                 <option value="null" hidden>Select Semester</option>
                 <option v-for="sem in SemRow"
                 v-bind:value="sem.id">{{sem.semester}}</option>
@@ -104,21 +104,6 @@
             </b-form-group>
           </b-col>
 
-
-          <!-- <b-col cols="12" md="6" lg="2">
-            <b-form-group
-              class="blockbatch"
-              label="Block Batch"
-              label-for="blockBatch">
-              <b-form-select
-                id="blockBatch"
-                @change="getInstructorSchedule()">
-                <option v-for="ay in rowData"
-                v-bind:value="ins.id">{{ins.first_name}} {{ins.last_name}}</option>
-              </b-form-select>
-            </b-form-group>
-          </b-col> -->
-
           <b-col cols="12" md="6" lg="2">
             <b-form-group
               class="subject"
@@ -126,7 +111,7 @@
               label-for="Subject">
               <b-form-select
                 id="Subject"
-                @change="getInstructorSchedule()"
+                @change="getInstructors()"
                 v-model="selectedSubject" >
                 <option value="null" hidden>Select Subject</option>
                 <option v-if="SubjectsRow === null" value="null" disabled>No Subjects</option>
@@ -137,19 +122,90 @@
           </b-col>
 
 
+
+            <b-col cols="12" md="6" lg="2">
+              <b-form-group
+                class="block"
+                label="Block"
+                label-for="Block">
+              <b-form-input
+                type="text"
+                v-model="selectedBlock"
+                id="block"
+                placeholder="Enter Block No."
+                v-bind:value="blockData"
+                required>
+              </b-form-input>
+            </b-form-group>
+          </b-col>
+
           <b-col cols="12" md="6" lg="2">
             <b-form-group
-              class="leclab"
-              label="Lecture Laboratory"
-              label-for="lectureLaboratory">
+              class="batch"
+              label="Batch"
+              label-for="Batch">
+            <b-form-input
+              type="text"
+              v-model="selectedBatch"
+              id="batch"
+              placeholder="Enter Batch No."
+              v-bind:value="batchData"
+              >
+            </b-form-input>
+          </b-form-group>
+        </b-col>
+
+          <b-col cols="12" md="6" lg="2">
+            <b-form-group
+              class="instructor"
+              label="Instructor"
+              label-for="Instructor">
               <b-form-select
-                id="lectureLaboratory"
-                @change="getInstructorSchedule()">
-                <!-- <option v-for="ay in rowData"
-                v-bind:value="ins.id">{{ins.first_name}} {{ins.last_name}}</option> -->
+                id="Instructor"
+                @change="getRooms"
+                v-model="selectedInstructor" >
+                <option value="null" hidden>Select Instructor</option>
+                <option v-if="instructorRow === null" value="null" disabled>No Instructors</option>
+                <option v-else v-for="ins in instructorRow"
+                v-bind:value="ins.instructor_id">{{ins.instructor.first_name}} {{ins.instructor.last_name}}</option>
               </b-form-select>
             </b-form-group>
           </b-col>
+
+          <b-col cols="12" md="6" lg="2">
+            <b-form-group
+              class="room"
+              label="Room"
+              label-for="Room">
+              <b-form-select
+                id="Room"
+                @change="getDays"
+                v-model="selectedRoom">
+                <option value="null" hidden>Select Room</option>
+                <option v-if="roomRow === null" value="null" disabled>No Rooms</option>
+                <option v-else v-for="room in roomRow"
+                v-bind:value="room.id">{{room.room_number}} - {{room.room_name}}</option>
+              </b-form-select>
+            </b-form-group>
+          </b-col>
+
+          <b-col cols="12" md="6" lg="2">
+            <b-form-group
+              class="day"
+              label="Day"
+              label-for="Day">
+              <b-form-select
+                id="Day"
+                @change=""
+                v-model="selectedDay"
+                :options="day_options">
+                <option value="null" hidden>Select Day</option>
+                <option v-if="roomRow === null" value="null" disabled>No Days</option>
+              </b-form-select>
+            </b-form-group>
+          </b-col>
+
+
 
         </b-form>
         <b-form-row>
@@ -201,6 +257,10 @@
                   CourseRow: null,
                   Curriculumrow: null,
                   SubjectsRow: null,
+                  instructorRow: null,
+                  roomRow: null,
+                  blockData: null,
+                  batchData: null,
                   gridOptions: null,
                   showForm: false,
                   alertMessage: "",
@@ -212,15 +272,24 @@
 
                   current_ay: [],
                   current_sem: [],
-                  selectedCourse: null,
-                  selectedYearLevel: null,
-                  year_options: [],
-                  course_options: [],
-                  academic_options: [],
-                  selectedCurriculum:null,
+
                   selectedAcademicYear:null,
                   selectedSemester:null,
+                  selectedCourse: null,
+                  selectedCurriculum:null,
                   selectedSubject: null,
+                  selectedYearLevel: null,
+                  selectedInstructor: null,
+                  selectedBlock: null,
+                  selectedBatch: null,
+                  selectedRoom: null,
+                  selectedDay: null,
+                  academic_options: [],
+                  year_options: [],
+                  course_options: [],
+                  day_options: [],
+
+
                   dataFilter: null,
 
 
@@ -255,18 +324,19 @@
               };
 
               this.CollegeClassScheduleColumnDefs = [
-                  {headerName: 'Day', field: 'day', sortable: true, filter: true, width: 150,},
-                  {headerName: 'Time Start', field: 'time_start', sortable: true, filter: true, width: 150},
-                  {headerName: 'Time End', field: 'time_end', sortable: true, filter: true, width: 150},
-                  {headerName: 'Subject Code', field: 'subject.subject.subject_code', sortable: true, filter: true, width: 150, resizable:true },
-                  {headerName: 'Subject Description', field: 'subject.subject.subject_description', sortable: true, filter: true, width: 300, resizable:true},
+                  {headerName: 'Day', field: 'schedule.day', sortable: true, filter: true, width: 150,},
+                  {headerName: 'Time', field: 'schedule.time', sortable: true, filter: true, width: 200},
+                  // {headerName: 'Time Start', field: 'schedule.time_start', sortable: true, filter: true, width: 150},
+                  // {headerName: 'Time End', field: 'schedule.time_end', sortable: true, filter: true, width: 150},
+                  {headerName: 'Subject Code', field: 'subject.subject_code', sortable: true, filter: true, width: 150, resizable:true },
+                  {headerName: 'Subject Description', field: 'subject.subject_desc', sortable: true, filter: true, width: 300, resizable:true},
                   {headerName: 'Room No.', field: 'room.room_number', sortable: true, filter: true, width: 150},
-                  {headerName: 'Instructor.', field: 'instructor.first_name' , sortable: true, filter: true, width: 150},
+                  {headerName: 'Instructor.', field: 'instructor.full_name' , sortable: true, filter: true, width: 150},
                   {headerName: 'Block', field: 'block', sortable: true, filter: true, width: 150},
                   {headerName: 'Batch', field: 'batch', sortable: true, filter: true, width: 150},
-                  {headerName: 'Class Type', field: 'class_type', sortable: true, filter: true, width: 150},
-                  {headerName: 'Academic Year', field: 'academic_year.academic_year', sortable: true, filter: true, width: 150},
-                  {headerName: 'Semester', field: 'semester.semester', sortable: true, filter: true, width: 150},
+                  // {headerName: 'Class Type', field: 'class_type', sortable: true, filter: true, width: 150},
+                  {headerName: 'Academic Year', field: 'ay.academic_year', sortable: true, filter: true, width: 150},
+                  {headerName: 'Semester', field: 'sem.semester', sortable: true, filter: true, width: 150},
               ];
 
               },
@@ -287,7 +357,7 @@
                       headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
                     })
                     .then(response => {
-                      //console.log(response.data.data);
+                      // console.log(response);
                       this.CollegeClassSchedRow = response.data;
                     })
                 },
@@ -325,22 +395,7 @@
                       headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
                     })
                     .then(response => {
-                      //console.log(response.data.data);
                       this.AyRow = response.data;
-                      // if( response.data.length == 0){
-                      //   // this.AyRow = null;
-                      // }else{
-                      //   for (var i = 0; i < response.data.length; i++) {
-                      //     // console.log(response.data[i].academic_year);
-                      //     this.academic_options.push(
-                      //       {
-                      //         value: {
-                      //           id: response.data[i].id,
-                      //         },
-                      //         text: response.data[i].academic_year },
-                      //     );
-                      //   }
-                      // }
                     })
                 },
 
@@ -351,11 +406,29 @@
                       headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
                     })
                     .then(response => {
-                      //console.log(response.data.data);
                       this.SemRow = response.data;
                     })
                 },
 
+                changeSemester: function(){
+                  // clears select boxes
+                  this.day_options = [];
+                  this.SubjectsRow = null;
+                  this.instructorRow = null;
+                  this.roomRow = null;
+
+                  // clear select box selected values
+                  // this.selectedCurriculum = null;
+                  this.selectedYearLevel = null;
+                  this.selectedSubject = null;
+                  this.selectedBlock = null;
+                  this.selectedBatch = null;
+                  this.selectedInstructor = null;
+                  this.selectedRoom = null;
+                  this.selectedDay = null;
+                },
+
+                // get all courses
                 getCourse: function(){
                   Axios
                     .get('http://localhost/api/v1/courses', {
@@ -382,6 +455,7 @@
                     });
                 },
 
+                // gets all curriculum record
                 getCurriculum: function(){
                   Axios
                     .get('http://localhost/api/v1/courses/' + this.selectedCourse.id + '/curriculums', {
@@ -396,19 +470,28 @@
                       }else{
                         this.Curriculumrow = response.data;
                       }
+                      // clears select boxes
+                      this.day_options = [];
                       this.year_options = [];
                       this.SubjectsRow = null;
-                      this.selectedYearLevel = null;
+                      this.instructorRow = null;
+                      this.roomRow = null;
+
+                      // clear select box selected values
                       this.selectedCurriculum = null;
+                      this.selectedYearLevel = null;
                       this.selectedSubject = null;
+                      this.selectedBlock = null;
+                      this.selectedBatch = null;
+                      this.selectedInstructor = null;
+                      this.selectedRoom = null;
+                      this.selectedDay = null;
                     });
-
-
-
                 },
+
+                //
                 changeCurr: function(){
-                  this.selectedYearLevel = null;
-                  this.selectedSubject = null;
+
                   // console.log(this.selectedCourse)
                   if(this.selectedCourse.year === "4 years"){
                     this.year_options = [
@@ -425,8 +508,22 @@
                      { value: '2nd Year', text: '2nd Year' },
                    ];
                  }
+                 this.SubjectsRow = null;
+                 this.instructorRow = null;
+                 this.roomRow = null;
+                 this.day_options = [];
+
+                 this.selectedYearLevel = null;
+                 this.selectedSubject = null;
+                 this.selectedBlock = null;
+                 this.selectedBatch = null;
+                 this.selectedInstructor = null;
+                 this.selectedRoom = null;
+                 this.selectedDay = null;
+
                 },
 
+                // gets all subjects
                 getSubject: function(){
                   this.dataFilter = {
                     "semester_id" : this.selectedSemester,
@@ -439,7 +536,7 @@
                       headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
                     })
                     .then(response => {
-                      if( response.data == 0){
+                      if( response.data.length == 0){
                         this.SubjectsRow = null;
                       }else{
                         this.SubjectsRow = response.data;
@@ -447,9 +544,71 @@
 
                       // this.SubjectsRow = response.data;
                       // console.log(response.data);
+                      this.instructorRow = null;
+                      this.roomRow = null;
+                      this.day_options = [];
+
+                      this.selectedSubject = null;
+                      this.selectedBlock = null;
+                      this.selectedBatch = null;
+                      this.selectedInstructor = null;
+                      this.selectedRoom = null;
+                      this.selectedDay = null;
+
                     });
                 },
 
+                getInstructors: function(){
+                  Axios
+                    .get('http://localhost/api/v1/curriculum_subjects/' + this.selectedSubject + '/instructors', {
+                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+                    })
+                    .then(response => {
+                      // console.log(response);
+                      this.instructorRow = response.data;
+                    })
+
+                    this.roomRow = null;
+                    this.day_options = [];
+
+
+                    this.selectedBlock = 1;
+                    this.selectedBatch = 1;
+                    this.selectedInstructor = null;
+                    this.selectedRoom = null;
+                    this.selectedDay = null;
+
+                    this.getRooms();
+                },
+
+                getRooms: function(){
+                  Axios
+                    .get('http://localhost/api/v1/rooms', {
+                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+                    })
+                    .then(response => {
+                      // console.log(response);
+                      this.day_options = [];
+                      this.selectedDay = null;
+                      this.selectedRoom = null;
+                      this.roomRow = response.data;
+                    })
+                },
+
+                getDays: function(){
+                  this.day_options = [
+                    { value: 'Monday', text: 'Monday' },
+                    { value: 'Tuesday', text: 'Tuesday' },
+                    { value: 'Wednesday', text: 'Wednesday' },
+                    { value: 'Thursday', text: 'Thursday' },
+                    { value: 'Friday', text: 'Friday' },
+                    { value: 'Saturday', text: 'Saturday' }
+                  ]
+                },
+
+                getTimes: function(){
+
+                },
 
                 toggleForm: function(){
                   if(this.showForm){
