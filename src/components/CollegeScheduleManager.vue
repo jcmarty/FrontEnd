@@ -31,8 +31,8 @@
               label-for="academicYear">
               <b-form-select
                 id="academicYear"
-                v-model="selected"
-                @change="getAY()">
+                v-model="selectedAcademicYear"
+                @change="">
                 <option v-for="ay in AyRow"
                 v-bind:value="ay.academic_year">{{ay.academic_year}}</option>
               </b-form-select>
@@ -46,8 +46,8 @@
               label-for="Semester">
               <b-form-select
                 id="Semester"
-                v-model="selected"
-                @change="getSemester()">
+                v-model="selectedSemester"
+                @change="">
                 <option v-for="sem in SemRow"
                 v-bind:value="sem.semester">{{sem.semester}}</option>
               </b-form-select>
@@ -62,9 +62,24 @@
               <b-form-select
                 id="Course"
                 v-model="selectedCourse"
-                @change="getCourse()">
+                @change="getCurriculum()">
                 <option v-for="course in CourseRow"
                 v-bind:value="{id:course.id , year:course.year_duration}">{{course.course_code}}</option>
+              </b-form-select>
+            </b-form-group>
+          </b-col>
+
+          <b-col cols="12" md="6" lg="2">
+            <b-form-group
+              class="curriculum"
+              label="Curriculum"
+              label-for="Curriculum">
+              <b-form-select
+                id="Curriculum"
+                v-model="selectedCurriculum"
+                @change="">
+                <option v-for="curriculum in Curriculumrow "
+                v-bind:value="curriculum.id">{{curriculum.curriculum_title}}</option>
               </b-form-select>
             </b-form-group>
           </b-col>
@@ -77,7 +92,7 @@
               <b-form-select :hidden="Bs"
                 id="yearLevel"
                 v-model="selectedYearLevel"
-                @change="getCourse()">
+                @change="getSubject()">
                 <option>1st Year</option>
                 <option>2nd Year</option>
                 <option>3rd Year</option>
@@ -87,24 +102,9 @@
               <b-form-select :hidden="Voc"
                 id="yearLevel"
                 v-model="selectedYearLevel"
-                @change="getCourse()">
+                @change="getSubject()">
                 <option>1st Year</option>
                 <option>2nd Year</option>
-              </b-form-select>
-            </b-form-group>
-          </b-col>
-
-          <b-col cols="12" md="6" lg="2">
-            <b-form-group
-              class="curriculum"
-              label="Curriculum"
-              label-for="Curriculum">
-              <b-form-select
-                id="Curriculum"
-                v-model="selected"
-                @change="">
-                <option v-for="curriculum in CourseRow.id "
-                v-bind:value="curriculum.curriculum.id">{{curriculum.curriculum.id}}</option>
               </b-form-select>
             </b-form-group>
           </b-col>
@@ -117,10 +117,9 @@
               label-for="blockBatch">
               <b-form-select
                 id="blockBatch"
-                v-model="selected"
                 @change="getInstructorSchedule()">
-                <option v-for="ay in rowData"
-                v-bind:value="ins.id">{{ins.first_name}} {{ins.last_name}}</option>
+                <!-- <option v-for="ay in rowData"
+                v-bind:value="ins.id">{{ins.first_name}} {{ins.last_name}}</option> -->
               </b-form-select>
             </b-form-group>
           </b-col>
@@ -132,10 +131,9 @@
               label-for="Subject">
               <b-form-select
                 id="Subject"
-                v-model="selected"
                 @change="getInstructorSchedule()">
-                <option v-for="ay in rowData"
-                v-bind:value="ins.id">{{ins.first_name}} {{ins.last_name}}</option>
+                <!-- <option v-for="ay in rowData"
+                v-bind:value="ins.id">{{ins.first_name}} {{ins.last_name}}</option> -->
               </b-form-select>
             </b-form-group>
           </b-col>
@@ -148,27 +146,26 @@
               label-for="lectureLaboratory">
               <b-form-select
                 id="lectureLaboratory"
-                v-model="selected"
                 @change="getInstructorSchedule()">
-                <option v-for="ay in rowData"
-                v-bind:value="ins.id">{{ins.first_name}} {{ins.last_name}}</option>
+                <!-- <option v-for="ay in rowData"
+                v-bind:value="ins.id">{{ins.first_name}} {{ins.last_name}}</option> -->
               </b-form-select>
             </b-form-group>
           </b-col>
 
-          <b-form-row>
-            <b-col>
-              <b-button variant="danger" @click="toggleForm">
-                Cancel
-              </b-button>
-            </b-col>
-            <b-col class="d-flex justify-content-end">
-              <b-button variant="primary" id="Add_Semester_Btn" @click="addSemeter">
-                Add
-              </b-button>
-            </b-col>
-          </b-form-row>
         </b-form>
+        <b-form-row>
+          <b-col>
+            <b-button variant="danger" @click="toggleForm">
+              Cancel
+            </b-button>
+          </b-col>
+          <b-col class="d-flex justify-content-end">
+            <b-button variant="primary" id="Add_Semester_Btn" >
+              Add
+            </b-button>
+          </b-col>
+        </b-form-row>
       </div>
     </div>
 
@@ -216,6 +213,9 @@
                   Voc: true,
                   selectedCourse: null,
                   selectedYearLevel: null,
+                  selectedCurriculum:null,
+                  selectedAcademicYear:null,
+                  selectedSemester:null,
 
                   ClassSched:{
                     day: null,
@@ -265,10 +265,9 @@
               },
               mounted () {
                 this.getClassSchedule();
+                this.getCourse();
                 this.getAY();
                 this.getSemester();
-                this.getCourse();
-                this.getCurriculum();
 
               },
 
@@ -315,6 +314,19 @@
                       //console.log(response.data.data);
                       this.CourseRow = response.data;
                     });
+
+
+                },
+
+                getCurriculum: function(){
+                  Axios
+                    .get('http://localhost/api/v1/courses/' + this.selectedCourse.id + '/curriculums', {
+                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+                    })
+                    .then(response => {
+                        // console.log(response.data);
+                      this.Curriculumrow = response.data;
+                    });
                     if(this.selectedCourse.year === "4 years"){
                       this.Bs = false,
                       this.Voc = true
@@ -323,17 +335,18 @@
                      this.Bs = true,
                      this.Voc = false
                    }
+
                 },
 
-                getCurriculum: function(){
+                getSubject: function(){
                   Axios
-                    .get('http://localhost/api/v1/curriculums', {
+                    .post('http://localhost/api/v1/course/get_subjects', {
                       headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
                     })
                     .then(response => {
-                      //console.log(response.data.data);
+                        // console.log(response.data);
                       this.Curriculumrow = response.data;
-                    })
+                    });
                 },
 
 

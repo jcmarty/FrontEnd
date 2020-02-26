@@ -10,7 +10,7 @@
         name: 'UserAccountActionButtons',
         methods: {
           setFormValues: function(){
-            //console.log(this.params.data.id);
+            // console.log(this.params.data.password);
             this.params.context.componentParent.id = this.params.data.id;
             this.params.context.componentParent.users.username = this.params.data.username;
             this.params.context.componentParent.users.password = this.params.data.password;

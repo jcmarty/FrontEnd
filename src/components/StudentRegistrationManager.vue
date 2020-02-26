@@ -1,531 +1,9 @@
 <template>
   <div>
     <h1>Manage Student Registration</h1>
-    <div>
+    <div v-if="showForm">
       <!-- Update Student intermation Modal -->
-      <b-modal id="EditStudentModal" ref="EditStudentModal"
-      title="Edit Student Information" size="xl" hide-footer>
 
-        <!-- An alert for displaying success messages -->
-        <b-alert variant="success"
-          :show="updateSuccessCountDown"
-          @dismissed="updateSuccessCountDown=0"
-          dismissible fade>
-            {{alertMessage}}
-        </b-alert>
-
-        <!-- An alert for displaying warning and/or error messages -->
-        <b-alert variant="danger"
-          :show="updateErrorCountDown"
-          @dismissed="updateErrorCountDown=0"
-          dismissible fade>
-            <p>{{alertMessage}}</p>
-            <ul>
-              <li v-for="error in errors">{{ error }}</li>
-            </ul>
-        </b-alert>
-
-        <!-- Tab Group with forms for registration of students -->
-        <b-tabs v-model="tabIndex">
-          <b-tab title="Student Information">
-          <!-- Start form Student information -->
-            <b-form>
-              <b-form-row>
-                <h5>Student Information</h5>
-              </b-form-row>
-
-              <b-form-row>
-                <b-col cols="12" md="6" lg="3">
-                  <b-form-group
-                    class="lastname"
-                    label="Last Name"
-                    label-for="lastName">
-                    <b-form-input
-                      type="text"
-                      v-model="Students.last_name"
-                      id="lastName">
-                    </b-form-input>
-                  </b-form-group>
-                </b-col>
-
-                <b-col cols="12" md="6" lg="5">
-                  <b-form-group
-                    class="firstname"
-                    label="First Name"
-                    label-for="firstName">
-                    <b-form-input
-                      type="text"
-                      v-model="Students.first_name"
-                      id="firstName">
-                    </b-form-input>
-                  </b-form-group>
-                </b-col>
-
-                <b-col cols="12" md="6" lg="3">
-                  <b-form-group
-                    class="middlename"
-                    label="Middle Name"
-                    label-for="middleName">
-                    <b-form-input
-                      type="text"
-                      v-model="Students.middle_name"
-                      id="middleName">
-                    </b-form-input>
-                  </b-form-group>
-                </b-col>
-
-                <b-col cols="12" md="6" lg="1">
-                  <b-form-group
-                    class="suffixname"
-                    label="Suffix Name"
-                    label-for="suffixName">
-                    <b-form-input
-                      type="text"
-                      v-model="Students.suffix_name"
-                      id="suffixName">
-                    </b-form-input>
-                  </b-form-group>
-                </b-col>
-
-                <b-col cols="12" md="6" lg="6">
-                  <b-form-group
-                    class="schoollastattended"
-                    label="School Last Attended"
-                    label-for="schoolLastAttended">
-                    <b-form-input
-                      v-model="Students.school_last_attended"
-                      type="text"
-                      id="schoolLastAttended">
-                    </b-form-input>
-                  </b-form-group>
-                </b-col>
-
-                <b-col cols="12" md="6" lg="6">
-                  <b-form-group
-                    class="schooladdress"
-                    label="School Address"
-                    label-for="schoolAddress">
-                    <b-form-input
-                      type="text"
-                      v-model="Students.school_address"
-                      id="schoolAddress">
-                    </b-form-input>
-                  </b-form-group>
-                </b-col>
-              </b-form-row>
-
-              <b-form-row>
-                <b-col>
-                  <b-button variant="danger" @click="hideModal('EditStudentModal')">
-                    cancel
-                  </b-button>
-                </b-col>
-                <b-col class="d-flex justify-content-end">
-                  <b-button variant="primary" @click="secondTab">
-                    Next
-                  </b-button>
-                </b-col>
-              </b-form-row>
-
-            </b-form>
-          </b-tab>
-          <!-- End of student information form -->
-
-
-          <b-tab title="Personal Information" :disabled="secondTabDisabled">
-              <!-- Start of Personal Information Form -->
-            <b-form>
-              <b-form-row>
-                <h5>Personal Information</h5>
-              </b-form-row>
-
-              <b-form-row>
-                <b-col cols="12" md="6" lg="4">
-                  <b-form-group
-                    class="presentaddress"
-                    label="Present Address"
-                    label-for="presentAddress">
-                    <b-form-input
-                      type="text"
-                      v-model="Students.address"
-                      id="presentAddress"
-                      required>
-                    </b-form-input>
-                  </b-form-group>
-              </b-col>
-
-              <b-col cols="12" md="6" lg="2">
-                <b-form-group
-                  class="barangay"
-                  label="Barangay"
-                  label-for="Barangay">
-                  <b-form-input
-                    type="text"
-                    id="Barangay"
-                    required>
-                  </b-form-input>
-                </b-form-group>
-              </b-col>
-
-              <b-col cols="12" md="6" lg="2">
-                <b-form-group
-                  class="citymunicipality"
-                  label="City / Municipality"
-                  label-for="cityMunicipality">
-                  <b-form-input
-                    type="text"
-                    v-model="Students.city"
-                    id="cityMunicipality"
-                    required>
-                  </b-form-input>
-                </b-form-group>
-              </b-col>
-
-              <b-col cols="12" md="6" lg="3">
-                <b-form-group
-                  class="province"
-                  label="Province"
-                  label-for="Province">
-                  <b-form-input
-                    type="text"
-                    v-model="Students.province"
-                    id="Province"
-                    required>
-                  </b-form-input>
-                </b-form-group>
-              </b-col>
-
-              <b-col cols="12" md="6" lg="1">
-                <b-form-group
-                  class="postalcode"
-                  label="Postal Code"
-                  label-for="postalCode">
-                  <b-form-input
-                    type="text"
-                    v-model="Students.postal"
-                    id="postalCode"
-                    required>
-                  </b-form-input>
-                </b-form-group>
-              </b-col>
-            </b-form-row>
-
-            <b-form-row>
-                <b-col cols="12" md="6" lg="4">
-                  <b-form-group
-                    class="emailaddress"
-                    label="Email Address"
-                    label-for="emailAddress">
-                    <b-form-input
-                      type="email"
-                      v-model="Students.email"
-                      id="emailAddress"
-                      required>
-                    </b-form-input>
-                  </b-form-group>
-                </b-col>
-
-                <b-col cols="12" md="6" lg="2">
-                  <b-form-group
-                    class="cellphoneno"
-                    label="Cellphone No."
-                    label-for="cellphoneNo">
-                    <b-form-input
-                      type="number"
-                      v-model="Students.cellphone"
-                      id="cellphoneNo"
-                      required>
-                    </b-form-input>
-                  </b-form-group>
-                </b-col>
-
-                <b-col cols="12" md="6" lg="2">
-                  <b-form-group
-                    class="telephoneno"
-                    label="Telephone No."
-                    label-for="telephoneNo">
-                    <b-form-input
-                      type="text"
-                      v-model="Students.telephone"
-                      id="telephoneNo"
-                      required>
-                    </b-form-input>
-                  </b-form-group>
-                </b-col>
-
-                <b-col cols="12" md="6" lg="3">
-                  <b-form-group
-                    class="birthdate"
-                    label="Birth Date"
-                    label-for="birthDate">
-                    <datepicker
-                      v-model="Students.birth_date"
-                      id="birthDate"
-                      :clear-button="true"
-                      :calendar-button="true"
-                      :calendar-button-icon="calendarIcon"
-                      :bootstrap-styling="true"
-                      :format="birthDateFormat">
-                    </datepicker>
-                  </b-form-group>
-                </b-col>
-
-                <b-col cols="12" md="6" lg="1">
-                  <b-form-group
-                    class="age"
-                    label="Age"
-                    label-for="Age">
-                    <b-form-input
-                      type="text"
-                      id="Age"
-                      required>
-                    </b-form-input>
-                  </b-form-group>
-                </b-col>
-
-                <b-col cols="12" md="6" lg="4">
-                  <b-form-group
-                    class="placeofbirth"
-                    label="Place of Birth"
-                    label-for="placeofBirth">
-                    <b-form-input
-                      type="text"
-                      v-model="Students.birth_place"
-                      id="placeofBirth"
-                      required>
-                    </b-form-input>
-                  </b-form-group>
-                </b-col>
-
-                <b-col cols="12" md="6" lg="2">
-                  <b-form-group
-                    class="gender"
-                    label="Gender"
-                    label-for="Gender">
-                    <b-form-select
-                      v-model="Students.gender"
-                      :options="genderOptions">
-                    </b-form-select>
-                  </b-form-group>
-                </b-col>
-
-                <b-col cols="12" md="6" lg="2">
-                  <b-form-group
-                    class="bloodtype"
-                    label="Blood Type"
-                    label-for="bloodType">
-                    <b-form-input
-                      type="text"
-                      v-model="Students.blood_type"
-                      id="bloodType"
-                      required>
-                    </b-form-input>
-                  </b-form-group>
-                </b-col>
-
-                <b-col cols="12" md="6" lg="2">
-                  <b-form-group
-                    class="citizenship"
-                    label="Citizenship"
-                    label-for="citizenShip">
-                    <b-form-input
-                      type="text"
-                      id="citizenShip"
-                      required>
-                    </b-form-input>
-                  </b-form-group>
-                </b-col>
-
-                <b-col cols="12" md="6" lg="2">
-                  <b-form-group
-                    class="civilstatus"
-                    label="Civil Status"
-                    label-for="civilStatus">
-                    <b-form-input
-                      type="text"
-                      v-model="Students.civil_status"
-                      id="civilStatus"
-                      required>
-                    </b-form-input>
-                  </b-form-group>
-                </b-col>
-                </b-form-row>
-
-                <b-form-row>
-                  <b-col>
-                    <b-button variant="danger" @click="tabIndex--">
-                      Previous
-                    </b-button>
-                  </b-col>
-                  <b-col class="d-flex justify-content-end">
-                    <b-button variant="primary" @click="lastTab">
-                      Next
-                    </b-button>
-                  </b-col>
-                </b-form-row>
-            </b-form>
-            <!-- End of Personal Information Form -->
-          </b-tab>
-
-          <b-tab title="Parents / Guardian Information" :disabled="lastTabsDisabled">
-            <!-- Start of Parents Information Form -->
-
-            <b-form>
-              <b-form-row>
-                <h5>Parents Information</h5>
-              </b-form-row>
-
-              <b-form-row>
-                <b-col cols="12" md="6" lg="6">
-                  <b-form-group
-                    class="fathersname"
-                    label="Father's Name:"
-                    label-for="fathersName">
-                    <b-form-input
-                      type="text"
-                      v-model="Students.father_name"
-                      id="fathersName">
-                    </b-form-input>
-                  </b-form-group>
-                </b-col>
-
-                <b-col cols="12" md="6" lg="6">
-                  <b-form-group
-                    class="mothersname"
-                    label="Mother's Name:"
-                    label-for="mothersName">
-                    <b-form-input
-                      type="text"
-                      v-model="Students.mother_name"
-                      id="mothersName">
-                    </b-form-input>
-                  </b-form-group>
-                </b-col>
-            </b-form-row>
-
-            <b-form-row>
-                <b-col cols="12" md="6" lg="3">
-                  <b-form-group
-                    class="contactperson"
-                    label="Contact Person:"
-                    label-for="contactPerson">
-                    <b-form-input
-                      type="text"
-                      v-model="Students.contact_person"
-                      id="contactPerson">
-                    </b-form-input>
-                  </b-form-group>
-                </b-col>
-
-                <b-col cols="12" md="6" lg="3">
-                  <b-form-group
-                    class="contactnumber"
-                    label="Contact Number"
-                    label-for="contactNumber">
-                    <b-form-input
-                      type="text"
-                      v-model="Students.contact_number"
-                      id="contact_Number">
-                    </b-form-input>
-                  </b-form-group>
-                </b-col>
-
-                <b-col cols="12" md="6" lg="6">
-                  <b-form-group
-                    class="contactaddress"
-                    label="Contact Address:"
-                    label-for="contactAddress">
-                    <b-form-input
-                      type="text"
-                      v-model="Students.contact_address"
-                      id="contact_Address">
-                    </b-form-input>
-                  </b-form-group>
-                </b-col>
-              </b-form-row>
-
-                <hr>
-
-              <b-form-row>
-                <h5>Guardian Information</h5>
-              </b-form-row>
-
-                <b-form-row>
-                  <b-col cols="12" md="6" lg="3">
-                    <b-form-radio
-                        v-model="selected"
-                        name="some-radios"
-                        value="A">Same as Mother's Information
-                    </b-form-radio>
-                 </b-col>
-
-                 <b-col cols="12" md="6" lg="3">
-                    <b-form-radio
-                      v-model="selected"
-                      name="some-radios"
-                      value="A">Same as Father's Information
-                    </b-form-radio>
-                </b-col>
-              </b-form-row>
-
-              <b-form-row>
-                <b-col cols="12" md="6" lg="6">
-                  <b-form-group
-                    class="guardianname"
-                    label="Guardian's Name:"
-                    label-for="guardianName">
-                    <b-form-input
-                      type="text"
-                      id="guardianName">
-                    </b-form-input>
-                  </b-form-group>
-                </b-col>
-
-                <b-col cols="12" md="6" lg="6">
-                  <b-form-group
-                    class="contactaddress"
-                    label="Contact Address:"
-                    label-for="contactAddress">
-                    <b-form-input
-                      type="text"
-                      id="contactAddress">
-                    </b-form-input>
-                  </b-form-group>
-                </b-col>
-            </b-form-row>
-
-
-            <b-form-row>
-              <b-col cols="12" md="6" lg="3">
-                <b-form-group
-                  class="contactnumber"
-                  label="Contact Number"
-                  label-for="contactNumber">
-                  <b-form-input
-                    type="text"
-                    id="contactNumber">
-                  </b-form-input>
-                </b-form-group>
-              </b-col>
-          </b-form-row>
-
-              <b-form-row>
-                <b-col>
-                  <b-button variant="primary" @click="tabIndex--">
-                    Previous
-                  </b-button>
-                </b-col>
-                <b-col class="d-flex justify-content-end">
-                  <b-button variant="primary" @click="UpdateStudents()">
-                    Update
-                  </b-button>
-                </b-col>
-              </b-form-row>
-            </b-form>
-          </b-tab>
-        </b-tabs>
-      </b-modal>
-      <!-- End of modal update -->
 
       <!-- An alert for displaying success messages -->
       <b-alert variant="success"
@@ -548,14 +26,14 @@
 
       <!-- start of register students -->
       <!-- Tab Group with forms for registration of students -->
-      <b-tabs v-model="tabIndex">
+      <b-tabs v-model="tabIndex" >
         <b-tab title="Student Information">
         <!-- Start form Student information -->
           <b-form>
             <b-form-row>
-              <h5>Student Information</h5>
+              <h5>Student's Information</h5>
             </b-form-row>
-
+              <hr>
             <b-form-row>
               <b-col cols="12" md="6" lg="3">
                 <b-form-group
@@ -570,7 +48,7 @@
                 </b-form-group>
               </b-col>
 
-              <b-col cols="12" md="6" lg="5">
+              <b-col cols="12" md="6" lg="3">
                 <b-form-group
                   class="firstname"
                   label="First Name"
@@ -596,7 +74,7 @@
                 </b-form-group>
               </b-col>
 
-              <b-col cols="12" md="6" lg="1">
+              <b-col cols="12" md="6" lg="3">
                 <b-form-group
                   class="suffixname"
                   label="Suffix Name"
@@ -608,19 +86,22 @@
                   </b-form-input>
                 </b-form-group>
               </b-col>
+          </b-form-row>
 
-              <b-col cols="12" md="6" lg="6">
-                <b-form-group
-                  class="schoollastattended"
-                  label="School Last Attended"
-                  label-for="schoolLastAttended">
-                  <b-form-input
-                    v-model="Students.school_last_attended"
-                    type="text"
-                    id="schoolLastAttended">
-                  </b-form-input>
-                </b-form-group>
-              </b-col>
+          <b-form-row>
+
+            <b-col cols="12" md="6" lg="6">
+              <b-form-group
+                class="schoollastattended"
+                label="School Last Attended"
+                label-for="schoolLastAttended">
+                <b-form-input
+                  type="text"
+                  v-model="Students.school_last_attended"
+                  id="schoolLastAttended">
+                </b-form-input>
+              </b-form-group>
+            </b-col>
 
               <b-col cols="12" md="6" lg="6">
                 <b-form-group
@@ -634,7 +115,37 @@
                   </b-form-input>
                 </b-form-group>
               </b-col>
+
             </b-form-row>
+
+            <b-form-row>
+
+              <b-col cols="12" md="6" lg="6">
+                <b-form-group
+                  class="universitycollege"
+                  label="University / College (for transferee)"
+                  label-for="universityCollege">
+                  <b-form-input
+                    type="text"
+                    v-model="Students.college_last_attended"
+                    id="universityCollege">
+                  </b-form-input>
+                </b-form-group>
+              </b-col>
+                <b-col cols="12" md="6" lg="6">
+                  <b-form-group
+                    class="universicyaddress"
+                    label="University Address"
+                    label-for="universityAddress">
+                    <b-form-input
+                      type="text"
+                      v-model="Students.college_address"
+                      id="universityAddress">
+                    </b-form-input>
+                  </b-form-group>
+                </b-col>
+
+              </b-form-row>
 
             <b-form-row>
               <b-col>
@@ -660,12 +171,12 @@
             <b-form-row>
               <h5>Personal Information</h5>
             </b-form-row>
-
+            <hr>
             <b-form-row>
-              <b-col cols="12" md="6" lg="4">
+              <b-col cols="12" md="6" lg="5">
                 <b-form-group
                   class="presentaddress"
-                  label="Present Address"
+                  label="Present Address ( House No./Lot No./Bldg No./Street )"
                   label-for="presentAddress">
                   <b-form-input
                     type="text"
@@ -679,10 +190,11 @@
             <b-col cols="12" md="6" lg="2">
               <b-form-group
                 class="barangay"
-                label="Barangay"
+                label="Barangay / Subdivision"
                 label-for="Barangay">
                 <b-form-input
                   type="text"
+                  v-model="Students.barangay"
                   id="Barangay"
                   required>
                 </b-form-input>
@@ -703,7 +215,7 @@
               </b-form-group>
             </b-col>
 
-            <b-col cols="12" md="6" lg="3">
+            <b-col cols="12" md="6" lg="2">
               <b-form-group
                 class="province"
                 label="Province"
@@ -733,47 +245,6 @@
           </b-form-row>
 
           <b-form-row>
-              <b-col cols="12" md="6" lg="4">
-                <b-form-group
-                  class="emailaddress"
-                  label="Email Address"
-                  label-for="emailAddress">
-                  <b-form-input
-                    type="email"
-                    v-model="Students.email"
-                    id="emailAddress"
-                    required>
-                  </b-form-input>
-                </b-form-group>
-              </b-col>
-
-              <b-col cols="12" md="6" lg="2">
-                <b-form-group
-                  class="cellphoneno"
-                  label="Cellphone No."
-                  label-for="cellphoneNo">
-                  <b-form-input
-                    type="number"
-                    v-model="Students.cellphone"
-                    id="cellphoneNo"
-                    required>
-                  </b-form-input>
-                </b-form-group>
-              </b-col>
-
-              <b-col cols="12" md="6" lg="2">
-                <b-form-group
-                  class="telephoneno"
-                  label="Telephone No."
-                  label-for="telephoneNo">
-                  <b-form-input
-                    type="text"
-                    v-model="Students.telephone"
-                    id="telephoneNo"
-                    required>
-                  </b-form-input>
-                </b-form-group>
-              </b-col>
 
               <b-col cols="12" md="6" lg="3">
                 <b-form-group
@@ -792,20 +263,49 @@
                 </b-form-group>
               </b-col>
 
-              <b-col cols="12" md="6" lg="1">
+              <b-col cols="12" md="6" lg="2">
                 <b-form-group
-                  class="age"
-                  label="Age"
-                  label-for="Age">
+                  class="gender"
+                  label="Gender"
+                  label-for="Gender">
+                  <b-form-select
+                    v-model="Students.gender"
+                    :options="genderOptions">
+                  </b-form-select>
+                </b-form-group>
+              </b-col>
+
+              <b-col cols="12" md="6" lg="4">
+                <b-form-group
+                  class="emailaddress"
+                  label="Email Address"
+                  label-for="emailAddress">
                   <b-form-input
-                    type="text"
-                    id="Age"
+                    type="email"
+                    v-model="Students.email"
+                    id="emailAddress"
                     required>
                   </b-form-input>
                 </b-form-group>
               </b-col>
 
-              <b-col cols="12" md="6" lg="4">
+
+
+              <b-col cols="12" md="6" lg="3">
+                <b-form-group
+                  class="cellphoneno"
+                  label="Cellphone No."
+                  label-for="cellphoneNo">
+                  <b-form-input
+                    type="number"
+                    v-model="Students.cellphone"
+                    id="cellphoneNo"
+                    required>
+                  </b-form-input>
+                </b-form-group>
+              </b-col>
+
+              <b-col cols="12" md="6" lg="5">
                 <b-form-group
                   class="placeofbirth"
                   label="Place of Birth"
@@ -821,37 +321,12 @@
 
               <b-col cols="12" md="6" lg="2">
                 <b-form-group
-                  class="gender"
-                  label="Gender"
-                  label-for="Gender">
-                  <b-form-select
-                    v-model="Students.gender"
-                    :options="genderOptions">
-                  </b-form-select>
-                </b-form-group>
-              </b-col>
-
-              <b-col cols="12" md="6" lg="2">
-                <b-form-group
-                  class="bloodtype"
-                  label="Blood Type"
-                  label-for="bloodType">
-                  <b-form-input
-                    type="text"
-                    v-model="Students.blood_type"
-                    id="bloodType"
-                    required>
-                  </b-form-input>
-                </b-form-group>
-              </b-col>
-
-              <b-col cols="12" md="6" lg="2">
-                <b-form-group
                   class="citizenship"
                   label="Citizenship"
                   label-for="citizenShip">
                   <b-form-input
                     type="text"
+                    v-model="Students.citizenship"
                     id="citizenShip"
                     required>
                   </b-form-input>
@@ -871,6 +346,21 @@
                   </b-form-input>
                 </b-form-group>
               </b-col>
+
+              <b-col cols="12" md="6" lg="3">
+                <b-form-group
+                  class="telephoneno"
+                  label="Telephone No."
+                  label-for="telephoneNo">
+                  <b-form-input
+                    type="text"
+                    v-model="Students.telephone"
+                    id="telephoneNo"
+                    required>
+                  </b-form-input>
+                </b-form-group>
+              </b-col>
+
               </b-form-row>
 
               <b-form-row>
@@ -896,7 +386,7 @@
             <b-form-row>
               <h5>Parents Information</h5>
             </b-form-row>
-
+            <hr>
             <b-form-row>
               <b-col cols="12" md="6" lg="6">
                 <b-form-group
@@ -926,23 +416,24 @@
           </b-form-row>
 
           <b-form-row>
-              <b-col cols="12" md="6" lg="3">
-                <b-form-group
-                  class="contactperson"
-                  label="Contact Person:"
-                  label-for="contactPerson">
-                  <b-form-input
-                    type="text"
-                    v-model="Students.contact_person"
-                    id="contactPerson">
-                  </b-form-input>
-                </b-form-group>
-              </b-col>
 
-              <b-col cols="12" md="6" lg="3">
+            <b-col cols="12" md="6" lg="6">
+              <b-form-group
+                class="contactaddress"
+                label="Contact Address:"
+                label-for="contactAddress">
+                <b-form-input
+                  type="text"
+                  v-model="Students.contact_address"
+                  id="contact_Address">
+                </b-form-input>
+              </b-form-group>
+            </b-col>
+
+              <b-col cols="12" md="6" lg="6">
                 <b-form-group
-                  class="contactnumber"
-                  label="Contact Number"
+                  class="hishercontactnumber"
+                  label="His/Her Contact Number:"
                   label-for="contactNumber">
                   <b-form-input
                     type="text"
@@ -952,18 +443,6 @@
                 </b-form-group>
               </b-col>
 
-              <b-col cols="12" md="6" lg="6">
-                <b-form-group
-                  class="contactaddress"
-                  label="Contact Address:"
-                  label-for="contactAddress">
-                  <b-form-input
-                    type="text"
-                    v-model="Students.contact_address"
-                    id="contact_Address">
-                  </b-form-input>
-                </b-form-group>
-              </b-col>
             </b-form-row>
 
               <hr>
@@ -971,39 +450,23 @@
             <b-form-row>
               <h5>Guardian Information</h5>
             </b-form-row>
-
-              <b-form-row>
-                <b-col cols="12" md="6" lg="3">
-                  <b-form-radio
-                      v-model="selected"
-                      name="some-radios"
-                      value="A">Same as Mother's Information
-                  </b-form-radio>
-               </b-col>
-
-               <b-col cols="12" md="6" lg="3">
-                  <b-form-radio
-                    v-model="selected"
-                    name="some-radios"
-                    value="A">Same as Father's Information
-                  </b-form-radio>
-              </b-col>
-            </b-form-row>
+            <hr>
 
             <b-form-row>
-              <b-col cols="12" md="6" lg="6">
+              <b-col cols="12" md="6" lg="4">
                 <b-form-group
                   class="guardianname"
                   label="Guardian's Name:"
                   label-for="guardianName">
                   <b-form-input
                     type="text"
+                    v-model="Students.contact_person"
                     id="guardianName">
                   </b-form-input>
                 </b-form-group>
               </b-col>
 
-              <b-col cols="12" md="6" lg="6">
+              <b-col cols="12" md="6" lg="4">
                 <b-form-group
                   class="contactaddress"
                   label="Contact Address:"
@@ -1014,11 +477,8 @@
                   </b-form-input>
                 </b-form-group>
               </b-col>
-          </b-form-row>
 
-
-          <b-form-row>
-            <b-col cols="12" md="6" lg="3">
+            <b-col cols="12" md="6" lg="4">
               <b-form-group
                 class="contactnumber"
                 label="Contact Number"
@@ -1049,8 +509,11 @@
     </div>
 
 
-    <b-form-row>
-      <h5>Pre Registered Students</h5>
+    <b-button variant="success" size="sm" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
+      Register New Student
+    </b-button>
+
+
       <ag-grid-vue class="ag-theme-material"
         :columnDefs="studentColDef"
         :rowData="StudentRowData"
@@ -1059,7 +522,7 @@
         :paginationPageSize="10"
         :gridOptions="gridOptions">
       </ag-grid-vue>
-    </b-form-row>
+
 
 
   </div>
@@ -1128,8 +591,10 @@
           last_name: null,
           suffix_name: null,
           gender: null,
-          address: null,
           civil_status: null,
+          citizenship:null,
+          address: null,
+          barangay: null,
           city: null,
           postal: null,
           province: null,
@@ -1148,9 +613,11 @@
           user_id: null,
           school_last_attended: null,
           school_address: null,
+          college_last_attended: null,
+          college_address: null,
           active: 1,
-
         }
+
       }
     },
     beforeMount(){
@@ -1265,8 +732,10 @@
               last_name: null,
               suffix_name: null,
               gender: null,
-              address: null,
               civil_status: null,
+              citizenship:null,
+              address: null,
+              barangay: null,
               city: null,
               postal: null,
               province: null,
@@ -1285,6 +754,8 @@
               user_id: null,
               school_last_attended: null,
               school_address: null,
+              college_last_attended: null,
+              college_address: null,
               active: 1,
             };
           })
@@ -1317,8 +788,10 @@
               last_name: null,
               suffix_name: null,
               gender: null,
-              address: null,
               civil_status: null,
+              citizenship:null,
+              address: null,
+              barangay: null,
               city: null,
               postal: null,
               province: null,
@@ -1337,6 +810,8 @@
               user_id: null,
               school_last_attended: null,
               school_address: null,
+              college_last_attended: null,
+              college_address: null,
               active: 1,
             };
           })
@@ -1359,8 +834,10 @@
           last_name: null,
           suffix_name: null,
           gender: null,
-          address: null,
           civil_status: null,
+          citizenship:null,
+          address: null,
+          barangay: null,
           city: null,
           postal: null,
           province: null,
@@ -1379,6 +856,8 @@
           user_id: null,
           school_last_attended: null,
           school_address: null,
+          college_last_attended: null,
+          college_address: null,
           active: 1,
         };
       },
@@ -1386,7 +865,6 @@
       CancelRegister: function(){
         this.ClearStudentFields();
       },
-
 
       toggleForm: function(){
         // toggle form visibility
@@ -1396,6 +874,7 @@
           this.showForm = true;
         }
       },
+
     },
-    }
+  }
 </script>

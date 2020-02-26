@@ -271,7 +271,7 @@
       </b-col>
 
       <!--  Room Name -->
-      <b-col cols="12" md="6" lg="4">
+      <b-col cols="12" md="6" lg="3">
         <b-form-group
           class="password"
           label="Password"
@@ -280,6 +280,19 @@
             type="password"
             v-model="users.password"
             id="Password"
+            required></b-form-input>
+        </b-form-group>
+      </b-col>
+
+      <b-col cols="12" md="6" lg="3">
+        <b-form-group
+          class="confirmpassword"
+          label="Confirm Password"
+          label-for="confirmPassword">
+          <b-form-input
+            type="password"
+            v-model="users.password_confirmation"
+            id="confirmPassword"
             required></b-form-input>
         </b-form-group>
       </b-col>
@@ -460,6 +473,7 @@
           {headerName: 'Middle Name', field: 'middle_name', sortable: true, filter: true, width: 180,},
           {headerName: 'Last Name', field: 'last_name', sortable: true, filter: true, width: 180,},
           {headerName: 'Role', field: 'role', sortable: true, filter: true, width: 180,},
+          {headerName: 'Status', field: 'active', sortable: true, filter: true, width: 180,},
           {headerName: 'Actions', field: 'id', cellRendererFramework: 'UserAccountActionButtons'}
       ];
 

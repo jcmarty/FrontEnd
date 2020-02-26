@@ -15,7 +15,7 @@
               label-for="studentNo">
               <b-form-input
                 type="text"
-                v-bind:value="RegStudent.student_number"
+                v-bind:value=" RegStudent.student_number "
                 id="studentNo"
                 required></b-form-input>
             </b-form-group>
@@ -118,7 +118,7 @@
 
 
 
-    <b-form-row>
+    <!-- <b-form-row>
       <h5>Subject Enrolled</h5>
       <ag-grid-vue class="ag-theme-material"
         :columnDefs="SubjectsColDef"
@@ -140,7 +140,7 @@
         :paginationPageSize="10"
         :gridOptions="gridOptions">
       </ag-grid-vue>
-    </b-form-row>
+    </b-form-row> -->
 
 
           <b-form-row>
@@ -221,18 +221,13 @@
       ];
 
     },
+
     mounted () {
+      this.test();
       this.getSemesters();
     },
 
-    created() {
-        console.log(this.$route.params);
-        this.RegStudent = {
-          id: this.$route.params.id,
-          name: this.$route.params.first_name + " " + this.$route.params.last_name,
-          student_number: this.$route.params.student_number,
-        }
-    },
+
     methods:{
       getSemesters: function(){
         Axios
@@ -372,6 +367,24 @@
             this.dismissErrorCountDown = this.dismissSecs;
           });
         this.$refs['deleteSemesterModal'].hide();
+      },
+
+      // start of testing
+      test: function(){
+        if(Object.keys(this.$route.params).length === 0){
+          this.RegStudent = {
+               id: '',
+               name: '',
+               student_number: '',
+             };
+        }else {
+             this.RegStudent = {
+                  id: this.$route.params.id,
+                  name: this.$route.params.first_name + " " + this.$route.params.last_name,
+                  student_number: this.$route.params.student_number,
+                };
+        }
+        console.log(this.$route.params);
       }
     }
   }

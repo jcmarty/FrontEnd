@@ -12,7 +12,7 @@
         v-model="selected"
         @change="getInstructorSchedule()">
         <option v-for="ins in rowData"
-        v-bind:value="ins.id">{{ins.first_name}} {{ins.last_name}}</option>
+        v-bind:value="ins.id">{{ins.last_name}}, {{ins.first_name}} </option>
       </b-form-select>
     </b-form-group>
   </b-col>
