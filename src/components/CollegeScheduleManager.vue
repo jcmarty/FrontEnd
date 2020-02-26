@@ -33,8 +33,9 @@
                 id="academicYear"
                 v-model="selectedAcademicYear"
                 @change="">
+                <option value="null" hidden>Select Academic Year</option>
                 <option v-for="ay in AyRow"
-                v-bind:value="ay.academic_year">{{ay.academic_year}}</option>
+                v-bind:value="ay.id">{{ay.academic_year}}</option>
               </b-form-select>
             </b-form-group>
           </b-col>
@@ -48,8 +49,9 @@
                 id="Semester"
                 v-model="selectedSemester"
                 @change="">
+                <option value="null" hidden>Select Semester</option>
                 <option v-for="sem in SemRow"
-                v-bind:value="sem.semester">{{sem.semester}}</option>
+                v-bind:value="sem.id">{{sem.semester}}</option>
               </b-form-select>
             </b-form-group>
           </b-col>
@@ -62,9 +64,10 @@
               <b-form-select
                 id="Course"
                 v-model="selectedCourse"
-                @change="getCurriculum()">
-                <option v-for="course in CourseRow"
-                v-bind:value="{id:course.id , year:course.year_duration}">{{course.course_code}}</option>
+                @change="getCurriculum()" :options="course_options">
+                <option value="null" hidden>Select Course</option>
+                <!-- <option v-for="course in CourseRow"
+                v-bind:value="{id:course.id , year:course.year_duration}">{{course.course_code}}</option> -->
               </b-form-select>
             </b-form-group>
           </b-col>
@@ -77,8 +80,10 @@
               <b-form-select
                 id="Curriculum"
                 v-model="selectedCurriculum"
-                @change="">
-                <option v-for="curriculum in Curriculumrow "
+                @change="changeCurr">
+                <option value="null" hidden>Select Curriculum</option>
+                <option v-if="Curriculumrow === null" value="null" disabled>No Curriculums</option>
+                <option v-else v-for="curriculum in Curriculumrow "
                 v-bind:value="curriculum.id">{{curriculum.curriculum_title}}</option>
               </b-form-select>
             </b-form-group>
@@ -89,28 +94,18 @@
               class="yearlevel"
               label="Year Level"
               label-for="yearLevel">
-              <b-form-select :hidden="Bs"
-                id="yearLevel"
-                v-model="selectedYearLevel"
-                @change="getSubject()">
-                <option>1st Year</option>
-                <option>2nd Year</option>
-                <option>3rd Year</option>
-                <option>4th Year</option>
-              </b-form-select>
-
-              <b-form-select :hidden="Voc"
-                id="yearLevel"
-                v-model="selectedYearLevel"
-                @change="getSubject()">
-                <option>1st Year</option>
-                <option>2nd Year</option>
+              <b-form-select
+                  id="yearLevel"
+                  v-model="selectedYearLevel"
+                  @change="getSubject()" :options="year_options">
+                  <option value="null" hidden>Select Year Level</option>
+                  <option v-if="selectedCurriculum === null" value="null" disabled>No year levels</option>
               </b-form-select>
             </b-form-group>
           </b-col>
 
 
-          <b-col cols="12" md="6" lg="2">
+          <!-- <b-col cols="12" md="6" lg="2">
             <b-form-group
               class="blockbatch"
               label="Block Batch"
@@ -118,11 +113,11 @@
               <b-form-select
                 id="blockBatch"
                 @change="getInstructorSchedule()">
-                <!-- <option v-for="ay in rowData"
-                v-bind:value="ins.id">{{ins.first_name}} {{ins.last_name}}</option> -->
+                <option v-for="ay in rowData"
+                v-bind:value="ins.id">{{ins.first_name}} {{ins.last_name}}</option>
               </b-form-select>
             </b-form-group>
-          </b-col>
+          </b-col> -->
 
           <b-col cols="12" md="6" lg="2">
             <b-form-group
@@ -131,9 +126,12 @@
               label-for="Subject">
               <b-form-select
                 id="Subject"
-                @change="getInstructorSchedule()">
-                <!-- <option v-for="ay in rowData"
-                v-bind:value="ins.id">{{ins.first_name}} {{ins.last_name}}</option> -->
+                @change="getInstructorSchedule()"
+                v-model="selectedSubject" >
+                <option value="null" hidden>Select Subject</option>
+                <option v-if="SubjectsRow === null" value="null" disabled>No Subjects</option>
+                <option v-else v-for="data in SubjectsRow"
+                v-bind:value="data.id">{{data.subject.subject_code}} - {{data.subject.subject_description}} </option>
               </b-form-select>
             </b-form-group>
           </b-col>
@@ -202,6 +200,7 @@
                   SemRow: null,
                   CourseRow: null,
                   Curriculumrow: null,
+                  SubjectsRow: null,
                   gridOptions: null,
                   showForm: false,
                   alertMessage: "",
@@ -209,13 +208,21 @@
                   dismissSecs: 7,
                   dismissSuccessCountDown: 0,
                   dismissErrorCountDown: 0,
-                  Bs: true,
-                  Voc: true,
+
+
+                  current_ay: [],
+                  current_sem: [],
                   selectedCourse: null,
                   selectedYearLevel: null,
+                  year_options: [],
+                  course_options: [],
+                  academic_options: [],
                   selectedCurriculum:null,
                   selectedAcademicYear:null,
                   selectedSemester:null,
+                  selectedSubject: null,
+                  dataFilter: null,
+
 
                   ClassSched:{
                     day: null,
@@ -265,6 +272,7 @@
               },
               mounted () {
                 this.getClassSchedule();
+                this.getCurrentSetting()
                 this.getCourse();
                 this.getAY();
                 this.getSemester();
@@ -272,6 +280,7 @@
               },
 
               methods: {
+                // gets all created schedule
                 getClassSchedule: function(){
                   Axios
                     .get('http://localhost/api/v1/class_schedules', {
@@ -282,7 +291,34 @@
                       this.CollegeClassSchedRow = response.data;
                     })
                 },
-
+                getCurrentSetting: function(){
+                  Axios
+                    .get('http://localhost/api/v1/settings', {
+                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+                    })
+                    .then(response => {
+                      Axios
+                        .get('http://localhost/api/v1/academic_years/' + response.data.current_ay, {
+                          headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+                        })
+                        .then(current_ay => {
+                          this.selectedAcademicYear = current_ay.data.id;
+                          this.current_ay = [
+                            { id: current_ay.data.id},
+                            { academic_year: current_ay.data.academic_year},
+                          ];
+                          Axios
+                            .get('http://localhost/api/v1/semesters/' + response.data.current_sem, {
+                              headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+                            })
+                            .then(current_sem => {
+                              this.selectedSemester = current_sem.data.id
+                              this.current_sem = current_sem.data.semester
+                            }) // end of get current sem
+                        }) // end of get current ay
+                    }) // end of get settings
+                },
+                // gets all academic year record
                 getAY: function(){
                   Axios
                     .get('http://localhost/api/v1/academic_years', {
@@ -291,9 +327,24 @@
                     .then(response => {
                       //console.log(response.data.data);
                       this.AyRow = response.data;
+                      // if( response.data.length == 0){
+                      //   // this.AyRow = null;
+                      // }else{
+                      //   for (var i = 0; i < response.data.length; i++) {
+                      //     // console.log(response.data[i].academic_year);
+                      //     this.academic_options.push(
+                      //       {
+                      //         value: {
+                      //           id: response.data[i].id,
+                      //         },
+                      //         text: response.data[i].academic_year },
+                      //     );
+                      //   }
+                      // }
                     })
                 },
 
+                // gets all semester record
                 getSemester: function(){
                   Axios
                     .get('http://localhost/api/v1/semesters', {
@@ -311,11 +362,24 @@
                       headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
                     })
                     .then(response => {
-                      //console.log(response.data.data);
-                      this.CourseRow = response.data;
+                      // course_options
+                      // this.CourseRow = response.data;
+                      if( response.data.length == 0){
+                        this.CourseRow = null;
+                      }else{
+                        for (var i = 0; i < response.data.length; i++) {
+                          // console.log(response.data[i].course_code);
+                          this.course_options.push(
+                            {
+                              value: {
+                                id: response.data[i].id,
+                                year: response.data[i].year_duration
+                              },
+                              text: response.data[i].course_code },
+                          );
+                        }
+                      }
                     });
-
-
                 },
 
                 getCurriculum: function(){
@@ -324,28 +388,65 @@
                       headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
                     })
                     .then(response => {
-                        // console.log(response.data);
-                      this.Curriculumrow = response.data;
-                    });
-                    if(this.selectedCourse.year === "4 years"){
-                      this.Bs = false,
-                      this.Voc = true
-                    }
-                   else if(this.selectedCourse.year === "2 years"){
-                     this.Bs = true,
-                     this.Voc = false
-                   }
 
+                      // this.Curriculumrow = response.data;
+
+                      if( response.data.length == 0){
+                        this.Curriculumrow = null;
+                      }else{
+                        this.Curriculumrow = response.data;
+                      }
+                      this.year_options = [];
+                      this.SubjectsRow = null;
+                      this.selectedYearLevel = null;
+                      this.selectedCurriculum = null;
+                      this.selectedSubject = null;
+                    });
+
+
+
+                },
+                changeCurr: function(){
+                  this.selectedYearLevel = null;
+                  this.selectedSubject = null;
+                  // console.log(this.selectedCourse)
+                  if(this.selectedCourse.year === "4 years"){
+                    this.year_options = [
+                      { value: '1st Year', text: '1st Year' },
+                      { value: '2nd Year', text: '2nd Year' },
+                      { value: '3rd Year', text: '3rd Year' },
+                      { value: '4th Year', text: '4th Year' },
+                    ];
+                  }
+                 else if(this.selectedCourse.year === "2 years"){
+                   this.year_options = [
+
+                     { value: '1st Year', text: '1st Year' },
+                     { value: '2nd Year', text: '2nd Year' },
+                   ];
+                 }
                 },
 
                 getSubject: function(){
+                  this.dataFilter = {
+                    "semester_id" : this.selectedSemester,
+                    "curriculum_id" : this.selectedCurriculum,
+                    "year_level" : this.selectedYearLevel
+                  };
+                  // console.log(this.dataFilter);
                   Axios
-                    .post('http://localhost/api/v1/course/get_subjects', {
+                    .post('http://localhost/api/v1/course/get_subjects', this.dataFilter,{
                       headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
                     })
                     .then(response => {
-                        // console.log(response.data);
-                      this.Curriculumrow = response.data;
+                      if( response.data == 0){
+                        this.SubjectsRow = null;
+                      }else{
+                        this.SubjectsRow = response.data;
+                      }
+
+                      // this.SubjectsRow = response.data;
+                      // console.log(response.data);
                     });
                 },
 

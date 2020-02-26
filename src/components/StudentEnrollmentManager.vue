@@ -118,18 +118,18 @@
 
 
 
-    <!-- <b-form-row>
+    <b-form-row>
       <h5>Subject Enrolled</h5>
       <ag-grid-vue class="ag-theme-material"
-        :columnDefs="SubjectsColDef"
-        :rowData="SubjectcsRowData"
+        :columnDefs="SubjectEnrolledColdef"
+        :rowData="SubjectEnrolledRowData"
         :animateRows="true"
         :pagination="true"
         :paginationPageSize="10"
         :gridOptions="gridOptions">
       </ag-grid-vue>
     </b-form-row>
-
+<hr/>
     <b-form-row>
       <h5>Subject List</h5>
       <ag-grid-vue class="ag-theme-material"
@@ -140,7 +140,7 @@
         :paginationPageSize="10"
         :gridOptions="gridOptions">
       </ag-grid-vue>
-    </b-form-row> -->
+    </b-form-row>
 
 
           <b-form-row>
@@ -181,8 +181,8 @@
         gridOptions: null,
         SubjectsColDef: null,
         SubjectcsRowData: null,
-        SubjectEnColdef: null,
-        SubjectEnRowData: null,
+        SubjectEnrolledColdef: null,
+        SubjectEnrolledRowData: null,
         id: null,
         semesters:{
           semester:null
@@ -207,13 +207,13 @@
           }
       };
       this.SubjectsColDef = [
-          {headerName: 'ID', field: 'id', sortable: true, filter: true, width: 150},
-          {headerName: 'Subject Code', field: 'subject_code', sortable: true, filter: true, width: 150,},
+          {headerName: 'ID', field: 'subject.subject_id', sortable: true, filter: true, width: 150},
+          {headerName: 'Subject Code', field: 'subject.subject_code', sortable: true, filter: true, width: 150,},
           {headerName: 'Subject Description', field: 'subject_description',  sortable: true, filter: true, width: 350},
           {headerName: 'Action', field: 'subject_description', cellRendererFramework: 'SemestersActionButtons'}
       ];
 
-      this.SubjectEnColdef = [
+      this.SubjectEnrolledColdef = [
           {headerName: 'ID', field: 'id', sortable: true, filter: true, width: 150},
           {headerName: 'Subject Code', field: 'subject_code', sortable: true, filter: true, width: 150,},
           {headerName: 'Subject Description', field: 'subject_description',  sortable: true, filter: true, width: 350},
@@ -258,7 +258,7 @@
           })
           .then(response => {
             //console.log(response.data.data);
-            this.SubjectEnRowData = response.data;
+            this.SubjectEnrolledRowData = response.data;
           })
           .catch(error => {
             this.alertMessage = error.response.data.message;
