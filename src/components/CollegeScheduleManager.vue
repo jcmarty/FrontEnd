@@ -111,7 +111,7 @@
               label-for="Subject">
               <b-form-select
                 id="Subject"
-                @change="getInstructors()"
+                @change="getInstructors"
                 v-model="selectedSubject" >
                 <option value="null" hidden>Select Subject</option>
                 <option v-if="SubjectsRow === null" value="null" disabled>No Subjects</option>
@@ -523,7 +523,7 @@
 
                 },
 
-                // gets all subjects
+                // gets all subjects base on selected semester, curriculum and year level
                 getSubject: function(){
                   this.dataFilter = {
                     "semester_id" : this.selectedSemester,
@@ -532,7 +532,7 @@
                   };
                   // console.log(this.dataFilter);
                   Axios
-                    .post('http://localhost/api/v1/course/get_subjects', this.dataFilter,{
+                    .post('http://localhost/api/v1/curriculums/' + this.selectedCurriculum + '/subjects', this.dataFilter,{
                       headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
                     })
                     .then(response => {
@@ -558,6 +558,7 @@
                     });
                 },
 
+                // gets all instructor that prefers the selected subject
                 getInstructors: function(){
                   Axios
                     .get('http://localhost/api/v1/curriculum_subjects/' + this.selectedSubject + '/instructors', {
@@ -565,12 +566,15 @@
                     })
                     .then(response => {
                       // console.log(response);
-                      this.instructorRow = response.data;
+                      // this.instructorRow = response.data;
+                      if( response.data.length == 0){
+                        this.instructorRow = null;
+                      }else{
+                        this.instructorRow = response.data;
+                      }
                     })
-
                     this.roomRow = null;
                     this.day_options = [];
-
 
                     this.selectedBlock = 1;
                     this.selectedBatch = 1;
@@ -578,16 +582,16 @@
                     this.selectedRoom = null;
                     this.selectedDay = null;
 
-                    this.getRooms();
+                    // this.getRooms();
                 },
 
+                // gets all rooms
                 getRooms: function(){
                   Axios
                     .get('http://localhost/api/v1/rooms', {
                       headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
                     })
                     .then(response => {
-                      // console.log(response);
                       this.day_options = [];
                       this.selectedDay = null;
                       this.selectedRoom = null;
@@ -595,6 +599,7 @@
                     })
                 },
 
+                //
                 getDays: function(){
                   this.day_options = [
                     { value: 'Monday', text: 'Monday' },

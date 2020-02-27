@@ -64,6 +64,7 @@
               </li>
               <router-link tag="li" to="/reports/schedule/room"><a>Room Schedule</a></router-link>
               <router-link tag="li" to="/reports/schedule/instructor"><a>Instructor Schedule</a></router-link>
+              <router-link tag="li" to="/reports/students"><a>Students</a></router-link>
             </b-collapse>
           </li>
         </ul>
