@@ -79,7 +79,10 @@
                     after which the account must be blocked.
                     A password reset request will be sent to
                     the system administrator. */
-            Axios.post(baseUrl + "login", {username: this.input.username, password: this.input.password})
+            Axios.post(baseUrl + "login", {
+              username: this.input.username,
+              password: this.input.password
+            })
             .then(response => {
                 //save user details in localStorage
                 localStorage.setItem('ccbc_token', JSON.stringify({ user: response.data.user, token: response.data.token}));
