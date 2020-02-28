@@ -448,7 +448,8 @@
                                 id: response.data[i].id,
                                 year: response.data[i].year_duration
                               },
-                              text: response.data[i].course_code },
+                              text: response.data[i].course_code
+                            },
                           );
                         }
                       }

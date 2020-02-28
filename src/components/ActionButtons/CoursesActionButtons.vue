@@ -10,13 +10,13 @@
         name: 'CoursesActionButtons',
         methods: {
           setFormValues: function(){
-            //console.log(this.params.data.id);
-            // this.params.context.componentParent.id = this.params.data.id;
-            // this.params.context.componentParent.course.course_code = this.params.data.course_code;
-            // this.params.context.componentParent.course.course_desc = this.params.data.course_desc;
-            // this.params.context.componentParent.course.course_major = this.params.data.course_major;
-            // this.params.context.componentParent.course.year_duration = this.params.data.year_duration;
-            // this.params.context.componentParent.course.active = this.params.data.active;
+            console.log(this.params.data.id);
+            this.params.context.componentParent.id = this.params.data.id;
+            this.params.context.componentParent.course.course_code = this.params.data.course_code;
+            this.params.context.componentParent.course.course_desc = this.params.data.course_desc;
+            this.params.context.componentParent.course.course_major = this.params.data.course_major;
+            this.params.context.componentParent.course.year_duration = this.params.data.year_duration;
+            this.params.context.componentParent.course.active = this.params.data.active;
           }
         },
 
