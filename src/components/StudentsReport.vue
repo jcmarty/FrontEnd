@@ -2,30 +2,29 @@
   <div>
     <h1>Students Report</h1><hr/>
 
-  <!-- <b-col cols="12" md="6" lg="2">
-    <b-form-group
-      class="roomnumber"
-      label="Select Room No."
-      label-for="RoomNo">
-      <b-form-select
-        id="RoomNo"
-        v-model="selected"
-        @change="getRoomSchedule()">
-        <option v-for="rooms in rowData"
-        v-bind:value="rooms.id">{{rooms.room_number}}</option>
-      </b-form-select>
-    </b-form-group>
-  </b-col> -->
+    <b-col cols="12" md="6" lg="2">
+      <b-form-group
+        class="course"
+        label="Select Course"
+        label-for="Course">
+        <b-form-select
+          id="Course"
+          v-model="SelectedCourse"
+          @change="">
+          <option v-for="course in CourseRow"
+          v-bind:value="course.id">{{course.course_code}}</option>
+        </b-form-select>
+      </b-form-group>
+    </b-col>
 
     <ag-grid-vue class="ag-theme-material"
       :columnDefs="columnDefs"
-      :rowData="rowData"
+      :rowData="EnrolledStudentsRow"
       :animateRows="true"
       :pagination="true"
       :paginationPageSize="10"
       :gridOptions="gridOptions">
     </ag-grid-vue>
-
 
   </div>
 </template>
@@ -41,11 +40,12 @@ import '../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
         data() {
             return {
               columnDefs: null,
-              rowData: null,
+              EnrolledStudentsRow: null,
+              CourseRow: null,
               gridOptions: null,
               id: null,
 
-              selected: null,
+              SelectedCourse: null,
             }
         },
         components: {
@@ -59,36 +59,49 @@ import '../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
           };
             this.columnDefs = [
                 {headerName: 'ID', field: 'id', sortable: true, filter: true, width: 150 },
-                {headerName: 'Subject Code', field: 'subject.subject.subject_code', sortable: true, filter: true, width: 150},
-                {headerName: 'Subject Description', field: 'subject.subject.subject_description', sortable: true, filter: true, width: 150, resizable: true},
-                {headerName: 'Day', field: 'day', sortable: true, filter: true, width: 150,},
-                {headerName: 'Time Start', field: 'time_start', sortable: true, filter: true, width: 150},
-                {headerName: 'Time End', field: 'time_end', sortable: true, filter: true, width: 150},
-                {headerName: 'Instructor', field: 'instructor_id', sortable: true, filter: true, width: 150},
-                {headerName: 'Block', field: 'block', sortable: true, filter: true, width: 150},
-                {headerName: 'Batch', field: 'batch', sortable: true, filter: true, width: 150},
-                {headerName: 'Class Type', field: 'class_type', sortable: true, filter: true, width: 150},
-                {headerName: 'Academic Year', field: 'academic_year_id', sortable: true, filter: true, width: 150},
-                {headerName: 'Semester', field: 'semester_id', sortable: true, filter: true, width: 150},
+                {headerName: 'Student Number', field: 'student.student_number', sortable: true, filter: true, width: 150},
+                {headerName: 'Student Name', field: 'subject.subject.subject_description', sortable: true, filter: true, width: 150, resizable: true},
+                {headerName: 'Course', field: 'course.course_code', sortable: true, filter: true, width: 150,},
+                {headerName: 'Year Level', field: 'year_level', sortable: true, filter: true, width: 150},
+                // {headerName: 'Time End', field: 'time_end', sortable: true, filter: true, width: 150},
+                // {headerName: 'Instructor', field: 'instructor_id', sortable: true, filter: true, width: 150},
+                // {headerName: 'Block', field: 'block', sortable: true, filter: true, width: 150},
+                // {headerName: 'Batch', field: 'batch', sortable: true, filter: true, width: 150},
+                // {headerName: 'Class Type', field: 'class_type', sortable: true, filter: true, width: 150},
+                // {headerName: 'Academic Year', field: 'academic_year_id', sortable: true, filter: true, width: 150},
+                // {headerName: 'Semester', field: 'semester_id', sortable: true, filter: true, width: 150},
             ];
 
           },
           mounted () {
             this.getEnrolledStudents();
+            this.getCourse();
             // this.getRoomSchedule();
           },
 
           methods: {
             getEnrolledStudents: function(){
               Axios
-                .get('http://localhost/api/v1/students', {
+                .get('http://localhost/api/v1/enrollments', {
                   headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
                 })
                 .then(response => {
                   //console.log(response.data.data);
-                  this.rowData = response.data;
+                  this.EnrolledStudentsRow = response.data;
                 })
             },
+
+            getCourse: function(){
+              Axios
+              .get('http://localhost/api/v1/courses', {
+                headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+              })
+              .then(response => {
+                //console.log(response.data.data);
+                this.CourseRow = response.data;
+              })
+          }
+
 
             // getRoomSchedule: function(id){
             //   Axios
@@ -102,5 +115,5 @@ import '../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
             // },
 
             }
-          }
+    }
 </script>
