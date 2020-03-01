@@ -1,7 +1,7 @@
 <template>
     <div>
-      <b-button variant='warning' size='sm' @click='setFormValues()' v-b-modal.editTrackModal>Edit</b-button>
-      <b-button variant='danger' size='sm' @click='setFormValues()' v-b-modal.deleteTrackModal>Delete</b-button>
+      <b-button variant='warning' size='sm' @click='setFormValues()' v-b-modal.editTrackModal>EDIT</b-button>
+      <b-button variant='danger' size='sm' @click='setFormValues()' v-b-modal.deleteTrackModal>DELETE</b-button>
     </div>
 </template>
 
