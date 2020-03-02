@@ -207,18 +207,6 @@
                 </tr>
               </table>
 
-                <!-- <ul>
-                  <li v-for="(key, value) in userActivities">
-                    {{value}}
-
-                        <b-form-checkbox
-                          :id="key"
-                          v-model="empty">
-                          <b-text>create</b-text>
-                        </b-form-checkbox>
-
-                  </li>
-                </ul> -->
               </b-form-group>
             </b-col>
           </b-form-row>
@@ -230,8 +218,8 @@
                 </b-button>
               </b-col>
               <b-col class="d-flex justify-content-end">
-                <b-button variant="primary" id="Add_UserAccount_Btn" @click="addUserPrivileges">
-                  Next
+                <b-button variant="success" id="Add_UserAccount_Btn" @click="addUserPrivileges">
+                  Add
                 </b-button>
               </b-col>
           </b-form-row>
@@ -240,7 +228,7 @@
     <!-- User Privilege Form End -->
   </b-tabs>
 
-    <b-button variant="success" size="sm" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
+    <b-button variant="primary" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
       Add New User Account
     </b-button>
 
@@ -254,7 +242,7 @@
     </ag-grid-vue>
 
 <!-- User Account Edit Form Start -->
-    <b-modal id="editUserAccountModal" ref="editUserAccountModal" title="Edit User Account" size="xl">
+    <b-modal id="editUserAccountModal" ref="editUserAccountModal" title="Edit User Account" size="lg" no-close-on-backdrop>
       <b-form-row>
       <!-- Room Number -->
       <b-col cols="12" md="6" lg="2">
@@ -325,7 +313,7 @@
         </b-form-group>
       </b-col>
 
-      <b-col cols="12" md="6" lg="2">
+      <b-col cols="12" md="6" lg="3">
         <b-form-group
           class="middlename"
           label="Middle Name"
@@ -338,7 +326,7 @@
         </b-form-group>
       </b-col>
 
-      <b-col cols="12" md="6" lg="2">
+      <b-col cols="12" md="6" lg="3">
         <b-form-group
           class="lastname"
           label="Last Name"
@@ -351,7 +339,7 @@
         </b-form-group>
       </b-col>
 
-      <b-col cols="12" md="6" lg="2">
+      <b-col cols="12" md="6" lg="4">
         <b-form-group
           class="role"
           label="Role"
@@ -368,28 +356,32 @@
 
       <template v-slot:modal-footer="{ cancel, ok }">
         <!-- Emulate built in modal footer ok and cancel button actions -->
-        <b-button size="sm" variant="danger" @click="$bvModal.hide('editUserAccountModal')">
+      <b-col>
+        <b-button class="float-left"  variant="danger" @click="$bvModal.hide('editUserAccountModal')">
           Cancel
         </b-button>
-        <b-button size="sm" variant="success" @click="updateUserAccount()">
+        <b-button class="float-right"  variant="success" @click="updateUserAccount()">
           Update
         </b-button>
+      </b-col>
       </template>
     </b-modal>
     <!-- User Account Edit Form End -->
 
     <!-- User Account Delete Form Start -->
-    <b-modal id="deleteUserAccountModal" ref="deleteUserAccountModal" title="Delete User Account" size="lg">
-      <p>Are you sure you want to delete {{ this.users.username }}?</p>
+    <b-modal id="deleteUserAccountModal" ref="deleteUserAccountModal" title="Delete User Account" size="md" no-close-on-backdrop>
+      <h6>Are you sure you want to delete <br/> <b>{{ this.users.username }}?</b></h6>
 
       <template v-slot:modal-footer="{ cancel, ok }">
         <!-- Emulate built in modal footer ok and cancel button actions -->
-        <b-button size="sm" variant="danger" @click="$bvModal.hide('deleteUserAccountModal')">
-          Cancel
+      <b-col>
+        <b-button class="float-left"  variant="danger" @click="$bvModal.hide('deleteUserAccountModal')">
+          No
         </b-button>
-        <b-button size="sm" variant="success" @click="deleteUserAccount()">
-          Delete
+        <b-button class="float-right"  variant="success" @click="deleteUserAccount()">
+          Yes
         </b-button>
+      </b-col>
       </template>
     </b-modal>
     <!-- User Account Delete Form End -->
@@ -522,6 +514,7 @@
               this.privID = response.data.last_insert_id;
               this.tabIndex++;
               this.secondTabDisabled = false;
+
 
             // clear room data
             this.users = {

@@ -2,6 +2,11 @@ html, body, #app{
 	height: 100%;
 
 }
+
+h6{
+	text-align: center;
+}
+
 /************************
  *        Login         *
  ************************/
