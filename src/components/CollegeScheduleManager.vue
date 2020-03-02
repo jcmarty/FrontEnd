@@ -116,7 +116,9 @@
                 <option value="null" hidden>Select Subject</option>
                 <option v-if="SubjectsRow === null" value="null" disabled>No Subjects</option>
                 <option v-else v-for="data in SubjectsRow"
-                v-bind:value="data.id">{{data.subject.subject_code}} - {{data.subject.subject_description}} </option>
+                v-bind:value="{data}">
+                {{data.subject.subject_code}} - {{data.subject.subject_description}}
+              </option>
               </b-form-select>
             </b-form-group>
           </b-col>
@@ -134,7 +136,7 @@
                 id="block"
                 placeholder="Enter Block No."
                 v-bind:value="blockData"
-                required>
+                :disabled="blockStatus">
               </b-form-input>
             </b-form-group>
           </b-col>
@@ -150,7 +152,7 @@
               id="batch"
               placeholder="Enter Batch No."
               v-bind:value="batchData"
-              >
+              :disabled="batchStatus">
             </b-form-input>
           </b-form-group>
         </b-col>
@@ -270,6 +272,7 @@
                   dismissErrorCountDown: 0,
 
 
+
                   current_ay: [],
                   current_sem: [],
 
@@ -289,6 +292,8 @@
                   course_options: [],
                   day_options: [],
 
+                  blockStatus: true,
+                  batchStatus: true,
 
                   dataFilter: null,
 
@@ -326,15 +331,12 @@
               this.CollegeClassScheduleColumnDefs = [
                   {headerName: 'Day', field: 'schedule.day', sortable: true, filter: true, width: 150,},
                   {headerName: 'Time', field: 'schedule.time', sortable: true, filter: true, width: 200},
-                  // {headerName: 'Time Start', field: 'schedule.time_start', sortable: true, filter: true, width: 150},
-                  // {headerName: 'Time End', field: 'schedule.time_end', sortable: true, filter: true, width: 150},
                   {headerName: 'Subject Code', field: 'subject.subject_code', sortable: true, filter: true, width: 150, resizable:true },
                   {headerName: 'Subject Description', field: 'subject.subject_desc', sortable: true, filter: true, width: 300, resizable:true},
                   {headerName: 'Room No.', field: 'room.room_number', sortable: true, filter: true, width: 150},
                   {headerName: 'Instructor.', field: 'instructor.full_name' , sortable: true, filter: true, width: 150},
                   {headerName: 'Block', field: 'block', sortable: true, filter: true, width: 150},
                   {headerName: 'Batch', field: 'batch', sortable: true, filter: true, width: 150},
-                  // {headerName: 'Class Type', field: 'class_type', sortable: true, filter: true, width: 150},
                   {headerName: 'Academic Year', field: 'ay.academic_year', sortable: true, filter: true, width: 150},
                   {headerName: 'Semester', field: 'sem.semester', sortable: true, filter: true, width: 150},
               ];
@@ -492,9 +494,8 @@
 
                 //
                 changeCurr: function(){
-
                   // console.log(this.selectedCourse)
-                  if(this.selectedCourse.year === "4 years"){
+                  if(this.selectedCourse.year == "4"){
                     this.year_options = [
                       { value: '1st Year', text: '1st Year' },
                       { value: '2nd Year', text: '2nd Year' },
@@ -502,7 +503,7 @@
                       { value: '4th Year', text: '4th Year' },
                     ];
                   }
-                 else if(this.selectedCourse.year === "2 years"){
+                 else if(this.selectedCourse.year == "2"){
                    this.year_options = [
 
                      { value: '1st Year', text: '1st Year' },
@@ -571,6 +572,7 @@
                       if( response.data.length == 0){
                         this.instructorRow = null;
                       }else{
+                        console.log(this.selectedSubject);
                         this.instructorRow = response.data;
                       }
                     })
@@ -617,11 +619,33 @@
                 },
 
                 toggleForm: function(){
+                  // clears select boxes
+                  this.CourseRow = null;
+                  this.Curriculumrow = null;
+                  this.year_options = [];
+                  this.SubjectsRow = null;
+                  this.instructorRow = null;
+                  this.roomRow = null;
+                  this.day_options = [];
+
+                  // clear select box selected values
+                  // this.selectedCurriculum = null;
+                  this.selectedCourse = null;
+                  this.selectedCurriculum = null;
+                  this.selectedYearLevel = null;
+                  this.selectedSubject = null;
+                  this.selectedBlock = null;
+                  this.selectedBatch = null;
+                  this.selectedInstructor = null;
+                  this.selectedRoom = null;
+                  this.selectedDay = null;
+
                   if(this.showForm){
                     this.showForm = false;
                   } else {
                     this.showForm = true;
                   }
+
                 },
               },
 
