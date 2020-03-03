@@ -29,6 +29,9 @@ import StudentEnrollmentManager from "./components/StudentEnrollmentManager.vue"
 import StudentGradesManager from "./components/StudentGradesManager.vue";
 import StudentsReport from "./components/StudentsReport.vue";
 
+
+import testing from "./components/testing.vue";
+
 Vue.use(Router);
 
 
@@ -258,6 +261,16 @@ export default new Router({
           path: '/reports/students',
           name: 'StudentsReport',
           component: StudentsReport,
+          beforeEnter(to, from, next){
+            setTimeout(() => next(), 2000);
+          },
+        },
+
+        // testing only
+        {
+          path: '/manage/testing',
+          name: 'testing',
+          component: testing,
           beforeEnter(to, from, next){
             setTimeout(() => next(), 2000);
           },
