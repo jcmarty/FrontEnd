@@ -10,6 +10,7 @@
         name: 'SemestersActionButtons',
         methods: {
           setFormValues: function(){
+            this.params.context.componentParent.id = this.params.data.id;
           this.params.context.componentParent.semesters.semester = this.params.data.semester;
           }
         }

@@ -145,10 +145,10 @@
         }
       };
       this.columnDefs = [
-        {headerName: 'Subject Code', field: 'subject_id', sortable: true, filter: true},
-        {headerName: 'Description', field: 'subject_description', sortable: true, filter: true},
-        {headerName: 'Academic Year', field: 'academic_year', sortable: true, filter: true},
-        {headerName: 'Semester', field: 'semester', sortable: true, filter: true},
+        {headerName: 'Subject Code', field: 'subject.subject_code', sortable: true, filter: true},
+        {headerName: 'Description', field: 'subject.subject_description', sortable: true, filter: true},
+        {headerName: 'Academic Year', field: 'academic_year.academic_year', sortable: true, filter: true},
+        {headerName: 'Semester', field: 'semester.semester', sortable: true, filter: true},
         {headerName: 'Actions', field: 'id', width: 150, cellRendererFramework: 'PreferredSubjectButtons'}
       ];
     },
@@ -216,7 +216,7 @@
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
-            //console.log(response.data);
+            console.log(response.data);
             this.rowData = response.data;
           })
           .catch(error => {
@@ -231,7 +231,7 @@
           .then(response => {
             //console.log(response.data);
             for(const subject of response.data){
-              this.subjectOptions.push({value: subject.id, text: subject.subject_description});
+              this.subjectOptions.push({value: subject.id, text: subject.subject_code + " - " +subject.subject_description});
             }
           })
           .catch(error => {
