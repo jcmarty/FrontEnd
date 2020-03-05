@@ -18,7 +18,7 @@
           type="text"
           v-model="filterText"
           id="search_subject"
-          placeholder="Filter..." @change="onFilterTextBoxChanged"
+          placeholder="Filter..." v-on:keyup="onFilterTextBoxChanged"
           ></b-form-input>
       </b-form-group>
     </b-form-row>
@@ -116,6 +116,7 @@
     },
     methods: {
       onFilterTextBoxChanged: function () {
+        // alert(this.filterText);
           this.gridOptions.api.setQuickFilter(this.filterText);
       },
 
