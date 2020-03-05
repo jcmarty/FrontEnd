@@ -186,7 +186,7 @@
     <!-- Start Of Edit Modal -->
     <b-modal id="editUserAccountModal" ref="editUserAccountModal" title="Edit User Account" size="lg" no-close-on-backdrop>
       <b-form-row>
-      <!-- Room Number -->
+      <!-- Username -->
       <b-col cols="12" md="6" lg="2">
         <b-form-group
           class="username"
@@ -200,7 +200,7 @@
         </b-form-group>
       </b-col>
 
-      <!--  Room Name -->
+      <!--  Password -->
       <b-col cols="12" md="6" lg="3">
         <b-form-group
           class="password"
@@ -214,6 +214,7 @@
         </b-form-group>
       </b-col>
 
+      <!--  Confirm Password -->
       <b-col cols="12" md="6" lg="3">
         <b-form-group
           class="confirmpassword"
@@ -227,7 +228,7 @@
         </b-form-group>
       </b-col>
 
-      <!--  Room Type -->
+      <!--  Email -->
       <b-col cols="12" md="6" lg="4">
         <b-form-group
           class="email"
@@ -241,7 +242,7 @@
         </b-form-group>
       </b-col>
 
-      <!-- Room Capacity -->
+      <!-- First Name -->
       <b-col cols="12" md="6" lg="2">
         <b-form-group
           class="firstname"
@@ -255,6 +256,7 @@
         </b-form-group>
       </b-col>
 
+      <!-- Middle Name -->
       <b-col cols="12" md="6" lg="3">
         <b-form-group
           class="middlename"
@@ -268,6 +270,7 @@
         </b-form-group>
       </b-col>
 
+      <!-- Last Name -->
       <b-col cols="12" md="6" lg="3">
         <b-form-group
           class="lastname"
@@ -281,6 +284,7 @@
         </b-form-group>
       </b-col>
 
+      <!-- Role -->
       <b-col cols="12" md="6" lg="4">
         <b-form-group
           class="role"
@@ -296,6 +300,7 @@
       </b-col>
       </b-form-row>
 
+      <!-- Modal Footer Template -->
       <template v-slot:modal-footer="{ cancel, ok }">
         <!-- Emulate built in modal footer ok and cancel button actions -->
       <b-col>
@@ -307,13 +312,12 @@
         </b-button>
       </b-col>
       </template>
-    </b-modal>
-    <!-- User Account Edit Form End -->
 
-    <!-- User Account Delete Form Start -->
+    </b-modal><!-- End of Edit Modal -->
+
+    <!-- Start of Delete Modal -->
     <b-modal id="deleteUserAccountModal" ref="deleteUserAccountModal" title="Delete User Account" size="md" no-close-on-backdrop>
       <h6>Are you sure you want to delete <br/> <b>{{ this.users.username }}?</b></h6>
-
       <template v-slot:modal-footer="{ cancel, ok }">
         <!-- Emulate built in modal footer ok and cancel button actions -->
       <b-col>
@@ -325,17 +329,17 @@
         </b-button>
       </b-col>
       </template>
-    </b-modal>
-    <!-- User Account Delete Form End -->
-  </div>
-</template>   
+    </b-modal> <!-- End of delete Modal -->
+
+  </div> <!-- End of Main Div -->
+</template> <!-- End of Template -->
 
 <script>
   import Axios from "axios";
   import {AgGridVue} from "ag-grid-vue";
+  import UserAccountActionButtons from "./ActionButtons/UserAccountActionButtons.vue";
   import '../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
   import '../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
-  import UserAccountActionButtons from "./ActionButtons/UserAccountActionButtons.vue";
   export default{
     name: 'UserAccountManager',
     components: {
@@ -347,7 +351,7 @@
         columnDefs: null,
         rowData: null,
         gridOptions: null,
-
+        LastUser: null,
         users: {
           username: null,
           password: null,
@@ -379,13 +383,15 @@
         dismissSuccessCountDown: 0,
         dismissErrorCountDown: 0,
       }
-    },
+    }, // End of Data
+
     beforeMount(){
       this.gridOptions = {
           context: {
               componentParent: this
           }
       };
+
       this.columnDefs = [
           {headerName: 'ID', field: 'id', sortable: true, filter: true, width: 80},
           {headerName: 'Username', field: 'username', sortable: true, filter: true, width: 130,},
@@ -397,13 +403,50 @@
           {headerName: 'Actions', field: 'id', cellRendererFramework: 'UserAccountActionButtons'}
       ];
 
-    },
+    }, // End of Before Mount
+
     mounted () {
       this.getUserAccount();
-    },
+    }, // End of Mounted
 
     methods:{
 
+      // GrantPrivilege: function(){
+      //   this.errors = [];
+      //   Axios
+      //   .post('http://localhost/api/v1/privileges/' + this.LastUser, {
+      //     headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+      //   })
+      //   .then(response => {
+      //     //console.log(response.data.data);
+      //     this.rowData = response.data;
+      //   })
+      //   .catch(error => {
+      //     this.alertMessage = error.response.data.message;
+      //     this.dismissErrorCountDown = this.dismissSecs;
+      //   })
+      // },
+
+      GrantLastUser: function(role){
+
+      },
+
+      getUserActivies: function(){
+        .get('http://localhost/api/v1/users', {
+          headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+        })
+        .then(response => {
+          //console.log(response.data.data);
+      
+        })
+        .catch(error => {
+          this.alertMessage = error.response.data.message;
+          this.dismissErrorCountDown = this.dismissSecs;
+        })
+    }, // End of Get User Account Function
+      },
+
+      // Get User Account Function
       getUserAccount: function(){
         Axios
           .get('http://localhost/api/v1/users', {
@@ -417,14 +460,9 @@
             this.alertMessage = error.response.data.message;
             this.dismissErrorCountDown = this.dismissSecs;
           })
-      },
-      toggleForm: function(){
-        if(this.showForm){
-          this.showForm = false;
-        } else {
-          this.showForm = true;
-        }
-      },
+      }, // End of Get User Account Function
+
+      // Add User Account Function
       addUserAccount: function(){
         this.errors = [];
         Axios
@@ -435,17 +473,20 @@
             this.getUserAccount();
             this.alertMessage = response.data.message;
             this.dismissSuccessCountDown = this.dismissSecs;
-            // clear room data
-            this.users = {
-              username: null,
-              password: null,
-              email: null,
-              first_name: null,
-              middle_name: null,
-              last_name: null,
-              role: null,
-              active: 1
-            };
+            this.resetform();
+          Axios
+            .get('http://localhost/api/v1/users', {
+              headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+            })
+            .then(last_user => {
+              this.LastUser = last_user.data[0].id
+              this.GrantLastUSer(last_user.data[0].role);
+            })
+            .catch(error => {
+              this.alertMessage = error.response.data.message;
+              this.dismissErrorCountDown = this.dismissSecs;
+            })
+
           })
           .catch(error => {
             this.alertMessage = error.response.data.message;
@@ -457,7 +498,10 @@
             }
             this.dismissErrorCountDown = this.dismissSecs;
           })
-      },
+      }, // End of Add User Account function
+
+
+      // Update User Account Funtion
       updateUserAccount: function(){
         this.errors = [];
         Axios
@@ -468,17 +512,7 @@
           this.getUserAccount();
           this.alertMessage = response.data.message;
           this.dismissSuccessCountDown = this.dismissSecs;
-          // clear subject data
-          this.users = {
-            username: null,
-            password: null,
-            email: null,
-            first_name: null,
-            middle_name: null,
-            last_name: null,
-            role: null,
-            active: 1
-          };
+          this.resetform();
         })
         .catch(error => {
           this.alertMessage = error.response.data.message;
@@ -491,7 +525,9 @@
           this.dismissErrorCountDown = this.dismissSecs;
         });
         this.$refs['editUserAccountModal'].hide();
-      },
+      }, // End of Update User Account Function
+
+      // Delete User Account Function
       deleteUserAccount: function(){
         this.errors = [];
         Axios
@@ -502,31 +538,39 @@
             this.getUserAccount();
             this.alertMessage = response.data.message;
             this.dismissSuccessCountDown = this.dismissSecs;
-            // clear room data
-            this.users = {
-              username: null,
-              password: null,
-              email: null,
-              first_name: null,
-              middle_name: null,
-              last_name: null,
-              role: null,
-              active: 1
-            };
+            this.resetform();
 
           })
           .catch(error => {
             this.alertMessage = error.response.data.message;
-            /*const values = Object.values(error.response.data.errors);
-            for(const val of values){
-              for(const err of val){
-                this.errors.push(err);
-              }
-            }*/
             this.dismissErrorCountDown = this.dismissSecs;
           });
         this.$refs['deleteUserAccountModal'].hide();
-      }
-    }
-  }
+      }, // End of Delete User Account Function
+
+      // Toggle Form Function
+      toggleForm: function(){
+        this.resetform();
+        if(this.showForm){
+          this.showForm = false;
+        } else {
+          this.showForm = true;
+        }
+      }, // End of Toggle Form Function
+
+      // Reset Form Function
+      resetform: function(){
+        this.users = {
+          username: null,
+          password: null,
+          email: null,
+          first_name: null,
+          middle_name: null,
+          last_name: null,
+          role: null,
+          active: 1
+        };
+      }, // End of Reset Form Function
+    } // End of Methods
+  } // End of Export Default
 </script>
