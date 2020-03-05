@@ -344,7 +344,7 @@
               },
               mounted () {
                 this.getClassSchedule();
-                this.getCurrentSetting()
+                this.getCurrentSetting();
                 this.getCourse();
                 this.getAY();
                 this.getSemester();
@@ -363,6 +363,7 @@
                       this.CollegeClassSchedRow = response.data;
                     })
                 },
+                // get current academic year and
                 getCurrentSetting: function(){
                   Axios
                     .get('http://localhost/api/v1/settings', {
@@ -604,14 +605,15 @@
 
                 //
                 getDays: function(){
-                  this.day_options = [
-                    { value: 'Monday', text: 'Monday' },
-                    { value: 'Tuesday', text: 'Tuesday' },
-                    { value: 'Wednesday', text: 'Wednesday' },
-                    { value: 'Thursday', text: 'Thursday' },
-                    { value: 'Friday', text: 'Friday' },
-                    { value: 'Saturday', text: 'Saturday' }
-                  ]
+                  Axios
+                    .get('http://localhost/api/v1/instructors/' + this.selectedInstructor
+                        + '/availabilities/' + this.selectedAcademicYear + '/' + this.selectedSemester,
+                    {
+                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+                    })
+                    .then(response => {
+                      console.log(response.data);
+                    })
                 },
 
                 getTimes: function(){

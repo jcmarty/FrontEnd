@@ -9,17 +9,33 @@
     </p>
     <p v-if="curriculum.strand !== null">Strand: {{ curriculum.strand.strand }}</p> -->
     <!--  TODO:  Place a form for adding curriculum subject here -->
-
-    <b-card class="mt-3" header="Curriculum Subjects">
-      <ag-grid-vue class="ag-theme-material"
-        :columnDefs="columnDefs"
-        :rowData="rowData"
-        :animateRows="true"
-        :pagination="true"
-        :paginationPageSize="10"
-        :gridOptions="gridOptions">
-      </ag-grid-vue>
-    </b-card>
+    <b-form-row>
+      <b-form-group
+        class="search_subject"
+        label="Search Subject"
+        label-for="search_subject">
+        <b-form-input
+          type="text"
+          v-model="filterText"
+          id="search_subject"
+          placeholder="Filter..." @change="onFilterTextBoxChanged"
+          ></b-form-input>
+      </b-form-group>
+    </b-form-row>
+    <b-form-row>
+      <b-col cols="12" md="6" lg="6">
+        <!-- <b-card class="mt-3" header="Curriculum Subjects"> -->
+          <ag-grid-vue class="ag-theme-material"
+            :columnDefs="columnDefs"
+            :rowData="rowData"
+            :animateRows="true"
+            :pagination="true"
+            :paginationPageSize="10"
+            :gridOptions="gridOptions">
+          </ag-grid-vue>
+        <!-- </b-card> -->
+      </b-col>
+    </b-form-row>
     <!--  TODO:  Display subjects per year and semester  -------
                  We might need a custom component here
                  instead of using ag-grid-vue.  Not sure though.
@@ -38,6 +54,7 @@
         columnDefs: null,
         rowData: null,
         gridOptions: null,
+        filterText: null,
         id: null,
         subject: {
           subject_code: null,
@@ -70,15 +87,15 @@
           }
       };
         this.columnDefs = [
-            {headerName: 'ID', field: 'id', sortable: true, filter: true, width: 80},
-            {headerName: 'Year', field: 'academic_year', sortable: true, filter: true, width: 180,},
-            {headerName: 'semester', field: 'semester', sortable: true, filter: true, width: 180,},
+            // {headerName: 'ID', field: 'id', sortable: true, filter: true, width: 80},
+            // {headerName: 'Year', field: 'academic_year', sortable: true, filter: true, width: 180,},
+            // {headerName: 'semester', field: 'semester', sortable: true, filter: true, width: 180,},
             {headerName: 'Subject Code', field: 'subject_code', sortable: true, filter: true, width: 180,},
             {headerName: 'Subject Description', field: 'subject_description', sortable: true, filter: true, width: 180,},
             {headerName: 'Lecture', field: 'lec', sortable: true, filter: true, width: 130,},
             {headerName: 'Laboratory', field: 'lab', sortable: true, filter: true, resizable: true},
             {headerName: 'Units', field: 'units', sortable: true, filter: true, width: 150},
-            {headerName: 'Active', field: 'active', sortable: true, filter: true, width: 180}
+            // {headerName: 'Active', field: 'active', sortable: true, filter: true, width: 180}
 
 
         ];
@@ -98,6 +115,10 @@
       this.getCurriculumDetails();
     },
     methods: {
+      onFilterTextBoxChanged: function () {
+          this.gridOptions.api.setQuickFilter(this.filterText);
+      },
+
       getCurriculumDetails:  function(){
         Axios
           .get('http://localhost/api/v1/curriculums/' + this.curriculum.id, {
