@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Manage Curriculum Subjects</h1>
+    <h1>Manage {{curriculum_data.curriculum_title}} Subjects</h1>
     <!-- <h2>Title: {{ curriculum.curriculum_title }}</h2>
     <p>Description: {{ curriculum.curriculum_desc }}</p>
     <p v-if="curriculum.course !== null">
@@ -55,6 +55,7 @@
         rowData: null,
         gridOptions: null,
         filterText: null,
+        curriculum_data: null,
         id: null,
         subject: {
           subject_code: null,
@@ -67,7 +68,7 @@
         options: [
           {value: 0, text: 'Inactive'},
           {value: 1, text: 'Active'}],
-          curriculum: {
+        curriculum: {
             id: null,
             curriculum_title: null,
             curriculum_desc: null,
@@ -96,20 +97,11 @@
             {headerName: 'Laboratory', field: 'lab', sortable: true, filter: true, resizable: true},
             {headerName: 'Units', field: 'units', sortable: true, filter: true, width: 150},
             // {headerName: 'Active', field: 'active', sortable: true, filter: true, width: 180}
-
-
         ];
-        Axios
-          .get('http://localhost/api/v1/subjects', {
-            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-          })
-          .then(response => {
-            //console.log(response.data.data);
-            this.rowData = response.data;
-          })
       },
     created() {
         this.curriculum.id = this.$route.params.id;
+        this.curriculum_data = this.$route.params.data;
     },
     mounted(){
       this.getCurriculumDetails();
@@ -120,18 +112,15 @@
           this.gridOptions.api.setQuickFilter(this.filterText);
       },
 
-      getCurriculumDetails:  function(){
+      getSubjects: function(){
         Axios
-          .get('http://localhost/api/v1/curriculums/' + this.curriculum.id, {
+          .get('http://localhost/api/v1/subjects', {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
-            this.curriculum = response.data[0];
-            //console.log(this.curriculum);
+            // console.log(this.curriculum_data);
+            this.rowData = response.data;
           })
-          .catch(error => {
-            console.log(error.response);
-          });
       }
     }
   }
