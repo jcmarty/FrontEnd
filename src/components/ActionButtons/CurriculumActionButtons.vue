@@ -1,6 +1,12 @@
 <template>
     <div>
-      <b-button variant="primary" size='sm' :to="{ name: 'manageCurriculumSubjects', params: { id: params.data.id } }">Subjects</b-button>
+      <b-button variant="primary" size='sm' :to="{ name: 'manageCurriculumSubjects',
+        params: {
+          id: params.data.id,
+          data: params.data
+          }
+        }">
+        Subjects</b-button>
       <b-button variant='primary' size='sm' @click='setFormValues()' v-b-modal.editCurriculumModal>Edit</b-button>
       <b-button variant='danger' size='sm' @click='setFormValues()' v-b-modal.deleteCurriculumModal>Delete</b-button>
     </div>
