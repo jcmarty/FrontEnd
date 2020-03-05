@@ -432,19 +432,20 @@
       },
 
       getUserActivies: function(){
+        axios
         .get('http://localhost/api/v1/users', {
           headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
         })
         .then(response => {
           //console.log(response.data.data);
-      
+
         })
         .catch(error => {
           this.alertMessage = error.response.data.message;
           this.dismissErrorCountDown = this.dismissSecs;
         })
     }, // End of Get User Account Function
-      },
+
 
       // Get User Account Function
       getUserAccount: function(){
