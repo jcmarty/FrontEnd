@@ -1,7 +1,8 @@
-<template>
-  <div>
+<template> <!-- Start Template -->
+  <div> <!-- Start of Main Div -->
     <h1>Manage User Accounts</h1>
-    <!--form Start  -->
+    <hr/>
+    <!-- Alert Message -->
     <b-alert variant="success"
       :show="dismissSuccessCountDown"
       @dismissed="dismissSuccessCountDown=0"
@@ -17,146 +18,162 @@
           <li v-for="error in errors">{{ error }}</li>
         </ul>
     </b-alert>
+    <!-- End of Alert Message -->
 
-    <b-tabs v-if="showForm" v-model="tabIndex">
-      <b-tab title="User Accounts">
-        <!-- Form Start -->
-        <!-- User information -->
-        <b-form id="Add_UserAccount_Form">
+    <!-- Adding Form Start  -->
+    <div class="col-md-10 offset-md-1">
+      <div class="panel panel-primary recordMaintenanceForm" v-if="showForm">
+        <div class="panel-heading">Add New User Account</div>
+        <div class="panel-body">
+          <b-form id="Add_UserAccount_Form">
+            <b-form-row>
+              <!-- Username -->
+              <b-col cols="12" md="6" lg="3">
+                <b-form-group
+                  class="username"
+                  label="Username"
+                  label-for="Username">
+                  <b-form-input
+                    type="text"
+                    v-model="users.username"
+                    id="Username"
+                    required>
+                  </b-form-input>
+                </b-form-group>
+              </b-col>
+
+            <!-- Password -->
+            <b-col cols="12" md="6" lg="3">
+              <b-form-group
+                class="password"
+                label="Password"
+                label-for="Password">
+                <b-form-input
+                  type="password"
+                  v-model="users.password"
+                  id="Password"
+                  required>
+                </b-form-input>
+              </b-form-group>
+            </b-col>
+
+            <!-- Confirm Password -->
+            <b-col cols="12" md="6" lg="3">
+              <b-form-group
+                class="confirmpassword"
+                label="Confirm Password"
+                label-for="confirmPassword">
+                <b-form-input
+                  type="password"
+                  v-model="users.password_confirmation"
+                  id="confirmPassword"
+                  required></b-form-input>
+              </b-form-group>
+            </b-col>
+
+            <!-- Email -->
+            <b-col cols="12" md="6" lg="3">
+              <b-form-group
+                class="email"
+                label="Email"
+                label-for="Email">
+                <b-form-input
+                  type="text"
+                  v-model="users.email"
+                  id="Email"
+                  required>
+                </b-form-input>
+              </b-form-group>
+            </b-col>
+          </b-form-row>
+
+          <!-- First Name -->
           <b-form-row>
-          <b-col cols="12" md="6" lg="3">
-            <b-form-group
-              class="username"
-              label="Username"
-              label-for="Username">
-              <b-form-input
-                type="text"
-                v-model="users.username"
-                id="Username"
-                required></b-form-input>
-            </b-form-group>
-          </b-col>
+            <b-col cols="12" md="6" lg="3">
+              <b-form-group
+                class="firstname"
+                label="First Name"
+                label-for="firstName">
+                <b-form-input
+                  type="text"
+                  v-model="users.first_name"
+                  id="firstName"
+                  required>
+                </b-form-input>
+              </b-form-group>
+            </b-col>
 
-          <!--  Room Name -->
-          <b-col cols="12" md="6" lg="3">
-            <b-form-group
-              class="password"
-              label="Password"
-              label-for="Password">
-              <b-form-input
-                type="password"
-                v-model="users.password"
-                id="Password"
-                required></b-form-input>
-            </b-form-group>
-          </b-col>
+            <!-- Middle Name -->
+            <b-col cols="12" md="6" lg="3">
+              <b-form-group
+                class="middlename"
+                label="Middle Name"
+                label-for="middleName">
+                <b-form-input
+                  type="text"
+                  v-model="users.middle_name"
+                  id="middleName"
+                  required>
+                </b-form-input>
+              </b-form-group>
+            </b-col>
 
-          <b-col cols="12" md="6" lg="3">
-            <b-form-group
-              class="confirmpassword"
-              label="Confirm Password"
-              label-for="confirmPassword">
-              <b-form-input
-                type="password"
-                v-model="users.password_confirmation"
-                id="confirmPassword"
-                required></b-form-input>
-            </b-form-group>
-          </b-col>
+            <!-- Last Name -->
+            <b-col cols="12" md="6" lg="3">
+              <b-form-group
+                class="lastname"
+                label="Last Name"
+                label-for="lastName">
+                <b-form-input
+                  type="text"
+                  v-model="users.last_name"
+                  id="lastName"
+                  required>
+                </b-form-input>
+              </b-form-group>
+            </b-col>
 
-          <b-col cols="12" md="6" lg="3">
-            <b-form-group
-              class="email"
-              label="Email"
-              label-for="Email">
-              <b-form-input
-                type="text"
-                v-model="users.email"
-                id="Email"
-                required></b-form-input>
-            </b-form-group>
-          </b-col>
+            <!-- Role -->
+            <b-col cols="12" md="6" lg="3">
+              <b-form-group
+                class="role"
+                label="Role"
+                label-for="Role">
+                <b-form-select
+                  type="text"
+                  v-model="users.role"
+                  :options="roleOptions"
+                  required>
+                </b-form-select>
+              </b-form-group>
+            </b-col>
+          </b-form-row>
 
-        </b-form-row>
-        <b-form-row>
-          <!--  Room Type -->
-
-          <!-- Room Capacity -->
-          <b-col cols="12" md="6" lg="3">
-            <b-form-group
-              class="firstname"
-              label="First Name"
-              label-for="firstName">
-              <b-form-input
-                type="text"
-                v-model="users.first_name"
-                id="firstName"
-                required></b-form-input>
-            </b-form-group>
-          </b-col>
-
-          <b-col cols="12" md="6" lg="3">
-            <b-form-group
-              class="middlename"
-              label="Middle Name"
-              label-for="middleName">
-              <b-form-input
-                type="text"
-                v-model="users.middle_name"
-                id="middleName"
-                required></b-form-input>
-            </b-form-group>
-          </b-col>
-
-          <b-col cols="12" md="6" lg="3">
-            <b-form-group
-              class="lastname"
-              label="Last Name"
-              label-for="lastName">
-              <b-form-input
-                type="text"
-                v-model="users.last_name"
-                id="lastName"
-                required></b-form-input>
-            </b-form-group>
-          </b-col>
-
-          <b-col cols="12" md="6" lg="3">
-            <b-form-group
-              class="role"
-              label="Role"
-              label-for="Role">
-              <b-form-select
-                type="text"
-                v-model="users.role"
-                :options="roleOptions"
-                required>
-              </b-form-select>
-            </b-form-group>
-          </b-col>
-        </b-form-row>
-        <b-form-row>
+          <b-form-row>
             <b-col>
               <b-button variant="danger" @click="toggleForm">
                 Cancel
               </b-button>
             </b-col>
             <b-col class="d-flex justify-content-end">
-              <b-button variant="primary" id="Add_UserAccount_Btn" @click="addUserAccount">
-                Next
+              <b-button variant="success" id="Add_UserAccount_Btn" @click="addUserAccount">
+                Add
               </b-button>
             </b-col>
-        </b-form-row>
-          </b-form>
-      </b-tab>
+          </b-form-row>
+
+        </b-form>
+      </div>  <!-- End of Panel Body  -->
+    </div>  <!-- End of Panel  -->
+  </div> <!-- End of Col  -->
     <!--User Account Form End  -->
 
-  </b-tabs>
-
+    <!-- Add New Semester Button -->
     <b-button variant="primary" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
       Add New User Account
     </b-button>
 
+    <!-- Ag-grid Table  -->
     <ag-grid-vue class="ag-theme-material"
       :columnDefs="columnDefs"
       :rowData="rowData"
@@ -166,7 +183,7 @@
       :gridOptions="gridOptions">
     </ag-grid-vue>
 
-<!-- User Account Edit Form Start -->
+    <!-- Start Of Edit Modal -->
     <b-modal id="editUserAccountModal" ref="editUserAccountModal" title="Edit User Account" size="lg" no-close-on-backdrop>
       <b-form-row>
       <!-- Room Number -->
@@ -342,13 +359,6 @@
           active: 1
         },
 
-        userpriv: [
-          {activity_id:[]},
-          {create_priv:[]},
-          {read_priv:[]},
-          {update_priv:[]},
-          {delete:[]}
-        ],
         roleOptions:[
           {value: 'Coordinator', text: 'Coordinator'},
           {value: 'Guess', text: 'Guess'},
@@ -368,12 +378,6 @@
         dismissSecs: 7,
         dismissSuccessCountDown: 0,
         dismissErrorCountDown: 0,
-
-        privID: null,
-        userActivities: this.$store.state.settings.user_activities,
-        secondTabDisabled: true,
-        tabIndex: 0,
-        CbcID: 0,
       }
     },
     beforeMount(){
@@ -399,10 +403,6 @@
     },
 
     methods:{
-      nextTab: function(){
-        this.secondTabDisabled = false;
-        this.tabIndex++;
-      },
 
       getUserAccount: function(){
         Axios
@@ -435,11 +435,6 @@
             this.getUserAccount();
             this.alertMessage = response.data.message;
             this.dismissSuccessCountDown = this.dismissSecs;
-              this.privID = response.data.last_insert_id;
-              this.tabIndex++;
-              this.secondTabDisabled = false;
-
-
             // clear room data
             this.users = {
               username: null,
@@ -531,36 +526,6 @@
             this.dismissErrorCountDown = this.dismissSecs;
           });
         this.$refs['deleteUserAccountModal'].hide();
-      },
-      addUserPrivileges: function(){
-        this.errors = [];
-        Axios
-          .post('http://localhost/api/v1/privileges/' + this.privID, this.users, {
-            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-          })
-          .then(response => {
-            this.getUserAccount();
-            this.alertMessage = response.data.message;
-            this.dismissSuccessCountDown = this.dismissSecs;
-            // clear room data
-            this.userpriv = {
-              activity_id: this.userActivities,
-              create_priv: 0,
-              read_priv: 0,
-              update_priv: 0,
-              delete_priv: 0
-            };
-          })
-          .catch(error => {
-            this.alertMessage = error.response.data.message;
-            const values = Object.values(error.response.data.errors);
-            for(const val of values){
-              for(const err of val){
-                this.errors.push(err);
-              }
-            }
-            this.dismissErrorCountDown = this.dismissSecs;
-          });
       }
     }
   }
