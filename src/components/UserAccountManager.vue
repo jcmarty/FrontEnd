@@ -151,81 +151,6 @@
       </b-tab>
     <!--User Account Form End  -->
 
-<!-- User Privilege Form Start -->
-    <b-tab title="User Privilege" :disabled="secondTabDisabled">
-        <b-form>
-          <b-form-row>
-            <b-col cols="12" md="6" lg="3">
-              <b-form-group
-              class="useractivities"
-              label="User Activities"
-              label-for="userActivities">
-
-              <table border="1">
-                <tr>
-                  <th>Activities</th>
-                  <th>Create</th>
-                  <th>Read</th>
-                  <th>Update</th>
-                  <th>Delete</th>
-                </tr>
-
-                <tr  v-for="(key, value) in userActivities">
-                  <td v-model="userpriv.activity_id">{{value}}</td>
-                  <td>
-                    <b-form-checkbox
-                      v-model="userpriv.create_priv"
-                      value= "1"
-                      unchecked-value ="0">
-                      <div>{{ userpriv.create_priv }}</div>
-                  </b-form-checkbox>
-                </td>
-
-                  <td>
-                      <b-form-checkbox
-                        v-model="userpriv.read_priv"
-                        value="1"
-                        unchecked-value ="">
-                    </b-form-checkbox>
-                  </td>
-
-                  <td>
-                    <b-form-checkbox
-                      v-model="userpriv.update_priv"
-                      value="1"
-                      unchecked-value ="">
-                    </b-form-checkbox>
-                  </td>
-
-                    <td>
-                      <b-form-checkbox
-                      v-model="userpriv.delete_priv"
-                      value="1"
-                      unchecked-value ="">
-                    </b-form-checkbox>
-                  </td>
-                </tr>
-              </table>
-
-              </b-form-group>
-            </b-col>
-          </b-form-row>
-
-          <b-form-row>
-              <b-col>
-                <b-button variant="primary" @click="tabIndex--">
-                  Previous
-                </b-button>
-              </b-col>
-              <b-col class="d-flex justify-content-end">
-                <b-button variant="success" id="Add_UserAccount_Btn" @click="addUserPrivileges">
-                  Add
-                </b-button>
-              </b-col>
-          </b-form-row>
-        </b-form>
-    </b-tab>
-    <!-- User Privilege Form End -->
   </b-tabs>
 
     <b-button variant="primary" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
@@ -465,7 +390,6 @@
           {headerName: 'Middle Name', field: 'middle_name', sortable: true, filter: true, width: 180,},
           {headerName: 'Last Name', field: 'last_name', sortable: true, filter: true, width: 180,},
           {headerName: 'Role', field: 'role', sortable: true, filter: true, width: 180,},
-          {headerName: 'Status', field: 'active', sortable: true, filter: true, width: 180,},
           {headerName: 'Actions', field: 'id', cellRendererFramework: 'UserAccountActionButtons'}
       ];
 

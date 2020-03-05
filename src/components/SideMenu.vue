@@ -37,7 +37,6 @@
                 <router-link tag="li" to="/manage/curriculum/shs"><a class="super_child_menu">Senior High</a></router-link>
               </b-collapse>
               </li>
-              <router-link tag="li" to="/manage/testing"><a>Testing</a></router-link>
               <router-link tag="li" to="/manage/room"><a>Room</a></router-link>
               <router-link tag="li" to="/manage/academicyear"><a>Academic Years</a></router-link>
               <router-link tag="li" to="/manage/semesters"><a>Semester</a></router-link>

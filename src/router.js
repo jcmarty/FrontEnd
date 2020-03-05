@@ -28,9 +28,7 @@ import StudentRegistrationManager from "./components/StudentRegistrationManager.
 import StudentEnrollmentManager from "./components/StudentEnrollmentManager.vue";
 import StudentGradesManager from "./components/StudentGradesManager.vue";
 import StudentsReport from "./components/StudentsReport.vue";
-
-
-import testing from "./components/testing.vue";
+import UserPrivilegeManager from "./components/UserPrivilegeManager.vue";
 
 Vue.use(Router);
 
@@ -268,9 +266,9 @@ export default new Router({
 
         // testing only
         {
-          path: '/manage/testing',
-          name: 'testing',
-          component: testing,
+          path: '/manage/user/privilege',
+          name: 'UserPrivilegeManager',
+          component: UserPrivilegeManager,
           beforeEnter(to, from, next){
             setTimeout(() => next(), 2000);
           },
