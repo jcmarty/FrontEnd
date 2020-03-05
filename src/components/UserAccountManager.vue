@@ -352,6 +352,7 @@
         rowData: null,
         gridOptions: null,
         LastUser: null,
+        LastUserRole: null,
         users: {
           username: null,
           password: null,
@@ -365,11 +366,14 @@
 
         roleOptions:[
           {value: 'Coordinator', text: 'Coordinator'},
-          {value: 'Guess', text: 'Guess'},
+          {value: 'Guest', text: 'Guest'},
           {value: 'Registrar', text: 'Registrar'},
           {value: 'System Admin', text: 'System Admin'},
           {value: 'System Administrator', text: 'System Administrator'}
         ],
+
+        UserActivities:[],
+        UserPriv:[],
 
         options: [
           {value: 0, text: 'Inactive'},
@@ -411,42 +415,6 @@
 
     methods:{
 
-      // GrantPrivilege: function(){
-      //   this.errors = [];
-      //   Axios
-      //   .post('http://localhost/api/v1/privileges/' + this.LastUser, {
-      //     headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-      //   })
-      //   .then(response => {
-      //     //console.log(response.data.data);
-      //     this.rowData = response.data;
-      //   })
-      //   .catch(error => {
-      //     this.alertMessage = error.response.data.message;
-      //     this.dismissErrorCountDown = this.dismissSecs;
-      //   })
-      // },
-
-      GrantLastUser: function(role){
-
-      },
-
-      getUserActivies: function(){
-        axios
-        .get('http://localhost/api/v1/users', {
-          headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-        })
-        .then(response => {
-          //console.log(response.data.data);
-
-        })
-        .catch(error => {
-          this.alertMessage = error.response.data.message;
-          this.dismissErrorCountDown = this.dismissSecs;
-        })
-    }, // End of Get User Account Function
-
-
       // Get User Account Function
       getUserAccount: function(){
         Axios
@@ -481,7 +449,9 @@
             })
             .then(last_user => {
               this.LastUser = last_user.data[0].id
-              this.GrantLastUSer(last_user.data[0].role);
+               this.getUserActivies();
+              // console.log(this.LastUser);
+              // this.GrantLastUSer(last_user.data[0].role);
             })
             .catch(error => {
               this.alertMessage = error.response.data.message;
@@ -500,6 +470,49 @@
             this.dismissErrorCountDown = this.dismissSecs;
           })
       }, // End of Add User Account function
+
+      getUserActivies: function(){
+        Axios
+        .get('http://localhost/api/v1/activities', {
+          headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+        })
+        .then(user_activities => {
+          // console.log(user_activities.data);
+          for(var i = 0; i < user_activities.data.length; i++){
+            this.UserPriv.push({
+              user_id: this.LastUser,
+              activity_id: user_activities.data[i].id,
+              create_priv: 0,
+              read_priv: 0,
+              update_priv: 0,
+              delete_priv: 0,
+            });
+          }
+          this.GrantLastUser();
+        })
+        .catch(error => {
+          this.alertMessage = error.response.data.message;
+          this.dismissErrorCountDown = this.dismissSecs;
+        })
+    },
+
+
+      GrantLastUser: function(){
+        for(var j = 0; j < this.UserPriv.length; j++){
+          Axios
+            .post('http://localhost/api/v1/privileges', this.UserPriv[j],{
+              headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+            })
+            .then(respone => {
+              console.log(this.UserPriv[j])
+            })
+            .catch(error => {
+              this.alertMessage = error.response.data.message;
+              this.dismissErrorCountDown = this.dismissSecs;
+            })
+        }
+      },
+
 
 
       // Update User Account Funtion
