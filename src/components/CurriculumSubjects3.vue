@@ -72,14 +72,14 @@
             <td>{{data.year_level}}</td>
             <td>{{data.semester.semester}}</td>
             <td>
-              <!-- <b-button
+              <b-button
                 v-model="deleteSubject"
                 variant='danger'
                 size='sm'
                 class="deleteBtn"
                 @click='()=>onDeleteSubject(data.id)'>
                   DELETE
-              </b-button> -->
+              </b-button>
             </td>
           </tr>
         </tbody>
