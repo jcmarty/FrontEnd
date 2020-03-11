@@ -95,7 +95,7 @@
                 //redirect page to admin page
                   this.$router.replace("/admin");
 
-                  console.log(response.data.user)
+                  // console.log(response.data.user)
 
             })
             .catch(error => {
