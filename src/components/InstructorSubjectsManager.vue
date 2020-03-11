@@ -161,7 +161,7 @@
       this.preferredSubject.semester_id = this.settings.current_sem;
     },
     created() {
-        console.log(this.$route.params);
+        // console.log(this.$route.params);
         this.instructor = {
           id: this.$route.params.id,
           name: this.$route.params.first_name + " " + this.$route.params.last_name
@@ -195,9 +195,11 @@
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
+            // console.log(response)
             this.alertMessage = response.data.message;
             this.dismissSuccessCountDown = this.dismissSecs;
             this.getPreferredSubjects();
+            this.preferredSubject.subject_id = null;
           })
           .catch(error => {
             this.alertMessage = error.response.data.message;
@@ -216,11 +218,11 @@
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
-            console.log(response.data);
+            // console.log(response.data);
             this.rowData = response.data;
           })
           .catch(error => {
-            console.log(error.response);
+            // console.log(error.response);
           })
       },
       getSubjects: function(){
@@ -235,7 +237,7 @@
             }
           })
           .catch(error => {
-            console.log(error.response);
+            // console.log(error.response);
           })
       },
       getAcademicYears: function(){
@@ -250,7 +252,7 @@
             }
           })
           .catch(error => {
-            console.log(error.response.data.message);
+            // console.log(error.response.data.message);
           })
       },
       getSemesters: function(){
@@ -264,7 +266,7 @@
             }
           })
           .catch(error => {
-            console.log(error.response.data.message);
+            // console.log(error.response.data.message);
           })
       },
     }

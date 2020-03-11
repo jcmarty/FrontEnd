@@ -84,7 +84,7 @@
                 <option value="null" hidden>Select Curriculum</option>
                 <option v-if="Curriculumrow === null" value="null" disabled>No Curriculums</option>
                 <option v-else v-for="curriculum in Curriculumrow "
-                v-bind:value="curriculum.id">{{curriculum.curriculum_title}}</option>
+                v-bind:value="{id: curriculum.id, subjects: curriculum.curriculum_subjects}">{{curriculum.curriculum_title}}</option>
               </b-form-select>
             </b-form-group>
           </b-col>
@@ -116,7 +116,7 @@
                 <option value="null" hidden>Select Subject</option>
                 <option v-if="SubjectsRow === null" value="null" disabled>No Subjects</option>
                 <option v-else v-for="data in SubjectsRow"
-                v-bind:value="{data}">
+                v-bind:value="{id: data.id, subject_id: data.subject_id, instructors: data.subject.instructors, lab:  data.subject.lab}">
                 {{data.subject.subject_code}} - {{data.subject.subject_description}}
               </option>
               </b-form-select>
@@ -168,8 +168,8 @@
                 v-model="selectedInstructor" >
                 <option value="null" hidden>Select Instructor</option>
                 <option v-if="instructorRow === null" value="null" disabled>No Instructors</option>
-                <option v-else v-for="ins in instructorRow"
-                v-bind:value="ins.instructor_id">{{ins.instructor.first_name}} {{ins.instructor.last_name}}</option>
+                <option v-else v-for="data in instructorRow"
+                v-bind:value="data.instructor_id">{{data.instructor.first_name}} {{data.instructor.last_name}}</option>
               </b-form-select>
             </b-form-group>
           </b-col>
@@ -275,11 +275,16 @@
 
                   current_ay: [],
                   current_sem: [],
-
                   selectedAcademicYear:null,
                   selectedSemester:null,
-                  selectedCourse: null,
-                  selectedCurriculum:null,
+                  selectedCourse: {
+                    id: null,
+                    curriculums: []
+                  },
+                  selectedCurriculum:{
+                    id: null,
+                    subjects: []
+                  },
                   selectedSubject: null,
                   selectedYearLevel: null,
                   selectedInstructor: null,
@@ -287,6 +292,7 @@
                   selectedBatch: null,
                   selectedRoom: null,
                   selectedDay: null,
+
                   academic_options: [],
                   year_options: [],
                   course_options: [],
@@ -322,6 +328,8 @@
                 AgGridVue,
             },
             beforeMount() {
+              this.getClassSchedule();
+              this.getCurrentSetting();
               this.gridOptions = {
                   context: {
                       componentParent: this
@@ -343,12 +351,9 @@
 
               },
               mounted () {
-                this.getClassSchedule();
-                this.getCurrentSetting();
-                this.getCourse();
                 this.getAY();
                 this.getSemester();
-
+                this.getCourse();
               },
 
               methods: {
@@ -416,7 +421,7 @@
                 changeSemester: function(){
                   // clears select boxes
                   this.day_options = [];
-                  this.SubjectsRow = null;
+                  this.SubjectsRow = [];
                   this.instructorRow = null;
                   this.roomRow = null;
 
@@ -438,8 +443,6 @@
                       headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
                     })
                     .then(response => {
-                      // course_options
-                      // this.CourseRow = response.data;
                       if( response.data.length == 0){
                         this.CourseRow = null;
                       }else{
@@ -449,7 +452,8 @@
                             {
                               value: {
                                 id: response.data[i].id,
-                                year: response.data[i].year_duration
+                                year: response.data[i].year_duration,
+                                curriculum: response.data[i].curriculum
                               },
                               text: response.data[i].course_code
                             },
@@ -461,23 +465,16 @@
 
                 // gets all curriculum record
                 getCurriculum: function(){
-                  Axios
-                    .get('http://localhost/api/v1/courses/' + this.selectedCourse.id + '/curriculums', {
-                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-                    })
-                    .then(response => {
-
-                      // this.Curriculumrow = response.data;
-
-                      if( response.data.length == 0){
+                  var curriculums = this.selectedCourse.curriculum
+                      if( curriculums.length == 0){
                         this.Curriculumrow = null;
                       }else{
-                        this.Curriculumrow = response.data;
+                        this.Curriculumrow = curriculums;
                       }
                       // clears select boxes
                       this.day_options = [];
                       this.year_options = [];
-                      this.SubjectsRow = null;
+                      this.SubjectsRow = [];
                       this.instructorRow = null;
                       this.roomRow = null;
 
@@ -490,12 +487,11 @@
                       this.selectedInstructor = null;
                       this.selectedRoom = null;
                       this.selectedDay = null;
-                    });
+                    // });
                 },
 
-                //
+                // SET YEAR LEVEL BASED ON SELECTED COURSE
                 changeCurr: function(){
-                  // console.log(this.selectedCourse)
                   if(this.selectedCourse.year == "4"){
                     this.year_options = [
                       { value: '1st Year', text: '1st Year' },
@@ -511,7 +507,7 @@
                      { value: '2nd Year', text: '2nd Year' },
                    ];
                  }
-                 this.SubjectsRow = null;
+                 this.SubjectsRow = [];
                  this.instructorRow = null;
                  this.roomRow = null;
                  this.day_options = [];
@@ -528,25 +524,22 @@
 
                 // gets all subjects base on selected semester, curriculum and year level
                 getSubject: function(){
-                  this.dataFilter = {
-                    "semester_id" : this.selectedSemester,
-                    "curriculum_id" : this.selectedCurriculum,
-                    "year_level" : this.selectedYearLevel
-                  };
-                  // console.log(this.dataFilter);
-                  Axios
-                    .post('http://localhost/api/v1/curriculums/' + this.selectedCurriculum + '/subjects', this.dataFilter,{
-                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-                    })
-                    .then(response => {
-                      if( response.data.length == 0){
-                        this.SubjectsRow = null;
-                      }else{
-                        this.SubjectsRow = response.data;
-                      }
+                  // clears subject select box
+                  this.SubjectsRow = [];
+                  var year = this.selectedYearLevel
+                  var sem = this.selectedSemester
+                  var subjects = this.selectedCurriculum.subjects
 
-                      // this.SubjectsRow = response.data;
-                      // console.log(response.data);
+                  if(subjects.length == 0){
+                    this.SubjectsRow = [];
+                  }else{
+                    for(var i = 0; i < subjects.length; i++){
+                      if(subjects[i].year_level == year && subjects[i].semester_id == sem){
+                          this.SubjectsRow.push(subjects[i])
+                      }
+                    }
+                  }
+
                       this.instructorRow = null;
                       this.roomRow = null;
                       this.day_options = [];
@@ -558,30 +551,44 @@
                       this.selectedRoom = null;
                       this.selectedDay = null;
 
-                    });
+
                 },
 
                 // gets all instructor that prefers the selected subject
                 getInstructors: function(){
-                  Axios
-                    .get('http://localhost/api/v1/curriculum_subjects/' + this.selectedSubject + '/instructors', {
-                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-                    })
-                    .then(response => {
-                      // console.log(response);
-                      // this.instructorRow = response.data;
-                      if( response.data.length == 0){
-                        this.instructorRow = null;
-                      }else{
-                        console.log(this.selectedSubject);
-                        this.instructorRow = response.data;
-                      }
-                    })
+                  this.instructorRow = null
+
+                  var instructors = this.selectedSubject.instructors;
+
+                    if( instructors.length == 0){
+                      this.instructorRow = null;
+                    }else{
+                      this.instructorRow = instructors;
+                    }
+
+
+
+                  var lab = this.selectedSubject.lab
+                  console.log(lab);
+                  // check if subject has laboratory
+                  if(lab == 1){
+                    this.blockStatus = false;
+                    this.batchStatus = false;
+                    this.selectedBlock = 1;
+                    this.selectedBatch = 1;
+                  } else{
+                    this.blockStatus = false;
+                    this.batchStatus = true;
+                    this.selectedBlock = 1;
+                    this.selectedBatch = 0;
+                  }
+
+
+
                     this.roomRow = null;
                     this.day_options = [];
 
-                    this.selectedBlock = 1;
-                    this.selectedBatch = 1;
+
                     this.selectedInstructor = null;
                     this.selectedRoom = null;
                     this.selectedDay = null;
@@ -605,15 +612,15 @@
 
                 //
                 getDays: function(){
-                  Axios
-                    .get('http://localhost/api/v1/instructors/' + this.selectedInstructor
-                        + '/availabilities/' + this.selectedAcademicYear + '/' + this.selectedSemester,
-                    {
-                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-                    })
-                    .then(response => {
-                      console.log(response.data);
-                    })
+                //   Axios
+                //     .get('http://localhost/api/v1/instructors/' + this.selectedInstructor
+                //         + '/availabilities/' + this.selectedAcademicYear + '/' + this.selectedSemester,
+                //     {
+                //       headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+                //     })
+                //     .then(response => {
+                //       console.log(response.data);
+                //     })
                 },
 
                 getTimes: function(){
@@ -625,7 +632,7 @@
                   this.CourseRow = null;
                   this.Curriculumrow = null;
                   this.year_options = [];
-                  this.SubjectsRow = null;
+                  this.SubjectsRow = [];
                   this.instructorRow = null;
                   this.roomRow = null;
                   this.day_options = [];

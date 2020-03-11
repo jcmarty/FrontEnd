@@ -30,6 +30,8 @@
                   <router-link tag="li" to="/manage/schedule/shs"><a class="super_child_menu">Senior High</a></router-link>
                 </b-collapse>
               </li>
+              <!-- for testing only -->
+              <router-link tag="li" to="/manage/schedule/college"><a>Schedule Test</a></router-link>
               <router-link tag="li" to="/manage/subject"><a>Subject</a></router-link>
               <li v-b-toggle.curriculum><a>Curriculum<span class="fa fa-chevron-down"></span></a>
               <b-collapse tag="ul" class="nav child_menu" id="curriculum" accordion="sideMenuSubAccordion">
@@ -37,6 +39,7 @@
                 <router-link tag="li" to="/manage/curriculum/shs"><a class="super_child_menu">Senior High</a></router-link>
               </b-collapse>
               </li>
+              <!-- for testing only -->
               <router-link tag="li" to="/manage/curriculum/college"><a>Curriculum Test</a></router-link>
               <router-link tag="li" to="/manage/room"><a>Room</a></router-link>
               <router-link tag="li" to="/manage/academicyear"><a>Academic Years</a></router-link>
