@@ -366,9 +366,9 @@
 
         roleOptions:[
           {value: 'Coordinator', text: 'Coordinator'},
-          {value: 'Guest', text: 'Guest'},
           {value: 'Registrar', text: 'Registrar'},
-          {value: 'System Admin', text: 'System Admin'},
+          {value: 'School Administrator', text: 'School Administrator'},
+          {value: 'Student Assistant', text: 'Student Assistant'},
           {value: 'System Administrator', text: 'System Administrator'}
         ],
 
@@ -448,7 +448,9 @@
               headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
             })
             .then(last_user => {
+              // console.log(last_user.data);
               this.LastUser = last_user.data[0].id
+              this.LastUserRole = last_user.data[0].role
                this.getUserActivies();
               // console.log(this.LastUser);
               // this.GrantLastUSer(last_user.data[0].role);
@@ -478,17 +480,338 @@
         })
         .then(user_activities => {
           // console.log(user_activities.data);
+        if (this.LastUserRole === 'System Administrator') {
           for(var i = 0; i < user_activities.data.length; i++){
-            this.UserPriv.push({
-              user_id: this.LastUser,
-              activity_id: user_activities.data[i].id,
-              create_priv: 0,
-              read_priv: 0,
-              update_priv: 0,
-              delete_priv: 0,
-            });
+              this.UserPriv.push({
+                user_id: this.LastUser,
+                activity_id: user_activities.data[i].id,
+                create_priv: 1,
+                read_priv: 1,
+                update_priv: 1,
+                delete_priv: 1,
+              });
           }
+        }
+        else if (this.LastUserRole === 'School Administrator') {
+          for(var i = 0; i < user_activities.data.length; i++){
+              this.UserPriv.push({
+                user_id: this.LastUser,
+                activity_id: user_activities.data[i].id,
+                create_priv: 0,
+                read_priv: 1,
+                update_priv: 0,
+                delete_priv: 0,
+              });
+              console.log(user_activities.data[i].id);
+          }
+        }
+        else if (this.LastUserRole === 'Registrar') {
+          // preset privileges
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[1].id,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[15].id,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
+          });
+          // no privileges
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[0].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[2].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[3].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[4].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[5].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[6].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[7].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[8].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[9].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[10].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[11].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[12].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[13].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[14].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[16].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[17].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+
+        }
+        else if (this.LastUserRole === 'Coordinator') {
+          // preset privileges
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[5].id,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[7].id,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[8].id,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[9].id,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[14].id,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
+          });
+          // no privileges
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[0].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[1].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[2].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[3].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[4].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[6].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[10].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[11].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[12].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[13].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[15].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[16].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[17].id,
+            create_priv: 0,
+            read_priv: 0,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+
+        }
+
+
+
+
           this.GrantLastUser();
+          this.UserPriv = []
+
         })
         .catch(error => {
           this.alertMessage = error.response.data.message;
