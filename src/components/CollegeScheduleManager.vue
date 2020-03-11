@@ -1,244 +1,163 @@
 <template>
-  <div>
+<div>
 
-  <h1>College Class Schedule</h1><hr/>
+  <h1>College Class Schedule</h1>
+  <hr />
 
-    <b-alert variant="success"
-      :show="dismissSuccessCountDown"
-      @dismissed="dismissSuccessCountDown=0"
-      dismissible fade>
-        {{alertMessage}}
-    </b-alert>
-    <b-alert variant="danger"
-      :show="dismissErrorCountDown"
-      @dismissed="dismissErrorCountDown=0"
-      dismissible fade>
-        <p>{{alertMessage}}</p>
-        <ul>
-          <li v-for="error in errors">{{ error }}</li>
-        </ul>
-    </b-alert>
+  <b-alert variant="success" :show="dismissSuccessCountDown" @dismissed="dismissSuccessCountDown=0" dismissible fade>
+    {{alertMessage}}
+  </b-alert>
+  <b-alert variant="danger" :show="dismissErrorCountDown" @dismissed="dismissErrorCountDown=0" dismissible fade>
+    <p>{{alertMessage}}</p>
+    <ul>
+      <li v-for="error in errors">{{ error }}</li>
+    </ul>
+  </b-alert>
 
-    <div class="panel panel-primary recordMaintenanceForm" v-if="showForm">
-      <div class="panel-heading">Add a Class Schedule</div>
-      <div class="panel-body">
-        <b-form id="Add_ClassSchedule_Form">
+  <div class="panel panel-primary recordMaintenanceForm" v-if="showForm">
+    <div class="panel-heading">Add a Class Schedule</div>
+    <div class="panel-body">
+      <b-form id="Add_ClassSchedule_Form">
 
-          <b-col cols="12" md="6" lg="2">
-            <b-form-group
-              class="academicyear"
-              label="Academic Year"
-              label-for="academicYear">
-              <b-form-select
-                id="academicYear"
-                v-model="selectedAcademicYear"
-                @change="">
-                <option value="null" hidden>Select Academic Year</option>
-                <option v-for="ay in AyRow"
-                v-bind:value="ay.id">{{ay.academic_year}}</option>
-              </b-form-select>
-            </b-form-group>
-          </b-col>
+        <b-col cols="12" md="6" lg="2">
+          <b-form-group class="academicyear" label="Academic Year" label-for="academicYear">
+            <b-form-select id="academicYear" v-model="selectedAcademicYear" @change="">
+              <option value="null" hidden>Select Academic Year</option>
+              <option v-for="ay in AyRow" v-bind:value="ay.id">{{ay.academic_year}}</option>
+            </b-form-select>
+          </b-form-group>
+        </b-col>
 
-          <b-col cols="12" md="6" lg="2">
-            <b-form-group
-              class="semester"
-              label="Semester"
-              label-for="Semester">
-              <b-form-select
-                id="Semester"
-                v-model="selectedSemester"
-                @change="changeSemester">
-                <option value="null" hidden>Select Semester</option>
-                <option v-for="sem in SemRow"
-                v-bind:value="sem.id">{{sem.semester}}</option>
-              </b-form-select>
-            </b-form-group>
-          </b-col>
+        <b-col cols="12" md="6" lg="2">
+          <b-form-group class="semester" label="Semester" label-for="Semester">
+            <b-form-select id="Semester" v-model="selectedSemester" @change="changeSemester">
+              <option value="null" hidden>Select Semester</option>
+              <option v-for="sem in SemRow" v-bind:value="sem.id">{{sem.semester}}</option>
+            </b-form-select>
+          </b-form-group>
+        </b-col>
 
-          <b-col cols="12" md="6" lg="2">
-            <b-form-group
-              class="course"
-              label="Course"
-              label-for="Course">
-              <b-form-select
-                id="Course"
-                v-model="selectedCourse"
-                @change="getCurriculum()" :options="course_options">
-                <option value="null" hidden>Select Course</option>
-                <!-- <option v-for="course in CourseRow"
+        <b-col cols="12" md="6" lg="2">
+          <b-form-group class="course" label="Course" label-for="Course">
+            <b-form-select id="Course" v-model="selectedCourse" @change="getCurriculum()" :options="course_options">
+              <option value="null" hidden>Select Course</option>
+              <!-- <option v-for="course in CourseRow"
                 v-bind:value="{id:course.id , year:course.year_duration}">{{course.course_code}}</option> -->
-              </b-form-select>
-            </b-form-group>
-          </b-col>
+            </b-form-select>
+          </b-form-group>
+        </b-col>
 
-          <b-col cols="12" md="6" lg="2">
-            <b-form-group
-              class="curriculum"
-              label="Curriculum"
-              label-for="Curriculum">
-              <b-form-select
-                id="Curriculum"
-                v-model="selectedCurriculum"
-                @change="changeCurr">
-                <option value="null" hidden>Select Curriculum</option>
-                <option v-if="Curriculumrow === null" value="null" disabled>No Curriculums</option>
-                <option v-else v-for="curriculum in Curriculumrow "
-                v-bind:value="{id: curriculum.id, subjects: curriculum.curriculum_subjects}">{{curriculum.curriculum_title}}</option>
-              </b-form-select>
-            </b-form-group>
-          </b-col>
+        <b-col cols="12" md="6" lg="2">
+          <b-form-group class="curriculum" label="Curriculum" label-for="Curriculum">
+            <b-form-select id="Curriculum" v-model="selectedCurriculum" @change="changeCurr">
+              <option value="null" hidden>Select Curriculum</option>
+              <option v-if="Curriculumrow === null" value="null" disabled>No Curriculums</option>
+              <option v-else v-for="curriculum in Curriculumrow " v-bind:value="{id: curriculum.id, subjects: curriculum.curriculum_subjects}">{{curriculum.curriculum_title}}</option>
+            </b-form-select>
+          </b-form-group>
+        </b-col>
 
-          <b-col cols="12" md="6" lg="2">
-            <b-form-group
-              class="yearlevel"
-              label="Year Level"
-              label-for="yearLevel">
-              <b-form-select
-                  id="yearLevel"
-                  v-model="selectedYearLevel"
-                  @change="getSubject()" :options="year_options">
-                  <option value="null" hidden>Select Year Level</option>
-                  <option v-if="selectedCurriculum === null" value="null" disabled>No year levels</option>
-              </b-form-select>
-            </b-form-group>
-          </b-col>
+        <b-col cols="12" md="6" lg="2">
+          <b-form-group class="yearlevel" label="Year Level" label-for="yearLevel">
+            <b-form-select id="yearLevel" v-model="selectedYearLevel" @change="getSubject()" :options="year_options">
+              <option value="null" hidden>Select Year Level</option>
+              <option v-if="selectedCurriculum === null" value="null" disabled>No year levels</option>
+            </b-form-select>
+          </b-form-group>
+        </b-col>
 
-          <b-col cols="12" md="6" lg="2">
-            <b-form-group
-              class="subject"
-              label="Subject"
-              label-for="Subject">
-              <b-form-select
-                id="Subject"
-                @change="getInstructors"
-                v-model="selectedSubject" >
-                <option value="null" hidden>Select Subject</option>
-                <option v-if="SubjectsRow === null" value="null" disabled>No Subjects</option>
-                <option v-else v-for="data in SubjectsRow"
-                v-bind:value="{id: data.id, subject_id: data.subject_id, instructors: data.subject.instructors, lab:  data.subject.lab}">
+        <b-col cols="12" md="6" lg="2">
+          <b-form-group class="subject" label="Subject" label-for="Subject">
+            <b-form-select id="Subject" @change="getInstructors" v-model="selectedSubject">
+              <option value="null" hidden>Select Subject</option>
+              <option v-if="SubjectsRow === null" value="null" disabled>No Subjects</option>
+              <option v-else v-for="data in SubjectsRow" v-bind:value="{id: data.id, subject_id: data.subject_id, instructors: data.subject.instructors, lab:  data.subject.lab}">
                 {{data.subject.subject_code}} - {{data.subject.subject_description}}
               </option>
-              </b-form-select>
-            </b-form-group>
-          </b-col>
+            </b-form-select>
+          </b-form-group>
+        </b-col>
 
 
 
-            <b-col cols="12" md="6" lg="2">
-              <b-form-group
-                class="block"
-                label="Block"
-                label-for="Block">
-              <b-form-input
-                type="text"
-                v-model="selectedBlock"
-                id="block"
-                placeholder="Enter Block No."
-                v-bind:value="blockData"
-                :disabled="blockStatus">
-              </b-form-input>
-            </b-form-group>
-          </b-col>
-
-          <b-col cols="12" md="6" lg="2">
-            <b-form-group
-              class="batch"
-              label="Batch"
-              label-for="Batch">
-            <b-form-input
-              type="text"
-              v-model="selectedBatch"
-              id="batch"
-              placeholder="Enter Batch No."
-              v-bind:value="batchData"
-              :disabled="batchStatus">
+        <b-col cols="12" md="6" lg="1">
+          <b-form-group class="block" label="Block" label-for="Block">
+            <b-form-input type="text" v-model="selectedBlock" id="block" placeholder="No." v-bind:value="blockData" :disabled="blockStatus">
             </b-form-input>
           </b-form-group>
         </b-col>
 
-          <b-col cols="12" md="6" lg="2">
-            <b-form-group
-              class="instructor"
-              label="Instructor"
-              label-for="Instructor">
-              <b-form-select
-                id="Instructor"
-                @change="getRooms"
-                v-model="selectedInstructor" >
-                <option value="null" hidden>Select Instructor</option>
-                <option v-if="instructorRow === null" value="null" disabled>No Instructors</option>
-                <option v-else v-for="data in instructorRow"
-                v-bind:value="data.instructor_id">{{data.instructor.first_name}} {{data.instructor.last_name}}</option>
-              </b-form-select>
-            </b-form-group>
-          </b-col>
+        <b-col cols="12" md="6" lg="1">
+          <b-form-group class="batch" label="Batch" label-for="Batch">
+            <b-form-input type="text" v-model="selectedBatch" id="batch" placeholder="No." v-bind:value="batchData" :disabled="batchStatus">
+            </b-form-input>
+          </b-form-group>
+        </b-col>
 
-          <b-col cols="12" md="6" lg="2">
-            <b-form-group
-              class="room"
-              label="Room"
-              label-for="Room">
-              <b-form-select
-                id="Room"
-                @change="getDays"
-                v-model="selectedRoom">
-                <option value="null" hidden>Select Room</option>
-                <option v-if="roomRow === null" value="null" disabled>No Rooms</option>
-                <option v-else v-for="room in roomRow"
-                v-bind:value="room.id">{{room.room_number}} - {{room.room_name}}</option>
-              </b-form-select>
-            </b-form-group>
-          </b-col>
+        <b-col cols="12" md="6" lg="2">
+          <b-form-group class="instructor" label="Instructor" label-for="Instructor">
+            <b-form-select id="Instructor" @change="setRooms" v-model="selectedInstructor">
+              <option value="null" hidden>Select Instructor</option>
+              <option v-if="instructorRow === null" value="null" disabled>No Instructors</option>
+              <option v-else v-for="data in instructorRow" v-bind:value="data.instructor_id">{{data.instructor.first_name}} {{data.instructor.last_name}}</option>
+            </b-form-select>
+          </b-form-group>
+        </b-col>
 
-          <b-col cols="12" md="6" lg="2">
-            <b-form-group
-              class="day"
-              label="Day"
-              label-for="Day">
-              <b-form-select
-                id="Day"
-                @change=""
-                v-model="selectedDay"
-                :options="day_options">
-                <option value="null" hidden>Select Day</option>
-                <option v-if="roomRow === null" value="null" disabled>No Days</option>
-              </b-form-select>
-            </b-form-group>
-          </b-col>
+        <b-col cols="12" md="6" lg="2">
+          <b-form-group class="room" label="Room" label-for="Room">
+            <b-form-select id="Room" @change="getDays" v-model="selectedRoom">
+              <option value="null" hidden>Select Room</option>
+              <option v-if="roomRow === null" value="null" disabled>No Rooms</option>
+              <option v-else v-for="room in roomRow" v-bind:value="room.id">{{room.room_number}} - {{room.room_name}}</option>
+            </b-form-select>
+          </b-form-group>
+        </b-col>
+
+        <b-col cols="12" md="6" lg="2">
+          <b-form-group class="day" label="Day" label-for="Day">
+            <b-form-select id="Day" @change="getTimes" v-model="selectedDay" :options="day_options">
+              <option value="null" hidden>Select Day</option>
+              <option v-if="roomRow === null" value="null" disabled>No Days</option>
+            </b-form-select>
+          </b-form-group>
+        </b-col>
+
+        <b-col cols="12" md="6" lg="2">
+          <b-form-group class="time_start" label="Time Start" label-for="time_start">
+            <b-form-select id="time_start" @change="" v-model="selectedTimeStart" :options="time_start_options">
+              <option value="null" hidden>Select Time Start</option>
+              <option v-if="time_start_options === []" value="null" disabled>No Days</option>
+            </b-form-select>
+          </b-form-group>
+        </b-col>
 
 
 
-        </b-form>
-        <b-form-row>
-          <b-col>
-            <b-button variant="danger" @click="toggleForm">
-              Cancel
-            </b-button>
-          </b-col>
-          <b-col class="d-flex justify-content-end">
-            <b-button variant="primary" id="Add_Semester_Btn" >
-              Add
-            </b-button>
-          </b-col>
-        </b-form-row>
-      </div>
+      </b-form>
+      <b-form-row>
+        <b-col>
+          <b-button variant="danger" @click="toggleForm">
+            Cancel
+          </b-button>
+        </b-col>
+        <b-col class="d-flex justify-content-end">
+          <b-button variant="primary" id="Add_Semester_Btn">
+            Add
+          </b-button>
+        </b-col>
+      </b-form-row>
     </div>
-
-    <b-button variant="success" size="sm" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
-      Add New Class Schedule
-    </b-button>
-
-    <ag-grid-vue class="ag-theme-material"
-      :columnDefs="CollegeClassScheduleColumnDefs"
-      :rowData="CollegeClassSchedRow"
-      :animateRows="true"
-      :pagination="true"
-      :paginationPageSize="10"
-      :gridOptions="gridOptions">
-    </ag-grid-vue>
-
   </div>
+
+  <b-button variant="success" size="sm" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
+    Add New Class Schedule
+  </b-button>
+
+  <ag-grid-vue class="ag-theme-material" :columnDefs="CollegeClassScheduleColumnDefs" :rowData="CollegeClassSchedRow" :animateRows="true" :pagination="true" :paginationPageSize="10" :gridOptions="gridOptions">
+  </ag-grid-vue>
+
+</div>
 </template>
 
     <script>
@@ -261,6 +180,7 @@
                   SubjectsRow: null,
                   instructorRow: null,
                   roomRow: null,
+                  roomContainer: null,
                   blockData: null,
                   batchData: null,
                   gridOptions: null,
@@ -292,11 +212,13 @@
                   selectedBatch: null,
                   selectedRoom: null,
                   selectedDay: null,
+                  selectedTimeStart: null,
 
                   academic_options: [],
                   year_options: [],
                   course_options: [],
                   day_options: [],
+                  time_start_options: [],
 
                   blockStatus: true,
                   batchStatus: true,
@@ -354,9 +276,226 @@
                 this.getAY();
                 this.getSemester();
                 this.getCourse();
+                this.getRooms();
               },
 
               methods: {
+
+
+                // gets all curriculum record
+                getCurriculum: function(){
+                  var curriculums = this.selectedCourse.curriculum
+                      if( curriculums.length == 0){
+                        this.Curriculumrow = null;
+                      }else{
+                        this.Curriculumrow = curriculums;
+                      }
+                      // clears select boxes
+                      this.day_options = [];
+                      this.year_options = [];
+                      this.SubjectsRow = [];
+                      this.time_start_options = []
+                      this.instructorRow = null;
+                      this.roomRow = null;
+
+                      // clear select box selected values
+                      this.selectedCurriculum = null;
+                      this.selectedYearLevel = null;
+                      this.selectedSubject = null;
+                      this.selectedBlock = null;
+                      this.selectedBatch = null;
+                      this.selectedInstructor = null;
+                      this.selectedRoom = null;
+                      this.selectedDay = null;
+                      this.selectedTimeStart = null;
+                    // });
+                },
+
+                // SET YEAR LEVEL BASED ON SELECTED COURSE
+                changeCurr: function(){
+                  if(this.selectedCourse.year == "4"){
+                    this.year_options = [
+                      { value: '1st Year', text: '1st Year' },
+                      { value: '2nd Year', text: '2nd Year' },
+                      { value: '3rd Year', text: '3rd Year' },
+                      { value: '4th Year', text: '4th Year' },
+                    ];
+                  }
+                 else if(this.selectedCourse.year == "2"){
+                   this.year_options = [
+
+                     { value: '1st Year', text: '1st Year' },
+                     { value: '2nd Year', text: '2nd Year' },
+                   ];
+                 }
+                 this.SubjectsRow = [];
+                 this.time_start_options = []
+                 this.instructorRow = null;
+                 this.roomRow = null;
+                 this.day_options = [];
+
+                 this.selectedYearLevel = null;
+                 this.selectedSubject = null;
+                 this.selectedBlock = null;
+                 this.selectedBatch = null;
+                 this.selectedInstructor = null;
+                 this.selectedRoom = null;
+                 this.selectedDay = null;
+                 this.selectedTimeStart = null;
+                },
+
+                // gets all subjects base on selected semester, curriculum and year level
+                getSubject: function(){
+                  // clears subject select box
+                  this.SubjectsRow = [];
+                  var year = this.selectedYearLevel
+                  var sem = this.selectedSemester
+                  var subjects = this.selectedCurriculum.subjects
+
+                  if(subjects.length == 0){
+                    this.SubjectsRow = [];
+                  }else{
+                    for(var i = 0; i < subjects.length; i++){
+                      if(subjects[i].year_level == year && subjects[i].semester_id == sem){
+                          this.SubjectsRow.push(subjects[i])
+                      }
+                    }
+                  }
+
+                      this.instructorRow = null;
+                      this.roomRow = null;
+                      this.day_options = [];
+                      this.time_start_options = []
+
+                      this.selectedSubject = null;
+                      this.selectedBlock = null;
+                      this.selectedBatch = null;
+                      this.selectedInstructor = null;
+                      this.selectedRoom = null;
+                      this.selectedDay = null;
+                      this.selectedTimeStart = null;
+
+
+                },
+
+                // gets all instructor that prefers the selected subject
+                getInstructors: function(){
+                  this.instructorRow = null
+                  // console.log(this.selectedSubject.instructors);
+                  var instructors = this.selectedSubject.instructors;
+
+                    if( instructors.length == 0){
+                      this.instructorRow = null;
+                    }else{
+                      this.instructorRow = instructors;
+                    }
+
+                  var lab = this.selectedSubject.lab
+                  // check if subject has laboratory
+                  if(lab == 1){
+                    this.blockStatus = false;
+                    this.batchStatus = false;
+                    this.selectedBlock = 1;
+                    this.selectedBatch = 1;
+                  } else{
+                    this.blockStatus = false;
+                    this.batchStatus = true;
+                    this.selectedBlock = 1;
+                    this.selectedBatch = 0;
+                  }
+
+                    this.roomRow = null;
+                    this.day_options = [];
+                    this.time_start_options = []
+
+
+                    this.selectedInstructor = null;
+                    this.selectedRoom = null;
+                    this.selectedDay = null;
+                    this.selectedTimeStart = null;
+
+
+                },
+
+                setRooms: function(){
+                  this.roomRow = this.roomContainer;
+                },
+
+
+                // get days of availability of an instructor
+                getDays: function(){
+                  Axios
+                    .get('http://localhost/api/v1/instructors/' + this.selectedInstructor,
+                    {
+                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+                    })
+                    .then(response => {
+                      var availabilities = response.data.availabilities;
+                      for(var i = 0; i < availabilities.length; i++){
+                        this.day_options.push({
+                          value: {
+                            day: availabilities[i].day,
+                            time_start: availabilities[i].time_start,
+                            time_end: availabilities[i].time_end,
+                          },
+                          text: availabilities[i].day
+                        });
+                      }
+                    })
+                },
+
+                getTimes: function(){
+                  // console.log(this.selectedDay)
+                  var time_start = this.selectedDay.time_start;
+                  var split_start = time_start.split(":");
+                  var hour_start = split_start[0];
+                  var h = "";
+
+                  var time_end = this.selectedDay.time_end;
+                  var split_end = time_end.split(":");
+                  var hour_end = split_end[0];
+
+                  var ampm = "";
+                  var converted = "";
+
+                  for (var i = hour_start; i <= hour_end; i++) {
+                  	for (var j = 0; j < 2; j++) {
+                  		// this.timeConverter(j,i);
+                      if (j == 0){
+                        var minutes_start = "00";
+                        h = i % 12 || 12;
+                        ampm = (i < 12 || i == 24) ? "AM" : "PM";
+                        //alert(converted = h + ":" +  minutes_start + ampm) ;
+                        converted = h + ":" +  minutes_start + ampm;
+                        this.time_start_options.push({
+                          value: converted,
+                          text: converted
+                        })
+                        // this.checkUsedTime(converted);
+                      }
+                      else if(j == 1){
+                        if(i == hour_end){
+
+                        }else{
+                          var minutes_start = "30";
+                          h = i % 12 || 12;
+                        	ampm = (i < 12 || i == 24) ? "AM" : "PM";
+                          //alert(converted = h + ":" +  minutes_start + ampm) ;
+                          converted = h + ":" +  minutes_start + ampm;
+                          this.time_start_options.push({
+                            value: converted,
+                            text: converted
+                          })
+                          // this.checkUsedTime(converted);
+                        }
+                      }
+                  	}
+                  }
+                },
+
+                timeConverter: function(j, i){
+
+                },
                 // gets all created schedule
                 getClassSchedule: function(){
                   Axios
@@ -418,9 +557,27 @@
                     })
                 },
 
+                // gets all rooms
+                getRooms: function(){
+                  Axios
+                    .get('http://localhost/api/v1/rooms', {
+                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+                    })
+                    .then(response => {
+                      this.day_options = [];
+                      this.time_start_options = []
+
+                      this.selectedTimeStart = null;
+                      this.selectedDay = null;
+                      this.selectedRoom = null;
+                      this.roomContainer = response.data;
+                    })
+                },
+
                 changeSemester: function(){
                   // clears select boxes
                   this.day_options = [];
+                  this.time_start_options = []
                   this.SubjectsRow = [];
                   this.instructorRow = null;
                   this.roomRow = null;
@@ -434,6 +591,7 @@
                   this.selectedInstructor = null;
                   this.selectedRoom = null;
                   this.selectedDay = null;
+                  this.selectedTimeStart = null;
                 },
 
                 // get all courses
@@ -463,170 +621,6 @@
                     });
                 },
 
-                // gets all curriculum record
-                getCurriculum: function(){
-                  var curriculums = this.selectedCourse.curriculum
-                      if( curriculums.length == 0){
-                        this.Curriculumrow = null;
-                      }else{
-                        this.Curriculumrow = curriculums;
-                      }
-                      // clears select boxes
-                      this.day_options = [];
-                      this.year_options = [];
-                      this.SubjectsRow = [];
-                      this.instructorRow = null;
-                      this.roomRow = null;
-
-                      // clear select box selected values
-                      this.selectedCurriculum = null;
-                      this.selectedYearLevel = null;
-                      this.selectedSubject = null;
-                      this.selectedBlock = null;
-                      this.selectedBatch = null;
-                      this.selectedInstructor = null;
-                      this.selectedRoom = null;
-                      this.selectedDay = null;
-                    // });
-                },
-
-                // SET YEAR LEVEL BASED ON SELECTED COURSE
-                changeCurr: function(){
-                  if(this.selectedCourse.year == "4"){
-                    this.year_options = [
-                      { value: '1st Year', text: '1st Year' },
-                      { value: '2nd Year', text: '2nd Year' },
-                      { value: '3rd Year', text: '3rd Year' },
-                      { value: '4th Year', text: '4th Year' },
-                    ];
-                  }
-                 else if(this.selectedCourse.year == "2"){
-                   this.year_options = [
-
-                     { value: '1st Year', text: '1st Year' },
-                     { value: '2nd Year', text: '2nd Year' },
-                   ];
-                 }
-                 this.SubjectsRow = [];
-                 this.instructorRow = null;
-                 this.roomRow = null;
-                 this.day_options = [];
-
-                 this.selectedYearLevel = null;
-                 this.selectedSubject = null;
-                 this.selectedBlock = null;
-                 this.selectedBatch = null;
-                 this.selectedInstructor = null;
-                 this.selectedRoom = null;
-                 this.selectedDay = null;
-
-                },
-
-                // gets all subjects base on selected semester, curriculum and year level
-                getSubject: function(){
-                  // clears subject select box
-                  this.SubjectsRow = [];
-                  var year = this.selectedYearLevel
-                  var sem = this.selectedSemester
-                  var subjects = this.selectedCurriculum.subjects
-
-                  if(subjects.length == 0){
-                    this.SubjectsRow = [];
-                  }else{
-                    for(var i = 0; i < subjects.length; i++){
-                      if(subjects[i].year_level == year && subjects[i].semester_id == sem){
-                          this.SubjectsRow.push(subjects[i])
-                      }
-                    }
-                  }
-
-                      this.instructorRow = null;
-                      this.roomRow = null;
-                      this.day_options = [];
-
-                      this.selectedSubject = null;
-                      this.selectedBlock = null;
-                      this.selectedBatch = null;
-                      this.selectedInstructor = null;
-                      this.selectedRoom = null;
-                      this.selectedDay = null;
-
-
-                },
-
-                // gets all instructor that prefers the selected subject
-                getInstructors: function(){
-                  this.instructorRow = null
-
-                  var instructors = this.selectedSubject.instructors;
-
-                    if( instructors.length == 0){
-                      this.instructorRow = null;
-                    }else{
-                      this.instructorRow = instructors;
-                    }
-
-
-
-                  var lab = this.selectedSubject.lab
-                  console.log(lab);
-                  // check if subject has laboratory
-                  if(lab == 1){
-                    this.blockStatus = false;
-                    this.batchStatus = false;
-                    this.selectedBlock = 1;
-                    this.selectedBatch = 1;
-                  } else{
-                    this.blockStatus = false;
-                    this.batchStatus = true;
-                    this.selectedBlock = 1;
-                    this.selectedBatch = 0;
-                  }
-
-
-
-                    this.roomRow = null;
-                    this.day_options = [];
-
-
-                    this.selectedInstructor = null;
-                    this.selectedRoom = null;
-                    this.selectedDay = null;
-
-                    // this.getRooms();
-                },
-
-                // gets all rooms
-                getRooms: function(){
-                  Axios
-                    .get('http://localhost/api/v1/rooms', {
-                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-                    })
-                    .then(response => {
-                      this.day_options = [];
-                      this.selectedDay = null;
-                      this.selectedRoom = null;
-                      this.roomRow = response.data;
-                    })
-                },
-
-                //
-                getDays: function(){
-                //   Axios
-                //     .get('http://localhost/api/v1/instructors/' + this.selectedInstructor
-                //         + '/availabilities/' + this.selectedAcademicYear + '/' + this.selectedSemester,
-                //     {
-                //       headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-                //     })
-                //     .then(response => {
-                //       console.log(response.data);
-                //     })
-                },
-
-                getTimes: function(){
-
-                },
-
                 toggleForm: function(){
                   // clears select boxes
                   this.CourseRow = null;
@@ -654,10 +648,8 @@
                   } else {
                     this.showForm = true;
                   }
-
                 },
-              },
-
+              }
             }
     </script>
 

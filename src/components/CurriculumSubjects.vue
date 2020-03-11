@@ -113,21 +113,14 @@
         </b-button>
       </b-form-group>
     </b-col>
-
-
     <!-- curriculum subjects table -->
-    <div id="dataTable">
-      <table class="table table-bordered table-striped" border="1">
+      <table class="table table-bordered table-striped">
         <tbody id="subjectsTable">
 
         </tbody>
       </table>
-    </div>
-     <iframe name="print_frame" width="0" height="0" frameborder="0" src="about:blank"></iframe>
     </b-col>
   </b-form-row>
-
-
 
 
   <!--  TODO:  Display subjects per year and semester  -------
@@ -137,16 +130,6 @@
 </div>
 </template>
 <style>
-
-@media print {
-  button{
-    display: none;
-  }
-  #dataTable {
-    display: block;
-  }
-}
-
 #subjectsTable tr td {
   padding-top: 25px;
   margin: 0;
@@ -168,12 +151,8 @@ td:nth-child(5) {
 
 <script>
 function myFunction() {
-  // document.getElementById('deleteID').value = this.id;
-  // document.getElementById('currID').click();
-
-  window.frames["print_frame"].document.body.innerHTML = document.getElementById("dataTable").outerHTML;
-  window.frames["print_frame"].window.focus();
-  window.frames["print_frame"].window.print();
+  document.getElementById('deleteID').value = this.id;
+  document.getElementById('currID').click();
 }
 import Axios from "axios";
 import {
