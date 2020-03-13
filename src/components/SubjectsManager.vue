@@ -21,14 +21,14 @@
     <!-- End of Alert Message -->
 
     <!-- Adding Form Start  -->
-    <div class="addPanel">
+    <div class="addPanelSubject">
       <div class="panel panel-primary recordMaintenanceForm" v-if="showForm">
         <div class="panel-heading">Add Subject</div>
         <div class="panel-body">
           <b-form id="Add_College_Subject_Form">
             <b-form-row>
                 <!-- Suject Code -->
-              <b-col cols="12" md="6" lg="6">
+              <b-col cols="12" md="6" lg="12">
                 <b-form-group
                   class="subjectcode"
                   label="Subject Code"
@@ -40,9 +40,11 @@
                     required></b-form-input>
                 </b-form-group>
               </b-col>
+            </b-form-row>
 
+          <b-form-row>
               <!--  Subject Description -->
-              <b-col cols="12" md="6" lg="6">
+              <b-col cols="12" md="6" lg="12">
                 <b-form-group
                   class="subjectdesc"
                   label="Subject Description"
@@ -58,7 +60,7 @@
 
             <b-form-row>
               <!-- Lecture Units -->
-              <b-col cols="12" md="6" lg="4">
+              <b-col cols="12" md="6" lg="6">
                 <b-form-group
                   class="lecUnits"
                   label="Lecture Units"
@@ -72,7 +74,7 @@
               </b-col>
 
               <!-- Laboratory Units -->
-              <b-col cols="12" md="6" lg="4">
+              <b-col cols="12" md="6" lg="6">
                 <b-form-group
                   class="labUnits"
                   label="Laboratory Units"
@@ -85,19 +87,6 @@
                 </b-form-group>
               </b-col>
 
-              <!-- Total Units -->
-              <b-col cols="12" md="6" lg="4">
-                <b-form-group
-                  class="units"
-                  label="Units"
-                  label-for="Units">
-                  <b-form-input
-                    type="number"
-                    v-model="subject.units"
-                    id="Units"
-                    required></b-form-input>
-                </b-form-group>
-              </b-col>
             </b-form-row>
 
             <!-- Form Buttons -->
@@ -209,7 +198,7 @@
       <!-- end of table -->
 
     <!-- Start Of Edit Modal -->
-    <b-modal id="editSubjModal" ref="editSubjModal" title=" Edit Subject" size="lg" no-close-on-backdrop>
+    <b-modal id="editSubjModal" ref="editSubjModal" title=" Edit Subject" size="md" no-close-on-backdrop>
         <b-form-row>
         <!-- Subject Code -->
           <b-col cols="12" md="6" lg="6">
@@ -220,8 +209,8 @@
               <b-form-input
                 type="text"
                 v-model="subject.subject_code"
-                id="subjCode"
-                required></b-form-input>
+                id="subjCode">
+              </b-form-input>
             </b-form-group>
           </b-col>
 
@@ -234,8 +223,7 @@
               <b-form-input
                 type="text"
                 v-model="subject.subject_description"
-                id="subjDesc"
-                required>
+                id="subjDesc">
               </b-form-input>
             </b-form-group>
           </b-col>
@@ -251,8 +239,8 @@
               <b-form-input
                 type="number"
                 v-model="subject.lec"
-                id="lec"
-                required></b-form-input>
+                id="lec">
+              </b-form-input>
             </b-form-group>
           </b-col>
 
@@ -265,24 +253,11 @@
               <b-form-input
                 type="number"
                 v-model="subject.lab"
-                id="lab"
-                required></b-form-input>
+                id="lab">
+              </b-form-input>
             </b-form-group>
           </b-col>
 
-          <!-- Total Units -->
-          <b-col cols="12" md="6" lg="4">
-            <b-form-group
-              class="units"
-              label="Units"
-              label-for="Units">
-              <b-form-input
-                type="number"
-                v-model="subject.units"
-                id="Units"
-                required></b-form-input>
-            </b-form-group>
-          </b-col>
 
           <!-- Subject Status -->
           <b-col cols="12" md="6" lg="4">
@@ -522,3 +497,15 @@
     } // End of Methods
   } // End of Export Default
 </script>
+
+<style>
+  .addPanelSubject{
+    width: 35%;
+    position: relative;
+    left: 335px;
+  }
+
+
+
+
+</style>
