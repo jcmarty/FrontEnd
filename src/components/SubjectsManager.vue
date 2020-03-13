@@ -162,8 +162,8 @@
         :filter="filter">
 
         <template v-slot:cell(active)="row" >
-          <p v-if="row.item.active"><b-badge variant="success">Active</b-badge></p>
-          <p v-else><b-badge variant="danger">Inactive</b-badge></p>
+          <p v-if="row.item.active"><b-badge class="p-2" variant="success">Active</b-badge></p>
+          <p v-else><b-badge  class="p-2" variant="danger">Inactive</b-badge></p>
 
         </template>
 
