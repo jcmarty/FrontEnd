@@ -7,6 +7,9 @@
   <b-alert variant="success" :show="dismissSuccessCountDown" @dismissed="dismissSuccessCountDown=0" dismissible fade>
     {{alertMessage}}
   </b-alert>
+  <b-alert variant="warning" :show="dismissWarningCountDown" @dismissed="dismissSuccessCountDown=0" dismissible fade>
+    {{alertMessage}}
+  </b-alert>
   <b-alert variant="danger" :show="dismissErrorCountDown" @dismissed="dismissErrorCountDown=0" dismissible fade>
     <p>{{alertMessage}}</p>
     <ul>
@@ -126,7 +129,7 @@
 
         <b-col cols="12" md="6" lg="2">
           <b-form-group class="time_start" label="Time Start" label-for="time_start">
-            <b-form-select id="time_start" @change="" v-model="selectedTimeStart" :options="availabilities">
+            <b-form-select id="time_start" @change="getTimeEnd" v-model="selectedTimeStart" :options="availabilities">
               <option value="null" hidden>Select Time Start</option>
               <option v-if="selectedDay == null" value="null" disabled>No Time Start</option>
             </b-form-select>
@@ -199,6 +202,7 @@
                   errors: [],
                   dismissSecs: 7,
                   dismissSuccessCountDown: 0,
+                  dismissWarningCountDown: 0,
                   dismissErrorCountDown: 0,
 
 
@@ -472,35 +476,50 @@
                     })
                 },
 
-                getTimeConflicts: function(){
-                  // get selected room availability
+                getTimeEnd: function(){
+                  alert("change");
+                  this.getTimeConflicts();
+                },
 
+                getTimeConflicts: function(){
+
+                  // get selected room availability
                   Axios
-                    .get('http://localhost/api/v1/class_schedules',
+                    .get('http://localhost/api/v1/rooms/' + this.selectedRoom + '/schedules?academic_year_id=' + this.selectedAcademicYear +
+                    '&semester_id=' + this.selectedSemester +
+                    '&day=' + this.selectedDay.day +
+                    '&time_start=' + this.selectedTimeStart +
+                    '&active=1',
                     {
                       headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
                     }).then(response => {
                       // push time conflicts to this array time_conflicts
+                      if(response.data != null){
+                        this.dismissWarningCountDown = 5;
+                        this.alertMessage = response.data;
+                      }
                     })
+
                   // get selected instructor availability
-                  Axios
-                    .get('http://localhost/api/v1/instructors',
-                    {
-                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-                    }).then(response => {
-                      // push time conflicts to this array time_conflicts
-                    })
-                  // get selected course availability
-                  Axios
-                    .get('http://localhost/api/v1/course',
-                    {
-                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-                    }).then(response => {
-                      // push time conflicts to this array time_conflicts
-                    })
+                  // Axios
+                  //   .get('http://localhost/api/v1/instructors',
+                  //   {
+                  //     headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+                  //   }).then(response => {
+                  //     // push time conflicts to this array time_conflicts
+                  //   })
+                  // // get selected course availability
+                  // Axios
+                  //   .get('http://localhost/api/v1/course',
+                  //   {
+                  //     headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+                  //   }).then(response => {
+                  //     // push time conflicts to this array time_conflicts
+                  //   })
                 },
 
                 getTimes: function(){
+                  // this.getTimeConflicts();
                   this.selectedTimeStart = null;
                   this.time_start_options = [];
                   this.availabilities = [];
