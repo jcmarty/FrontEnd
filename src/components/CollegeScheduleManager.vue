@@ -161,30 +161,92 @@
     </div>
   </div>
 
-  <b-button variant="success" size="sm" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
-    Add New Class Schedule
-  </b-button>
-  <b-button variant="success" size="" @click="getAvailabilities" class="">
-    TIME
-  </b-button>
-  <ag-grid-vue class="ag-theme-material" :columnDefs="CollegeClassScheduleColumnDefs" :rowData="CollegeClassSchedRow" :animateRows="true" :pagination="true" :paginationPageSize="10" :gridOptions="gridOptions">
-  </ag-grid-vue>
+<!-- Table Start -->
+  <div class="myTable px-4 py-3 my-5">
+    <!-- Adding Form Start  -->
+    <b-row>
+      <b-col lg="4" class="my-1 ">
+        <b-form-group
+        class="filter"
+        label="Filter"
+        label-for="Filter">
+          <b-input-group  size="sm">
+            <b-form-input
+              v-model="filter"
+              type="search"
+              id="filterInput"
+              placeholder="Type to Search">
+            </b-form-input>
+          </b-input-group>
+        </b-form-group>
+      </b-col>
+
+      <b-col class="py-4">
+        <!-- Add New Room Button -->
+        <b-button variant="primary" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
+          Add New Class Schedule
+        </b-button>
+      </b-col>
+    </b-row>
+
+    <!-- Main table element -->
+    <b-table
+      class="my-3 table-striped"
+      show-empty
+      responsive=true
+      head-variant="dark"
+      bordered
+      hover
+      stacked="md"
+      :items="items"
+      :fields="fields"
+      :current-page="currentPage"
+      :per-page="perPage"
+      :filter="filter">
+
+    </b-table>
+
+    <hr/>
+    <b-row>
+      <b-col sm="4" md="6" lg="1" class="my-1">
+        <b-form-group
+        class="perpageselect"
+        label=""
+        label-for="perPageSelect">
+          <b-form-select
+            v-model="perPage"
+            id="perPageSelect"
+            size="sm"
+            :options="pageOptions"
+          ></b-form-select>
+        </b-form-group>
+      </b-col>
+
+      <b-col sm="4" md="3" class="my-1 col-md-3 offset-md-8">
+        <b-pagination
+          v-model="currentPage"
+          :total-rows="totalRows"
+          :per-page="perPage"
+          align="fill"
+          size="sm"
+          class="my-0"
+        ></b-pagination>
+      </b-col>
+    </b-row>
+  </div>
+    <!-- end of table -->
+
+
 
 </div>
 </template>
 
     <script>
     import Axios from "axios";
-    import {AgGridVue} from "ag-grid-vue";
-    import '../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
-    import '../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
-
         export default {
             name: 'CollegeClassSchedule',
             data() {
                 return {
-                  CollegeClassScheduleColumnDefs: null,
-                  columnDefs: null,
                   CollegeClassSchedRow: null,
                   AyRow: null,
                   SemRow: null,
@@ -196,7 +258,7 @@
                   roomContainer: null,
                   blockData: null,
                   batchData: null,
-                  gridOptions: null,
+
                   showForm: false,
                   alertMessage: "",
                   errors: [],
@@ -205,8 +267,6 @@
                   dismissWarningCountDown: 0,
                   dismissErrorCountDown: 0,
 
-
-
                   current_ay: [],
                   current_sem: [],
                   availabilities : [],
@@ -214,15 +274,18 @@
 
                   selectedAcademicYear:null,
                   selectedSemester:null,
+
                   selectedCourse: {
                     id: null,
                     course_code: null,
                     curriculums: []
                   },
+
                   selectedCurriculum:{
                     id: null,
                     subjects: []
                   },
+
                   selectedSubject: null,
                   selectedYearLevel: null,
                   selectedInstructor: null,
@@ -257,41 +320,41 @@
                     instructor: null,
                     block: null,
                     batch: null,
-                    class_type: null,
                     academic_year: null,
                     semester: null,
 
                   },
 
+                  items: [],
+                  fields: [
+                    { key: 'day', label: 'Day', class: 'text-center', sortable: true},
+                    { key: 'time_start', label: 'Time Start', sortable: true, class: 'text-center' },
+                    { key: 'time_end', label: 'Time End', sortable: true, class: 'text-center' },
+                    { key: 'subject_code', label: 'Subject Code', sortable: true, class: 'text-center' },
+                    { key: 'subject_desc', label: 'Description', sortable: true, class: 'text-center' },
+                    { key: 'room_number', label: 'Room', sortable: true, class: 'text-center' },
+                    { key: 'instructor', label: 'Instructor', sortable: true, class: 'text-center' },
+                    { key: 'block', label: 'Block', sortable: true, class: 'text-center' },
+                    { key: 'batch', label: 'Batch', sortable: true, class: 'text-center' },
+                  ],
+
+                  totalRows: 1,
+                  currentPage: 1,
+                  perPage: 5,
+                  pageOptions: [5, 10, 15, 20, 25],
+                  filter: null,
+
 
                   // full_name: this.instructor.first_name + " " + this.instructor.last_name,
                 }
             },
-            components: {
-                AgGridVue,
-            },
+
             beforeMount() {
               this.getClassSchedule();
               this.getCurrentSetting();
-              this.gridOptions = {
-                  context: {
-                      componentParent: this
-                  }
-              };
-
-              this.CollegeClassScheduleColumnDefs = [
-                  {headerName: 'Day', field: 'day', sortable: true, filter: true, width: 150,},
-                  {headerName: 'Time Start', field: 'time_start', sortable: true, filter: true, width: 200},
-                  {headerName: 'Time End', field: 'time_end', sortable: true, filter: true, width: 200},
-                  {headerName: 'Subject Code', field: 'subject_code', sortable: true, filter: true, width: 150, resizable:true },
-                  {headerName: 'Subject Description', field: 'subject.subject.subject_description', sortable: true, filter: true, width: 300, resizable:true},
-                  {headerName: 'Room No.', field: 'room.room_number', sortable: true, filter: true, width: 150},
-                  {headerName: 'Instructor.', field: 'instructor.last_name' , sortable: true, filter: true, width: 150},
-                  {headerName: 'Block', field: 'block', sortable: true, filter: true, width: 150},
-                  {headerName: 'Batch', field: 'batch', sortable: true, filter: true, width: 150},
-              ];
 
               },
+
               mounted () {
                 this.getAY();
                 this.getSemester();
@@ -300,7 +363,6 @@
               },
 
               methods: {
-
 
                 // gets all curriculum record
                 getCurriculum: function(){
