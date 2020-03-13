@@ -331,9 +331,9 @@
                     { key: 'time_start', label: 'Time Start', sortable: true, class: 'text-center' },
                     { key: 'time_end', label: 'Time End', sortable: true, class: 'text-center' },
                     { key: 'subject_code', label: 'Subject Code', sortable: true, class: 'text-center' },
-                    { key: 'subject_desc', label: 'Description', sortable: true, class: 'text-center' },
-                    { key: 'room_number', label: 'Room', sortable: true, class: 'text-center' },
-                    { key: 'instructor', label: 'Instructor', sortable: true, class: 'text-center' },
+                    { key: 'subject.subject.subject_description', label: 'Description', sortable: true, class: 'text-center' },
+                    { key: 'room.room_number', label: 'Room', sortable: true, class: 'text-center' },
+                    { key: 'instructor.last_name', label: 'Instructor', sortable: true, class: 'text-center' },
                     { key: 'block', label: 'Block', sortable: true, class: 'text-center' },
                     { key: 'batch', label: 'Batch', sortable: true, class: 'text-center' },
                   ],
@@ -741,7 +741,8 @@
                     })
                     .then(response => {
                       console.log(response.data);
-                      this.CollegeClassSchedRow = response.data;
+                      this.items = response.data;
+                      this.totalRows = this.items.length;
                     })
                 },
                 // get current academic year and
