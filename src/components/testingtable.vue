@@ -55,6 +55,14 @@
       <template v-slot:row-details="row">
         <b-card>
           <b-col cols="12" md="6" lg="3">
+            <!-- getting the id of selected room -->
+            <b-form-input
+              type="number"
+              id="roomID"
+              :value="row.item.id"
+              hidden>
+            </b-form-input >
+
             <b-form-group
               class="roomnumber"
               label="Room Number"
@@ -62,8 +70,6 @@
               <b-form-input
                 type="number"
                 id="roomNumber"
-                v-model="room.room_number"
-                required
                 :value="row.item.room_number">
               </b-form-input>
             </b-form-group>
@@ -77,8 +83,6 @@
               <b-form-input
                 type="text"
                 id="roomName"
-                v-model="room.room_name"
-                required
                 :value="row.item.room_name">
               </b-form-input>
             </b-form-group>
@@ -92,8 +96,6 @@
               <b-form-input
                 type="text"
                 id="roomType"
-                v-model="room.room_type"
-                required
                 :value="row.item.room_type">
               </b-form-input>
             </b-form-group>
@@ -107,8 +109,6 @@
               <b-form-input
                 type="number"
                 id="roomCapacity"
-                v-model="room.room_capacity"
-                required
                 :value="row.item.room_capacity">
               </b-form-input>
             </b-form-group>
@@ -118,7 +118,6 @@
             <b-form-group
               label="Status">
               <b-form-select
-                v-model="room.active"
                 :options="options"
                 :value="row.item.active">
               </b-form-select>
@@ -244,26 +243,39 @@
 
       // Update Room Function
       updateRoom: function(){
-        this.errors = [];
-        Axios
-        .put('http://localhost/api/v1/rooms/' + this.id, this.room, {
-          headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-        })
-        .then(response => {
-          this.getRooms();
-          this.alertMessage = response.data.message;
-          this.dismissSuccessCountDown = this.dismissSecs;
-        })
-        .catch(error => {
-          this.alertMessage = error.response.data.message;
-          const values = Object.values(error.response.data.errors);
-          for(const val of values){
-            for(const err of val){
-              this.errors.push(err);
-            }
-          }
-          this.dismissErrorCountDown = this.dismissSecs;
-        });
+        // document.getElementById("roomID").value
+        var num = document.getElementById("roomNumber").value
+        var name = document.getElementById("roomName").value
+        var type = document.getElementById("roomType").value
+        var cap = document.getElementById("roomCapacity").value
+        var data = {
+          room_number: num,
+          room_name: name,
+          room_type: type,
+          room_capacity: cap,
+        }
+        console.log(data);
+
+        // this.errors = [];
+        // Axios
+        // .put('http://localhost/api/v1/rooms/' + this.id, this.room, {
+        //   headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+        // })
+        // .then(response => {
+        //   this.getRooms();
+        //   this.alertMessage = response.data.message;
+        //   this.dismissSuccessCountDown = this.dismissSecs;
+        // })
+        // .catch(error => {
+        //   this.alertMessage = error.response.data.message;
+        //   const values = Object.values(error.response.data.errors);
+        //   for(const val of values){
+        //     for(const err of val){
+        //       this.errors.push(err);
+        //     }
+        //   }
+        //   this.dismissErrorCountDown = this.dismissSecs;
+        // });
       }, // End of Update Room Function
 
       info(item, index, button) {

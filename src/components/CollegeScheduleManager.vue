@@ -126,7 +126,7 @@
 
         <b-col cols="12" md="6" lg="2">
           <b-form-group class="time_start" label="Time Start" label-for="time_start">
-            <b-form-select id="time_start" @change="" v-model="selectedTimeStart" :options="time_start_options">
+            <b-form-select id="time_start" @change="" v-model="selectedTimeStart" :options="availabilities">
               <option value="null" hidden>Select Time Start</option>
               <option v-if="selectedDay == null" value="null" disabled>No Time Start</option>
             </b-form-select>
@@ -135,7 +135,7 @@
 
         <b-col cols="12" md="6" lg="2">
           <b-form-group class="time_end" label="Time End" label-for="time_end">
-            <b-form-select id="time_end" @change="" v-model="selectedTimeStart" :options="time_end_options">
+            <b-form-select id="time_end" @change="" v-model="selectedTimeEnd" :options="availabilities">
               <option value="null" hidden>Select Time End</option>
               <option v-if="selectedTimeStart == null" value="null" disabled>No Time End</option>
             </b-form-select>
@@ -276,16 +276,15 @@
               };
 
               this.CollegeClassScheduleColumnDefs = [
-                  {headerName: 'Day', field: 'schedule.day', sortable: true, filter: true, width: 150,},
-                  {headerName: 'Time', field: 'schedule.time', sortable: true, filter: true, width: 200},
-                  {headerName: 'Subject Code', field: 'subject.subject_code', sortable: true, filter: true, width: 150, resizable:true },
-                  {headerName: 'Subject Description', field: 'subject.subject_desc', sortable: true, filter: true, width: 300, resizable:true},
+                  {headerName: 'Day', field: 'day', sortable: true, filter: true, width: 150,},
+                  {headerName: 'Time Start', field: 'time_start', sortable: true, filter: true, width: 200},
+                  {headerName: 'Time End', field: 'time_end', sortable: true, filter: true, width: 200},
+                  {headerName: 'Subject Code', field: 'subject_code', sortable: true, filter: true, width: 150, resizable:true },
+                  {headerName: 'Subject Description', field: 'subject.subject.subject_description', sortable: true, filter: true, width: 300, resizable:true},
                   {headerName: 'Room No.', field: 'room.room_number', sortable: true, filter: true, width: 150},
-                  {headerName: 'Instructor.', field: 'instructor.full_name' , sortable: true, filter: true, width: 150},
+                  {headerName: 'Instructor.', field: 'instructor.last_name' , sortable: true, filter: true, width: 150},
                   {headerName: 'Block', field: 'block', sortable: true, filter: true, width: 150},
                   {headerName: 'Batch', field: 'batch', sortable: true, filter: true, width: 150},
-                  {headerName: 'Academic Year', field: 'ay.academic_year', sortable: true, filter: true, width: 150},
-                  {headerName: 'Semester', field: 'sem.semester', sortable: true, filter: true, width: 150},
               ];
 
               },
@@ -551,23 +550,23 @@
                       }
                   	}
                   }
-                  this.getAvailabilities();
+                  // this.getAvailabilities();
                 },
 
                 getAvailabilities : function (data){
                   // this.aaaaaa()
                   var used = [
                       {
-                        start: "15:00:00",
-                        end: "16:00:00",
+                        start: "8:00:00",
+                        end: "9:30:00",
+                      },
+                      {
+                        start: "10:30:00",
+                        end: "11:00:00",
                       },
                       {
                         start: "11:00:00",
-                        end: "13:00:00",
-                      },
-                      {
-                        start: "13:00:00",
-                        end: "14:30:00",
+                        end: "1:00:00",
                       },
 
                     ];
@@ -651,7 +650,7 @@
                       this.availabilities.indexOf(used) !== -1 &&   this.availabilities.splice(  this.availabilities.indexOf(used), 1)
                   }
 
-                  this.time_start_options = this.availabilities
+                  // this.time_start_options = this.availabilities
                 },
                 // gets all created schedule
                 getClassSchedule: function(){
@@ -660,7 +659,7 @@
                       headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
                     })
                     .then(response => {
-                      // console.log(response);
+                      console.log(response.data);
                       this.CollegeClassSchedRow = response.data;
                     })
                 },
@@ -799,13 +798,15 @@
                               active : 1
                             };
 
-                  // Axios
-                  //   .post('http://localhost/api/v1/class_schedules', {
-                  //     headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-                  //   })
-                  //   .then(response => {
-                  //   })
-                  console.log(newSchedule)
+                  Axios
+                    .post('http://localhost/api/v1/class_schedules', newSchedule,{
+                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+                    })
+                    .then(response => {
+                      alert(response.data.message);
+                      this.getClassSchedule();
+                    })
+                  // console.log(newSchedule)
                 },
 
                 toggleForm: function(){
