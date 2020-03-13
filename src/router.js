@@ -30,6 +30,10 @@ import StudentGradesManager from "./components/StudentGradesManager.vue";
 import StudentsReport from "./components/StudentsReport.vue";
 import UserPrivilegeManager from "./components/UserPrivilegeManager.vue";
 
+
+// testing only
+import TestingTable from "./components/testingtable.vue";
+
 Vue.use(Router);
 
 
@@ -269,6 +273,15 @@ export default new Router({
           path: '/manage/user/privilege',
           name: 'UserPrivilegeManager',
           component: UserPrivilegeManager,
+          beforeEnter(to, from, next){
+            setTimeout(() => next(), 2000);
+          },
+        },
+
+        {
+          path: '/manage/test/',
+          name: 'TestingTable',
+          component: TestingTable,
           beforeEnter(to, from, next){
             setTimeout(() => next(), 2000);
           },

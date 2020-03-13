@@ -40,6 +40,7 @@
               </b-collapse>
               </li>
               <!-- for testing only -->
+              <router-link tag="li" to="/manage/test"><a>TestingTable</a></router-link>
               <router-link tag="li" to="/manage/curriculum/college"><a>Curriculum Test</a></router-link>
               <router-link tag="li" to="/manage/room"><a>Room</a></router-link>
               <router-link tag="li" to="/manage/academicyear"><a>Academic Years</a></router-link>

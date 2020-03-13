@@ -381,8 +381,10 @@ h6{
     position: fixed
 }
 body .container.body .right_col {
-    background: #F7F7F7
+		min-height: 643px;
+    background: white;
 }
+
 .nav-md .container.body .right_col {
     padding: 10px 20px 20px 20px;
     margin-left: 230px;
@@ -703,6 +705,7 @@ a:hover,
 a:focus {
     text-decoration: none
 }
+
 
 @media (min-width: 480px) {
     .top_nav .navbar-right li {
@@ -1932,7 +1935,7 @@ a.star {
     background: none repeat scroll 0 0 #FFFFFF;
     border-radius: 4px;
     margin-top: 20px;
-    min-height: 500px;
+    min-height: 1080px;
     padding: 10px 11px;
     width: 100%
 }
