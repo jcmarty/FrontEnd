@@ -24,6 +24,9 @@
           <router-link tag="li" to="/admin"><a><i class="fa fa-home"></i> Home </a></router-link>
           <li v-bind:class="{current : currentCategory=='manage'}"><a v-b-toggle.manageOptions><i class="fa fa-edit"></i> Manage <span class="fa fa-chevron-down"></span></a>
             <b-collapse tag="ul" class="nav child_menu" id="manageOptions" accordion="sideMenuAccordion">
+              <router-link tag="li" to="/manage/requirements"><a>Requirements Test</a></router-link>
+              <router-link tag="li" to="/manage/curriculum/college"><a>Curriculum Test</a></router-link>
+              <router-link tag="li" to="/manage/schedule/college"><a>Schedule Test</a></router-link>
               <li v-b-toggle.schedules><a> Class Schedule<span class="fa fa-chevron-down"></span></a>
                 <b-collapse tag="ul" class="nav child_menu" id="schedules" accordion="sideMenuSubAccordion">
                   <router-link tag="li" to="/manage/schedule/college"><a class="super_child_menu">College</a></router-link>
@@ -31,8 +34,7 @@
                 </b-collapse>
               </li>
               <!-- for testing only -->
-              <router-link tag="li" to="/manage/schedule/college"><a>Schedule Test</a></router-link>
-              <router-link tag="li" to="/manage/subject"><a>Subject</a></router-link>
+
               <li v-b-toggle.curriculum><a>Curriculum<span class="fa fa-chevron-down"></span></a>
               <b-collapse tag="ul" class="nav child_menu" id="curriculum" accordion="sideMenuSubAccordion">
                 <router-link tag="li" to="/manage/curriculum/college"><a class="super_child_menu">College</a></router-link>
@@ -40,8 +42,8 @@
               </b-collapse>
               </li>
               <!-- for testing only -->
-              <router-link tag="li" to="/manage/test"><a>TestingTable</a></router-link>
-              <router-link tag="li" to="/manage/curriculum/college"><a>Curriculum Test</a></router-link>
+
+              <router-link tag="li" to="/manage/subject"><a>Subject</a></router-link>
               <router-link tag="li" to="/manage/room"><a>Room</a></router-link>
               <router-link tag="li" to="/manage/academicyear"><a>Academic Years</a></router-link>
               <router-link tag="li" to="/manage/semesters"><a>Semester</a></router-link>

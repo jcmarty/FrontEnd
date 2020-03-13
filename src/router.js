@@ -31,9 +31,9 @@ import StudentsReport from "./components/StudentsReport.vue";
 import UserPrivilegeManager from "./components/UserPrivilegeManager.vue";
 
 
-// testing only
-import TestingTable from "./components/testingtable.vue";
 
+// testing only
+import RequirementsTesting from "./components/RequirementsTesting.vue";
 Vue.use(Router);
 
 
@@ -279,9 +279,9 @@ export default new Router({
         },
 
         {
-          path: '/manage/test/',
-          name: 'TestingTable',
-          component: TestingTable,
+          path: '/manage/requirements/',
+          name: 'RequirementsTesting',
+          component: RequirementsTesting,
           beforeEnter(to, from, next){
             setTimeout(() => next(), 2000);
           },

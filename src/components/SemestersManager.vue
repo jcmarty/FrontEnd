@@ -21,7 +21,7 @@
     <!-- End of Alert Message -->
 
     <!-- Adding Form Start  -->
-    <div class="col-md-4 offset-md-4">
+    <div class="addPanelSemester">
       <div class="panel panel-primary recordMaintenanceForm" v-if="showForm">
         <div class="panel-heading">Add a Semester</div>
         <div class="panel-body">
@@ -61,20 +61,88 @@
       </div> <!-- End of Panel  -->
     </div> <!-- End of Col  -->
 
-    <!-- Add New Semester Button -->
-    <b-button variant="primary" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
-      Add New Semster
-    </b-button>
+    <div class="myTable px-4 py-3 my-5">
+      <!-- Adding Form Start  -->
+      <b-row>
+        <b-col lg="4" class="my-1 ">
+          <b-form-group
+          class="filter"
+          label="Filter"
+          label-for="Filter">
+            <b-input-group  size="sm">
+              <b-form-input
+                v-model="filter"
+                type="search"
+                id="filterInput"
+                placeholder="Type to Search">
+              </b-form-input>
+            </b-input-group>
+          </b-form-group>
+        </b-col>
 
-    <!-- Ag-grid Table  -->
-    <ag-grid-vue class="ag-theme-material"
-      :columnDefs="columnDefs"
-      :rowData="rowData"
-      :animateRows="true"
-      :pagination="true"
-      :paginationPageSize="10"
-      :gridOptions="gridOptions">
-    </ag-grid-vue>
+        <b-col class="py-4">
+          <!-- Add New Room Button -->
+          <b-button variant="primary" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
+            Add New Semester
+          </b-button>
+        </b-col>
+      </b-row>
+
+      <!-- Main table element -->
+      <b-table
+        class="my-3 table-striped"
+        show-empty
+        responsive=true
+        head-variant="dark"
+        bordered
+        hover
+        stacked="md"
+        :items="items"
+        :fields="fields"
+        :current-page="currentPage"
+        :per-page="perPage"
+        :filter="filter">
+
+        <template v-slot:cell(actions)="row">
+          <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" class="mr-1">
+            <b-icon-pencil/>
+          </b-button>
+
+          <b-button variant="danger" size="sm" @click="DeleteModal(row.item, $event.target)" v-b-tooltip.hover title="Delete Room">
+            <b-icon-trash/>
+          </b-button>
+        </template>
+      </b-table>
+
+      <hr/>
+      <b-row>
+        <b-col sm="4" md="6" lg="1" class="my-1">
+          <b-form-group
+          class="perpageselect"
+          label=""
+          label-for="perPageSelect">
+            <b-form-select
+              v-model="perPage"
+              id="perPageSelect"
+              size="sm"
+              :options="pageOptions"
+            ></b-form-select>
+          </b-form-group>
+        </b-col>
+
+        <b-col sm="4" md="3" class="my-1 col-md-3 offset-md-8">
+          <b-pagination
+            v-model="currentPage"
+            :total-rows="totalRows"
+            :per-page="perPage"
+            align="fill"
+            size="sm"
+            class="my-0"
+          ></b-pagination>
+        </b-col>
+      </b-row>
+    </div>
+      <!-- end of table -->
 
     <!-- Start Of Edit Modal -->
     <b-modal id="editSemesterModal" ref="editSemesterModal" title="Edit Semester" size="sm" no-close-on-backdrop>
@@ -131,26 +199,24 @@
 
 <script>
   import Axios from "axios";
-  import {AgGridVue} from "ag-grid-vue";
-  import SemestersActionButtons from "./ActionButtons/SemestersActionButtons.vue";
-  import '../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
-  import '../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
   export default{
     name: 'SemestersManager',
-    components: {
-      AgGridVue,
-      SemestersActionButtons
-    },
     data() {
       return {
-        columnDefs: null,
-        rowData: null,
-        gridApi: null,
-        allColumnIds: [],
-        gridOptions: null,
-        id: null,
+        items: [],
+        fields: [
+          { key: 'semester', label: 'Semester', class: 'text-center', sortable: true},
+          { key: 'actions', label: 'Actions' , class: 'text-center' }
+        ],
+
+        totalRows: 1,
+        currentPage: 1,
+        perPage: 5,
+        pageOptions: [5, 10, 15, 20, 25],
+        filter: null,
 
         semesters:{
+          id: null,
           semester:null
         },
 
@@ -163,21 +229,7 @@
       }
     }, // End of Data
 
-    beforeMount(){
-      this.gridOptions = {
-          context: {
-              componentParent: this
-          }
-      };
-      this.columnDefs = [
-          {headerName: 'Semester', field: 'semester', sortable: true, filter: true, resizable: true},
-          {headerName: 'Actions', field: 'id', resizable: true, cellRendererFramework: 'SemestersActionButtons'}
-      ];
-
-    }, // End of BeforeMount
-
     mounted () {
-      this.gridApi = this.gridOptions.api;
       this.getSemesters();
     }, // End of Mounted
 
@@ -189,11 +241,8 @@
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
-            this.rowData = response.data;
-            this.gridColumnApi.getAllColumns().forEach(function(column) {
-              allColumnIds.push(column.colId);
-            });
-            this.gridColumnApi.autoSizeColumns(allColumnIds, skipHeader);
+            this.items = response.data;
+            this.totalRows = this.items.length;
           })
           .catch(error => {
             this.alertMessage = error.response.data.message;
@@ -231,7 +280,7 @@
       updateSemester: function(){
         this.errors = [];
         Axios
-        .put('http://localhost/api/v1/semesters/' + this.id, this.semesters, {
+        .put('http://localhost/api/v1/semesters/' + this.semesters.id, this.semesters, {
           headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
         })
         .then(response => {
@@ -257,7 +306,7 @@
       deleteSemester: function(){
         this.errors = [];
         Axios
-          .delete('http://localhost/api/v1/semesters/' + this.id, {
+          .delete('http://localhost/api/v1/semesters/' + this.semesters.id, {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
@@ -268,12 +317,6 @@
           })
           .catch(error => {
             this.alertMessage = error.response.data.message;
-            /*const values = Object.values(error.response.data.errors);
-            for(const val of values){
-              for(const err of val){
-                this.errors.push(err);
-              }
-            }*/
             this.dismissErrorCountDown = this.dismissSecs;
           });
         this.$refs['deleteSemesterModal'].hide();
@@ -295,6 +338,30 @@
           semester: null
         };
       }, // End of Reset Form Function
+
+      EditModal: function(item, index) {
+        this.semesters = {
+          id: item.id,
+          semester: item.semester
+        },
+        this.$root.$emit('bv::show::modal', 'editSemesterModal')
+      },
+      DeleteModal: function(item){
+        this.semesters = {
+          id: item.id,
+          semester: item.semester
+        },
+
+          this.$root.$emit('bv::show::modal', 'deleteSemesterModal')
+      },
     } // End of Methods
   }// End of Export Default
 </script>
+
+<style>
+.addPanelSemester{
+  width: 25%;
+  position: relative;
+  left: 350px;
+}
+</style>

@@ -21,7 +21,7 @@
     <!-- End of Alert Message -->
 
     <!-- Adding Form Start  -->
-    <div class="col-md-10 offset-md-1">
+    <div class="addPanel">
       <div class="panel panel-primary recordMaintenanceForm" v-if="showForm">
         <div class="panel-heading">Add Subject</div>
         <div class="panel-body">
@@ -119,21 +119,94 @@
       </div>  <!-- End of Panel  -->
     </div> <!-- End of Col  -->
 
+    <div class="myTable px-4 py-3 my-5">
+      <!-- Adding Form Start  -->
+      <b-row>
+        <b-col lg="4" class="my-1 ">
+          <b-form-group
+          class="filter"
+          label="Filter"
+          label-for="Filter">
+            <b-input-group  size="sm">
+              <b-form-input
+                v-model="filter"
+                type="search"
+                id="filterInput"
+                placeholder="Type to Search">
+              </b-form-input>
+            </b-input-group>
+          </b-form-group>
+        </b-col>
 
-    <!-- Add New Subject Button -->
-    <b-button variant="primary" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
-      Add New Subject
-    </b-button>
+        <b-col class="py-4">
+          <!-- Add New Room Button -->
+          <b-button variant="primary" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
+            Add New Sbuject
+          </b-button>
+        </b-col>
+      </b-row>
 
-    <!-- Ag-grid Table  -->
-    <ag-grid-vue class="ag-theme-material"
-      :columnDefs="columnDefs"
-      :rowData="rowData"
-      :animateRows="true"
-      :pagination="true"
-      :paginationPageSize="10"
-      :gridOptions="gridOptions">
-    </ag-grid-vue>
+      <!-- Main table element -->
+      <b-table
+        class="my-3 table-striped"
+        show-empty
+        responsive=true
+        head-variant="dark"
+        bordered
+        hover
+        stacked="md"
+        :items="items"
+        :fields="fields"
+        :current-page="currentPage"
+        :per-page="perPage"
+        :filter="filter">
+
+        <template v-slot:cell(active)="row" >
+          <p v-if="row.item.active"><b-badge variant="success">Active</b-badge></p>
+          <p v-else><b-badge variant="danger">Inactive</b-badge></p>
+
+        </template>
+
+        <template v-slot:cell(actions)="row">
+          <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" class="mr-1">
+            <b-icon-pencil/>
+          </b-button>
+
+          <b-button variant="danger" size="sm" @click="DeleteModal(row.item, $event.target)" v-b-tooltip.hover title="Delete Room">
+            <b-icon-trash/>
+          </b-button>
+        </template>
+      </b-table>
+
+      <hr/>
+      <b-row>
+        <b-col sm="4" md="6" lg="1" class="my-1">
+          <b-form-group
+          class="perpageselect"
+          label=""
+          label-for="perPageSelect">
+            <b-form-select
+              v-model="perPage"
+              id="perPageSelect"
+              size="sm"
+              :options="pageOptions"
+            ></b-form-select>
+          </b-form-group>
+        </b-col>
+
+        <b-col sm="4" md="3" class="my-1 col-md-3 offset-md-8">
+          <b-pagination
+            v-model="currentPage"
+            :total-rows="totalRows"
+            :per-page="perPage"
+            align="fill"
+            size="sm"
+            class="my-0"
+          ></b-pagination>
+        </b-col>
+      </b-row>
+    </div>
+      <!-- end of table -->
 
     <!-- Start Of Edit Modal -->
     <b-modal id="editSubjModal" ref="editSubjModal" title=" Edit Subject" size="lg" no-close-on-backdrop>
@@ -256,26 +329,30 @@
 
 <script>
   import Axios from "axios";
-  import {AgGridVue} from "ag-grid-vue";
-  import SubjectActionButtons from "./ActionButtons/SubjectActionButtons.vue";
-  import '../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
-  import '../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
   export default{
     name: 'SubjectsManager',
-    components: {
-      AgGridVue,
-      SubjectActionButtons,
-    },
     data() {
       return {
-        columnDefs: null,
-        rowData: null,
-        gridApi: null,
-        gridOptions: null,
-        allColumnIds: [],
-        id: null,
+        items: [],
+        fields: [
+
+          { key: 'subject_code', label: 'Subject Code', sortable: true, class: 'text-center' },
+          { key: 'subject_description', label: 'Subject Description', sortable: true, class: 'text-center' },
+          { key: 'lec', label: 'Lec units', sortable: true, class: 'text-center' },
+          { key: 'lab', label: 'Lab Unit', sortable: true, class: 'text-center' },
+          { key: 'units', label: 'Units', sortable: true, class: 'text-center' },
+          { key: 'active', label: 'Active', sortable: true, class: 'text-center' },
+          { key: 'actions', label: 'Actions' , class: 'text-center' }
+        ],
+
+        totalRows: 1,
+        currentPage: 1,
+        perPage: 5,
+        pageOptions: [5, 10, 15, 20, 25],
+        filter: null,
 
         subject: {
+          id: null,
           subject_code: null,
           subject_description: null,
           lec: 0,
@@ -299,32 +376,7 @@
     }, // end of data
 
 
-    beforeMount(){
-      this.gridOptions = {
-          context: {
-            componentParent: this
-          }
-      };
-      this.columnDefs = [
-          {headerName: 'Subject Code', field: 'subject_code', sortable: true, filter: true},
-          {headerName: 'Description', field: 'subject_description', sortable: true, filter: true, width: 500, resizable: true },
-          {headerName: 'Lec Units', field: 'lec', sortable: true, filter: true},
-          {headerName: 'Lab Units', field: 'lab', sortable: true, filter: true, },
-          {headerName: 'Total Units', field: 'units', sortable: true, filter: true, },
-          {headerName: 'Status', field: 'active',
-            cellRenderer: (data) => {
-              if(data.value === 1){
-                return 'Active';
-              } else {
-                return 'Inactive';
-              }
-            }},
-          {headerName: 'Actions', field: 'id', cellRendererFramework: 'SubjectActionButtons'}
-      ];
-    }, // end of before mount
-
     mounted () {
-      this.gridApi = this.gridOptions.api;
       this.getSubjects();
     }, //end of mounted
 
@@ -336,11 +388,8 @@
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
-            this.rowData = response.data;
-            this.gridColumnApi.getAllColumns().forEach(function(column) {
-              allColumnIds.push(column.colId);
-            });
-            this.gridColumnApi.autoSizeColumns(allColumnIds, skipHeader);
+            this.items = response.data;
+            this.totalRows = this.items.length;
           })
           .catch(error => {
             this.alertMessage = error.response.data.message;
@@ -380,7 +429,7 @@
         this.errors = [];
         this.subject.units = parseInt(this.subject.lec) + parseInt(this.subject.lab);
         Axios
-          .put('http://localhost/api/v1/subjects/' + this.id, this.subject, {
+          .put('http://localhost/api/v1/subjects/' + this.subject.id, this.subject, {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
@@ -406,7 +455,7 @@
       deleteSubject: function(){
         this.errors = [];
         Axios
-          .delete('http://localhost/api/v1/subjects/' + this.id, {
+          .delete('http://localhost/api/v1/subjects/' + this.subject.id, {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
@@ -443,6 +492,33 @@
           active: 1
         };
       }, // End of Reset Form Function
+
+      EditModal: function(item, index) {
+
+        this.subject = {
+          id: item.id,
+          subject_code: item.subject_code,
+          subject_description: item.subject_description,
+          lec: item.lec,
+          lab: item.lab,
+          units: item.units,
+          active: item.active
+        };
+        this.$root.$emit('bv::show::modal', 'editSubjModal')
+      },
+      DeleteModal: function(item){
+        this.subject = {
+          id: item.id,
+          subject_code: item.subject_code,
+          subject_description: item.subject_description,
+          lec: item.lec,
+          lab: item.lab,
+          units: item.units,
+          active: item.active
+        };
+
+          this.$root.$emit('bv::show::modal', 'deleteSubjModal')
+      },
     } // End of Methods
   } // End of Export Default
 </script>
