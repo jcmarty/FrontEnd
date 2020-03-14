@@ -21,7 +21,7 @@
     <!-- End of Alert Message -->
 
     <!-- Adding Form Start  -->
-    <div class="col-md-10 offset-md-1">
+    <div class="addPanel">
       <div class="panel panel-primary recordMaintenanceForm" v-if="showForm">
         <div class="panel-heading">Add New User Account</div>
         <div class="panel-body">
@@ -168,20 +168,98 @@
   </div> <!-- End of Col  -->
     <!--User Account Form End  -->
 
-    <!-- Add New Semester Button -->
-    <b-button variant="primary" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
-      Add New User Account
-    </b-button>
+    <div class="myTable px-4 py-3 my-5">
+      <!-- Adding Form Start  -->
+      <b-row>
+        <b-col lg="4" class="my-1 ">
+          <b-form-group
+          class="filter"
+          label="Filter"
+          label-for="Filter">
+            <b-input-group  size="sm">
+              <b-form-input
+                v-model="filter"
+                type="search"
+                id="filterInput"
+                placeholder="Type to Search">
+              </b-form-input>
+            </b-input-group>
+          </b-form-group>
+        </b-col>
 
-    <!-- Ag-grid Table  -->
-    <ag-grid-vue class="ag-theme-material"
-      :columnDefs="columnDefs"
-      :rowData="rowData"
-      :animateRows="true"
-      :pagination="true"
-      :paginationPageSize="10"
-      :gridOptions="gridOptions">
-    </ag-grid-vue>
+        <b-col class="py-4">
+          <!-- Add New Room Button -->
+          <b-button variant="primary" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
+            Add New Room
+          </b-button>
+        </b-col>
+      </b-row>
+
+      <!-- Main table element -->
+      <b-table
+        class="my-3 table-striped"
+        show-empty
+        responsive=true
+        head-variant="dark"
+        bordered
+        hover
+        stacked="md"
+        :items="items"
+        :fields="fields"
+        :current-page="currentPage"
+        :per-page="perPage"
+        :filter="filter">
+
+        <template v-slot:cell(active)="row" >
+          <p v-if="row.item.active"><b-badge class="p-2" variant="success">Active</b-badge></p>
+          <p v-else><b-badge class="p-2" variant="danger">Inactive</b-badge></p>
+
+        </template>
+
+        <template v-slot:cell(actions)="row">
+          <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" class="mr-1">
+            <b-icon-pencil/>
+          </b-button>
+
+          <b-button variant="danger" size="sm" @click="DeleteModal(row.item, $event.target)" v-b-tooltip.hover title="Delete Room">
+            <b-icon-trash/>
+          </b-button>
+
+          <b-button variant='info' size='sm' @click="PrivPage(row.item, $event.target)"v-b-tooltip.hover title="Privileges">
+            <b-icon-clock/>
+          </b-button>
+        </template>
+      </b-table>
+
+      <hr/>
+      <b-row>
+        <b-col sm="4" md="6" lg="1" class="my-1">
+          <b-form-group
+          class="perpageselect"
+          label=""
+          label-for="perPageSelect">
+            <b-form-select
+              v-model="perPage"
+              id="perPageSelect"
+              size="sm"
+              :options="pageOptions"
+            ></b-form-select>
+          </b-form-group>
+        </b-col>
+
+        <b-col sm="4" md="3" class="my-1 col-md-3 offset-md-8">
+          <b-pagination
+            v-model="currentPage"
+            :total-rows="totalRows"
+            :per-page="perPage"
+            align="fill"
+            size="sm"
+            class="my-0"
+          ></b-pagination>
+        </b-col>
+      </b-row>
+    </div>
+      <!-- end of table -->
 
     <!-- Start Of Edit Modal -->
     <b-modal id="editUserAccountModal" ref="editUserAccountModal" title="Edit User Account" size="lg" no-close-on-backdrop>
@@ -336,24 +414,33 @@
 
 <script>
   import Axios from "axios";
-  import {AgGridVue} from "ag-grid-vue";
-  import UserAccountActionButtons from "./ActionButtons/UserAccountActionButtons.vue";
-  import '../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
-  import '../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
   export default{
     name: 'UserAccountManager',
-    components: {
-      AgGridVue,
-      UserAccountActionButtons
-    },
     data() {
       return {
-        columnDefs: null,
-        rowData: null,
-        gridOptions: null,
+        items: [],
+        fields: [
+          { key: 'username', label: 'Username', class: 'text-center', sortable: true},
+          { key: 'email', label: 'Email', sortable: true, class: 'text-center' },
+          { key: 'first_name', label: 'First Name', sortable: true, class: 'text-center' },
+          { key: 'middle_name', label: 'Middle Name', sortable: true, class: 'text-center' },
+          { key: 'last_name', label: 'Last Name', sortable: true, class: 'text-center' },
+          { key: 'role', label: 'Role ', sortable: true, class: 'text-center' },
+          { key: 'active', label: 'Active', sortable: true, class: 'text-center' },
+          { key: 'actions', label: 'Actions' , class: 'text-center' }
+        ],
+
+        totalRows: 1,
+        currentPage: 1,
+        perPage: 5,
+        pageOptions: [5, 10, 15, 20, 25],
+        filter: null,
+
         LastUser: null,
         LastUserRole: null,
+
         users: {
+          id: null,
           username: null,
           password: null,
           email: null,
@@ -389,25 +476,7 @@
       }
     }, // End of Data
 
-    beforeMount(){
-      this.gridOptions = {
-          context: {
-              componentParent: this
-          }
-      };
 
-      this.columnDefs = [
-          {headerName: 'ID', field: 'id', sortable: true, filter: true, width: 80},
-          {headerName: 'Username', field: 'username', sortable: true, filter: true, width: 130,},
-          {headerName: 'Email', field: 'email', sortable: true, filter: true, width: 150},
-          {headerName: 'First Name', field: 'first_name', sortable: true, filter: true, width: 180,},
-          {headerName: 'Middle Name', field: 'middle_name', sortable: true, filter: true, width: 180,},
-          {headerName: 'Last Name', field: 'last_name', sortable: true, filter: true, width: 180,},
-          {headerName: 'Role', field: 'role', sortable: true, filter: true, width: 180,},
-          {headerName: 'Actions', field: 'id', cellRendererFramework: 'UserAccountActionButtons'}
-      ];
-
-    }, // End of Before Mount
 
     mounted () {
       this.getUserAccount();
@@ -422,8 +491,8 @@
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
-            //console.log(response.data.data);
-            this.rowData = response.data;
+            this.items = response.data;
+            this.totalRows = this.items.length;
           })
           .catch(error => {
             this.alertMessage = error.response.data.message;
@@ -842,7 +911,7 @@
       updateUserAccount: function(){
         this.errors = [];
         Axios
-        .put('http://localhost/api/v1/users/' + this.id, this.users, {
+        .put('http://localhost/api/v1/users/' + this.users.id, this.users, {
           headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
         })
         .then(response => {
@@ -868,7 +937,7 @@
       deleteUserAccount: function(){
         this.errors = [];
         Axios
-          .delete('http://localhost/api/v1/users/' + this.id, {
+          .delete('http://localhost/api/v1/users/' + this.users.id, {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
@@ -908,6 +977,51 @@
           active: 1
         };
       }, // End of Reset Form Function
+
+      EditModal: function(item, index) {
+        this.users = {
+          id: item.id,
+          username: item.username,
+          password: item.password,
+          email: item.email,
+          first_name: item.first_name,
+          middle_name: item.middle_name,
+          last_name: item.last_name,
+          role: item.role,
+          active: item.active
+        };
+        this.$root.$emit('bv::show::modal', 'editUserAccountModal')
+      },
+      DeleteModal: function(item){
+        this.users = {
+          id: item.id,
+          username: item.username,
+          password: item.password,
+          email: item.email,
+          first_name: item.first_name,
+          middle_name: item.middle_name,
+          last_name: item.last_name,
+          role: item.role,
+          active: item.active
+        };
+
+          this.$root.$emit('bv::show::modal', 'deleteUserAccountModal')
+      },
+
+      PrivPage: function(item){
+        this.users = {
+          id: item.id,
+          username: item.username,
+          password: item.password,
+          email: item.email,
+          first_name: item.first_name,
+          middle_name: item.middle_name,
+          last_name: item.last_name,
+          role: item.role,
+          active: item.active
+        };
+          this.$router.replace({name: 'UserPrivilegeManager', params: {id: item.id, first_name: item.first_name, last_name: item.last_name}})
+      }
     } // End of Methods
   } // End of Export Default
 </script>
