@@ -27,9 +27,13 @@
   <b-alert variant="success" :show="dismissSuccessCountDown" @dismissed="dismissSuccessCountDown=0" dismissible fade>
     {{alertMessage}}
   </b-alert>
-  <b-alert variant="warning" :show="dismissWarningCountDown" @dismissed="dismissSuccessCountDown=0" dismissible fade>
-    {{alertMessage}}
+  <b-alert variant="warning" :show="dismissWarningCountDown" @dismissed="dismissWarningCountDown=0" dismissible fade>
+    <p>{{alertMessage}}</p>
+    <ul>
+      <li v-for="error in errors">{{ error }}</li>
+    </ul>
   </b-alert>
+
   <b-alert variant="danger" :show="dismissErrorCountDown" @dismissed="dismissErrorCountDown=0" dismissible fade>
     <p>{{alertMessage}}</p>
     <ul>
@@ -71,30 +75,6 @@
             </b-form-group>
           </b-col>
 
-          <b-col cols="12" md="6" lg="1">
-            <b-form-group class="block" label="Block" label-for="Block">
-              <b-form-select id="block"  v-bind:value="blockData" v-model="selectedBlock" :disabled="blockStatus">
-                <option value="null" hidden>Block</option>
-                <option value="1" hidden>1</option>
-                <option value="2" hidden>2</option>
-                <option value="3" hidden>3</option>
-                <option value="4" hidden>4</option>
-              </b-form-select>
-            </b-form-group>
-          </b-col>
-
-          <b-col cols="12" md="6" lg="1">
-            <b-form-group class="batch" label="Batch" label-for="Batch">
-              <b-form-select id="batch" @change="" v-bind:value="batchData" v-model="selectedBatch" :disabled="batchStatus">
-                <option value="null" hidden>Batch</option>
-                <option value="1" hidden>1</option>
-                <option value="2" hidden>2</option>
-                <option value="3" hidden>3</option>
-                <option value="4" hidden>4</option>
-              </b-form-select>
-            </b-form-group>
-          </b-col>
-
           <b-col cols="12" md="6" lg="4">
             <b-form-group class="subject" label="Subject" label-for="Subject">
               <b-form-select id="Subject" @change="getInstructors" v-model="selectedSubject">
@@ -103,6 +83,31 @@
                 <option v-else v-for="data in SubjectsRow" v-bind:value="{id: data.id, subject_code: data.subject.subject_code ,subject_id: data.subject_id, instructors: data.subject.instructors, lab:  data.subject.lab}">
                   {{data.subject.subject_code}} - {{data.subject.subject_description}}
                 </option>
+              </b-form-select>
+            </b-form-group>
+          </b-col>
+
+          <b-col cols="12" md="6" lg="1">
+            <b-form-group class="block" label="Block" label-for="Block">
+              <b-form-select id="block" @change="getFilteredClassSchedule" v-bind:value="blockData" v-model="selectedBlock" :disabled="blockStatus">
+                <option value="null" hidden>Block</option>
+                <option value="1" >1</option>
+                <option value="2" >2</option>
+                <option value="3" >3</option>
+                <option value="4" >4</option>
+              </b-form-select>
+            </b-form-group>
+          </b-col>
+
+          <b-col cols="12" md="6" lg="1">
+            <b-form-group class="batch" label="Batch" label-for="Batch">
+              <b-form-select id="batch" @change="" v-bind:value="batchData" v-model="selectedBatch" :disabled="batchStatus">
+                <option value="null" hidden>Batch</option>
+                <option value="0" v-if="selectedBatch == 0" hidden>0</option>
+                <option value="1" >1</option>
+                <option value="2" >2</option>
+                <option value="3" >3</option>
+                <option value="4" >4</option>
               </b-form-select>
             </b-form-group>
           </b-col>
@@ -142,7 +147,7 @@
         <b-form-row>
           <b-col cols="12" md="6" lg="12">
             <b-form-group class="day" label="Day" label-for="Day">
-              <b-form-select id="Day" @change="getTimeConflicts" v-model="selectedDay" :options="day_options">
+              <b-form-select id="Day" @change="getTimes" v-model="selectedDay" :options="day_options">
                 <option value="null" hidden>Select Day</option>
                 <option v-if="selectedRoom == null" value="null" disabled>No Days</option>
                 <option v-else-if="day_options == []" value="null" disabled>No Days</option>
@@ -366,7 +371,7 @@ thead tr th{
 
                 getTimeConflicts: function(){
                   // this.conflicts = [];
-                  var conflicts = null;
+                  var conflicts = [];
                   // get selected room occupied times
                   Axios
                   .get('http://localhost/api/v1/class_schedules', {
@@ -387,12 +392,12 @@ thead tr th{
                       // alert("May data instructor")
                         for(var i = 0; i < response.data.length; i++){
                           var time = response.data[i];
-                          conflicts.push(
-                            {
-                              start : response.data[i].time_start,
-                              end : response.data[i].time_end
-                            },
-                          );
+                          var obj  = {};
+
+                          obj.start = JSON.stringify(time.time_start)
+                          obj.end = JSON.stringify(time.time_end)
+
+                          conflicts.push(obj)
                         }
                       // console.log(this.conflicts)
                       // this.dismissWarningCountDown = 7;
@@ -422,12 +427,11 @@ thead tr th{
                       // alert("May data instructor")
                         for(var i = 0; i < response.data.length; i++){
                           var time = response.data[i];
-                          conflicts.push(
-                            {
-                              start : response.data[i].time_start,
-                              end : response.data[i].time_end
-                            },
-                          );
+                          var obj  = {};
+                          obj.start = JSON.stringify(time.time_start)
+                          obj.end = JSON.stringify(time.time_end)
+
+                          conflicts.push(obj)
                         }
                         // this.conflicts = conflicts
                       // console.log(this.conflicts)
@@ -454,9 +458,10 @@ thead tr th{
                   //   }).then(response => {
                   //     // push time conflicts to this array time_conflicts
                   //   })
-                  console.log(conflicts);
 
-                  console.log(conflicts.length);
+                  // console.log(conflicts);
+
+                  // console.log(conflicts.length);
                   // this.getTimes();
                 },
 
@@ -504,9 +509,9 @@ thead tr th{
                     }
                   }
 
-                  console.log(this.availabilities)
+                  // console.log(this.availabilities)
                   // this.getAvailabilities();
-                  this.getTimeStart();
+                  // this.getTimeStart();
                 },
 
                 // get the available time start
@@ -532,7 +537,7 @@ thead tr th{
                     },
                   ];
 
-
+                  // console.log(used);
                   var ampm = "";
                   var converted = "";
                   var h = "";
@@ -633,8 +638,7 @@ thead tr th{
 
 
                 getTimeEnd: function(){
-                  alert("change");
-                  this.getTimeConflicts();
+
                 },
 
 
@@ -764,6 +768,7 @@ thead tr th{
 
                 // create class schedule
                 createSchedule: function(){
+                  this.errors = [];
                   var newSchedule = {
                               day : this.selectedDay.day,
                               time_start : this.selectedTimeStart,
@@ -787,8 +792,14 @@ thead tr th{
                       headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
                     })
                     .then(response => {
-                      alert(response.data.message);
-                      this.getClassSchedule();
+                      this.alertMessage = response.data.message;
+                      this.dismissSuccessCountDown = this.dismissSecs;
+                      this.getFilteredClassSchedule();
+                    })
+                    .catch(error => {
+                      this.alertMessage = error.response.data.message;
+                      this.errors = error.response.data.conflicts;
+                      this.dismissWarningCountDown = this.dismissSecs;
                     })
                   // console.log(newSchedule)
                 },
@@ -871,7 +882,7 @@ thead tr th{
                     this.selectedBatch = 1;
                   } else{
                     this.blockStatus = false;
-                    this.batchStatus = true;
+                    this.batchStatus = false;
                     this.selectedBlock = 1;
                     this.selectedBatch = 0;
                   }
