@@ -141,7 +141,7 @@
       <b-table
         class="my-3 table-striped"
         show-empty
-        responsive=true
+        responsive
         head-variant="dark"
         bordered
         hover
@@ -157,8 +157,8 @@
         </template>
 
         <template v-slot:cell(active)="row" >
-          <p v-if="row.item.active"><b-badge class="p-2" variant="success">Active</b-badge></p>
-          <p v-else><b-badge class="p-2" variant="danger">Inactive</b-badge></p>
+          <b-badge variant="success" pill v-if="row.item.active">Active</b-badge>
+          <b-badge variant="danger"  pill v-else>Inactive</b-badge>
         </template>
 
         <template v-slot:cell(actions)="row">
@@ -320,12 +320,12 @@
       return {
         items: [],
         fields: [
-          { key: 'course_code', label: 'Course Code', sortable: true, class: 'text-left'},
-          { key: 'course_desc', label: 'Course Description', sortable: true, class: 'text-left' },
-          { key: 'course_major', label: 'Course Major', sortable: true, class: 'text-left' },
+          { key: 'course_code', label: 'Course Code', sortable: true, class: 'text-center'},
+          { key: 'course_desc', label: 'Course Description', sortable: true, class: 'text-center' },
+          { key: 'course_major', label: 'Course Major', sortable: true, class: 'text-center' },
           { key: 'year_duration', label: 'Year Duration', sortable: true, class: 'text-center' },
-          { key: 'active', label: 'Active', sortable: true, class: 'text-left' },
-          { key: 'actions', label: 'Actions' , class: 'text-left' }
+          { key: 'active', label: 'Active', sortable: true, class: 'text-center' },
+          { key: 'actions', label: 'Actions' , class: 'text-center' }
         ],
 
         totalRows: 1,

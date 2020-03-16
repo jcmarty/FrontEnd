@@ -154,7 +154,7 @@
       <!--  end of panel-body -->
     </div>
     <!-- end of panel -->
-    <div class="myTable px-4 py-3 my-5">
+    <div class="myTable px-4 py-3 my-1">
       <b-row>
         <b-col lg="4" class="my-1 ">
           <b-form-group
@@ -176,7 +176,7 @@
       <b-table
         class="my-3 table-striped"
         show-empty
-        responsive=true
+        responsive
         head-variant="dark"
         bordered
         hover
@@ -188,23 +188,23 @@
         :filter="filter">
 
         <template v-slot:cell(create_priv)="row" >
-          <p v-if="row.item.create_priv">Authorized</p>
-          <p v-else>Unauthorized</p>
+          <a v-if="row.item.create_priv">Authorized</a>
+          <a v-else>Unauthorized</a>
         </template>
 
         <template v-slot:cell(read_priv)="row" >
-          <p v-if="row.item.create_priv">Authorized</p>
-          <p v-else>Unauthorized</p>
+          <a v-if="row.item.create_priv">Authorized</a>
+          <a v-else>Unauthorized</a>
         </template>
 
         <template v-slot:cell(update_priv)="row" >
-          <p v-if="row.item.create_priv">Authorized</p>
-          <p v-else>Unauthorized</p>
+          <a v-if="row.item.create_priv">Authorized</a>
+          <a v-else>Unauthorized</a>
         </template>
 
         <template v-slot:cell(delete_priv)="row" >
-          <p v-if="row.item.create_priv">Authorized</p>
-          <p v-else>Unauthorized</p>
+          <a v-if="row.item.create_priv">Authorized</a>
+          <a v-else>Unauthorized</a>
         </template>
 
 
@@ -250,6 +250,11 @@
   thead{
     text-align: center;
   }
+
+  .table tbody tr td, .table th {
+    vertical-align: middle;
+  }
+
 </style>
 
 <script>
@@ -365,6 +370,10 @@
                  this.label = "Unselect all"
                  this.grant = 1
                }
+               else {
+                 this.label = "Select all"
+                 this.grant = 0
+               }
          })
          .catch(error => {
            this.alertMessage = error.response.data.message;
@@ -427,7 +436,8 @@
         if (this.grant == 1){
           this.label = "Select all"
           this.grant = 0
-        }else{
+        }
+        else if(this.grant == 0){
           this.label = "Unselect all"
           this.grant = 1
         }

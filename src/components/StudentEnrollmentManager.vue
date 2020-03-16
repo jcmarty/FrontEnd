@@ -144,7 +144,7 @@
       <b-table
         class="my-3 table-striped"
         show-empty
-        responsive=true
+        responsive
         head-variant="dark"
         bordered
         hover
