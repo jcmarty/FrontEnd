@@ -142,7 +142,7 @@
         <b-form-row>
           <b-col cols="12" md="6" lg="12">
             <b-form-group class="day" label="Day" label-for="Day">
-              <b-form-select id="Day" @change="getTimes" v-model="selectedDay" :options="day_options">
+              <b-form-select id="Day" @change="getTimeConflicts" v-model="selectedDay" :options="day_options">
                 <option value="null" hidden>Select Day</option>
                 <option v-if="selectedRoom == null" value="null" disabled>No Days</option>
                 <option v-else-if="day_options == []" value="null" disabled>No Days</option>
@@ -302,6 +302,7 @@ thead tr th{
                   time_start_options: [],
                   time_end_options: [],
                   notUsedTime: [],
+                  conflicts: [],
 
                   blockStatus: true,
                   batchStatus: true,
@@ -363,89 +364,17 @@ thead tr th{
               methods: {
 
 
-
-                // SET YEAR LEVEL BASED ON SELECTED COURSE
-                changeCurr: function(){
-                  if(this.selectedCourse.year == "4"){
-                    this.year_options = [
-                      { value: '1st Year', text: '1st Year' },
-                      { value: '2nd Year', text: '2nd Year' },
-                      { value: '3rd Year', text: '3rd Year' },
-                      { value: '4th Year', text: '4th Year' },
-                    ];
-                  }
-                 else if(this.selectedCourse.year == "2"){
-                   this.year_options = [
-
-                     { value: '1st Year', text: '1st Year' },
-                     { value: '2nd Year', text: '2nd Year' },
-                   ];
-                 }
-                 this.SubjectsRow = [];
-                 this.time_start_options = []
-                 this.instructorRow = null;
-                 this.roomRow = null;
-                 this.day_options = [];
-
-                 this.selectedYearLevel = null;
-                 this.selectedSubject = null;
-                 this.selectedBlock = null;
-                 this.selectedBatch = null;
-                 this.selectedInstructor = null;
-                 this.selectedRoom = null;
-                 this.selectedDay = null;
-                 this.selectedTimeStart = null;
-                },
-
-                // gets all subjects base on selected semester, curriculum and year level
-                getSubject: function(){
-                  // clears subject select box
-                  this.SubjectsRow = [];
-                  var year = this.selectedYearLevel
-                  var sem = this.selectedSemester
-                  var subjects = this.selectedCurriculum.subjects
-
-                  if(subjects.length == 0){
-                    this.SubjectsRow = [];
-                  }else{
-                    for(var i = 0; i < subjects.length; i++){
-                      if(subjects[i].year_level == year && subjects[i].semester_id == sem){
-                          this.SubjectsRow.push(subjects[i])
-                      }
-                    }
-                  }
-
-                      this.instructorRow = null;
-                      this.roomRow = null;
-                      this.day_options = [];
-                      this.time_start_options = []
-
-                      this.selectedSubject = null;
-                      this.selectedBlock = null;
-                      this.selectedBatch = null;
-                      this.selectedInstructor = null;
-                      this.selectedRoom = null;
-                      this.selectedDay = null;
-                      this.selectedTimeStart = null;
-
-
-                },
-
-                getTimeEnd: function(){
-                  alert("change");
-                  this.getTimeConflicts();
-                },
-
                 getTimeConflicts: function(){
-
-                  // get selected room availability
+                  // this.conflicts = [];
+                  var conflicts = null;
+                  // get selected room occupied times
                   Axios
-                  .get('http://localhost/api/v1/rooms/' + this.selectedRoom + '/schedules', {
+                  .get('http://localhost/api/v1/class_schedules', {
                       params: {
                         academic_year_id: this.selectedAcademicYear,
                         semester_id: this.selectedSemester,
+                        room_id: this.selectedRoom,
                         day: this.selectedDay.day,
-                        time_start: this.selectedTimeStart,
                         active: 1,
                       },
                       headers: {
@@ -454,10 +383,58 @@ thead tr th{
                   })
                   .then(response => {
                     // push time conflicts to this array time_conflicts
-                    if(response.data != null){
-                      console.log(response.data)
+                    if(response.data.length > 0){
+                      // alert("May data instructor")
+                        for(var i = 0; i < response.data.length; i++){
+                          var time = response.data[i];
+                          conflicts.push(
+                            {
+                              start : response.data[i].time_start,
+                              end : response.data[i].time_end
+                            },
+                          );
+                        }
+                      // console.log(this.conflicts)
                       // this.dismissWarningCountDown = 7;
                       // this.alertMessage = response.data;
+                    }else{
+                      alert("Room is not occupied yet");
+                    }
+                  })
+
+                  // get selected instructor occupied times
+                  Axios
+                  .get('http://localhost/api/v1/class_schedules', {
+                      params: {
+                        academic_year_id: this.selectedAcademicYear,
+                        semester_id: this.selectedSemester,
+                        instructor_id: this.selectedInstructor,
+                        day: this.selectedDay.day,
+                        active: 1,
+                      },
+                      headers: {
+                        'Authorization': 'Bearer ' + this.$store.getters.getToken
+                      }
+                  })
+                  .then(response => {
+                    // push time conflicts to this array time_conflicts
+                    if(response.data.length > 0){
+                      // alert("May data instructor")
+                        for(var i = 0; i < response.data.length; i++){
+                          var time = response.data[i];
+                          conflicts.push(
+                            {
+                              start : response.data[i].time_start,
+                              end : response.data[i].time_end
+                            },
+                          );
+                        }
+                        // this.conflicts = conflicts
+                      // console.log(this.conflicts)
+                      // this.dismissWarningCountDown = 7;
+                      // this.alertMessage = response.data;
+                    }else{
+                      alert("Instructor has no schedule for this day");
                     }
                   })
 
@@ -477,12 +454,16 @@ thead tr th{
                   //   }).then(response => {
                   //     // push time conflicts to this array time_conflicts
                   //   })
+                  console.log(conflicts);
+
+                  console.log(conflicts.length);
+                  // this.getTimes();
                 },
 
                 getTimes: function(){
                   // this.getTimeConflicts();
-                  this.selectedTimeStart = null;
-                  this.time_start_options = [];
+                  // this.selectedTimeStart = null;
+                  // this.time_start_options = [];
                   this.availabilities = [];
                   // console.log(this.selectedDay)
                   var time_start = this.selectedDay.time_start;
@@ -498,18 +479,14 @@ thead tr th{
                   var converted = "";
 
                   for (var i = hour_start; i <= hour_end; i++) {
-                  	for (var j = 0; j < 2; j++) {
-                  		// this.timeConverter(j,i);
+                    for (var j = 0; j < 2; j++) {
+                      // this.timeConverter(j,i);
                       if (j == 0){
                         var minutes_start = "00";
                         h = i % 12 || 12;
                         ampm = (i < 12 || i == 24) ? "AM" : "PM";
-                        //alert(converted = h + ":" +  minutes_start + ampm) ;
                         converted = h + ":" +  minutes_start + ampm;
-                        // this.availabilities.push({
-                        //   value: converted,
-                        //   text: converted
-                        // })
+
                         this.availabilities.push(converted)
                       }
                       else if(j == 1){
@@ -518,20 +495,151 @@ thead tr th{
                         }else{
                           var minutes_start = "30";
                           h = i % 12 || 12;
-                        	ampm = (i < 12 || i == 24) ? "AM" : "PM";
-                          //alert(converted = h + ":" +  minutes_start + ampm) ;
+                          ampm = (i < 12 || i == 24) ? "AM" : "PM";
                           converted = h + ":" +  minutes_start + ampm;
-                          // this.availabilities.push({
-                          //   value: converted,
-                          //   text: converted
-                          // })
+
                           this.availabilities.push(converted)
                         }
                       }
-                  	}
+                    }
                   }
+
+                  console.log(this.availabilities)
                   // this.getAvailabilities();
+                  this.getTimeStart();
                 },
+
+                // get the available time start
+                // based on the time time availability of selected room, instructor, and course
+                getTimeStart: function(){
+                  var used = [
+                    {
+                      start: "09:00:00",
+                      end: "10:30:00"
+                    },
+                    {
+                      start: "10:30:00",
+                      end: "11:30:00"
+                    },
+
+                    {
+                      start: "13:00:00",
+                      end: "14:00:00"
+                    },
+                    {
+                      start: "14:00:00",
+                      end: "15:30:00"
+                    },
+                  ];
+
+
+                  var ampm = "";
+                  var converted = "";
+                  var h = "";
+                  var usedTime = [];
+                  var all_start = [];
+                  var all_end = [];
+
+                   for (var a = 0; a < used.length; a++) {
+
+                   	var split_used_start = used[a].start.split(":");
+                		var hour_used_start = split_used_start[0];
+                    var min_start = split_used_start[1]
+
+                    var split_used_end = used[a].end.split(":");
+                		var hour_used_end = split_used_end[0];
+                    var min_end = split_used_end[1];
+
+
+                    var minutes_start = min_start;
+                    var x = hour_used_start % 12 || 12;
+                    var start_ampm = (hour_used_start < 12 || hour_used_start == 24) ? "AM" : "PM";
+                    var start_converted = x + ":" +  minutes_start + start_ampm;
+
+                    all_start.indexOf(start_converted) === -1 ? all_start.push(start_converted) : console.log();
+
+                    var minutes_start = min_end;
+                    var y = hour_used_end % 12 || 12;
+                    var end_ampm = (hour_used_end < 12 || hour_used_end == 24) ? "AM" : "PM";
+                    var end_converted = y + ":" +  minutes_start + end_ampm;
+
+                    all_end.indexOf(end_converted) === -1 ? all_end.push(end_converted) : console.log();
+
+
+                    for (var b = hour_used_start; b <= hour_used_end; b++) {
+                			for (var j = 0; j < 2; j++) {
+                				if (j == 0){
+                				  var minutes_start = "00";
+                			  	h = b % 12 || 12;
+                			  	ampm = (b < 12 || b == 24) ? "AM" : "PM";
+                			   	converted = h + ":" +  minutes_start + ampm;
+                          // console.log(converted);
+                          usedTime.indexOf(converted) === -1 ? usedTime.push(converted) : console.log();
+                			   	// usedTime.push(converted);
+                       	}else if(j == 1){
+                        	if(b == hour_used_end){
+                            if(min_end == "30"){
+                              var minutes_start = min_end;
+                              h = b % 12 || 12;
+                              ampm = (b < 12 || b == 24) ? "AM" : "PM";
+                              converted = h + ":" +  minutes_start + ampm;
+
+                              usedTime.indexOf(converted) === -1 ? usedTime.push(converted) : console.log();
+                            }
+                          }else{
+                          	var minutes_start = "30";
+                				  	h = b % 12 || 12;
+                   				  ampm = (b < 12 || b == 24) ? "AM" : "PM";
+                            converted = h + ":" +  minutes_start + ampm;
+                            // console.log(converted);
+                   				  usedTime.indexOf(converted) === -1 ? usedTime.push(converted) : console.log();
+                          }
+                        }
+                			}
+                    }
+                	}
+
+                  //remove used time
+                  for(var n = 0; n < all_end.length; n++){
+                    for(var m = 0; m < all_start.length; m++){
+                      if(all_end[n] == all_start[m]){
+                        all_end.splice(n, 1)
+                      }
+                    }
+                  }
+
+                  // removes not used time
+                  for(var o = 0; o < usedTime.length; o++){
+                    for(var p = 0; p < all_end.length; p++){
+                      if(usedTime[o] == all_end[p]){
+                        usedTime.splice(o, 1)
+                      }
+                    }
+                  }
+
+                  var available = this.availabilities;
+                  // removes availibilities using used time
+                  for(var q = 0; q < available.length; q++){
+                    for(var w = 0; w < usedTime.length; w++){
+                      if(available[q] == usedTime[w]){
+                        available.splice(q, 1)
+                      }
+                    }
+                  }
+                  this.time_start_options = available;
+
+
+                },
+
+
+                getTimeEnd: function(){
+                  alert("change");
+                  this.getTimeConflicts();
+                },
+
+
+
+
 
                 getAvailabilities : function (data){
                   // this.aaaaaa()
@@ -619,20 +727,19 @@ thead tr th{
                   //  all of used time
                   // console.log(usedTime.sort());
 
-                  for(var i = 0; i < this.notUsedTime.length; i++){
-                    var time = this.notUsedTime[i]
-                    // cuts the un used time
-                    usedTime.indexOf(time) !== -1 && usedTime.splice(usedTime.indexOf(time), 1)
-                  }
-
-                  for(var i = 0; i < usedTime.length; i++){
-                    var used = usedTime[i]
-                      this.availabilities.indexOf(used) !== -1 &&   this.availabilities.splice(  this.availabilities.indexOf(used), 1)
-                  }
+                  // for(var i = 0; i < this.notUsedTime.length; i++){
+                  //   var time = this.notUsedTime[i]
+                  //   // cuts the un used time
+                  //   usedTime.indexOf(time) !== -1 && usedTime.splice(usedTime.indexOf(time), 1)
+                  // }
+                  //
+                  // for(var i = 0; i < usedTime.length; i++){
+                  //   var used = usedTime[i]
+                  //     this.availabilities.indexOf(used) !== -1 &&   this.availabilities.splice(  this.availabilities.indexOf(used), 1)
+                  // }
 
                   // this.time_start_options = this.availabilities
                 },
-
 
                 // gets all created schedule
                 getFilteredClassSchedule: function(){
@@ -649,12 +756,11 @@ thead tr th{
                       headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
                     })
                     .then(response => {
-                      console.log(response.data);
+                      // console.log(response.data);
                       this.items = response.data;
                       this.totalRows = this.items.length;
                     })
                 },
-
 
                 // create class schedule
                 createSchedule: function(){
@@ -686,9 +792,6 @@ thead tr th{
                     })
                   // console.log(newSchedule)
                 },
-
-
-
 
                 // gets all created schedule
                 getClassSchedule: function(){
@@ -922,6 +1025,39 @@ thead tr th{
                     }) // end of get all courses
                 },
 
+                // SET YEAR LEVEL BASED ON SELECTED COURSE
+                changeCurr: function(){
+                  if(this.selectedCourse.year == "4"){
+                    this.year_options = [
+                      { value: '1st Year', text: '1st Year' },
+                      { value: '2nd Year', text: '2nd Year' },
+                      { value: '3rd Year', text: '3rd Year' },
+                      { value: '4th Year', text: '4th Year' },
+                    ];
+                  }
+                 else if(this.selectedCourse.year == "2"){
+                   this.year_options = [
+
+                     { value: '1st Year', text: '1st Year' },
+                     { value: '2nd Year', text: '2nd Year' },
+                   ];
+                 }
+                 this.SubjectsRow = [];
+                 this.time_start_options = []
+                 this.instructorRow = null;
+                 this.roomRow = null;
+                 this.day_options = [];
+
+                 this.selectedYearLevel = null;
+                 this.selectedSubject = null;
+                 this.selectedBlock = null;
+                 this.selectedBatch = null;
+                 this.selectedInstructor = null;
+                 this.selectedRoom = null;
+                 this.selectedDay = null;
+                 this.selectedTimeStart = null;
+                },
+
                 // Gets all room records
                 getRooms: function(){
                   Axios
@@ -938,7 +1074,8 @@ thead tr th{
                       this.roomContainer = response.data;
                     })
                     .catch(function (error) {
-                      console.log(error.response.status); console.log(error);
+                      console.log(error.response.status);
+                      console.log(error);
                     })
                 },
 
@@ -961,6 +1098,38 @@ thead tr th{
                   this.selectedRoom = null;
                   this.selectedDay = null;
                   this.selectedTimeStart = null;
+                },
+
+                // gets all subjects base on selected semester, curriculum and year level
+                getSubject: function(){
+                  // clears subject select box
+                  this.SubjectsRow = [];
+                  var year = this.selectedYearLevel
+                  var sem = this.selectedSemester
+                  var subjects = this.selectedCurriculum.subjects
+
+                  if(subjects.length == 0){
+                    this.SubjectsRow = [];
+                  }else{
+                    for(var i = 0; i < subjects.length; i++){
+                      if(subjects[i].year_level == year && subjects[i].semester_id == sem){
+                          this.SubjectsRow.push(subjects[i])
+                      }
+                    }
+                  }
+
+                      this.instructorRow = null;
+                      this.roomRow = null;
+                      this.day_options = [];
+                      this.time_start_options = []
+
+                      this.selectedSubject = null;
+                      this.selectedBlock = null;
+                      this.selectedBatch = null;
+                      this.selectedInstructor = null;
+                      this.selectedRoom = null;
+                      this.selectedDay = null;
+                      this.selectedTimeStart = null;
                 },
 
                 // for clearing forms
