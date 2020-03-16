@@ -3,7 +3,7 @@
     <h1>User Priviledges</h1>
     <hr/>
     <b-breadcrumb>
-      <b-breadcrumb-item @click="$router.go(-1)">User Account</b-breadcrumb-item>
+      <b-breadcrumb-item to="/manage/useraccount">User Account</b-breadcrumb-item>
       <b-breadcrumb-item :active="true">{{ user.name }}</b-breadcrumb-item>
     </b-breadcrumb>
     <b-alert variant="success"

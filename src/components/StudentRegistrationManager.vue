@@ -1,28 +1,26 @@
 <template>
   <div>
     <h1>Manage Student Registration</h1>
+    <!-- An alert for displaying success messages -->
+    <b-alert variant="success"
+      :show="dismissSuccessCountDown"
+      @dismissed="dismissSuccessCountDown=0"
+      dismissible fade>
+        {{alertMessage}}
+    </b-alert>
+
+    <!-- An alert for displaying warning and/or error messages -->
+    <b-alert variant="danger"
+      :show="dismissErrorCountDown"
+      @dismissed="dismissErrorCountDown=0"
+      dismissible fade>
+        <p>{{alertMessage}}</p>
+        <ul>
+          <li v-for="error in errors">{{ error }}</li>
+        </ul>
+    </b-alert>
+
     <div v-if="showForm">
-      <!-- Update Student intermation Modal -->
-
-
-      <!-- An alert for displaying success messages -->
-      <b-alert variant="success"
-        :show="dismissSuccessCountDown"
-        @dismissed="dismissSuccessCountDown=0"
-        dismissible fade>
-          {{alertMessage}}
-      </b-alert>
-
-      <!-- An alert for displaying warning and/or error messages -->
-      <b-alert variant="danger"
-        :show="dismissErrorCountDown"
-        @dismissed="dismissErrorCountDown=0"
-        dismissible fade>
-          <p>{{alertMessage}}</p>
-          <ul>
-            <li v-for="error in errors">{{ error }}</li>
-          </ul>
-      </b-alert>
 
       <!-- start of register students -->
       <!-- Tab Group with forms for registration of students -->
@@ -508,20 +506,98 @@
       </b-tabs>
     </div>
 
+    <div class="myTable px-4 py-3 my-5">
+      <!-- Adding Form Start  -->
+      <b-row>
+        <b-col lg="4" class="my-1 ">
+          <b-form-group
+          class="filter"
+          label="Filter"
+          label-for="Filter">
+            <b-input-group  size="sm">
+              <b-form-input
+                v-model="filter"
+                type="search"
+                id="filterInput"
+                placeholder="Type to Search">
+              </b-form-input>
+            </b-input-group>
+          </b-form-group>
+        </b-col>
 
-    <b-button variant="success" size="sm" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
-      Register New Student
-    </b-button>
+        <b-col class="py-4">
+          <!-- Add New Room Button -->
+          <b-button variant="primary" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
+            Register new Student
+          </b-button>
+        </b-col>
+      </b-row>
 
+      <!-- Main table element -->
+      <b-table
+        class="my-3 table-striped"
+        show-empty
+        responsive=true
+        head-variant="dark"
+        bordered
+        hover
+        stacked="md"
+        :items="items"
+        :fields="fields"
+        :current-page="currentPage"
+        :per-page="perPage"
+        :filter="filter">
 
-      <ag-grid-vue class="ag-theme-material"
-        :columnDefs="studentColDef"
-        :rowData="StudentRowData"
-        :animateRows="true"
-        :pagination="true"
-        :paginationPageSize="10"
-        :gridOptions="gridOptions">
-      </ag-grid-vue>
+        <template v-slot:cell(active)="row" >
+          <p v-if="row.item.active"><b-badge class="p-2" variant="success">Active</b-badge></p>
+          <p v-else><b-badge class="p-2" variant="danger">Inactive</b-badge></p>
+
+        </template>
+
+        <template v-slot:cell(actions)="row">
+          <b-button variant="info" size="sm"  @click="enroll(row.item, row.index, $event.target)" class="mr-1">
+            <b-icon-people-fill/>
+          </b-button>
+
+          <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" class="mr-1">
+            <b-icon-pencil/>
+          </b-button>
+
+          <!-- <b-button variant="danger" size="sm" @click="DeleteModal(row.item, $event.target)" v-b-tooltip.hover title="Delete Room">
+            <b-icon-trash/>
+          </b-button> -->
+        </template>
+      </b-table>
+
+      <hr/>
+      <b-row>
+        <b-col sm="4" md="6" lg="1" class="my-1">
+          <b-form-group
+          class="perpageselect"
+          label=""
+          label-for="perPageSelect">
+            <b-form-select
+              v-model="perPage"
+              id="perPageSelect"
+              size="sm"
+              :options="pageOptions"
+            ></b-form-select>
+          </b-form-group>
+        </b-col>
+
+        <b-col sm="4" md="3" class="my-1 col-md-3 offset-md-8">
+          <b-pagination
+            v-model="currentPage"
+            :total-rows="totalRows"
+            :per-page="perPage"
+            align="fill"
+            size="sm"
+            class="my-0"
+          ></b-pagination>
+        </b-col>
+      </b-row>
+    </div>
+      <!-- end of table -->
 
 
 
@@ -530,61 +606,31 @@
 <script>
   import Axios from "axios";
   import moment from 'moment';
-  import {AgGridVue} from "ag-grid-vue";
   import Datepicker from 'vuejs-datepicker';
   import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue';
-  import '../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
-  import '../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
-  import StudentActionButtons from "./ActionButtons/StudentActionButtons.vue";
   export default{
     name: 'StudentRegistrationManager',
     components: {
-      AgGridVue,
       Datepicker,
       VueTimepicker,
-      StudentActionButtons
     },
     data() {
       return{
-        settings: this.$store.getters.getSettings,
-        tabIndex: 0,
-        selected: null,
-        secondTabDisabled: true,
-        lastTabsDisabled: true,
-        studentColDef: null,
-        StudentRowData: null,
-        AYrowData: null,
-        SemRowData: null,
-        CourseRowData: null,
-        academicYearOptions: [],
-        semesterOptions: [],
-        genderOptions: [
-          {value: 'Male', text: 'Male'},
-          {value: 'Female', text: 'Female'}
+        items: [],
+        fields: [
+          { key: 'student_number', label: 'Room Number', class: 'text-left'},
+          { key: 'full_name', label: 'Full Name', class: 'text-left'},
+          { key: 'birth_date', label: 'Birthdate', class: 'text-left'},
+          { key: 'gender', label: 'Gender', class: 'text-left'},
+          { key: 'address', label: 'Address', class: 'text-left'},
+          { key: 'barangay', label: 'Barangay', class: 'text-left'},
+          { key: 'city', label: 'City', class: 'text-left'},
+          { key: 'active', label: 'Active', class: 'text-left'},
+          { key: 'actions', label: 'Action', class: 'text-left'},
         ],
-        StudentStatusOptions: [
-          {value: 'Old', text: 'Old'},
-          {value: 'New', text: 'New'},
-          {value: 'Transferee', text: 'Transferee'}
-        ],
-        AcademicStatusOptions: [
-          {value: 'Regular', text: 'Regular'},
-          {value: 'Irregular', text: 'Irregular'}
 
-        ],
-        calendarIcon: "fa fa-calendar",
-        birthDateFormat: "MMM dd, yyyy",
-        showForm: false,
-        alertMessage: "",
-        errors: [],
-        dismissSecs: 7,
-        dismissSuccessCountDown: 0,
-        dismissErrorCountDown: 0,
-        updateSuccessCountDown: 0,
-        updateErrorCountDown: 0,
-        studentsrowdata: null,
-        id: null,
         Students: {
+          id: null,
           student_number: null,
           first_name: null,
           middle_name: null,
@@ -616,54 +662,77 @@
           college_last_attended: null,
           college_address: null,
           active: 1,
-        }
+        },
+
+        totalRows: 1,
+        currentPage: 1,
+        perPage: 5,
+        pageOptions: [5, 10, 15, 20, 25],
+        filter: null,
+
+        settings: this.$store.getters.getSettings,
+        tabIndex: 0,
+        selected: null,
+        secondTabDisabled: true,
+        lastTabsDisabled: true,
+        studentColDef: null,
+        StudentRowData: null,
+        AYrowData: null,
+        SemRowData: null,
+        CourseRowData: null,
+        academicYearOptions: [],
+        semesterOptions: [],
+
+        genderOptions: [
+          {value: 'Male', text: 'Male'},
+          {value: 'Female', text: 'Female'}
+        ],
+
+        StudentStatusOptions: [
+          {value: 'Old', text: 'Old'},
+          {value: 'New', text: 'New'},
+          {value: 'Transferee', text: 'Transferee'}
+        ],
+
+        AcademicStatusOptions: [
+          {value: 'Regular', text: 'Regular'},
+          {value: 'Irregular', text: 'Irregular'}
+        ],
+
+        calendarIcon: "fa fa-calendar",
+        birthDateFormat: "MMM dd, yyyy",
+        showForm: false,
+        alertMessage: "",
+        errors: [],
+        dismissSecs: 7,
+        dismissSuccessCountDown: 0,
+        dismissErrorCountDown: 0,
+        updateSuccessCountDown: 0,
+        updateErrorCountDown: 0,
+        studentsrowdata: null,
+
+
 
       }
     },
-    beforeMount(){
-      this.gridOptions = {
-          context: {
-              componentParent: this
-          }
-      };
 
-      this.studentColDef = [
-          {headerName: 'ID', field: 'id', sortable: true, filter: true, width: 100},
-          {headerName: 'Student Number', field: 'student_number', sortable: true, filter: true, width: 180,},
-          {headerName: 'First Name', field: 'first_name', sortable: true, filter: true, width: 150,},
-          {headerName: 'Middle Name', field: 'middle_name', sortable: true, filter: true, width: 150,},
-          {headerName: 'Last Name', field: 'last_name', sortable: true, filter: true, width: 150,},
-          {headerName: 'Suffix Name', field: 'suffix_name', sortable: true, filter: true, width: 150,},
-          {headerName: 'Gender', field: 'gender', sortable: true, filter: true, width: 150,},
-          {headerName: 'Status', field: 'active', width: 120,
-            cellRenderer: (data) => {
-              if(data.value === 1){
-                return 'Active';
-              } else {
-                return 'Inactive';
-              }
-            }},
-          {headerName: 'Actions', field: 'id', width: 180, cellRendererFramework: 'StudentActionButtons'}
-      ];
-
-
-    },
     mounted () {
       this.getSemesters();
       this.getAY();
       this.getCourse();
       this.getStudents();
     },
+
     methods:{
 
       secondTab: function(){
         this.secondTabDisabled = false;
-        this.tabIndex++;
+
       },
 
       lastTab: function(){
-        this.lastTabsDisabled = false;
         this.tabIndex++;
+        this.lastTabsDisabled = false;
       },
 
       hideModal: function($modal){
@@ -711,7 +780,35 @@
           })
           .then(response => {
             this.alertMessage = response.data.message;
-            this.StudentRowData = response.data;
+            this.items = response.data;
+            this.totalRows = this.items.length;
+
+            for (var i = 0; i < this.items.length; i++) {
+              // this.items[i].full_name = this.items[i].last_name;
+              var last_suffix = null;
+              if(this.items[i].suffix_name != null){
+
+              last_suffix = this.items[i].last_name + " " + this.items[i].suffix_name + ", " ;
+              }
+              else {
+                last_suffix = this.items[i].last_name + ", "
+              }
+
+              var first_middle = null;
+              if(this.items[i].middle_name != null){
+                first_middle = this.items[i].first_name + " " + this.items[i].middle_name;
+              }
+              else {
+                first_middle = this.items[i].first_name
+              }
+
+              this.items[i].full_name = last_suffix + first_middle;
+
+
+            }
+            console.log(this.items)
+            // console.log(response.data[0].fullname = 'john christopher marty')
+            // console.log(response.data[0])
           })
       },
 
@@ -781,6 +878,7 @@
             this.getStudents();
             this.alertMessage = response.data.message;
             this.dismissSuccessCountDown = this.dismissSecs;
+            this.showForm = false;
             this.Students = {
               student_number: null,
               first_name: null,
@@ -864,15 +962,105 @@
 
       CancelRegister: function(){
         this.ClearStudentFields();
+        this.secondTabDisabled = true;
+        this.lastTabsDisabled = true;
+        this.showForm = false;
       },
 
       toggleForm: function(){
-        // toggle form visibility
         if(this.showForm){
           this.showForm = false;
         } else {
           this.showForm = true;
         }
+      },
+
+      enroll: function(item){
+        this.Students = {
+          id: item.id,
+          student_number: item.id,
+          first_name: item.id,
+          middle_name: item.id,
+          last_name: item.id,
+          suffix_name: item.id,
+          gender: item.id,
+          civil_status: item.id,
+          citizenship:item.id,
+          address: item.id,
+          barangay: item.id,
+          city: item.id,
+          postal: item.id,
+          province: item.id,
+          telephone: item.id,
+          cellphone: item.id,
+          email: item.id,
+          birth_date: item.id,
+          birth_place: item.id,
+          father_name: item.id,
+          mother_name: item.id,
+          contact_person: item.id,
+          contact_address: item.id,
+          contact_number: item.id,
+          blood_type: item.id,
+          photo_url: item.id,
+          user_id: item.id,
+          school_last_attended: item.id,
+          school_address: item.id,
+          college_last_attended: item.id,
+          college_address: item.id,
+          active: 1,
+        },
+
+        this.$router.replace({
+          name: 'StudentEnrollmentManager',
+          params: {
+            id: item.id,
+            student_number: item.student_number,
+            first_name: item.first_name,
+            middle_name: item.middle_name, 
+            suffix_name: item.suffix_name,
+            last_name: item.last_name
+          }
+        })
+      },
+
+      EditModal: function(item, index) {
+        this.Students = {
+          id: item.id,
+          student_number: item.id,
+          first_name: item.id,
+          middle_name: item.id,
+          last_name: item.id,
+          suffix_name: item.id,
+          gender: item.id,
+          civil_status: item.id,
+          citizenship:item.id,
+          address: item.id,
+          barangay: item.id,
+          city: item.id,
+          postal: item.id,
+          province: item.id,
+          telephone: item.id,
+          cellphone: item.id,
+          email: item.id,
+          birth_date: item.id,
+          birth_place: item.id,
+          father_name: item.id,
+          mother_name: item.id,
+          contact_person: item.id,
+          contact_address: item.id,
+          contact_number: item.id,
+          blood_type: item.id,
+          photo_url: item.id,
+          user_id: item.id,
+          school_last_attended: item.id,
+          school_address: item.id,
+          college_last_attended: item.id,
+          college_address: item.id,
+          active: 1,
+        },
+
+        this.$root.$emit('bv::show::modal', 'EditStudentModal')
       },
 
     },

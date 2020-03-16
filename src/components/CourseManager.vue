@@ -320,12 +320,12 @@
       return {
         items: [],
         fields: [
-          { key: 'course_code', label: 'Course Code', class: 'text-center', sortable: true},
-          { key: 'course_desc', label: 'Course Description', sortable: true, class: 'text-center' },
-          { key: 'course_major', label: 'Course Major', sortable: true, class: 'text-center' },
+          { key: 'course_code', label: 'Course Code', sortable: true, class: 'text-left'},
+          { key: 'course_desc', label: 'Course Description', sortable: true, class: 'text-left' },
+          { key: 'course_major', label: 'Course Major', sortable: true, class: 'text-left' },
           { key: 'year_duration', label: 'Year Duration', sortable: true, class: 'text-center' },
-          { key: 'active', label: 'Active', sortable: true, class: 'text-center' },
-          { key: 'actions', label: 'Actions' , class: 'text-center' }
+          { key: 'active', label: 'Active', sortable: true, class: 'text-left' },
+          { key: 'actions', label: 'Actions' , class: 'text-left' }
         ],
 
         totalRows: 1,
