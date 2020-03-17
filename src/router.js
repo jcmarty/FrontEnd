@@ -317,6 +317,14 @@ export default new Router({
                 setTimeout(() => next(), 2000);
               },
             },
+            {
+              path: '/manage/user/privilege',
+              name: 'UserPrivilegeManager',
+              component: UserPrivilegeManager,
+              beforeEnter(to, from, next){
+                setTimeout(() => next(), 2000);
+              },
+            },
           ]
         },
         {

@@ -1,15 +1,13 @@
 <template>
   <div>
     <h1>Manage Student Registration</h1>
-    <!-- An alert for displaying success messages -->
+    <!-- Alert Message -->
     <b-alert variant="success"
       :show="dismissSuccessCountDown"
       @dismissed="dismissSuccessCountDown=0"
       dismissible fade>
         {{alertMessage}}
     </b-alert>
-
-    <!-- An alert for displaying warning and/or error messages -->
     <b-alert variant="danger"
       :show="dismissErrorCountDown"
       @dismissed="dismissErrorCountDown=0"
@@ -19,6 +17,7 @@
           <li v-for="error in errors">{{ error }}</li>
         </ul>
     </b-alert>
+    <!-- End of Alert Message -->
 
     <div v-if="showForm">
 
@@ -727,12 +726,14 @@
 
       secondTab: function(){
         this.secondTabDisabled = false;
+        this.tabIndex++;
 
       },
 
       lastTab: function(){
-        this.tabIndex++;
         this.lastTabsDisabled = false;
+        this.tabIndex++;
+
       },
 
       hideModal: function($modal){
