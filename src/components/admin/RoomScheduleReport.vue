@@ -2,29 +2,89 @@
   <div>
     <h1>Room Schedule Report</h1><hr/>
 
-  <b-col cols="12" md="6" lg="2">
-    <b-form-group
-      class="roomnumber"
-      label="Select Room No."
-      label-for="RoomNo">
-      <b-form-select
-        id="RoomNo"
-        v-model="selected"
-        @change="getRoomSchedule()">
-        <option v-for="rooms in rowData"
-        v-bind:value="rooms.id">{{rooms.room_number}}</option>
-      </b-form-select>
-    </b-form-group>
-  </b-col>
 
-    <ag-grid-vue class="ag-theme-material"
-      :columnDefs="columnDefs"
-      :rowData="RoomScheduleRowData"
-      :animateRows="true"
-      :pagination="true"
-      :paginationPageSize="10"
-      :gridOptions="gridOptions">
-    </ag-grid-vue>
+  <div class="myTable px-4 py-3 my-5">
+    <!-- Adding Form Start  -->
+    <b-row>
+
+      <b-col cols="12" md="6" lg="2">
+        <b-form-group
+          class="roomnumber"
+          label="Select Room No."
+          label-for="RoomNo">
+          <b-form-select
+            id="RoomNo"
+            v-model="selected"
+            @change="getRoomSchedule()">
+            <option v-for="rooms in rowData"
+            v-bind:value="rooms.id">{{rooms.room_number}}</option>
+          </b-form-select>
+        </b-form-group>
+      </b-col>
+    </b-row>
+
+    <!-- Main table element -->
+    <b-table
+      class="my-3 table-striped"
+      show-empty
+      responsive
+      head-variant="dark"
+      bordered
+      hover
+      stacked="md"
+      :items="items"
+      :fields="fields"
+      :current-page="currentPage"
+      :per-page="perPage"
+      :filter="filter">
+
+      <template v-slot:cell(active)="row" >
+      <b-badge  variant="success" pill v-if="row.item.active">Active</b-badge>
+      <b-badge  variant="danger"  pill v-else>Inactive</b-badge>
+
+      </template>
+
+      <template v-slot:cell(actions)="row">
+        <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" class="mr-1">
+          <b-icon-pencil/>
+        </b-button>
+
+        <b-button variant="danger" size="sm" @click="DeleteModal(row.item, $event.target)" v-b-tooltip.hover title="Delete Room">
+          <b-icon-trash/>
+        </b-button>
+      </template>
+    </b-table>
+
+    <hr/>
+    <b-row>
+      <b-col sm="4" md="6" lg="1" class="my-1">
+        <b-form-group
+        class="perpageselect"
+        label=""
+        label-for="perPageSelect">
+          <b-form-select
+            v-model="perPage"
+            id="perPageSelect"
+            size="sm"
+            :options="pageOptions"
+          ></b-form-select>
+        </b-form-group>
+      </b-col>
+
+      <b-col sm="4" md="3" class="my-1 col-md-3 offset-md-8">
+        <b-pagination
+          v-model="currentPage"
+          :total-rows="totalRows"
+          :per-page="perPage"
+          align="fill"
+          size="sm"
+          class="my-0"
+        ></b-pagination>
+      </b-col>
+    </b-row>
+  </div>
+    <!-- end of table -->
+
 
 
   </div>
@@ -32,47 +92,37 @@
 
 <script>
 import Axios from "axios";
-import {AgGridVue} from "ag-grid-vue";
-import '../../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
-import '../../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
 
     export default {
         name: 'RoomScheduleReport',
         data() {
             return {
-              columnDefs: null,
+              items: [],
+              fields: [
+                { key: 'course_code', label: 'Course Code', class: 'text-center', sortable: true},
+                { key: 'year_level', label: 'Year Level', sortable: true, class: 'text-center' },
+                { key: 'subject_code', label: 'Subject Code', sortable: true, class: 'text-center' },
+                { key: 'day', label: 'Day', sortable: true, class: 'text-center' },
+                { key: 'time_start', label: 'Time Start', sortable: true, class: 'text-center' },
+                { key: 'time_end', label: 'Time End', sortable: true, class: 'text-center' },
+                { key: 'block', label: 'Block', sortable: true, class: 'text-center' },
+                { key: 'batch', label: 'Batch', sortable: true, class: 'text-center' },
+                { key: 'subject.semester.semester', label: 'Semester', sortable: true, class: 'text-center' },
+                { key: 'academic_year_id', label: 'Academic Year', sortable: true, class: 'text-center' },
+                { key: 'active', label: 'Active', sortable: true, class: 'text-center' },
+
+              ],
               rowData: null,
-              RoomScheduleRowData: null,
-              gridOptions: null,
-              id: null,
+              totalRows: 1,
+              currentPage: 1,
+              perPage: 5,
+              pageOptions: [5, 10, 15, 20, 25],
+              filter: null,
 
               selected: null,
             }
         },
-        components: {
-            AgGridVue,
-        },
-        beforeMount() {
-          this.gridOptions = {
-              context: {
-                  componentParent: this
-              }
-          };
-            this.columnDefs = [
-                {headerName: 'ID', field: 'subject_id', sortable: true, filter: true, width: 80},
-                {headerName: 'Day', field: 'day', sortable: true, filter: true, width: 150,},
-                {headerName: 'Time Start', field: 'time_start', sortable: true, filter: true, width: 150},
-                {headerName: 'Time End', field: 'time_end', sortable: true, filter: true, width: 150},
-                {headerName: 'Room ID.', field: 'room_id', sortable: true, filter: true, width: 150},
-                {headerName: 'Instructor ID.', field: 'instructor_id', sortable: true, filter: true, width: 150},
-                {headerName: 'Block', field: 'block', sortable: true, filter: true, width: 150},
-                {headerName: 'Batch', field: 'batch', sortable: true, filter: true, width: 150},
-                {headerName: 'Class Type', field: 'class_type', sortable: true, filter: true, width: 150},
-                {headerName: 'Academic Year', field: 'academic_year_id', sortable: true, filter: true, width: 150},
-                {headerName: 'Semester', field: 'semester_id', sortable: true, filter: true, width: 150},
-            ];
 
-          },
           mounted () {
             this.getRooms();
             this.getRoomSchedule();
@@ -85,7 +135,7 @@ import '../../../node_modules/ag-grid-community/dist/styles/ag-theme-material.cs
                   headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
                 })
                 .then(response => {
-                  //console.log(response.data.data);
+                  // console.log(response.data);
                   this.rowData = response.data;
                 })
             },
@@ -95,8 +145,9 @@ import '../../../node_modules/ag-grid-community/dist/styles/ag-theme-material.cs
                   headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
                 })
                 .then(response => {
-                  //console.log(response.data.data);
-                  this.RoomScheduleRowData = response.data;
+                  // console.log(response.data);
+                  this.items = response.data;
+                  this.totalRows = this.items.length;
                 })
             },
 
