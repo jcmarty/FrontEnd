@@ -158,8 +158,8 @@ import Axios from "axios";
 import {
   AgGridVue
 } from "ag-grid-vue";
-import '../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
-import '../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
+import '../../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
+import '../../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
 import CurriculumSubjectActionButton from "./ActionButtons/CurriculumSubjectActionButton.vue";
 export default {
   name: 'CurriculumSubjects',
