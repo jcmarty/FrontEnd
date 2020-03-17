@@ -12,7 +12,7 @@
         v-model="selected"
         @change="getInstructorSchedule()">
         <option v-for="ins in rowData"
-        v-bind:value="ins.id">{{ins.first_name}} {{ins.last_name}}</option>
+        v-bind:value="ins.id">{{ins.last_name}}, {{ins.first_name}} </option>
       </b-form-select>
     </b-form-group>
   </b-col>
@@ -71,7 +71,9 @@ import '../../../node_modules/ag-grid-community/dist/styles/ag-theme-material.cs
               }
           };
             this.columnDefs = [
-                {headerName: 'ID', field: 'subject_id', sortable: true, filter: true, width: 150},
+                {headerName: 'ID', field: 'id', sortable: true, filter: true, width: 150},
+                {headerName: 'Subject Code', field: 'subject.subject.subject_code', sortable: true, filter: true, width: 150},
+                {headerName: 'Subject Description', field: 'subject.subject.subject_description', sortable: true, filter: true, width: 150, resizable: true},
                 {headerName: 'Day', field: 'day', sortable: true, filter: true, width: 150,},
                 {headerName: 'Time Start', field: 'time_start', sortable: true, filter: true, width: 150},
                 {headerName: 'Time End', field: 'time_end', sortable: true, filter: true, width: 150},
