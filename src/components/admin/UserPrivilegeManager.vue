@@ -44,8 +44,10 @@
                 <!-- Select Activities -->
                 <b-col cols="12" md="12" lg="12">
                   <b-form-group class="checkBoxContainer" label="" label-for="">
-                    <b-form-select class="privCheckbox" id="activities" v-model="selectedActivity.id" :options="activityOptions" @change="changePriv">
+                    <!-- <b-form-select class="privCheckbox" id="activities" v-model="selectedActivity.id" :options="activityOptions" @change="changePriv"> -->
+                    <b-form-select class="privCheckbox" id="activities" v-model="selectedItem" @change="changePriv">
                       <option value="null" hidden>Select activity</option>
+                      <option v-for="item in items" :value="item.privileges">{{item.title}}</option>
                     </b-form-select>
                   </b-form-group>
                 </b-col>
@@ -187,23 +189,23 @@
         :per-page="perPage"
         :filter="filter">
 
-        <template v-slot:cell(create_priv)="row" >
-          <a v-if="row.item.create_priv">Authorized</a>
+        <template v-slot:cell(privileges.create_priv)="row" >
+          <a v-if="row.item.privileges.create_priv">Authorized</a>
           <a v-else>Unauthorized</a>
         </template>
 
-        <template v-slot:cell(read_priv)="row" >
-          <a v-if="row.item.read_priv">Authorized</a>
+        <template v-slot:cell(privileges.read_priv)="row" >
+          <a v-if="row.item.privileges.read_priv">Authorized</a>
           <a v-else>Unauthorized</a>
         </template>
 
-        <template v-slot:cell(update_priv)="row" >
-          <a v-if="row.item.update_priv">Authorized</a>
+        <template v-slot:cell(privileges.update_priv)="row" >
+          <a v-if="row.item.privileges.update_priv">Authorized</a>
           <a v-else>Unauthorized</a>
         </template>
 
-        <template v-slot:cell(delete_priv)="row" >
-          <a v-if="row.item.delete_priv">Authorized</a>
+        <template v-slot:cell(privileges.delete_priv)="row" >
+          <a v-if="row.item.privileges.delete_priv">Authorized</a>
           <a v-else>Unauthorized</a>
         </template>
 
@@ -266,11 +268,11 @@
       return {
         items: [],
         fields: [
-          { key: 'activity.title', label: 'Activity', class: 'text-center', sortable: true},
-          { key: 'create_priv', label: 'Create Privileges', sortable: true, class: 'text-center' },
-          { key: 'read_priv', label: 'Read Privileges', sortable: true, class: 'text-center' },
-          { key: 'update_priv', label: 'Update Privileges', sortable: true, class: 'text-center' },
-          { key: 'delete_priv', label: 'Delete Privileges', sortable: true, class: 'text-center' },
+          { key: 'title', label: 'Activity', class: 'text-center', sortable: true},
+          { key: 'privileges.create_priv', label: 'Create Privileges', sortable: true, class: 'text-center' },
+          { key: 'privileges.read_priv', label: 'Read Privileges', sortable: true, class: 'text-center' },
+          { key: 'privileges.update_priv', label: 'Update Privileges', sortable: true, class: 'text-center' },
+          { key: 'privileges.delete_priv', label: 'Delete Privileges', sortable: true, class: 'text-center' },
         ],
 
         totalRows: 1,
@@ -286,10 +288,9 @@
         status: true,
         grant: 0,
         label: 'Select all',
-
+        selectedItem : null,
         selectedActivity: {
           id: null,
-          user_id: null,
           create_priv: 0,
           read_priv: 0,
           update_priv: 0,
@@ -329,8 +330,8 @@
               // console.log(response.data[i].course_code);
               this.activityOptions.push(
                 {
-                  value: response.data[i].id,
-                  text: response.data[i].activity.title
+                  value: response.data[i].activity_id,
+                  text: response.data[i].title
                 },
               );
             }
@@ -350,18 +351,18 @@
       // enables check boxes when theres an activity selected
       changePriv: function(){
        this.status = false;
-       Axios
-         .get('http://localhost/api/v1/users/' + this.user.id + '/privileges/' + this.selectedActivity.id, {
-           headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-         })
-         .then(response => {
-           // console.log(response.data);
-           this.selectedActivity.user_id = response.data.user_id;
-           this.selectedActivity.create_priv = response.data.create_priv;
-           this.selectedActivity.read_priv = response.data.read_priv;
-           this.selectedActivity.update_priv = response.data.update_priv;
-           this.selectedActivity.delete_priv = response.data.delete_priv;
-
+       // Axios
+       //   .get('http://localhost/api/v1/users/' + this.user.id + '/privileges/' + this.selectedActivity.id, {
+       //     headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+       //   })
+       //   .then(response => {
+       //     // console.log(response.data);
+           this.selectedActivity.id = this.selectedItem.id;
+           this.selectedActivity.create_priv = this.selectedItem.create_priv;
+           this.selectedActivity.read_priv = this.selectedItem.read_priv;
+           this.selectedActivity.update_priv = this.selectedItem.update_priv;
+           this.selectedActivity.delete_priv = this.selectedItem.delete_priv;
+       //
                if(this.selectedActivity.create_priv == 1 &&
                  this.selectedActivity.read_priv == 1 &&
                  this.selectedActivity.update_priv == 1 &&
@@ -374,17 +375,19 @@
                  this.label = "Select all"
                  this.grant = 0
                }
-         })
-         .catch(error => {
-           this.alertMessage = error.response.data.message;
-           const values = Object.values(error.response.data.errors);
-           for(const val of values){
-             for(const err of val){
-               this.errors.push(err);
-             }
-           }
-           this.dismissErrorCountDown = this.dismissSecs;
-         });
+       //   })
+       //   .catch(error => {
+       //     this.alertMessage = error.response.data.message;
+       //     const values = Object.values(error.response.data.errors);
+       //     for(const val of values){
+       //       for(const err of val){
+       //         this.errors.push(err);
+       //       }
+       //     }
+       //     this.dismissErrorCountDown = this.dismissSecs;
+       //   });
+
+       // console.log(this.items)
       },
 
       // Granting user privilege
@@ -396,38 +399,39 @@
           this.errors.push("Activity select box is required.");
           this.dismissErrorCountDown = this.dismissSecs;
         }else{
-        this.errors = [];
-        Axios
-          .put('http://localhost/api/v1/privileges/' + this.selectedActivity.id, this.selectedActivity,{
-            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-          })
-          .then(response => {
-              // console.log(response)
-            this.alertMessage = response.data.message;
-            this.dismissSuccessCountDown = this.dismissSecs;
-            this.selectedActivity = {
-               id: null,
-               user_id: null,
-               create_priv: 0,
-               read_priv: 0,
-               update_priv: 0,
-               delete_priv: 0
-            };
-            this.label = "Select all"
-            this.grant = 0
-            this.status = true;
-            this.getUserPriviledge();
-          })
-          .catch(error => {
-            this.alertMessage = error.response.data.message;
-            const values = Object.values(error.response.data.errors);
-            for(const val of values){
-              for(const err of val){
-                this.errors.push(err);
+          this.errors = [];
+          console.log(this.selectedActivity)
+          Axios
+            .put('http://localhost/api/v1/privileges/' + this.selectedActivity.id, this.selectedActivity,{
+              headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+            })
+            .then(response => {
+                // console.log(response)
+              this.alertMessage = response.data.message;
+              this.dismissSuccessCountDown = this.dismissSecs;
+              this.selectedItem = null;
+              this.selectedActivity = {
+                 id: null,
+                 create_priv: 0,
+                 read_priv: 0,
+                 update_priv: 0,
+                 delete_priv: 0
+              };
+              this.label = "Select all"
+              this.grant = 0
+              this.status = true;
+              this.getUserPriviledge();
+            })
+            .catch(error => {
+              this.alertMessage = error.response.data.message;
+              const values = Object.values(error.response.data.errors);
+              for(const val of values){
+                for(const err of val){
+                  this.errors.push(err);
+                }
               }
-            }
-            this.dismissErrorCountDown = this.dismissSecs;
-          });
+              this.dismissErrorCountDown = this.dismissSecs;
+            });
         }
       },
 
