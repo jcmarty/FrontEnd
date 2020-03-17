@@ -28,6 +28,15 @@ import StrandsManager from "./components/admin/StrandsManager.vue";
 import TrackManager from "./components/admin/TrackManager.vue";
 import AcademicYearManager from "./components/admin/AcademicYearManager.vue";
 import UserAccountManager from "./components/admin/UserAccountManager.vue";
+import StudentRegistrationManager from "./components/admin/StudentRegistrationManager.vue";
+import StudentEnrollmentManager from "./components/admin/StudentEnrollmentManager.vue";
+import StudentGradesManager from "./components/admin/StudentGradesManager.vue";
+import StudentsReport from "./components/admin/StudentsReport.vue";
+import UserPrivilegeManager from "./components/admin/UserPrivilegeManager.vue";
+
+
+// for testing only
+import RequirementsTesting from "./components/admin/RequirementsTesting.vue";
 
 Vue.use(Router);
 
@@ -248,6 +257,62 @@ export default new Router({
               path: '/manage/useraccount',
               name: 'UserAccountManager',
               component: UserAccountManager,
+              beforeEnter(to, from, next){
+                setTimeout(() => next(), 2000);
+              },
+            },
+            {
+              path: '/manage/student/registration',
+              name: 'StudentRegistrationManager',
+              component: StudentRegistrationManager,
+              beforeEnter(to, from, next){
+                setTimeout(() => next(), 2000);
+              },
+            },
+            {
+              path: '/manage/student/enrollment',
+              name: 'StudentEnrollmentManager',
+              component: StudentEnrollmentManager,
+              beforeEnter(to, from, next){
+                setTimeout(() => next(), 2000);
+              },
+            },
+            {
+              path: '/manage/student/grades',
+              name: 'StudentGradesManager',
+              component: StudentGradesManager,
+              beforeEnter(to, from, next){
+                setTimeout(() => next(), 2000);
+              },
+            },
+            {
+              path: '/reports/students',
+              name: 'StudentsReport',
+              component: StudentsReport,
+              beforeEnter(to, from, next){
+                setTimeout(() => next(), 2000);
+              },
+            },
+            {
+              path: '/manage/user/privilege',
+              name: 'StudentsReport',
+              component: StudentsReport,
+              beforeEnter(to, from, next){
+                setTimeout(() => next(), 2000);
+              },
+            },
+            {
+              path: '/manage/user/privilege',
+              name: 'StudentsReport',
+              component: StudentsReport,
+              beforeEnter(to, from, next){
+                setTimeout(() => next(), 2000);
+              },
+            },
+            {
+              path: '/manage/student/requirements',
+              name: 'RequirementsTesting',
+              component: RequirementsTesting,
               beforeEnter(to, from, next){
                 setTimeout(() => next(), 2000);
               },

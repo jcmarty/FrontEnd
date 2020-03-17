@@ -24,6 +24,9 @@
           <router-link tag="li" to="/admin"><a><i class="fa fa-home"></i> Home </a></router-link>
           <li v-bind:class="{current : currentCategory=='manage'}"><a v-b-toggle.manageOptions><i class="fa fa-edit"></i> Manage <span class="fa fa-chevron-down"></span></a>
             <b-collapse tag="ul" class="nav child_menu" id="manageOptions" accordion="sideMenuAccordion">
+              <router-link tag="li" to="/manage/student/requirements"><a>Requirements Testing</a></router-link>
+              <router-link tag="li" to="/manage/curriculum/college"><a>Curriculum Testing</a></router-link>
+              <router-link tag="li" to="/manage/schedule/college"><a>Schedule Testing</a></router-link>
               <li v-b-toggle.schedules v-if="isAuthorized(this.$store.getters.getSettings.schedule_management, 0)"><a> Class Schedule<span class="fa fa-chevron-down"></span></a>
                 <b-collapse tag="ul" class="nav child_menu" id="schedules" accordion="sideMenuSubAccordion">
                   <router-link tag="li" to="/manage/schedule/college"><a class="super_child_menu">College</a></router-link>
@@ -45,6 +48,13 @@
               <router-link tag="li" to="/manage/track" v-if="isAuthorized(this.$store.getters.getSettings.track_management, 0)"><a>Track</a></router-link>
               <router-link tag="li" to="/manage/instructor" v-if="isAuthorized(this.$store.getters.getSettings.instructor_management, 0)"><a>Instructor</a></router-link>
               <router-link tag="li" to="/manage/useraccount" v-if="isAuthorized(this.$store.getters.getSettings.user_management, 0)"><a>User Accounts</a></router-link>
+              <li v-b-toggle.student><a>Student<span class="fa fa-chevron-down"></span></a>
+              <b-collapse tag="ul" class="nav child_menu" id="student" accordion="sideMenuSubAccordion">
+                <router-link tag="li" to="/manage/student/registration"><a class="super_child_menu">Registration</a></router-link>
+                <router-link tag="li" to="/manage/student/enrollment"><a class="super_child_menu">Enrollment</a></router-link>
+                <router-link tag="li" to="/manage/student/grades"><a class="super_child_menu">Grades</a></router-link>
+              </b-collapse>
+              </li>
               <!-- TODO:  Decide if we are really going to add these, and HOW -->
               <router-link tag="li" to="#"><a>Password Reset Requests</a></router-link>
               <router-link tag="li" to="#"><a>Backup and Restore Database</a></router-link>
