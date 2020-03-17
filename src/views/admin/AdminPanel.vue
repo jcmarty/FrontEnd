@@ -67,9 +67,9 @@
 </div>
 </template>
 <script>
-    import SideMenu from '../components/SideMenu.vue';
-    import Header from '../components/Header.vue';
-    import Footer from '../components/Footer.vue';
+    import SideMenu from '../../components/admin/SideMenu.vue';
+    import Header from '../../components/admin/Header.vue';
+    import Footer from '../../components/admin/Footer.vue';
     import Axios from "axios";
     const baseUrl = "http://localhost/api/v1/";
     export default {
@@ -93,7 +93,7 @@
           })
             .then(response => {
               this.$store.dispatch('setAppSettings', response.data);
-              //console.log(response.data);
+              console.log(response.data);
             });
         },
     }

@@ -1,12 +1,7 @@
-html, body, #app{
+html, body, #app, #admin{
 	height: 100%;
 
 }
-
-h6{
-	text-align: center;
-}
-
 /************************
  *        Login         *
  ************************/
@@ -45,6 +40,7 @@ h6{
 
 #loginComteqLogo {
   width: 60%;
+	margin-top: -30px;
 }
 
 #loginContainer{
@@ -53,6 +49,7 @@ h6{
   border-color: rgb(27,86,243);
   width: 400px;
   padding: 20px;
+	min-width:0;
 }
 
 /* login form header */
@@ -61,6 +58,17 @@ h6{
   text-align: center;
 }
 
+.loginOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0,0,0,.3);
+}
 
 /*********************************
  *    Admin Panel / Dashboard    *
@@ -381,10 +389,8 @@ h6{
     position: fixed
 }
 body .container.body .right_col {
-		min-height: 643px;
-    background: white;
+    background: #F7F7F7
 }
-
 .nav-md .container.body .right_col {
     padding: 10px 20px 20px 20px;
     margin-left: 230px;
@@ -705,7 +711,6 @@ a:hover,
 a:focus {
     text-decoration: none
 }
-
 
 @media (min-width: 480px) {
     .top_nav .navbar-right li {
@@ -1935,7 +1940,7 @@ a.star {
     background: none repeat scroll 0 0 #FFFFFF;
     border-radius: 4px;
     margin-top: 20px;
-    min-height: 1080px;
+    min-height: 500px;
     padding: 10px 11px;
     width: 100%
 }

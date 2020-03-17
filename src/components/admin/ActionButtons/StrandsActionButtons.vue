@@ -1,7 +1,7 @@
 <template>
     <div>
-      <b-button variant='warning' size='sm' @click='setFormValues()' v-b-modal.editStrandsModal v-b-tooltip.hover title="Edit Strand"><b-icon-pencil/></b-button>
-      <b-button variant='danger' size='sm' @click='setFormValues()' v-b-modal.deleteStrandsModal v-b-tooltip.hover title="Delete Strand"><b-icon-trash/></b-button>
+      <b-button variant='warning' size='sm' @click='setFormValues()' v-b-modal.editStrandsModal>Edit</b-button>
+      <b-button variant='danger' size='sm' @click='setFormValues()' v-b-modal.deleteStrandsModal>Delete</b-button>
     </div>
 </template>
 

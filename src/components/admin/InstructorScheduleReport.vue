@@ -12,7 +12,7 @@
         v-model="selected"
         @change="getInstructorSchedule()">
         <option v-for="ins in rowData"
-        v-bind:value="ins.id">{{ins.last_name}}, {{ins.first_name}} </option>
+        v-bind:value="ins.id">{{ins.first_name}} {{ins.last_name}}</option>
       </b-form-select>
     </b-form-group>
   </b-col>
@@ -33,8 +33,8 @@
 <script>
 import Axios from "axios";
 import {AgGridVue} from "ag-grid-vue";
-import '../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
-import '../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
+import '../../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
+import '../../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
 
     export default {
         name: 'InstructorScheduleReport',
@@ -71,9 +71,7 @@ import '../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
               }
           };
             this.columnDefs = [
-                {headerName: 'ID', field: 'id', sortable: true, filter: true, width: 150},
-                {headerName: 'Subject Code', field: 'subject.subject.subject_code', sortable: true, filter: true, width: 150},
-                {headerName: 'Subject Description', field: 'subject.subject.subject_description', sortable: true, filter: true, width: 150, resizable: true},
+                {headerName: 'ID', field: 'subject_id', sortable: true, filter: true, width: 150},
                 {headerName: 'Day', field: 'day', sortable: true, filter: true, width: 150,},
                 {headerName: 'Time Start', field: 'time_start', sortable: true, filter: true, width: 150},
                 {headerName: 'Time End', field: 'time_end', sortable: true, filter: true, width: 150},

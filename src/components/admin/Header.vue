@@ -8,7 +8,7 @@
         </div>
 
         <b-navbar-brand href="admin">
-          <img src="../assets/images/comteq_logo.png" alt="Comteq Logo" class="responsive"/>
+          <img src="../../assets/images/comteq_logo.png" alt="Comteq Logo" class="responsive"/>
         </b-navbar-brand>
 
         <b-navbar-nav>

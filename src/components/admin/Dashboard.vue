@@ -50,7 +50,7 @@
 </div>
 </template>
 <script>
-  import BarChart from '../BarChart.js';
+  import BarChart from '../../BarChart.js';
   export default{
     components: {
       BarChart

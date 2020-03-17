@@ -1,9 +1,9 @@
 <template>
     <div>
-      <b-button variant="info" size='sm' v-b-tooltip.hover title="Availability" :to="{ name: 'manageInstructorAvailabilities', params: { id: params.data.id, first_name: params.data.first_name, last_name: params.data.last_name } }"><b-icon-clock/></b-button>
-      <b-button variant="info" size='sm' v-b-tooltip.hover title="Subjects" :to="{ name: 'manageInstructorSubjects', params: { id: params.data.id, first_name: params.data.first_name, last_name: params.data.last_name } }"><b-icon-book/></b-button>
-      <b-button variant='warning' size='sm' @click='setFormValues()' v-b-modal.editInstructorModal v-b-tooltip.hover title="Edit Instructor"><b-icon-pencil/></b-button>
-      <b-button variant='danger' size='sm' @click='setFormValues()' v-b-modal.deleteInstructorModal v-b-tooltip.hover title="Delete Instructor"><b-icon-trash/></b-button>
+        <b-button variant="primary" size='sm' :to="{ name: 'manageInstructorAvailabilities', params: { id: params.data.id, first_name: params.data.first_name, last_name: params.data.last_name } }">Availability</b-button>
+        <b-button variant="primary" size='sm' :to="{ name: 'manageInstructorSubjects', params: { id: params.data.id, first_name: params.data.first_name, last_name: params.data.last_name } }">Subjects</b-button>
+      <b-button variant='primary' size='sm' @click='setFormValues()' v-b-modal.editInstructorModal>Edit</b-button>
+      <b-button variant='danger' size='sm' @click='setFormValues()' v-b-modal.deleteInstructorModal>Delete</b-button>
     </div>
 </template>
 

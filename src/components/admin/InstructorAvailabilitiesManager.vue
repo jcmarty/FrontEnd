@@ -175,8 +175,8 @@
         {headerName: 'Day', field: 'day', sortable: true, filter: true},
         {headerName: 'Time Start', field: 'time_start', sortable: true},
         {headerName: 'Time End', field: 'time_end', sortable: true},
-        {headerName: 'Academic Year', field: 'academic_year.academic_year', sortable: true, filter: true},
-        {headerName: 'Semester', field: 'semester.semester', sortable: true, filter: true},
+        {headerName: 'Academic Year', field: 'academic_year', sortable: true, filter: true},
+        {headerName: 'Semester', field: 'semester', sortable: true, filter: true},
         {headerName: 'Actions', field: 'id', width: 150, cellRendererFramework: 'InstructorAvailabilitiesButtons'}
       ];
     },

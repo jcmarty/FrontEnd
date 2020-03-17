@@ -3,7 +3,7 @@
     <h1>Manage Instructors</h1>
     <div>
       <b-modal id="editInstructorModal" ref="editInstructorModal"
-        title="Edit Instructor Information" size="xl" hide-footer no-close-on-backdrop>
+        title="Edit Instructor Information" size="xl" hide-footer>
         <!-- An alert for displaying success messages -->
         <b-alert variant="success"
           :show="updateSuccessCountDown"
@@ -251,7 +251,7 @@
                   <!--TODO:
                       ONLY call updateInstructor method if at
                       least one instructor information was changed -->
-                  <b-button variant="success" @click="updateInstructor">
+                  <b-button variant="primary" @click="updateInstructor">
                     Update
                   </b-button>
                 </b-col>
@@ -261,18 +261,16 @@
         </b-tabs>
       </b-modal>
 
-      <b-modal id="deleteInstructorModal" ref="deleteInstructorModal" title="Delete Instructor" size="md" no-close-on-backdrop>
-        <h6>Are you sure you want to delete <br/> <b>{{ this.instructor.first_name }} {{ this.instructor.last_name }}?</b></h6>
+      <b-modal id="deleteInstructorModal" ref="deleteInstructorModal" title="Delete Instructor" size="lg">
+        <p>Are you sure you want to remove {{ this.instructor.first_name }} {{ this.instructor.last_name }}?</p>
         <template v-slot:modal-footer="{ cancel, ok }">
           <!-- Emulate built in modal footer ok and cancel button actions -->
-        <b-col>
-          <b-button class="float-left"  variant="danger" @click="hideModal('deleteInstructorModal')">
-            No
+          <b-button size="sm" variant="danger" @click="hideModal('deleteInstructorModal')">
+            Cancel
           </b-button>
-          <b-button class="float-right" variant="success" @click="deleteInstructor()">
-            Yes
+          <b-button size="sm" variant="success" @click="deleteInstructor()">
+            Delete
           </b-button>
-        </b-col>
         </template>
       </b-modal>
 
@@ -298,9 +296,9 @@
       <!-- Tab Group with forms for adding new instructor/s -->
       <b-tabs v-if="showForm" v-model="tabIndex">
         <b-tab title="Personal Information">
-          <!-- Start form personal information -->
-          <!-- 1st Form 1 Personal Information Start -->
           <b-form>
+            <!-- Start form personal information -->
+            <!-- 1st Form 1 Personal Information Start -->
             <b-form-row>
               <b-col cols="12" md="6" lg="3">
                 <b-form-group
@@ -570,7 +568,7 @@
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="6" lg="2" class="d-flex justify-content-end align-items-end mb-1">
-                <b-button variant="success" @click="addPreferredSubject('new')" class="px-5">
+                <b-button variant="primary" @click="addPreferredSubject('new')" class="px-5">
                   Add
                 </b-button>
               </b-col>
@@ -655,7 +653,7 @@
                 </b-form-group>
               </b-col>
               <b-col cols="12" md="6" lg="2" class="d-flex justify-content-end align-items-end mb-1">
-                <b-button variant="success" @click="addTimeAvailability" class="px-5">
+                <b-button variant="primary" @click="addTimeAvailability" class="px-5">
                   Add
                 </b-button>
               </b-col>
@@ -676,7 +674,7 @@
                 </b-button>
               </b-col>
               <b-col class="d-flex justify-content-end">
-                <b-button variant="success" @click="toggleForm">
+                <b-button variant="primary" @click="toggleForm">
                   Finish
                 </b-button>
               </b-col>
@@ -686,7 +684,7 @@
       </b-tabs>
     </div>
 
-    <b-button variant="primary" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
+    <b-button variant="success" size="sm" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
       Add New Instructor
     </b-button>
 
@@ -708,8 +706,8 @@
   import {AgGridVue} from "ag-grid-vue";
   import Datepicker from 'vuejs-datepicker';
   import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue';
-  import '../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
-  import '../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
+  import '../../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
+  import '../../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
   import InstructorActionButtons from "./ActionButtons/InstructorActionButtons.vue";
   import PreferredSubjectButtons from "./ActionButtons/PreferredSubjectButtons.vue";
 

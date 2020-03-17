@@ -24,54 +24,46 @@
           <router-link tag="li" to="/admin"><a><i class="fa fa-home"></i> Home </a></router-link>
           <li v-bind:class="{current : currentCategory=='manage'}"><a v-b-toggle.manageOptions><i class="fa fa-edit"></i> Manage <span class="fa fa-chevron-down"></span></a>
             <b-collapse tag="ul" class="nav child_menu" id="manageOptions" accordion="sideMenuAccordion">
-              <router-link tag="li" to="/manage/requirements"><a>Requirements Test</a></router-link>
-              <router-link tag="li" to="/manage/curriculum/college"><a>Curriculum Test</a></router-link>
-              <router-link tag="li" to="/manage/schedule/college"><a>Schedule Test</a></router-link>
-              <li v-b-toggle.schedules><a> Class Schedule<span class="fa fa-chevron-down"></span></a>
+              <li v-b-toggle.schedules v-if="isAuthorized(this.$store.getters.getSettings.schedule_management, 0)"><a> Class Schedule<span class="fa fa-chevron-down"></span></a>
                 <b-collapse tag="ul" class="nav child_menu" id="schedules" accordion="sideMenuSubAccordion">
                   <router-link tag="li" to="/manage/schedule/college"><a class="super_child_menu">College</a></router-link>
                   <router-link tag="li" to="/manage/schedule/shs"><a class="super_child_menu">Senior High</a></router-link>
                 </b-collapse>
               </li>
-              <!-- for testing only -->
-
-              <li v-b-toggle.curriculum><a>Curriculum<span class="fa fa-chevron-down"></span></a>
+              <router-link tag="li" to="/manage/subject" v-if="isAuthorized(this.$store.getters.getSettings.subject_management, 0)"><a>Subject</a></router-link>
+              <li v-b-toggle.curriculum v-if="isAuthorized(this.$store.getters.getSettings.curriculum_management, 0)"><a>Curriculum<span class="fa fa-chevron-down"></span></a>
               <b-collapse tag="ul" class="nav child_menu" id="curriculum" accordion="sideMenuSubAccordion">
                 <router-link tag="li" to="/manage/curriculum/college"><a class="super_child_menu">College</a></router-link>
                 <router-link tag="li" to="/manage/curriculum/shs"><a class="super_child_menu">Senior High</a></router-link>
               </b-collapse>
               </li>
-              <!-- for testing only -->
-
-              <router-link tag="li" to="/manage/subject"><a>Subject</a></router-link>
-              <router-link tag="li" to="/manage/room"><a>Room</a></router-link>
-              <router-link tag="li" to="/manage/academicyear"><a>Academic Years</a></router-link>
-              <router-link tag="li" to="/manage/semesters"><a>Semester</a></router-link>
-              <router-link tag="li" to="/manage/course"><a>Course</a></router-link>
-              <router-link tag="li" to="/manage/strand"><a>Strand</a></router-link>
-              <router-link tag="li" to="/manage/track"><a>Track</a></router-link>
-              <router-link tag="li" to="/manage/instructor"><a>Instructor</a></router-link>
-              <router-link tag="li" to="/manage/useraccount"><a>User Accounts</a></router-link>
-              <li v-b-toggle.student><a>Student<span class="fa fa-chevron-down"></span></a>
-                <b-collapse tag="ul" class="nav child_menu" id="student" accordion="sideMenuSubAccordion">
-                  <router-link tag="li" to="/manage/registration/student"><a class="super_child_menu">Registration</a></router-link>
-                  <router-link tag="li" to="/manage/enrollment/student"><a class="super_child_menu">Enrollment</a></router-link>
-                  <router-link tag="li" to="/manage/grades/student"><a class="super_child_menu">Grades</a></router-link>
-                </b-collapse>
-              </li>
+              <router-link tag="li" to="/manage/room" v-if="isAuthorized(this.$store.getters.getSettings.room_management, 0)"><a>Room</a></router-link>
+              <router-link tag="li" to="/manage/academicyear" v-if="isAuthorized(this.$store.getters.getSettings.academic_year_management, 0)"><a>Academic Years</a></router-link>
+              <router-link tag="li" to="/manage/semesters" v-if="isAuthorized(this.$store.getters.getSettings.semester_management, 0)"><a>Semester</a></router-link>
+              <router-link tag="li" to="/manage/course" v-if="isAuthorized(this.$store.getters.getSettings.course_management, 0)"><a>Course</a></router-link>
+              <router-link tag="li" to="/manage/strand" v-if="isAuthorized(this.$store.getters.getSettings.strand_management, 0)"><a>Strand</a></router-link>
+              <router-link tag="li" to="/manage/track" v-if="isAuthorized(this.$store.getters.getSettings.track_management, 0)"><a>Track</a></router-link>
+              <router-link tag="li" to="/manage/instructor" v-if="isAuthorized(this.$store.getters.getSettings.instructor_management, 0)"><a>Instructor</a></router-link>
+              <router-link tag="li" to="/manage/useraccount" v-if="isAuthorized(this.$store.getters.getSettings.user_management, 0)"><a>User Accounts</a></router-link>
+              <!-- TODO:  Decide if we are really going to add these, and HOW -->
+              <router-link tag="li" to="#"><a>Password Reset Requests</a></router-link>
+              <router-link tag="li" to="#"><a>Backup and Restore Database</a></router-link>
+              <!-- --------------------------------------------------- -->
+              <router-link tag="li" to="#"><a>Activity Logs</a></router-link>
             </b-collapse>
           </li>
           <li v-bind:class="{active : currentCategory=='reports'}"><a v-b-toggle.reports><i class="fa fa-desktop"></i>View Report<span class="fa fa-chevron-down"></span></a>
             <b-collapse tag="ul" class="nav child_menu" id="reports" accordion="sideMenuAccordion">
-              <li v-b-toggle.classSchedules><a> Class Schedule<span class="fa fa-chevron-down"></span></a>
+              <li v-b-toggle.classSchedules v-if="isAuthorized(this.$store.getters.getSettings.schedule_management, 0)"><a> Class Schedule<span class="fa fa-chevron-down"></span></a>
                 <b-collapse tag="ul" class="nav child_menu" id="classSchedules" accordion="sideMenuSubAccordion">
                   <router-link tag="li" to="/reports/schedule/college"><a class="super_child_menu">College</a></router-link>
                   <router-link tag="li" to="/reports/schedule/shs"><a class="super_child_menu">Senior High</a></router-link>
                 </b-collapse>
               </li>
-              <router-link tag="li" to="/reports/schedule/room"><a>Room Schedule</a></router-link>
-              <router-link tag="li" to="/reports/schedule/instructor"><a>Instructor Schedule</a></router-link>
-              <router-link tag="li" to="/reports/students"><a>Students</a></router-link>
+              <router-link tag="li" to="/reports/schedule/room" v-if="isAuthorized(this.$store.getters.getSettings.schedule_management, 0)"><a>Room Schedule</a></router-link>
+              <router-link tag="li" to="/reports/schedule/instructor" v-if="isAuthorized(this.$store.getters.getSettings.schedule_management, 0)"><a>Instructor Schedule</a></router-link>
+              <router-link tag="li" to="#" v-if="isAuthorized(this.$store.getters.getSettings.instructor_management, 0)"><a>Instructors List</a></router-link>
+              <router-link tag="li" to="#" ><a>Alumni Members / Graduates</a></router-link>
             </b-collapse>
           </li>
         </ul>
@@ -132,6 +124,21 @@
       });
     },
     methods: {
+      isAuthorized(activity, priv){
+        //activity level
+        if(priv == 0){
+          //check if user has a privilege in this activity
+          if (this.user.activities.some(a => a.activity_id === activity)) {
+            return true;
+          }
+          return false;
+        }
+        //privilege level
+        else{
+          //TODO: check if user has the exact privilege (CRUD) to do this activity
+
+        }
+      },
       //hide sidebar submenu when clicked outside the sidebar menu
       onClickOutside(e, el){
         if(document.getElementById('manageOptions').classList.contains('show'))

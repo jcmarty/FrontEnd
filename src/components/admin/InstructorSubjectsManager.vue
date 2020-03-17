@@ -145,10 +145,10 @@
         }
       };
       this.columnDefs = [
-        {headerName: 'Subject Code', field: 'subject.subject_code', sortable: true, filter: true},
-        {headerName: 'Description', field: 'subject.subject_description', sortable: true, filter: true},
-        {headerName: 'Academic Year', field: 'academic_year.academic_year', sortable: true, filter: true},
-        {headerName: 'Semester', field: 'semester.semester', sortable: true, filter: true},
+        {headerName: 'Subject Code', field: 'subject_id', sortable: true, filter: true},
+        {headerName: 'Description', field: 'subject_description', sortable: true, filter: true},
+        {headerName: 'Academic Year', field: 'academic_year', sortable: true, filter: true},
+        {headerName: 'Semester', field: 'semester', sortable: true, filter: true},
         {headerName: 'Actions', field: 'id', width: 150, cellRendererFramework: 'PreferredSubjectButtons'}
       ];
     },
@@ -161,7 +161,7 @@
       this.preferredSubject.semester_id = this.settings.current_sem;
     },
     created() {
-        // console.log(this.$route.params);
+        console.log(this.$route.params);
         this.instructor = {
           id: this.$route.params.id,
           name: this.$route.params.first_name + " " + this.$route.params.last_name
@@ -195,11 +195,9 @@
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
-            // console.log(response)
             this.alertMessage = response.data.message;
             this.dismissSuccessCountDown = this.dismissSecs;
             this.getPreferredSubjects();
-            this.preferredSubject.subject_id = null;
           })
           .catch(error => {
             this.alertMessage = error.response.data.message;
@@ -218,11 +216,11 @@
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
-            // console.log(response.data);
+            //console.log(response.data);
             this.rowData = response.data;
           })
           .catch(error => {
-            // console.log(error.response);
+            console.log(error.response);
           })
       },
       getSubjects: function(){
@@ -233,11 +231,11 @@
           .then(response => {
             //console.log(response.data);
             for(const subject of response.data){
-              this.subjectOptions.push({value: subject.id, text: subject.subject_code + " - " +subject.subject_description});
+              this.subjectOptions.push({value: subject.id, text: subject.subject_description});
             }
           })
           .catch(error => {
-            // console.log(error.response);
+            console.log(error.response);
           })
       },
       getAcademicYears: function(){
@@ -252,7 +250,7 @@
             }
           })
           .catch(error => {
-            // console.log(error.response.data.message);
+            console.log(error.response.data.message);
           })
       },
       getSemesters: function(){
@@ -266,7 +264,7 @@
             }
           })
           .catch(error => {
-            // console.log(error.response.data.message);
+            console.log(error.response.data.message);
           })
       },
     }
