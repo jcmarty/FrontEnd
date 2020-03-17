@@ -193,17 +193,17 @@
         </template>
 
         <template v-slot:cell(read_priv)="row" >
-          <a v-if="row.item.create_priv">Authorized</a>
+          <a v-if="row.item.read_priv">Authorized</a>
           <a v-else>Unauthorized</a>
         </template>
 
         <template v-slot:cell(update_priv)="row" >
-          <a v-if="row.item.create_priv">Authorized</a>
+          <a v-if="row.item.update_priv">Authorized</a>
           <a v-else>Unauthorized</a>
         </template>
 
         <template v-slot:cell(delete_priv)="row" >
-          <a v-if="row.item.create_priv">Authorized</a>
+          <a v-if="row.item.delete_priv">Authorized</a>
           <a v-else>Unauthorized</a>
         </template>
 
