@@ -190,7 +190,7 @@
         <b-col class="py-4">
           <!-- Add New Room Button -->
           <b-button variant="primary" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
-            Add New Room
+            Add New User Account
           </b-button>
         </b-col>
       </b-row>
@@ -199,7 +199,7 @@
       <b-table
         class="my-3 table-striped"
         show-empty
-        responsive=true
+        responsive
         head-variant="dark"
         bordered
         hover
@@ -211,12 +211,16 @@
         :filter="filter">
 
         <template v-slot:cell(active)="row" >
-          <p v-if="row.item.active"><b-badge class="p-2" variant="success">Active</b-badge></p>
-          <p v-else><b-badge class="p-2" variant="danger">Inactive</b-badge></p>
+          <b-badge variant="success" pill v-if="row.item.active">Active</b-badge>
+          <b-badge variant="danger"  pill v-else>Inactive</b-badge>
 
         </template>
 
         <template v-slot:cell(actions)="row">
+          <b-button variant='info' size='sm' @click="PrivPage(row.item, $event.target)"v-b-tooltip.hover title="Privileges">
+            <b-icon-clock/>
+          </b-button>
+
           <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" class="mr-1">
             <b-icon-pencil/>
           </b-button>
@@ -225,9 +229,7 @@
             <b-icon-trash/>
           </b-button>
 
-          <b-button variant='info' size='sm' @click="PrivPage(row.item, $event.target)"v-b-tooltip.hover title="Privileges">
-            <b-icon-clock/>
-          </b-button>
+
         </template>
       </b-table>
 
@@ -265,7 +267,7 @@
     <b-modal id="editUserAccountModal" ref="editUserAccountModal" title="Edit User Account" size="lg" no-close-on-backdrop>
       <b-form-row>
       <!-- Username -->
-      <b-col cols="12" md="6" lg="2">
+      <b-col cols="12" md="6" lg="4">
         <b-form-group
           class="username"
           label="Username"
@@ -279,7 +281,7 @@
       </b-col>
 
       <!--  Password -->
-      <b-col cols="12" md="6" lg="3">
+      <b-col cols="12" md="6" lg="4">
         <b-form-group
           class="password"
           label="Password"
@@ -293,7 +295,7 @@
       </b-col>
 
       <!--  Confirm Password -->
-      <b-col cols="12" md="6" lg="3">
+      <b-col cols="12" md="6" lg="4">
         <b-form-group
           class="confirmpassword"
           label="Confirm Password"
@@ -305,23 +307,12 @@
             required></b-form-input>
         </b-form-group>
       </b-col>
+    </b-form-row>
 
-      <!--  Email -->
-      <b-col cols="12" md="6" lg="4">
-        <b-form-group
-          class="email"
-          label="Email"
-          label-for="Email">
-          <b-form-input
-            type="text"
-            v-model="users.email"
-            id="Email"
-            required></b-form-input>
-        </b-form-group>
-      </b-col>
+    <b-form-row>
 
       <!-- First Name -->
-      <b-col cols="12" md="6" lg="2">
+      <b-col cols="12" md="6" lg="4">
         <b-form-group
           class="firstname"
           label="First Name"
@@ -335,7 +326,7 @@
       </b-col>
 
       <!-- Middle Name -->
-      <b-col cols="12" md="6" lg="3">
+      <b-col cols="12" md="6" lg="4">
         <b-form-group
           class="middlename"
           label="Middle Name"
@@ -349,7 +340,7 @@
       </b-col>
 
       <!-- Last Name -->
-      <b-col cols="12" md="6" lg="3">
+      <b-col cols="12" md="6" lg="4">
         <b-form-group
           class="lastname"
           label="Last Name"
@@ -358,6 +349,23 @@
             type="text"
             v-model="users.last_name"
             id="lastName"
+            required></b-form-input>
+        </b-form-group>
+      </b-col>
+    </b-form-row>
+
+    <b-form-row>
+
+      <!--  Email -->
+      <b-col cols="12" md="6" lg="4">
+        <b-form-group
+          class="email"
+          label="Email"
+          label-for="Email">
+          <b-form-input
+            type="text"
+            v-model="users.email"
+            id="Email"
             required></b-form-input>
         </b-form-group>
       </b-col>
@@ -374,6 +382,16 @@
             :options="roleOptions"
             required>
           </b-form-select>
+        </b-form-group>
+      </b-col>
+
+      <b-col cols="12" md="6" lg="4">
+        <b-form-group
+          label="Status">
+          <b-form-select
+          :options="options"
+          v-model="users.active">
+        </b-form-select>
         </b-form-group>
       </b-col>
       </b-form-row>
@@ -452,10 +470,10 @@
         },
 
         roleOptions:[
+          {value: 'Assistant Registrar', text: 'Assistant Registrar'},
           {value: 'Coordinator', text: 'Coordinator'},
           {value: 'Registrar', text: 'Registrar'},
           {value: 'School Administrator', text: 'School Administrator'},
-          {value: 'Student Assistant', text: 'Student Assistant'},
           {value: 'System Administrator', text: 'System Administrator'}
         ],
 

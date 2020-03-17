@@ -104,8 +104,7 @@
           </input>
         </b-input-group>
       </b-form-group>
-  </b-row>
-  <b-row>
+
       <b-form-group
       class="tor"
       label="Transcript of Records (TOR)"
@@ -117,8 +116,7 @@
           </input>
         </b-input-group>
       </b-form-group>
-  </b-row>
-  <b-row>
+
       <b-form-group
       class="form137"
       label="Form 137"
@@ -130,8 +128,7 @@
           </input>
         </b-input-group>
       </b-form-group>
-  </b-row>
-  <b-row>
+
       <b-form-group
       class="form138"
       label="Form 138"
@@ -157,9 +154,7 @@
           </input>
         </b-input-group>
       </b-form-group>
-  </b-row>
 
-  <b-row>
       <b-form-group
       class="honorabledismisal"
       label="Honorable Dismisal"
@@ -171,9 +166,7 @@
           </input>
         </b-input-group>
       </b-form-group>
-  </b-row>
 
-  <b-row>
       <b-form-group
       class="twobytwo"
       label="2 x 2 picture"
@@ -188,59 +181,75 @@
   </b-row> -->
 
 
-  <!-- form 137
-      form 138
-      TOR
-      psa birth Certificate
-      good moral
-      honorable dismisal
-      2v2
-      -->
-  <!-- <input type="file" @change="SelecFile"/>
 
-  <input type="file" @change="SelecFile"/>
-  <input type="file" @change="SelecFile"/>
-  <input type="file" @change="SelecFile"/>
-  <input type="file" @change="SelecFile"/>
-  <input type="file" @change="SelecFile"/>
-  <input type="file" @change="SelecFile"/>
-  <input type="file" @change="SelecFile"/> -->
-  <!-- Main table element -->
-  <!-- <img v-for="item in items" :src="'/storage/images/'+item.url_tor" alt="image" /> -->
+      <div class="myTable px-4 py-3 my-5">
+        <!-- Adding Form Start  -->
+        <b-row>
+          <b-col lg="4" class="my-1 ">
+            <b-form-group
+            class="filter"
+            label="Filter"
+            label-for="Filter">
+              <b-input-group  size="sm">
+                <b-form-input
+                  v-model="filter"
+                  type="search"
+                  id="filterInput"
+                  placeholder="Type to Search">
+                </b-form-input>
+              </b-input-group>
+            </b-form-group>
+          </b-col>
 
-  <b-table
-    class="my-3 table-striped"
-    show-empty
-    responsive=true
-    head-variant="dark"
-    bordered
-    hover
-    stacked="md"
-    :items="items"
-    :fields="fields"
-    :current-page="currentPage"
-    :per-page="perPage"
-    :filter="filter">
+        </b-row>
 
-    <template v-slot:cell(year_duration)="row" >
-      <p v-if="row.item.year_duration">{{row.item.year_duration}} years</p>
-    </template>
+        <!-- Main table element -->
+        <b-table
+          class="my-3 table-striped"
+          show-empty
+          responsive
+          head-variant="dark"
+          bordered
+          hover
+          stacked="md"
+          :items="items"
+          :fields="fields"
+          :current-page="currentPage"
+          :per-page="perPage"
+          :filter="filter">
 
-    <template v-slot:cell(active)="row" >
-      <p v-if="row.item.active"><b-badge class="p-2" variant="success">Active</b-badge></p>
-      <p v-else><b-badge class="p-2" variant="danger">Inactive</b-badge></p>
-    </template>
+        </b-table>
 
-    <template v-slot:cell(actions)="row">
-      <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" class="mr-1">
-        <b-icon-pencil/>
-      </b-button>
+        <hr/>
+        <b-row>
+          <b-col sm="4" md="6" lg="1" class="my-1">
+            <b-form-group
+            class="perpageselect"
+            label=""
+            label-for="perPageSelect">
+              <b-form-select
+                v-model="perPage"
+                id="perPageSelect"
+                size="sm"
+                :options="pageOptions"
+              ></b-form-select>
+            </b-form-group>
+          </b-col>
 
-      <b-button variant="danger" size="sm" @click="DeleteModal(row.item, $event.target)" v-b-tooltip.hover title="Delete Room">
-        <b-icon-trash/>
-      </b-button>
-    </template>
-  </b-table>
+          <b-col sm="4" md="3" class="my-1 col-md-3 offset-md-8">
+            <b-pagination
+              v-model="currentPage"
+              :total-rows="totalRows"
+              :per-page="perPage"
+              align="fill"
+              size="sm"
+              class="my-0"
+            ></b-pagination>
+          </b-col>
+        </b-row>
+      </div>
+        <!-- end of table -->
+
 
 </div>
 </template>
@@ -249,6 +258,22 @@
   export default {
     data() {
       return {
+        items: [],
+        fields: [
+          { key: 'student_number', label: 'Student Number', class: 'text-left', sortable: true},
+          { key: 'url_tor', label: 'TOR', class: 'text-left', sortable: true},
+          { key: 'url_good_moral', label: 'Good Moral', sortable: true, class: 'text-left' },
+          { key: 'url_form_137', label: 'Form 137', sortable: true, class: 'text-left' },
+          { key: 'url_form_138', label: 'Form 138', sortable: true, class: 'text-left' },
+          { key: 'url_birth_certificate', label: 'Birth Certificate', sortable: true, class: 'text-left' },
+          { key: 'action', label: 'Action', sortable: true, class: 'text-left' }
+        ],
+
+        totalRows: 1,
+        currentPage: 1,
+        perPage: 5,
+        pageOptions: [5, 10, 15, 20, 25],
+        filter: null,
 
         items: [],
         fields: [
@@ -270,47 +295,33 @@
         tor_file: '',
       }
     },
+    mounted(){
+      this.getStudentRequirementsList();
+    },
 
     mounted(){
       this.getStudents();
     },
     methods: {
-      // SelecFile(event){
-      //   console.log(event)
-      // },
-      getStudents: function(){
+      SelecFile(event){
+        console.log(event.target.files[0].name)
+      },
+
+      // Get Room Function
+      getStudentRequirementsList: function(){
         Axios
           .get('http://localhost/api/v1/student_requirements', {
-            headers: {
-              'Authorization': 'Bearer ' + this.$store.getters.getToken
-            }
-
+            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
             this.items = response.data;
             this.totalRows = this.items.length;
-              // console.log(response.data);
           })
-      },
-
-
-      // Uploads selected files
-      UploadFile: function(){
-        let formData = new FormData();
-        formData.append('file', this.file);
-
-        console.log(formData)
-          // Axios
-          //   .put('http://localhost/api/v1/student_requirements/' + 166, {
-          //     headers: {
-          //       'Authorization': 'Bearer ' + this.$store.getters.getToken,
-          //       'Content-Type': 'multipart/form-data'
-          //     }
-          //   })
-          //   .then(response => {
-          //       console.log(response.data);
-          //   })
-        },
+          .catch(error => {
+            this.alertMessage = error.response.data.message;
+            this.dismissErrorCountDown = this.dismissSecs;
+          })
+      }, // End of Get Room function
 
         onChangeTORUpload(){
           this.tor_file = this.$refs.fileTOR.files[0];

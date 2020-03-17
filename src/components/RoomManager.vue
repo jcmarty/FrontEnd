@@ -136,7 +136,7 @@
       <b-table
         class="my-3 table-striped"
         show-empty
-        responsive=true
+        responsive
         head-variant="dark"
         bordered
         hover
@@ -148,8 +148,8 @@
         :filter="filter">
 
         <template v-slot:cell(active)="row" >
-          <p v-if="row.item.active"><b-badge class="p-2" variant="success">Active</b-badge></p>
-          <p v-else><b-badge class="p-2" variant="danger">Inactive</b-badge></p>
+        <b-badge  variant="success" pill v-if="row.item.active">Active</b-badge>
+        <b-badge  variant="danger"  pill v-else>Inactive</b-badge>
 
         </template>
 

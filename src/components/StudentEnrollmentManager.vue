@@ -115,83 +115,118 @@
         </b-col>
       </b-form-row>
 
-
-
-
-    <b-form-row>
-      <h5>Subject Enrolled</h5>
-      <ag-grid-vue class="ag-theme-material"
-        :columnDefs="SubjectEnrolledColdef"
-        :rowData="SubjectEnrolledRowData"
-        :animateRows="true"
-        :pagination="true"
-        :paginationPageSize="10"
-        :gridOptions="gridOptions">
-      </ag-grid-vue>
-    </b-form-row>
-<hr/>
-    <b-form-row>
-      <h5>Subject List</h5>
-      <ag-grid-vue class="ag-theme-material"
-        :columnDefs="SubjectsColDef"
-        :rowData="SubjectcsRowData"
-        :animateRows="true"
-        :pagination="true"
-        :paginationPageSize="10"
-        :gridOptions="gridOptions">
-      </ag-grid-vue>
-    </b-form-row>
-
-
-          <b-form-row>
-            <b-col>
-              <b-button variant="danger" @click="toggleForm">
-                Cancel
-              </b-button>
-            </b-col>
-            <b-col class="d-flex justify-content-end">
-              <b-button variant="primary" id="Add_Semester_Btn" @click="addSemeter">
-                Add
-              </b-button>
-            </b-col>
-          </b-form-row>
-
         </b-form>
       </div>
     </div>
+
+    <div class="myTable px-4 py-3 my-5">
+      <!-- Adding Form Start  -->
+      <b-row>
+        <b-col lg="4" class="my-1 ">
+          <b-form-group
+          class="filter"
+          label="Filter"
+          label-for="Filter">
+            <b-input-group  size="sm">
+              <b-form-input
+                v-model="filter"
+                type="search"
+                id="filterInput"
+                placeholder="Type to Search">
+              </b-form-input>
+            </b-input-group>
+          </b-form-group>
+        </b-col>
+
+      </b-row>
+
+      <!-- Main table element -->
+      <b-table
+        class="my-3 table-striped"
+        show-empty
+        responsive
+        head-variant="dark"
+        bordered
+        hover
+        stacked="md"
+        :items="items"
+        :fields="fields"
+        :current-page="currentPage"
+        :per-page="perPage"
+        :filter="filter">
+
+        <template v-slot:cell(active)="row" >
+          <p v-if="row.item.active"><b-badge class="p-2" variant="success">Active</b-badge></p>
+          <p v-else><b-badge class="p-2" variant="danger">Inactive</b-badge></p>
+
+        </template>
+      </b-table>
+
+      <hr/>
+      <b-row>
+        <b-col sm="4" md="6" lg="1" class="my-1">
+          <b-form-group
+          class="perpageselect"
+          label=""
+          label-for="perPageSelect">
+            <b-form-select
+              v-model="perPage"
+              id="perPageSelect"
+              size="sm"
+              :options="pageOptions"
+            ></b-form-select>
+          </b-form-group>
+        </b-col>
+
+        <b-col sm="4" md="3" class="my-1 col-md-3 offset-md-8">
+          <b-pagination
+            v-model="currentPage"
+            :total-rows="totalRows"
+            :per-page="perPage"
+            align="fill"
+            size="sm"
+            class="my-0"
+          ></b-pagination>
+        </b-col>
+      </b-row>
+    </div>
+      <!-- end of table -->
+
   </div>
 </template>
 
 <script>
   import Axios from "axios";
-  import {AgGridVue} from "ag-grid-vue";
-  import '../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
-  import '../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
-  import SemestersActionButtons from "./ActionButtons/SemestersActionButtons.vue";
   export default{
     name: 'StudentEnrollmentManager',
-    components: {
-      AgGridVue,
-      SemestersActionButtons
-    },
     data() {
       return {
-        columnDefs: null,
-        rowData: null,
-        gridOptions: null,
-        SubjectsColDef: null,
-        SubjectcsRowData: null,
-        SubjectEnrolledColdef: null,
-        SubjectEnrolledRowData: null,
-        id: null,
+        items: [],
+        fields: [
+          { key: 'room_number', label: 'Room Number', class: 'text-center', sortable: true},
+          { key: 'room_name', label: 'Room Name', sortable: true, class: 'text-center' },
+          { key: 'room_type', label: 'Room Type', sortable: true, class: 'text-center' },
+          { key: 'room_capacity', label: 'Room Capacity', sortable: true, class: 'text-center' },
+          { key: 'active', label: 'Active', sortable: true, class: 'text-center' },
+          { key: 'actions', label: 'Actions' , class: 'text-center' }
+        ],
+
+        totalRows: 1,
+        currentPage: 1,
+        perPage: 5,
+        pageOptions: [5, 10, 15, 20, 25],
+        filter: null,
+
         semesters:{
           semester:null
         },
+
         RegStudent:{
           id: null,
           name: null,
           student_number:null,
         },
+
         showForm: false,
         alertMessage: "",
         errors: [],
@@ -200,27 +235,7 @@
         dismissErrorCountDown: 0,
       }
     },
-    beforeMount(){
-      this.gridOptions = {
-          context: {
-              componentParent: this
-          }
-      };
-      this.SubjectsColDef = [
-          {headerName: 'ID', field: 'subject.subject_id', sortable: true, filter: true, width: 150},
-          {headerName: 'Subject Code', field: 'subject.subject_code', sortable: true, filter: true, width: 150,},
-          {headerName: 'Subject Description', field: 'subject_description',  sortable: true, filter: true, width: 350},
-          {headerName: 'Action', field: 'subject_description', cellRendererFramework: 'SemestersActionButtons'}
-      ];
 
-      this.SubjectEnrolledColdef = [
-          {headerName: 'ID', field: 'id', sortable: true, filter: true, width: 150},
-          {headerName: 'Subject Code', field: 'subject_code', sortable: true, filter: true, width: 150,},
-          {headerName: 'Subject Description', field: 'subject_description',  sortable: true, filter: true, width: 350},
-          {headerName: 'Action', field: 'subject_description', cellRendererFramework: 'SemestersActionButtons'}
-      ];
-
-    },
 
     mounted () {
       this.test();
@@ -243,6 +258,7 @@
             this.dismissErrorCountDown = this.dismissSecs;
           })
       },
+
       toggleForm: function(){
         if(this.showForm){
           this.showForm = false;
@@ -258,7 +274,8 @@
           })
           .then(response => {
             //console.log(response.data.data);
-            this.SubjectEnrolledRowData = response.data;
+            this.items = response.data;
+            this.totalRows = this.items.length;
           })
           .catch(error => {
             this.alertMessage = error.response.data.message;
@@ -288,6 +305,7 @@
           this.showForm = true;
         }
       },
+
       addSemeter: function(){
         this.errors = [];
         Axios
@@ -314,6 +332,7 @@
             this.dismissErrorCountDown = this.dismissSecs;
           })
       },
+
       updateSemester: function(){
         this.errors = [];
         Axios
@@ -341,6 +360,7 @@
         });
         this.$refs['editSemesterModal'].hide();
       },
+
       deleteSemester: function(){
         this.errors = [];
         Axios
@@ -380,11 +400,15 @@
         }else {
              this.RegStudent = {
                   id: this.$route.params.id,
-                  name: this.$route.params.first_name + " " + this.$route.params.last_name,
+                  name:
+                    this.$route.params.last_name +" "+
+                    this.$route.params.suffix_name+", "+
+                    this.$route.params.first_name+" "+
+                    this.$route.params.middle_name,
                   student_number: this.$route.params.student_number,
                 };
         }
-        console.log(this.$route.params);
+        // console.log(this.$route.params);
       }
     }
   }
