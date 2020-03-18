@@ -526,28 +526,19 @@
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
+            //
             this.getUserAccount();
-            this.alertMessage = response.data.message;
+            // console.log(response.data)
+            // added this message because api will return the created user record
+            this.alertMessage = "User account successfully created.";
             this.dismissSuccessCountDown = this.dismissSecs;
             this.showForm = false;
             this.resetform();
-          Axios
-            .get('http://localhost/api/v1/users', {
-              headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-            })
-            .then(last_user => {
-              // console.log(last_user.data);
-              this.LastUser = last_user.data[0].id
-              this.LastUserRole = last_user.data[0].role
-               this.getUserActivies();
-              // console.log(this.LastUser);
-              // this.GrantLastUSer(last_user.data[0].role);
-            })
-            .catch(error => {
-              this.alertMessage = error.response.data.message;
-              this.dismissErrorCountDown = this.dismissSecs;
-            })
+            // passing of data from created user record
+            this.LastUser = response.data.id;
+            this.LastUserRole = response.data.role;
 
+            this.getUserActivies();
           })
           .catch(error => {
             this.alertMessage = error.response.data.message;
@@ -569,6 +560,7 @@
         .then(user_activities => {
           // console.log(user_activities.data);
         if (this.LastUserRole === 'System Administrator') {
+          // all activities will be added to this user..
           for(var i = 0; i < user_activities.data.length; i++){
               this.UserPriv.push({
                 user_id: this.LastUser,
@@ -582,6 +574,7 @@
         }
 
         else if (this.LastUserRole === 'School Administrator') {
+          //
           for(var i = 0; i < user_activities.data.length; i++){
               this.UserPriv.push({
                 user_id: this.LastUser,
@@ -934,19 +927,21 @@
 
 
       GrantLastUser: function(){
-        for(var j = 0; j < this.UserPriv.length; j++){
+        // for(var j = 0; j < this.UserPriv.length; j++){
           Axios
-            .post('http://localhost/api/v1/privileges', this.UserPriv[j],{
+          // .post('http://localhost/api/v1/privileges', this.UserPriv[j],{
+            .post('http://localhost/api/v1/privileges', this.UserPriv,{
               headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
             })
             .then(respone => {
-              console.log(this.UserPriv[j])
+              console.log(respone.data);
+              // console.log(this.UserPriv[j])
             })
             .catch(error => {
               this.alertMessage = error.response.data.message;
               this.dismissErrorCountDown = this.dismissSecs;
             })
-        }
+        // }
       },
 
 
