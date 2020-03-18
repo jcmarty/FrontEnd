@@ -2,23 +2,6 @@
   <div> <!-- Start of Main Div -->
     <h1>Manage User Accounts</h1>
     <hr/>
-    <!-- Alert Message -->
-    <b-alert variant="success"
-      :show="dismissSuccessCountDown"
-      @dismissed="dismissSuccessCountDown=0"
-      dismissible fade>
-        {{alertMessage}}
-    </b-alert>
-    <b-alert variant="danger"
-      :show="dismissErrorCountDown"
-      @dismissed="dismissErrorCountDown=0"
-      dismissible fade>
-        <p>{{alertMessage}}</p>
-        <ul>
-          <li v-for="error in errors">{{ error }}</li>
-        </ul>
-    </b-alert>
-    <!-- End of Alert Message -->
 
     <!-- Adding Form Start  -->
     <div class="addPanel">
@@ -194,10 +177,26 @@
           </b-button>
         </b-col>
       </b-row>
-
+      <!-- Alert Message -->
+      <b-alert variant="success"
+        :show="dismissSuccessCountDown"
+        @dismissed="dismissSuccessCountDown=0"
+        dismissible fade>
+          {{alertMessage}}
+      </b-alert>
+      <b-alert variant="danger"
+        :show="dismissErrorCountDown"
+        @dismissed="dismissErrorCountDown=0"
+        dismissible fade>
+          <p>{{alertMessage}}</p>
+          <ul>
+            <li v-for="error in errors">{{ error }}</li>
+          </ul>
+      </b-alert>
+      <!-- End of Alert Message -->
       <!-- Main table element -->
       <b-table
-        class="my-3 table-striped"
+        class="my-0 table-striped"
         show-empty
         responsive
         head-variant="dark"
@@ -211,9 +210,10 @@
         :filter="filter">
 
         <template v-slot:cell(active)="row" >
-          <b-badge variant="success" pill v-if="row.item.active">Active</b-badge>
-          <b-badge variant="danger"  pill v-else>Inactive</b-badge>
-
+          <b-form-checkbox switch size="" :checked="row.item.status"  @change="StatusUpdate(row.item, $event.target)">
+            <b-badge variant="success" pill v-if="row.item.active">Active</b-badge>
+            <b-badge variant="danger"  pill v-else>Inactive</b-badge>
+          </b-form-checkbox>
         </template>
 
         <template v-slot:cell(actions)="row">
@@ -444,7 +444,7 @@
           { key: 'middle_name', label: 'Middle Name', sortable: true, class: 'text-center' },
           { key: 'last_name', label: 'Last Name', sortable: true, class: 'text-center' },
           { key: 'role', label: 'Role ', sortable: true, class: 'text-center' },
-          { key: 'active', label: 'Active', sortable: true, class: 'text-center' },
+          { key: 'active', label: 'Status', sortable: true, class: 'text-center' },
           { key: 'actions', label: 'Actions' , class: 'text-center' }
         ],
 
@@ -510,6 +510,14 @@
           })
           .then(response => {
             this.items = response.data;
+            for(var j = 0; j < this.items.length; j++){
+              if(this.items[j].active == 1){
+                this.items[j].status = true
+              }else{
+                this.items[j].status = false;
+              }
+            }
+            // console.log(this.items);
             this.totalRows = this.items.length;
           })
           .catch(error => {
@@ -927,9 +935,7 @@
 
 
       GrantLastUser: function(){
-        // for(var j = 0; j < this.UserPriv.length; j++){
           Axios
-          // .post('http://localhost/api/v1/privileges', this.UserPriv[j],{
             .post('http://localhost/api/v1/privileges', this.UserPriv,{
               headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
             })
@@ -941,7 +947,6 @@
               this.alertMessage = error.response.data.message;
               this.dismissErrorCountDown = this.dismissSecs;
             })
-        // }
       },
 
 
@@ -1043,9 +1048,48 @@
           role: item.role,
           active: item.active
         };
-
           this.$root.$emit('bv::show::modal', 'deleteUserAccountModal')
       },
+      // this function will update the status of user. Active or Inactive
+      StatusUpdate: function(item){
+        this.errors = [];
+
+        this.users = {
+          id: item.id,
+          username: item.username,
+          password: item.password,
+          email: item.email,
+          first_name: item.first_name,
+          middle_name: item.middle_name,
+          last_name: item.last_name,
+          role: item.role,
+          active: item.active == 1 ? item.active = 0 : item.active = 1
+        };
+        Axios
+        .put('http://localhost/api/v1/users/' + this.users.id, this.users, {
+          headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+        })
+        .then(response => {
+          this.getUserAccount();
+          if(item.active == 0){
+            this.alertMessage = "User " + item.username + " successfully deactivated."
+          }else{
+              this.alertMessage = "User " + item.username + " successfully activated."
+          }
+          this.dismissSuccessCountDown = this.dismissSecs;
+          this.resetform();
+        })
+        .catch(error => {
+          this.alertMessage = error.response.data.message;
+          const values = Object.values(error.response.data.errors);
+          for(const val of values){
+            for(const err of val){
+              this.errors.push(err);
+            }
+          }
+          this.dismissErrorCountDown = this.dismissSecs;
+        });
+      }, // end of Status Update Function
 
       PrivPage: function(item){
         this.users = {

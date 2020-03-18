@@ -807,7 +807,7 @@
 
 
             }
-            console.log(this.items)
+            // console.log(this.items)
             // console.log(response.data[0].fullname = 'john christopher marty')
             // console.log(response.data[0])
           })
@@ -876,8 +876,8 @@
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
+            this.alertMessage = "New student record successfully created.";
             this.getStudents();
-            this.alertMessage = response.data.message;
             this.dismissSuccessCountDown = this.dismissSecs;
             this.showForm = false;
             this.Students = {
@@ -925,6 +925,8 @@
             this.dismissErrorCountDown = this.dismissSecs;
           })
       },
+
+      
       ClearStudentFields: function(){
         this.Students = {
           student_number: null,
