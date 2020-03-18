@@ -939,8 +939,8 @@
             .post('http://localhost/api/v1/privileges', this.UserPriv[j],{
               headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
             })
-            .then(respone => {
-              console.log(this.UserPriv[j])
+            .then(response => {
+               console.log(response.data);
             })
             .catch(error => {
               this.alertMessage = error.response.data.message;
