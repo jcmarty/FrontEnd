@@ -1038,7 +1038,15 @@
           role: item.role,
           active: item.active
         };
-          this.$router.replace({name: 'UserPrivilegeManager', params: {id: item.id, first_name: item.first_name, last_name: item.last_name}})
+          this.$router.replace({
+            name: 'UserPrivilegeManager',
+            params: {
+              id: item.id, 
+              first_name: item.first_name,
+              last_name: item.last_name,
+              role: item.role
+            }
+          })
       }
     } // End of Methods
   } // End of Export Default

@@ -33,7 +33,7 @@ import StudentEnrollmentManager from "./components/admin/StudentEnrollmentManage
 import StudentGradesManager from "./components/admin/StudentGradesManager.vue";
 import StudentsReport from "./components/admin/StudentsReport.vue";
 import UserPrivilegeManager from "./components/admin/UserPrivilegeManager.vue";
-
+import ActivityLogs from "./components/admin/ActivityLogs.vue";
 
 // for testing only
 import RequirementsTesting from "./components/admin/RequirementsTesting.vue";
@@ -333,6 +333,15 @@ export default new Router({
               path: '/manage/user/privilege',
               name: 'UserPrivilegeManager',
               component: UserPrivilegeManager,
+              beforeEnter(to, from, next){
+                setTimeout(() => next(), 2000);
+              },
+            },
+
+            {
+              path: '/ActivityLogs',
+              name: 'ActivityLogs',
+              component: ActivityLogs,
               beforeEnter(to, from, next){
                 setTimeout(() => next(), 2000);
               },

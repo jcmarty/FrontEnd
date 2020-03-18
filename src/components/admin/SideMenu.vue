@@ -59,7 +59,7 @@
               <router-link tag="li" to="#"><a>Password Reset Requests</a></router-link>
               <router-link tag="li" to="#"><a>Backup and Restore Database</a></router-link>
               <!-- --------------------------------------------------- -->
-              <router-link tag="li" to="#"><a>Activity Logs</a></router-link>
+              <router-link tag="li" to="/ActivityLogs"><a>Activity Logs</a></router-link>
             </b-collapse>
           </li>
           <li v-bind:class="{active : currentCategory=='reports'}"><a v-b-toggle.reports><i class="fa fa-desktop"></i>View Report<span class="fa fa-chevron-down"></span></a>
