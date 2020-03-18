@@ -529,6 +529,7 @@
             this.getUserAccount();
             this.alertMessage = response.data.message;
             this.dismissSuccessCountDown = this.dismissSecs;
+            this.showForm = false;
             this.resetform();
           Axios
             .get('http://localhost/api/v1/users', {
@@ -579,6 +580,7 @@
               });
           }
         }
+
         else if (this.LastUserRole === 'School Administrator') {
           for(var i = 0; i < user_activities.data.length; i++){
               this.UserPriv.push({
@@ -592,16 +594,99 @@
               console.log(user_activities.data[i].id);
           }
         }
+
         else if (this.LastUserRole === 'Registrar') {
           // preset privileges
           this.UserPriv.push({
             user_id: this.LastUser,
             activity_id: user_activities.data[1].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[2].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[5].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[6].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[7].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[8].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[11].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[12].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[13].id,
             create_priv: 1,
             read_priv: 1,
             update_priv: 1,
             delete_priv: 1,
           });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[14].id,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
+          });
+
           this.UserPriv.push({
             user_id: this.LastUser,
             activity_id: user_activities.data[15].id,
@@ -610,290 +695,231 @@
             update_priv: 1,
             delete_priv: 1,
           });
-          // no privileges
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[0].id,
-            create_priv: 0,
-            read_priv: 0,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[2].id,
-            create_priv: 0,
-            read_priv: 0,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[3].id,
-            create_priv: 0,
-            read_priv: 0,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[4].id,
-            create_priv: 0,
-            read_priv: 0,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[5].id,
-            create_priv: 0,
-            read_priv: 0,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[6].id,
-            create_priv: 0,
-            read_priv: 0,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[7].id,
-            create_priv: 0,
-            read_priv: 0,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[8].id,
-            create_priv: 0,
-            read_priv: 0,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[9].id,
-            create_priv: 0,
-            read_priv: 0,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[10].id,
-            create_priv: 0,
-            read_priv: 0,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[11].id,
-            create_priv: 0,
-            read_priv: 0,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[12].id,
-            create_priv: 0,
-            read_priv: 0,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[13].id,
-            create_priv: 0,
-            read_priv: 0,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[14].id,
-            create_priv: 0,
-            read_priv: 0,
-            update_priv: 0,
-            delete_priv: 0,
-          });
+
           this.UserPriv.push({
             user_id: this.LastUser,
             activity_id: user_activities.data[16].id,
-            create_priv: 0,
-            read_priv: 0,
-            update_priv: 0,
-            delete_priv: 0,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
           });
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[17].id,
-            create_priv: 0,
-            read_priv: 0,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-
 
         }
-        else if (this.LastUserRole === 'Coordinator') {
+
+        else if (this.LastUserRole === 'Assistant Registrar') {
           // preset privileges
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[5].id,
-            create_priv: 1,
-            read_priv: 1,
-            update_priv: 1,
-            delete_priv: 1,
-          });
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[7].id,
-            create_priv: 1,
-            read_priv: 1,
-            update_priv: 1,
-            delete_priv: 1,
-          });
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[8].id,
-            create_priv: 1,
-            read_priv: 1,
-            update_priv: 1,
-            delete_priv: 1,
-          });
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[9].id,
-            create_priv: 1,
-            read_priv: 1,
-            update_priv: 1,
-            delete_priv: 1,
-          });
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[14].id,
-            create_priv: 1,
-            read_priv: 1,
-            update_priv: 1,
-            delete_priv: 1,
-          });
-          // no privileges
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[0].id,
-            create_priv: 0,
-            read_priv: 0,
-            update_priv: 0,
-            delete_priv: 0,
-          });
           this.UserPriv.push({
             user_id: this.LastUser,
             activity_id: user_activities.data[1].id,
             create_priv: 0,
-            read_priv: 0,
+            read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
           });
+
           this.UserPriv.push({
             user_id: this.LastUser,
             activity_id: user_activities.data[2].id,
             create_priv: 0,
-            read_priv: 0,
+            read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
           });
+
           this.UserPriv.push({
             user_id: this.LastUser,
-            activity_id: user_activities.data[3].id,
+            activity_id: user_activities.data[5].id,
             create_priv: 0,
-            read_priv: 0,
+            read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
           });
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[4].id,
-            create_priv: 0,
-            read_priv: 0,
-            update_priv: 0,
-            delete_priv: 0,
-          });
+
           this.UserPriv.push({
             user_id: this.LastUser,
             activity_id: user_activities.data[6].id,
             create_priv: 0,
-            read_priv: 0,
+            read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
           });
+
           this.UserPriv.push({
             user_id: this.LastUser,
-            activity_id: user_activities.data[10].id,
+            activity_id: user_activities.data[7].id,
             create_priv: 0,
-            read_priv: 0,
+            read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
           });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[8].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
           this.UserPriv.push({
             user_id: this.LastUser,
             activity_id: user_activities.data[11].id,
             create_priv: 0,
-            read_priv: 0,
+            read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
           });
+
           this.UserPriv.push({
             user_id: this.LastUser,
             activity_id: user_activities.data[12].id,
             create_priv: 0,
-            read_priv: 0,
+            read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
           });
+
           this.UserPriv.push({
             user_id: this.LastUser,
             activity_id: user_activities.data[13].id,
-            create_priv: 0,
-            read_priv: 0,
-            update_priv: 0,
-            delete_priv: 0,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
           });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[14].id,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
+          });
+
           this.UserPriv.push({
             user_id: this.LastUser,
             activity_id: user_activities.data[15].id,
-            create_priv: 0,
-            read_priv: 0,
-            update_priv: 0,
-            delete_priv: 0,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
           });
+
           this.UserPriv.push({
             user_id: this.LastUser,
             activity_id: user_activities.data[16].id,
-            create_priv: 0,
-            read_priv: 0,
-            update_priv: 0,
-            delete_priv: 0,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
           });
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[17].id,
-            create_priv: 0,
-            read_priv: 0,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-
-
         }
 
+        else if (this.LastUserRole === 'Coordinator') {
+          // preset privileges
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[1].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
 
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[2].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[3].id,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[4].id,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[5].id,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[6].id,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[7].id,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[8].id,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[11].id,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[12].id,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[13].id,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
+          });
+
+        }
 
 
           this.GrantLastUser();
@@ -1041,7 +1067,7 @@
           this.$router.replace({
             name: 'UserPrivilegeManager',
             params: {
-              id: item.id, 
+              id: item.id,
               first_name: item.first_name,
               last_name: item.last_name,
               role: item.role
