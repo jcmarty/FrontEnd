@@ -266,11 +266,11 @@
       return {
         items: [],
         fields: [
-          { key: 'activity.title', label: 'Activity', class: 'text-center', sortable: true},
-          { key: 'create_priv', label: 'Create Privileges', sortable: true, class: 'text-center' },
-          { key: 'read_priv', label: 'Read Privileges', sortable: true, class: 'text-center' },
-          { key: 'update_priv', label: 'Update Privileges', sortable: true, class: 'text-center' },
-          { key: 'delete_priv', label: 'Delete Privileges', sortable: true, class: 'text-center' },
+          { key: 'title', label: 'Activity', class: 'text-center', sortable: true},
+          { key: 'privileges.create_priv', label: 'Create Privileges', sortable: true, class: 'text-center' },
+          { key: 'privileges.read_priv', label: 'Read Privileges', sortable: true, class: 'text-center' },
+          { key: 'privileges.update_priv', label: 'Update Privileges', sortable: true, class: 'text-center' },
+          { key: 'privileges.delete_priv', label: 'Delete Privileges', sortable: true, class: 'text-center' },
         ],
 
         totalRows: 1,
