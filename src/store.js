@@ -13,7 +13,13 @@ export default new Vuex.Store({
     token: null,
     settings: {
       user_activities: []
-    }
+    },
+    // Academic Year Array of Object
+    academic_year : [],
+    // Semester Array of Object
+    semester : [],
+    // Courses Array of Object
+    courses: [],
   },
   mutations: {
     setAppSettings(state, payload){
@@ -27,6 +33,9 @@ export default new Vuex.Store({
     },
     setToken(state, payload){
       state.token = payload;
+    },
+    setCourses(state, payload){
+      state.courses = payload;
     }
   },
   actions: {
@@ -63,6 +72,9 @@ export default new Vuex.Store({
     },
     getToken(state){
       return state.token;
+    },
+    getCourses(){
+      return state.courses;
     }
   }
 });
