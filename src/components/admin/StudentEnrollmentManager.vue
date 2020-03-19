@@ -1,120 +1,191 @@
 <template>
   <div>
     <h1>Manage Student Enrollment</h1>
-
+    <hr/>
     <div class="panel panel-primary recordMaintenanceForm">
       <div class="panel-heading">Enroll Student</div>
       <div class="panel-body">
 
         <b-form id="Add_Semester_Form">
           <b-form-row>
-          <b-col cols="12" md="6" lg="3">
-            <b-form-group
-              class="studentno"
-              label="Student No."
-              label-for="studentNo">
-              <b-form-input
-                type="text"
-                v-bind:value=" RegStudent.student_number "
-                id="studentNo"
-                required></b-form-input>
-            </b-form-group>
-          </b-col>
 
-          <b-col cols="12" md="6" lg="3">
-            <b-form-group
-              class="studentStatus"
-              label="Student Status"
-              label-for="studentStatus">
-              <b-form-input
-                type="text"
-                v-model="semesters.semester"
-                id="studentStatus"
-                required></b-form-input>
-            </b-form-group>
-          </b-col>
+            <!-- Student Number -->
+            <b-col cols="12" md="6" lg="3">
+              <b-form-group
+                class="studentno"
+                label="Student No."
+                label-for="studentNo">
+                <b-form-input
+                  type="text"
+                  v-model="student_number"
+                  id="studentNo"
+                  @keyup="searchNumber"
+                  :state="state"
+                  placeholder="Search Student Number here..."
+                  ></b-form-input>
+              </b-form-group>
+            </b-col>
+            <!-- Student Number -->
 
-          <b-col cols="12" md="6" lg="3">
-            <b-form-group
-              class="academicstatus"
-              label="Academic Status"
-              label-for="academicStatus">
-              <b-form-input
-                type="text"
-                v-model="semesters.semester"
-                id="academicStatus"
-                required></b-form-input>
-            </b-form-group>
-          </b-col>
+            <!-- fullName -->
+            <b-col cols="12" md="6" lg="6">
+              <b-form-group
+                class="fullname"
+                label="Full Name"
+                label-for="fullName">
+                <b-form-input
+                  type="text"
+                  v-model="full_name"
+                  id="fullName"
+                  required></b-form-input>
+              </b-form-group>
+            </b-col>
+            <!-- fullName -->
 
-          <b-col cols="12" md="6" lg="3">
-            <b-form-group
-              class="fullname"
-              label="Full Name"
-              label-for="fullName">
-              <b-form-input
-                type="text"
-                v-bind:value=" RegStudent.name "
-                id="fullName"
-                required></b-form-input>
-            </b-form-group>
-          </b-col>
-        </b-form-row>
+            <!-- Date Enrolled-->
+            <b-col cols="12" md="6" lg="3">
+              <b-form-group
+                class="dateEnrolled"
+                label="Date Enrolled"
+                label-for="dateEnrolled">
+                <b-form-input
+                  type="date"
+                  v-model="selectedDate"
+                  id="dateEnrolled"
+                  ></b-form-input>
+              </b-form-group>
+            </b-col>
+            <!-- Date Enrolled -->
 
-        <b-form-row>
-          <b-col cols="12" md="6" lg="3">
-            <b-form-group
-              class="course"
-              label="Course"
-              label-for="Course">
-              <b-form-input
-                type="text"
-                v-model="semesters.semester"
-                id="Course"
-                required></b-form-input>
-            </b-form-group>
-          </b-col>
+            <!-- Academic Year -->
+            <b-col cols="12" md="6" lg="3">
+              <b-form-group
+                class="Academic"
+                label="Academic"
+                label-for="Academic">
+                <b-form-select
+                  v-model="selectedAcademic"
+                  id="Academic">
+                  <option value="null" hidden>Select Academic</option>
+                  <option  :value="ay.id" v-for="ay in academicYearOptions" >{{ay.academic_year}}</option>
+                </b-form-select>
+              </b-form-group>
+            </b-col>
+            <!-- Academic Year -->
 
-          <b-col cols="12" md="6" lg="3">
-            <b-form-group
-              class="curriculom"
-              label="Curriculom"
-              label-for="Curriculom">
-              <b-form-input
-                type="text"
-                v-model="semesters.semester"
-                id="Curriculom"
-                required></b-form-input>
-            </b-form-group>
-          </b-col>
+            <!-- Semester  -->
+            <b-col cols="12" md="6" lg="3">
+              <b-form-group
+                class="semester"
+                label="Semester"
+                label-for="Semester">
+                <b-form-select
+                  v-model="selectedSemester"
+                  id="Semester">
+                  <option value="null" hidden>Select Semester</option>
+                  <option  :value="sem.id" v-for="sem in semesterOptions" >{{sem.semester}}</option>
+                </b-form-select>
+              </b-form-group>
+            </b-col>
+            <!-- Semester  -->
 
-        <b-col cols="12" md="6" lg="3">
-          <b-form-group
-            class="yearlevel"
-            label="Year Level"
-            label-for="yearLevel">
-            <b-form-input
-              type="text"
-              v-model="semesters.semester"
-              id="yearLevel"
-              required></b-form-input>
-          </b-form-group>
-        </b-col>
+            <!-- Student Status -->
+            <b-col cols="12" md="6" lg="3">
+              <b-form-group
+                class="studentStatus"
+                label="Student Status"
+                label-for="studentStatus">
+                <b-form-select
+                  v-model="selectedStudentStatus"
+                  id="studentStatus">
+                  <option value="null" hidden>Select Student Status</option>
+                  <option value="New">New</option>
+                  <option value="Old">Old</option>
+                  <option value="Transferee">Transferee</option>
+                </b-form-select>
+              </b-form-group>
+            </b-col>
+            <!-- Student Status -->
 
-        <b-col cols="12" md="6" lg="3">
-          <b-form-group
-            class="dateenrolled"
-            label="Date Enrolled"
-            label-for="dateEnrolled">
-            <b-form-input
-              type="text"
-              v-model="semesters.semester"
-              id="dateEnrolled"
-              required></b-form-input>
-          </b-form-group>
-        </b-col>
-      </b-form-row>
+            <!-- Academic Status -->
+            <b-col cols="12" md="6" lg="3">
+              <b-form-group
+                class="academicstatus"
+                label="Academic Status"
+                label-for="academicStatus">
+                <b-form-select
+                  v-model="selectedAcademicStatus"
+                  id="academicStatus">
+                  <option value="null" hidden>Select Academic Status</option>
+                  <option value="Regular">Regular</option>
+                  <option value="Irregular">Irregular</option>
+                </b-form-select>
+              </b-form-group>
+            </b-col>
+            <!-- Academic Status -->
 
+
+
+          </b-form-row>
+
+          <b-form-row>
+            <!-- Course -->
+            <b-col cols="12" md="6" lg="3">
+              <b-form-group
+                class="course"
+                label="Course"
+                label-for="Course">
+                <b-form-select
+                  v-model="selectedCourse"
+                  id="Course">
+                  <option value="null" hidden>Select Course</option>
+                </b-form-select>
+              </b-form-group>
+            </b-col>
+            <!-- Course -->
+
+            <!-- Curriculum -->
+            <b-col cols="12" md="6" lg="3">
+              <b-form-group
+                class="curriculum"
+                label="Curriculum"
+                label-for="Curriculum">
+                <b-form-select
+                  v-model="selectedCurriculum"
+                  id="Curriculum">
+                  <option value="null" hidden>Select Curriculum</option>
+                </b-form-select>
+              </b-form-group>
+            </b-col>
+            <!-- Curriculum -->
+
+            <!-- yearLevel -->
+            <b-col cols="12" md="6" lg="3">
+              <b-form-group
+                class="yearlevel"
+                label="Year Level"
+                label-for="yearLevel">
+                <b-form-select
+                  v-model="selectedYearLevel"
+                  id="yearLevel">
+                  <option value="null" hidden>Select Year Level</option>
+                </b-form-select>
+              </b-form-group>
+            </b-col>
+            <!-- yearLevel -->
+
+            <!-- enroll button -->
+            <b-col cols="12" md="6" lg="3">
+              <b-button
+                class="mt-4"
+                variant="success"
+                block>
+                Enroll
+              </b-button>
+            </b-col>
+            <!-- enroll button -->
+
+          </b-form-row>
         </b-form>
       </div>
     </div>
@@ -227,6 +298,25 @@
           student_number:null,
         },
 
+        // form models
+        state: null,
+        student_id: null,
+        selectedAcademic: null,
+        selectedSemester: null,
+        selectedStudentStatus: null,
+        selectedAcademicStatus: null,
+        selectedCourse: null,
+        selectedCurriculum: null,
+        selectedYearLevel: null,
+        selectedDate: null,
+        full_name: null,
+
+        // form options
+        academicYearOptions: [],
+        semesterOptions: [],
+
+
+        student_number: null,
         showForm: false,
         alertMessage: "",
         errors: [],
@@ -240,32 +330,67 @@
     mounted () {
       this.test();
       this.getSemesters();
+      this.getAcademicYear();      
+      this.getRegisteredStudents();
     },
 
 
     methods:{
+      // Search student using student number
+      searchNumber:function(){
+        if(this.student_number.length > 11){
+          let data = this.rowData.filter(obj=>obj.student_number == this.student_number);
+          if(data.length > 0){
+            var info = data[0];
+            var suff =  info.suffix_name != null ? info.suffix_name + ",. " : ", "
+            var middle =  info.middle_name != null ? info.middle_name : ""
+            this.full_name = info.last_name + suff + info.first_name + " " + middle;
+            this.student_id = info.id;
+            this.state = true;
+          }else{
+            this.state = false;
+            this.full_name = null;
+            this.student_id = null;
+          }
+        }else{
+          this.state = null;
+          this.full_name = null;
+          this.student_id = null;
+        }
+      }, // end of function searchNumber
+
+      // get all semester
       getSemesters: function(){
         Axios
-          .get('http://localhost/api/v1/subjects', {
+          .get('http://localhost/api/v1/semesters', {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
-            //console.log(response.data.data);
-            this.SubjectcsRowData = response.data;
+            this.semesterOptions = response.data;
           })
           .catch(error => {
-            this.alertMessage = error.response.data.message;
-            this.dismissErrorCountDown = this.dismissSecs;
+            if(error.response.status == 500){
+              this.getSemesters();
+            }
           })
-      },
+      }, // end of function getSemesters
 
-      toggleForm: function(){
-        if(this.showForm){
-          this.showForm = false;
-        } else {
-          this.showForm = true;
-        }
-      },
+      // get all semester
+      getAcademicYear: function(){
+        Axios
+          .get('http://localhost/api/v1/academic_years', {
+            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+          })
+          .then(response => {
+            this.academicYearOptions = response.data;
+          })
+          .catch(error => {
+            if(error.response.status == 500){
+              this.getAcademicYear();
+            }
+          })
+      }, // end of function getSemesters
+
 
       getClassSched: function(){
         Axios
@@ -283,6 +408,20 @@
           })
       },
 
+      // this function will get all student records
+      getRegisteredStudents: function(){
+        Axios
+          .get('http://localhost/api/v1/students',  {
+            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+          })
+          .then(response => {
+            this.rowData = response.data;
+          })
+          .catch(error => {
+            console.log(error.response);
+          })
+      }, // end of function getRegisteredStudents
+
       getRegisteredStudent: function(){
         Axios
           .get('http://localhost/api/v1/students/' + this.RegStudent.id,  {
@@ -296,14 +435,6 @@
           .catch(error => {
             console.log(error.response);
           })
-      },
-
-      toggleForm: function(){
-        if(this.showForm){
-          this.showForm = false;
-        } else {
-          this.showForm = true;
-        }
       },
 
       addSemeter: function(){
@@ -398,15 +529,19 @@
                student_number: '',
              };
         }else {
+          var p = this.$route.params;
+
+            p.suffix_name =  p.suffix_name != null ? p.suffix_name : ""
+            p.middle_name =  p.middle_name != null ? p.middle_name : ""
+
              this.RegStudent = {
                   id: this.$route.params.id,
                   name:
-                    this.$route.params.last_name +" "+
-                    this.$route.params.suffix_name+", "+
-                    this.$route.params.first_name+" "+
-                    this.$route.params.middle_name,
+                    p.last_name + " " + p.suffix_name + ", " + p.first_name + " " + p.middle_name,
+                    // this.$route.params.last_name +" "+this.$route.params.suffix_name+", "+this.$route.params.first_name+" "+this.$route.params.middle_name,
                   student_number: this.$route.params.student_number,
                 };
+                this.student_number = this.$route.params.student_number;
         }
         // console.log(this.$route.params);
       }
