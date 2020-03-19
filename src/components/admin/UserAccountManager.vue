@@ -210,7 +210,7 @@
         :filter="filter">
 
         <template v-slot:cell(active)="row" >
-          <b-form-checkbox switch size="" :checked="row.item.status"  @change="StatusUpdate(row.item, $event.target)">
+          <b-form-checkbox switch size="sm" :checked="row.item.status"  @change="StatusUpdate(row.item, $event.target)">
             <b-badge variant="success" pill v-if="row.item.active">Active</b-badge>
             <b-badge variant="danger"  pill v-else>Inactive</b-badge>
           </b-form-checkbox>
@@ -224,11 +224,6 @@
           <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" class="mr-1">
             <b-icon-pencil/>
           </b-button>
-
-          <b-button variant="danger" size="sm" @click="DeleteModal(row.item, $event.target)" v-b-tooltip.hover title="Delete Room">
-            <b-icon-trash/>
-          </b-button>
-
 
         </template>
       </b-table>
@@ -357,7 +352,7 @@
     <b-form-row>
 
       <!--  Email -->
-      <b-col cols="12" md="6" lg="4">
+      <b-col cols="12" md="6" lg="8">
         <b-form-group
           class="email"
           label="Email"
@@ -385,15 +380,6 @@
         </b-form-group>
       </b-col>
 
-      <b-col cols="12" md="6" lg="4">
-        <b-form-group
-          label="Status">
-          <b-form-select
-          :options="options"
-          v-model="users.active">
-        </b-form-select>
-        </b-form-group>
-      </b-col>
       </b-form-row>
 
       <!-- Modal Footer Template -->

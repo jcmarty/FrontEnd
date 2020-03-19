@@ -786,24 +786,29 @@
 
             for (var i = 0; i < this.items.length; i++) {
               // this.items[i].full_name = this.items[i].last_name;
-              var last_suffix = null;
-              if(this.items[i].suffix_name != null){
 
-              last_suffix = this.items[i].last_name + " " + this.items[i].suffix_name + ", " ;
-              }
-              else {
-                last_suffix = this.items[i].last_name + ", "
-              }
+              var sn, mn = null;
+              sn = this.items[i].suffix_name != null ? " " +this.items[i].suffix_name : '',
+              mn = this.items[i].middle_name != null ? this.items[i].middle_name : '',
 
-              var first_middle = null;
-              if(this.items[i].middle_name != null){
-                first_middle = this.items[i].first_name + " " + this.items[i].middle_name;
-              }
-              else {
-                first_middle = this.items[i].first_name
-              }
-
-              this.items[i].full_name = last_suffix + first_middle;
+              this.items[i].full_name = this.items[i].last_name + sn + ", " + this.items[i].first_name + " " + mn;
+              // if(this.items[i].suffix_name != null){
+              //
+              // last_suffix = this.items[i].last_name + " " + this.items[i].suffix_name + ", " ;
+              // }
+              // else {
+              //   last_suffix = this.items[i].last_name + ", "
+              // }
+              //
+              // var first_middle = null;
+              // if(this.items[i].middle_name != null){
+              //   first_middle = this.items[i].first_name + " " + this.items[i].middle_name;
+              // }
+              // else {
+              //   first_middle = this.items[i].first_name
+              // }
+              //
+              // this.items[i].full_name = last_suffix + first_middle;
 
 
             }
@@ -926,7 +931,7 @@
           })
       },
 
-      
+
       ClearStudentFields: function(){
         this.Students = {
           student_number: null,

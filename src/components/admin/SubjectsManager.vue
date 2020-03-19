@@ -151,10 +151,10 @@
         :filter="filter">
 
         <template v-slot:cell(active)="row" >
-
-          <b-badge variant="success" pill v-if="row.item.active">Active</b-badge>
-          <b-badge variant="danger"  pill v-else>Inactive</b-badge>
-
+          <b-form-checkbox switch size="sm" :checked="row.item.status"  @change="StatusUpdate(row.item, $event.target)">
+            <b-badge variant="success" pill v-if="row.item.active">Active</b-badge>
+            <b-badge variant="danger"  pill v-else>Inactive</b-badge>
+          </b-form-checkbox>
         </template>
 
         <template v-slot:cell(actions)="row">
@@ -232,7 +232,7 @@
 
         <b-form-row>
           <!-- Lecture Units -->
-          <b-col cols="12" md="6" lg="4">
+          <b-col cols="12" md="6" lg="6">
             <b-form-group
               class="lecUnits"
               label="Lecture Units"
@@ -246,7 +246,7 @@
           </b-col>
 
           <!-- Laboratory Units -->
-          <b-col cols="12" md="6" lg="4">
+          <b-col cols="12" md="6" lg="6">
             <b-form-group
               class="labUnits"
               label="Laboratory Units"
@@ -259,14 +259,6 @@
             </b-form-group>
           </b-col>
 
-
-          <!-- Subject Status -->
-          <b-col cols="12" md="6" lg="4">
-            <b-form-group
-              label="Status">
-              <b-form-select v-model="subject.active" :options="options"></b-form-select>
-            </b-form-group>
-          </b-col>
         </b-form-row>
 
         <!-- Modal Footer Template -->
@@ -365,6 +357,13 @@
           })
           .then(response => {
             this.items = response.data;
+            for(var j = 0; j < this.items.length; j++){
+              if(this.items[j].active == 1){
+                this.items[j].status = true
+              }else{
+                this.items[j].status = false;
+              }
+            }
             this.totalRows = this.items.length;
           })
           .catch(error => {
@@ -495,6 +494,46 @@
 
           this.$root.$emit('bv::show::modal', 'deleteSubjModal')
       },
+
+      StatusUpdate: function(item){
+        this.errors = [];
+
+        this.subject = {
+          id: item.id,
+          subject_code: item.subject_code,
+          subject_description: item.subject_description,
+          lec: item.lec,
+          lab: item.lab,
+          units: item.units,
+          active: item.active == 1 ? item.active = 0 : item.active = 1
+        };
+
+
+        Axios
+        .put('http://localhost/api/v1/subjects/' + this.subject.id, this.subject, {
+          headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+        })
+        .then(response => {
+          this.getSubjects();
+          if(item.active == 0){
+            this.alertMessage = "Subject " + item.subject_code + " successfully deactivated."
+          }else{
+              this.alertMessage = "Subject " + item.subject_code + " successfully activated."
+          }
+          this.dismissSuccessCountDown = this.dismissSecs;
+          this.resetform();
+        })
+        .catch(error => {
+          this.alertMessage = error.response.data.message;
+          const values = Object.values(error.response.data.errors);
+          for(const val of values){
+            for(const err of val){
+              this.errors.push(err);
+            }
+          }
+          this.dismissErrorCountDown = this.dismissSecs;
+        });
+      }, // end of Status Update Function
     } // End of Methods
   } // End of Export Default
 </script>

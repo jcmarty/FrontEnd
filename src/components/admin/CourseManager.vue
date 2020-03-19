@@ -2,23 +2,6 @@
   <div> <!-- Start of Main Div -->
     <h1>Manage Course</h1>
     <hr/>
-    <!-- Alert Message -->
-    <b-alert variant="success"
-      :show="dismissSuccessCountDown"
-      @dismissed="dismissSuccessCountDown=0"
-      dismissible fade>
-        {{alertMessage}}
-    </b-alert>
-    <b-alert variant="danger"
-      :show="dismissErrorCountDown"
-      @dismissed="dismissErrorCountDown=0"
-      dismissible fade>
-        <p>{{alertMessage}}</p>
-        <ul>
-          <li v-for="error in errors">{{ error }}</li>
-        </ul>
-    </b-alert>
-    <!-- End of Alert Message -->
 
     <!-- Adding Form Start  -->
 
@@ -137,6 +120,23 @@
         </b-col>
       </b-row>
 
+      <!-- Alert Message -->
+      <b-alert variant="success"
+        :show="dismissSuccessCountDown"
+        @dismissed="dismissSuccessCountDown=0"
+        dismissible fade>
+          {{alertMessage}}
+      </b-alert>
+      <b-alert variant="danger"
+        :show="dismissErrorCountDown"
+        @dismissed="dismissErrorCountDown=0"
+        dismissible fade>
+          <p>{{alertMessage}}</p>
+          <ul>
+            <li v-for="error in errors">{{ error }}</li>
+          </ul>
+      </b-alert>
+
       <!-- Main table element -->
       <b-table
         class="my-3 table-striped"
@@ -157,17 +157,15 @@
         </template>
 
         <template v-slot:cell(active)="row" >
-          <b-badge variant="success" pill v-if="row.item.active">Active</b-badge>
-          <b-badge variant="danger"  pill v-else>Inactive</b-badge>
+          <b-form-checkbox switch size="sm" :checked="row.item.status"  @change="StatusUpdate(row.item, $event.target)">
+            <b-badge variant="success" pill v-if="row.item.active">Active</b-badge>
+            <b-badge variant="danger"  pill v-else>Inactive</b-badge>
+          </b-form-checkbox>
         </template>
 
         <template v-slot:cell(actions)="row">
           <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" class="mr-1">
             <b-icon-pencil/>
-          </b-button>
-
-          <b-button variant="danger" size="sm" @click="DeleteModal(row.item, $event.target)" v-b-tooltip.hover title="Delete Room">
-            <b-icon-trash/>
           </b-button>
         </template>
       </b-table>
@@ -253,7 +251,7 @@
         </b-col>
 
         <!-- Course Major -->
-        <b-col cols="12" md="6" lg="6">
+        <b-col cols="12" md="6" lg="9">
           <b-form-group
             class="coursemajor"
             label="Course Major"
@@ -267,16 +265,6 @@
           </b-form-group>
         </b-col>
 
-        <!-- Course Status -->
-        <b-col cols="12" md="6" lg="3">
-          <b-form-group
-            label="Status">
-            <b-form-select
-              v-model="course.active"
-              :options="options">
-            </b-form-select>
-          </b-form-group>
-        </b-col>
       </b-form-row>
 
         <!-- Modal Footer Template -->
@@ -379,6 +367,13 @@
           })
           .then(response => {
             this.items = response.data;
+            for(var j = 0; j < this.items.length; j++){
+              if(this.items[j].active == 1){
+                this.items[j].status = true
+              }else{
+                this.items[j].status = false;
+              }
+            }
             this.totalRows = this.items.length;
           })
           .catch(error => {
@@ -501,6 +496,43 @@
         },
           this.$root.$emit('bv::show::modal', 'deleteCourseModal')
       },
+
+      StatusUpdate: function(item){
+        this.errors = [];
+        this.course = {
+          id: item.id,
+          course_code: item.course_code,
+          course_desc: item.course_desc,
+          course_major: item.course_major,
+          year_duration: item.year_duration,
+          active: item.active == 1 ? item.active = 0 : item.active = 1
+        },
+
+        Axios
+        .put('http://localhost/api/v1/courses/' + this.course.id, this.course, {
+          headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+        })
+        .then(response => {
+          this.getCourses();
+          if(item.active == 0){
+            this.alertMessage = "Course " + item.course_code + " successfully deactivated."
+          }else{
+              this.alertMessage = "Course " + item.course_code + " successfully activated."
+          }
+          this.dismissSuccessCountDown = this.dismissSecs;
+          this.resetform();
+        })
+        .catch(error => {
+          this.alertMessage = error.response.data.message;
+          const values = Object.values(error.response.data.errors);
+          for(const val of values){
+            for(const err of val){
+              this.errors.push(err);
+            }
+          }
+          this.dismissErrorCountDown = this.dismissSecs;
+        });
+      }, // end of Status Update Function
     } // End of Methods
   } // End of Export Default
 </script>

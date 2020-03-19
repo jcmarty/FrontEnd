@@ -188,7 +188,7 @@
       <!-- horizontal select boxes -->
 
       <!-- SCHEDULES TABLE -->
-      <div class="myTable  px-3 pt-2 my-2 ml-2" style="overflow-x:scroll;">
+      <div class="scheduleTable  px-3 pt-2 my-2 ml-2" style="overflow-x:scroll;">
         <!-- Main table element -->
         <div class="" >
           <b-table
@@ -238,7 +238,7 @@
 </template>
 <style>
 tbody tr td{
-  white-space: nowrap;
+  /* white-space: nowrap; */
 }
 thead tr th{
   /* white-space: nowrap; */
@@ -1016,18 +1016,23 @@ thead tr th{
                         this.CourseRow = null;
                       }else{
                         for (var i = 0; i < response.data.length; i++) {
-                          // console.log(response.data[i].course_code);
-                          this.course_options.push(
-                            {
-                              value: {
-                                id: response.data[i].id,
-                                year: response.data[i].year_duration,
-                                course_code: response.data[i].course_code,
-                                curriculum: response.data[i].curriculum
+                          // var course = respone.data[i]
+                          if (response.data[i].active == 1) {
+                            this.course_options.push(
+                              {
+                                value: {
+                                  id: response.data[i].id,
+                                  year: response.data[i].year_duration,
+                                  course_code: response.data[i].course_code,
+                                  curriculum: response.data[i].curriculum
+                                },
+                                text: response.data[i].course_code
                               },
-                              text: response.data[i].course_code
-                            },
-                          );
+                            );
+                          }
+                          // console.log(response.data[i].course_code);
+
+
                         }
                       }
                     })
