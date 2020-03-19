@@ -21,6 +21,7 @@
                   id="studentNo"
                   @keyup="searchNumber"
                   :state="state"
+                  maxlength=12
                   placeholder="Search Student Number here..."
                   ></b-form-input>
               </b-form-group>
@@ -330,7 +331,7 @@
     mounted () {
       this.test();
       this.getSemesters();
-      this.getAcademicYear();      
+      this.getAcademicYear();
       this.getRegisteredStudents();
     },
 
@@ -338,6 +339,8 @@
     methods:{
       // Search student using student number
       searchNumber:function(){
+        this.student_number = this.student_number.length == 4 ? this.student_number + "-" : this.student_number;
+        this.student_number = this.student_number.length == 7 ? this.student_number + "-" : this.student_number;
         if(this.student_number.length > 11){
           let data = this.rowData.filter(obj=>obj.student_number == this.student_number);
           if(data.length > 0){
