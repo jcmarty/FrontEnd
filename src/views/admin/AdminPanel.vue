@@ -82,10 +82,13 @@
         data() {
             return {};
         },
-        mounted(){
+        beforeMount(){
           if(!this.$store.state.authenticated){
-            this.$router.replace("/login");
+            this.$router.replace("/admin/login");
           }
+        },
+        mounted(){
+
           // get system settings (includes current ay and sem)
           // and store in Vue store
           Axios.get(baseUrl + "settings", {

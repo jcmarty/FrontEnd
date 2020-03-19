@@ -83,6 +83,7 @@
         this.logginIn = true;
         Axios.post(baseUrl + "login", {username: this.input.username, password: this.input.password})
         .then(response => {
+            // console.log(response.data.user)
             //save user details in localStorage
             localStorage.setItem('ccbc_token', JSON.stringify({ user: response.data.user, token: response.data.token}));
             //save token in store
@@ -93,6 +94,7 @@
             this.$store.dispatch('setUser', response.data.user);
             //redirect page to admin page
             this.$router.replace("/admin");
+            // console.log(this.$store.getters.getUser)
         })
         .catch(error => {
           this.logginIn = false;

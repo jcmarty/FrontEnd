@@ -2,7 +2,7 @@
 <div class="col-md-3 left_col">
   <div class="left_col scroll-view">
     <div class="navbar nav_title" style="border: 0;">
-      <router-link tag="a" to="/admin" class="site_title"><i class="fa fa-calendar"></i> <span>{{user.role}}</span></router-link>
+      <router-link tag="a" to="/admin" class="site_title"><i class="fa fa-calendar"></i> <span>{{this.$store.getters.getUser.role}}</span></router-link>
     </div>
 
     <div class="clearfix"></div>
@@ -10,7 +10,7 @@
     <!-- menu profile quick info -->
     <div class="profile clearfix">
       <div class="profile_info">
-        <h2> Welcome {{user.first_name}}</h2>
+        <h2> Welcome {{this.$store.getters.getUser.first_name}}</h2>
       </div>
     </div>
     <!-- /menu profile quick info -->
@@ -88,7 +88,7 @@
     name: "SideMenu",
     data(){
       return {
-        user: this.$store.getters.getUser,
+        // user: this.$store.getters.getUser,
         category: 'index'
       }
     },
@@ -111,7 +111,7 @@
         case 'manageCollegeSchedule':
         case 'manageHighSchoolSchedule':
         case 'manageCollegeSubjects':
-        case 'manageHighSchoolSchedule':
+      //  case 'manageHighSchoolSchedule':
           //return 'manage';
           this.currentCategory = 'manage';
           break;
@@ -138,7 +138,7 @@
         //activity level
         if(priv == 0){
           //check if user has a privilege in this activity
-          if (this.user.activities.some(a => a.activity_id === activity)) {
+          if (this.$store.getters.getUser.activities.some(a => a.activity_id === activity)) {
             return true;
           }
           return false;

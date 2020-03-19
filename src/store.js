@@ -45,7 +45,10 @@ export default new Vuex.Store({
       context.commit('setAuthenticated', false);
       context.commit('setUser', null);
       context.commit('setToken', null);
-      router.replace("/login");
+      // from this
+      // router.replace("/login");
+      // to this
+      router.replace("/admin/login");
     },
     setAuthenticated(context, payload){
       context.commit('setAuthenticated', payload);
