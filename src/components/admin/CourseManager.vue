@@ -322,12 +322,6 @@
         pageOptions: [5, 10, 15, 20, 25],
         filter: null,
 
-        infoModal: {
-          id: 'info-modal',
-          title: '',
-          content: ''
-        },
-
         course: {
           id: null,
           course_code: null,

@@ -2,23 +2,6 @@
   <div> <!-- Start of Main Div -->
 
     <h1>Manage Rooms</h1>
-    <!-- Alert Message  -->
-    <b-alert variant="success"
-      :show="dismissSuccessCountDown"
-      @dismissed="dismissSuccessCountDown=0"
-      dismissible fade>
-        {{alertMessage}}
-    </b-alert>
-    <b-alert variant="danger"
-      :show="dismissErrorCountDown"
-      @dismissed="dismissErrorCountDown=0"
-      dismissible fade>
-        <p>{{alertMessage}}</p>
-        <ul>
-          <li v-for="error in errors">{{ error }}</li>
-        </ul>
-    </b-alert>
-    <!-- End of Alert Message -->
 
     <!-- Adding Form Start  -->
       <div class="addPanel">
@@ -132,6 +115,23 @@
         </b-col>
       </b-row>
 
+      <!-- Alert Message -->
+      <b-alert variant="success"
+        :show="dismissSuccessCountDown"
+        @dismissed="dismissSuccessCountDown=0"
+        dismissible fade>
+          {{alertMessage}}
+      </b-alert>
+      <b-alert variant="danger"
+        :show="dismissErrorCountDown"
+        @dismissed="dismissErrorCountDown=0"
+        dismissible fade>
+          <p>{{alertMessage}}</p>
+          <ul>
+            <li v-for="error in errors">{{ error }}</li>
+          </ul>
+      </b-alert>
+
       <!-- Main table element -->
       <b-table
         class="my-3 table-striped"
@@ -148,18 +148,15 @@
         :filter="filter">
 
         <template v-slot:cell(active)="row" >
-        <b-badge  variant="success" pill v-if="row.item.active">Active</b-badge>
-        <b-badge  variant="danger"  pill v-else>Inactive</b-badge>
-
+          <b-form-checkbox switch size="sm" :checked="row.item.status"  @change="StatusUpdate(row.item, $event.target)">
+            <b-badge variant="success" pill v-if="row.item.active">Active</b-badge>
+            <b-badge variant="danger"  pill v-else>Inactive</b-badge>
+          </b-form-checkbox>
         </template>
 
         <template v-slot:cell(actions)="row">
-          <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" class="mr-1">
+          <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Edit Room">
             <b-icon-pencil/>
-          </b-button>
-
-          <b-button variant="danger" size="sm" @click="DeleteModal(row.item, $event.target)" v-b-tooltip.hover title="Delete Room">
-            <b-icon-trash/>
           </b-button>
         </template>
       </b-table>
@@ -357,6 +354,13 @@
           })
           .then(response => {
             this.items = response.data;
+            for(var j = 0; j < this.items.length; j++){
+              if(this.items[j].active == 1){
+                this.items[j].status = true
+              }else{
+                this.items[j].status = false;
+              }
+            }
             this.totalRows = this.items.length;
           })
           .catch(error => {
@@ -487,6 +491,44 @@
 
           this.$root.$emit('bv::show::modal', 'deleteRoomModal')
       },
+
+      StatusUpdate: function(item){
+        this.errors = [];
+
+        this.room = {
+          id: item.id,
+          room_number: item.room_number,
+          room_name: item.room_name,
+          room_type: item.room_type,
+          room_capacity: item.room_capacity,
+          active: item.active == 1 ? item.active = 0 : item.active = 1
+        },
+
+        Axios
+        .put('http://localhost/api/v1/rooms/' + this.room.id, this.room, {
+          headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+        })
+        .then(response => {
+          this.getRooms();
+          if(item.active == 0){
+            this.alertMessage = "Room " + item.room_number + " successfully deactivated."
+          }else{
+              this.alertMessage = "Room " + item.room_number + " successfully activated."
+          }
+          this.dismissSuccessCountDown = this.dismissSecs;
+          this.resetform();
+        })
+        .catch(error => {
+          this.alertMessage = error.response.data.message;
+          const values = Object.values(error.response.data.errors);
+          for(const val of values){
+            for(const err of val){
+              this.errors.push(err);
+            }
+          }
+          this.dismissErrorCountDown = this.dismissSecs;
+        });
+      }, // end of Status Update Function
     } // End of Methods
   } // End of Export Default
 </script>
