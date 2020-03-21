@@ -2,23 +2,6 @@
   <div> <!-- Start of Main Div -->
     <h1>Manage Strands</h1>
     <hr/>
-    <!-- Alert Message -->
-    <b-alert variant="success"
-      :show="dismissSuccessCountDown"
-      @dismissed="dismissSuccessCountDown=0"
-      dismissible fade>
-        {{alertMessage}}
-    </b-alert>
-    <b-alert variant="danger"
-      :show="dismissErrorCountDown"
-      @dismissed="dismissErrorCountDown=0"
-      dismissible fade>
-        <p>{{alertMessage}}</p>
-        <ul>
-          <li v-for="error in errors">{{ error }}</li>
-        </ul>
-    </b-alert>
-    <!-- End of Alert Message -->
 
     <!-- Adding Form Start  -->
     <div class="addPanelStrand">
@@ -130,6 +113,24 @@
         </b-col>
       </b-row>
 
+      <!-- Alert Message -->
+      <b-alert variant="success"
+        :show="dismissSuccessCountDown"
+        @dismissed="dismissSuccessCountDown=0"
+        dismissible fade>
+          {{alertMessage}}
+      </b-alert>
+      <b-alert variant="danger"
+        :show="dismissErrorCountDown"
+        @dismissed="dismissErrorCountDown=0"
+        dismissible fade>
+          <p>{{alertMessage}}</p>
+          <ul>
+            <li v-for="error in errors">{{ error }}</li>
+          </ul>
+      </b-alert>
+      <!-- End of Alert Message -->
+
       <!-- Main table element -->
       <b-table
         class="my-3 table-striped"
@@ -150,17 +151,15 @@
         </template> -->
 
         <template v-slot:cell(active)="row" >
-          <b-badge variant="success" pill v-if="row.item.active">Active</b-badge>
-          <b-badge variant="danger"  pill v-else>Inactive</b-badge>
+          <b-form-checkbox switch size="sm" :checked="row.item.status"  @change="StatusUpdate(row.item, $event.target)">
+            <b-badge variant="success" pill v-if="row.item.active">Active</b-badge>
+            <b-badge variant="danger"  pill v-else>Inactive</b-badge>
+          </b-form-checkbox>
         </template>
 
         <template v-slot:cell(actions)="row">
-          <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" class="mr-1">
+          <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Edit Strand">
             <b-icon-pencil/>
-          </b-button>
-
-          <b-button variant="danger" size="sm" @click="DeleteModal(row.item, $event.target)" v-b-tooltip.hover title="Delete Room">
-            <b-icon-trash/>
           </b-button>
         </template>
       </b-table>
@@ -224,7 +223,7 @@
 
       <b-form-row>
         <!--  Stracnd Code -->
-        <b-col cols="12" md="6" lg="6">
+        <b-col cols="12" md="6" lg="12">
           <b-form-group
             class="strandcode"
             label="Strand Code"
@@ -238,16 +237,6 @@
           </b-form-group>
         </b-col>
 
-        <!-- Room Status -->
-        <b-col cols="12" md="6" lg="6">
-          <b-form-group
-            label="Status">
-            <b-form-select
-            :options="options"
-            v-model="strand.active">
-          </b-form-select>
-          </b-form-group>
-        </b-col>
       </b-form-row>
 
       <b-form-row>
@@ -499,6 +488,43 @@
 
           this.$root.$emit('bv::show::modal', 'deleteStrandsModal')
       },
+
+      StatusUpdate: function(item){
+        this.errors = [];
+
+        this.strand = {
+          id: item.id,
+          track_id: item.track_id,
+          strand_code: item.strand_code,
+          strand_desc: item.strand_desc,
+          active: item.active == 1 ? item.active = 0 : item.active = 1
+        };
+
+        Axios
+        .put('http://localhost/api/v1/strands/' + this.strand.id, this.strand, {
+          headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+        })
+        .then(response => {
+          this.getStrands();
+          if(item.active == 0){
+            this.alertMessage = "Strand " + item.strand_code + " successfully deactivated."
+          }else{
+              this.alertMessage = "Strand " + item.strand_code + " successfully activated."
+          }
+          this.dismissSuccessCountDown = this.dismissSecs;
+          this.resetform();
+        })
+        .catch(error => {
+          this.alertMessage = error.response.data.message;
+          const values = Object.values(error.response.data.errors);
+          for(const val of values){
+            for(const err of val){
+              this.errors.push(err);
+            }
+          }
+          this.dismissErrorCountDown = this.dismissSecs;
+        });
+      }, // end of Status Update Function
     } // End of Methods
   } // End of Export Default
 </script>
