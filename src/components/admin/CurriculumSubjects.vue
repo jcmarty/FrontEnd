@@ -155,12 +155,8 @@ function myFunction() {
   document.getElementById('currID').click();
 }
 import Axios from "axios";
-import {
-  AgGridVue
-} from "ag-grid-vue";
 import '../../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
 import '../../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
-import CurriculumSubjectActionButton from "./ActionButtons/CurriculumSubjectActionButton.vue";
 export default {
   name: 'CurriculumSubjects',
   data() {
@@ -227,15 +223,13 @@ export default {
       }
     }
   },
-  components: {
-    AgGridVue,
-  },
   beforeMount() {
 
   },
   created() {
     this.curriculum.id = this.$route.params.id;
     this.curriculum_data = this.$route.params.data;
+    this.curriculum.curriculum_title = this.$route.params.curriculum_title
   },
   mounted() {
     this.getCurriculumSubjects();

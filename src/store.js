@@ -15,28 +15,62 @@ export default new Vuex.Store({
       user_activities: []
     },
     // Academic Year Array of Object
-    academic_year : [],
+    academic_years : [],
     // Semester Array of Object
-    semester : [],
+    semesters : [],
     // Courses Array of Object
     courses: [],
+    // Rooms Array of Object
+    rooms: [],
   },
   mutations: {
     setAppSettings(state, payload){
       state.settings = payload;
     },
+
     setAuthenticated(state, payload) {
       state.authenticated = payload;
     },
+
     setUser(state, payload){
       state.user = payload;
     },
+
     setToken(state, payload){
       state.token = payload;
     },
+
+    setAcademicYears(state, payload){
+      state.academic_years = payload;
+    },
+
+    setSemesters(state, payload){
+      state.semesters = payload;
+    },
+
     setCourses(state, payload){
-      state.courses = payload;
-    }
+      var courses = []
+      for (var i = 0; i < payload.length; i++) {
+        if (payload[i].active == 1) {
+          courses.push(
+            {
+              value: {
+                id: payload[i].id,
+                year: payload[i].year_duration,
+                course_code: payload[i].course_code,
+                curriculum: payload[i].curriculum
+              },
+              text: payload[i].course_code
+            },
+          );
+        }
+      }
+      state.courses = courses;
+    }, // end of setCourses
+
+    setRooms(state, payload){
+      state.rooms = payload;
+    }, // end of setRooms
   },
   actions: {
     //TODO: Move login / api request code here?
@@ -61,7 +95,19 @@ export default new Vuex.Store({
     },
     setAppSettings(context, payload){
       context.commit('setAppSettings', payload);
-    }
+    },
+    setAcademicYears(context, payload){
+      context.commit('setAcademicYears', payload);
+    },
+    setSemesters(context, payload){
+      context.commit('setSemesters', payload);
+    },
+    setCourses(context, payload){
+      context.commit('setCourses', payload);
+    },
+    setRooms(context, payload){
+      context.commit('setRooms', payload);
+    },
   },
   getters: {
     getSettings(state){
@@ -76,8 +122,17 @@ export default new Vuex.Store({
     getToken(state){
       return state.token;
     },
-    getCourses(){
+    getAcademicYears(state){
+      return state.academic_years;
+    },
+    getSemesters(state){
+      return state.semesters;
+    },
+    getCourses(state){
       return state.courses;
-    }
+    },
+    getRooms(state){
+      return state.rooms;
+    },
   }
 });

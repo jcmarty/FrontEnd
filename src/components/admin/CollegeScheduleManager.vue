@@ -7,7 +7,7 @@
         <b-form-group class="academicyear" label="" label-for="academicYear">
           <b-form-select id="academicYear" v-model="selectedAcademicYear" @change="">
             <option value="null" hidden>Select Academic Year</option>
-            <option v-for="ay in AyRow" v-bind:value="ay.id">{{ay.academic_year}}</option>
+            <option  :value="ay.id" v-for="ay in academicYearOptions" >{{ay.academic_year}}</option>
           </b-form-select>
         </b-form-group>
       </b-col>
@@ -16,7 +16,7 @@
         <b-form-group class="semester" label="" label-for="Semester">
           <b-form-select id="Semester" v-model="selectedSemester" @change="changeSemester">
             <option value="null" hidden>Select Semester</option>
-            <option v-for="sem in SemRow" v-bind:value="sem.id">{{sem.semester}}</option>
+            <option  :value="sem.id" v-for="sem in semesterOptions" >{{sem.semester}}</option>
           </b-form-select>
         </b-form-group>
       </b-col>
@@ -286,8 +286,8 @@ thead tr th{
                   availabilities : [],
                   time_conflicts: [],
 
-                  selectedAcademicYear:null,
-                  selectedSemester:null,
+                  selectedAcademicYear: this.$store.getters.getSettings.current_ay,
+                  selectedSemester: this.$store.getters.getSettings.current_sem,
                   selectedCourse: null,
                   selectedCurriculum: null,
                   selectedSubject: null,
@@ -300,9 +300,11 @@ thead tr th{
                   selectedTimeStart: null,
                   selectedTimeEnd : null,
 
-                  academic_options: [],
+                  // form options
+                  academicYearOptions: this.$store.getters.getAcademicYears,
+                  semesterOptions: this.$store.getters.getSemesters,
                   year_options: [],
-                  course_options: [],
+                  course_options: this.$store.getters.getCourses,
                   day_options: [],
                   time_start_options: [],
                   time_end_options: [],
@@ -354,16 +356,11 @@ thead tr th{
                 }
             },
 
-            beforeMount() {
+              beforeMount() {
               // this.getClassSchedule();
-              this.getCurrentSetting();
               },
 
               mounted () {
-                this.getAcademicYear();
-                this.getSemester();
-                this.getCourse();
-                this.getRooms();
               },
 
               methods: {
@@ -907,7 +904,7 @@ thead tr th{
                   this.day_options = [];
                   this.selectedDay = null;
                   this.selectedRoom = null;
-                  this.roomRow = this.roomContainer;
+                  this.roomRow = this.$store.getters.getRooms;
                 },
 
                 // gets all curriculum record
@@ -937,108 +934,6 @@ thead tr th{
                       this.selectedDay = null;
                       this.selectedTimeStart = null;
                     // });
-                },
-
-                // get current academic year and
-                getCurrentSetting: function(){
-                  Axios
-                    .get('http://localhost/api/v1/settings', {
-                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-                    })
-                    .then(response => {
-                      Axios
-                        .get('http://localhost/api/v1/academic_years/' + response.data.current_ay, {
-                          headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-                        })
-                        .then(current_ay => {
-                          this.selectedAcademicYear = current_ay.data.id;
-                          this.current_ay = [
-                            { id: current_ay.data.id},
-                            { academic_year: current_ay.data.academic_year},
-                          ];
-                          Axios
-                            .get('http://localhost/api/v1/semesters/' + response.data.current_sem, {
-                              headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-                            })
-                            .then(current_sem => {
-                              this.selectedSemester = current_sem.data.id
-                              this.current_sem = current_sem.data.semester
-                            })
-                            .catch(function (error) {
-                                console.log(error.response.status); console.log(error);
-                            }) // end of get current sem
-                        })
-                        .catch(function (error) {
-                            console.log(error.response.status); console.log(error);
-                        }) // end of get current ay
-                    })
-                    .catch(function (error) {
-                        console.log(error.response.status); console.log(error);
-                    }) // end of get settings
-                },
-
-                // gets all academic year record
-                getAcademicYear: function(){
-                  Axios
-                    .get('http://localhost/api/v1/academic_years', {
-                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-                    })
-                    .then(response => {
-                      this.AyRow = response.data;
-                    })
-                    .catch(function (error) {
-                      console.log(error.response.status); console.log(error);
-                    })
-                },
-
-                // Gets all semester record
-                getSemester: function(){
-                  Axios
-                    .get('http://localhost/api/v1/semesters', {
-                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-                    })
-                    .then(response => {
-                      this.SemRow = response.data;
-                    })
-                    .catch(function (error) {
-                      console.log(error.response.status); console.log(error);
-                    })
-                },
-
-                // Gets all course records
-                getCourse: function(){
-                  Axios
-                    .get('http://localhost/api/v1/courses', {
-                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-                    })
-                    .then(response => {
-                      if( response.data.length == 0){
-                        this.CourseRow = null;
-                      }else{
-                        for (var i = 0; i < response.data.length; i++) {
-                          // var course = respone.data[i]
-                          if (response.data[i].active == 1) {
-                            this.course_options.push(
-                              {
-                                value: {
-                                  id: response.data[i].id,
-                                  year: response.data[i].year_duration,
-                                  course_code: response.data[i].course_code,
-                                  curriculum: response.data[i].curriculum
-                                },
-                                text: response.data[i].course_code
-                              },
-                            );
-                          }
-                          // console.log(response.data[i].course_code);
-
-
-                        }
-                      }
-                    })
-                    .catch(function (error) {
-                      console.log(error.response.status); console.log(error);
-                    }) // end of get all courses
                 },
 
                 // SET YEAR LEVEL BASED ON SELECTED COURSE
@@ -1074,26 +969,6 @@ thead tr th{
                  this.selectedTimeStart = null;
                 },
 
-                // Gets all room records
-                getRooms: function(){
-                  Axios
-                    .get('http://localhost/api/v1/rooms', {
-                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-                    })
-                    .then(response => {
-                      this.day_options = [];
-                      this.time_start_options = []
-
-                      this.selectedTimeStart = null;
-                      this.selectedDay = null;
-                      this.selectedRoom = null;
-                      this.roomContainer = response.data;
-                    })
-                    .catch(function (error) {
-                      console.log(error.response.status);
-                      console.log(error);
-                    })
-                },
 
                 // clears selected values when semester select box has changed
                 changeSemester: function(){

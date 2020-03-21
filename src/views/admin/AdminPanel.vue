@@ -88,16 +88,90 @@
           }
         },
         mounted(){
-
           // get system settings (includes current ay and sem)
           // and store in Vue store
-          Axios.get(baseUrl + "settings", {
-            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-          })
+          this.getSettings();
+          this.getAcademicYears();
+          this.getSemesters();
+          this.getCourses();
+          this.getRooms();
+        },
+
+
+        methods: {
+          // get all settng from db
+          getSettings: function(){
+            Axios.get(baseUrl + "settings", {
+              headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+            })
             .then(response => {
-              this.$store.dispatch('setAppSettings', response.data);
-              console.log(response.data);
-            });
+                this.$store.dispatch('setAppSettings', response.data);
+                // console.log(response.data);
+            }); // end of function getSettings
+          },
+
+          getAcademicYears: function(){
+            Axios.get(baseUrl + "academic_years", {
+              headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+            })
+            .then(response => {
+                this.$store.dispatch('setAcademicYears', response.data);
+            })
+            .catch(error => {
+              console.log(error.response.data.status)
+              if(error.response.data.status == 500){
+                this.getAcademicYears();
+              }
+            })
+          },// end of function getSettings
+
+          // get all semester
+          getSemesters: function(){
+            Axios
+              .get(baseUrl + 'semesters', {
+                headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+              })
+              .then(response => {
+                this.$store.dispatch('setSemesters', response.data);
+              })
+              .catch(error => {
+                if(error.response.status == 500){
+                  this.getSemesters();
+                }
+              })
+          }, // end of function getSemesters
+
+          // get all courses
+          getCourses: function(){
+            Axios
+              .get(baseUrl + 'courses', {
+                headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+              })
+              .then(response => {
+                this.$store.dispatch('setCourses', response.data);
+              })
+              .catch(error => {
+                if(error.response.status == 500){
+                  this.getCourses();
+                }
+              })
+          }, // end of function getCourses
+
+          // get all room records
+          getRooms: function(){
+            Axios
+              .get('http://localhost/api/v1/rooms', {
+                headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+              })
+              .then(response => {
+                this.$store.dispatch('setRooms', response.data);
+              })
+              .catch(error => {
+                if(error.response.status == 500){
+                  this.getRooms();
+                }
+              })
+          },
         },
     }
 </script>
