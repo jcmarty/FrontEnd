@@ -14,9 +14,6 @@
       @dismissed="dismissErrorCountDown=0"
       dismissible fade>
         <p>{{alertMessage}}</p>
-        <ul>
-          <li v-for="error in errors">{{ error }}</li>
-        </ul>
     </b-alert>
     <!-- End of Alert Message -->
 

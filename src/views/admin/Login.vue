@@ -13,6 +13,7 @@
         <!--<p v-bind:class="{alert:hasError, 'alert-danger':hasError}">{{loginMessage}}</p>-->
         <b-alert variant="danger" v-model="hasError">{{loginMessage}}</b-alert>
         <b-form-group
+          class="mb-3"
           label="Username:"
           label-for="username">
             <b-form-input
@@ -23,6 +24,7 @@
             </b-form-input>
         </b-form-group>
         <b-form-group
+          class="mb-4"
           label="Password:"
           label-for="Password">
             <b-form-input
@@ -33,7 +35,12 @@
             </b-form-input>
         </b-form-group>
         <b-form-group>
-            <b-button type="submit" id="LoginBtn" name="loginbtn" v-on:click="login()" variant="primary" v-bind:disabled="logginIn">Login</b-button>
+            <b-button block class="mb-3" type="submit" id="LoginBtn" name="loginbtn" v-on:click="login()" variant="primary" v-bind:disabled="logginIn">Login</b-button>
+            <p>Reset password
+              <strong>
+                  <router-link  to="/reset_password"><a>here.</a></router-link>
+              </strong>
+            </p>
         </b-form-group>
       </div>
     </b-form>

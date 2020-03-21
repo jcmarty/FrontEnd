@@ -34,6 +34,7 @@ import StudentGradesManager from "./components/admin/StudentGradesManager.vue";
 import StudentsReport from "./components/admin/StudentsReport.vue";
 import UserPrivilegeManager from "./components/admin/UserPrivilegeManager.vue";
 import ActivityLogs from "./components/admin/ActivityLogs.vue";
+import ResetPassword from "./components/admin/ResetPassword.vue";
 
 // for testing only
 import RequirementsTesting from "./components/admin/RequirementsTesting.vue";
@@ -346,6 +347,7 @@ export default new Router({
                 setTimeout(() => next(), 2000);
               },
             },
+
           ]
         },
         {
@@ -355,7 +357,16 @@ export default new Router({
             guest: true
           }
 
-        }
+        },
+
+        {
+          path: '/reset_password',
+          name: 'ResetPassword',
+          component: ResetPassword,
+          beforeEnter(to, from, next){
+            setTimeout(() => next(), 1000);
+          },
+        },
       ]
     }
   ]

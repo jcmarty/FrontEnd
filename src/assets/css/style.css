@@ -73,6 +73,9 @@ html, body, #app, #admin{
 /*********************************
  *    Admin Panel / Dashboard    *
  *********************************/
+.nav-md{
+		background: white;
+}
 .nav-sm .container, .nav-md .container{
   min-width: 100%;
 }
@@ -375,8 +378,16 @@ html, body, #app, #admin{
         position: static
     }
 }
+.col-md-3.left_col{
+	background: rgb(27, 86, 243);
+	height: 121%;
+
+}
 .nav-md .container.body .col-md-3.left_col {
-    min-height: 100%;
+		/* background: rgb(27, 86, 243); */
+		/* background: red;
+		height: 100vh; */
+		/* min-height: 100%; */
     width: 230px;
     padding: 0;
     position: absolute;
@@ -385,6 +396,7 @@ html, body, #app, #admin{
     z-index: 1
 }
 .nav-md .container.body .col-md-3.left_col.menu_fixed {
+		/* background: green; */
     height: 100%;
     position: fixed
 }
@@ -530,7 +542,9 @@ body .container.body .right_col {
 }
 body {
     color: #73879C;
-  	background: rgb(27, 86, 243);
+		/* background: white; */
+  	/* background: rgb(27, 86, 243); */
+		/* background: green; */
     font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
     font-size: 13px;
     font-weight: 400;
