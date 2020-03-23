@@ -1,0 +1,455 @@
+<template>
+  <div class="container">
+    <h1>User Priviledges</h1>
+    <hr/>
+    <b-breadcrumb>
+      <b-breadcrumb-item to="/manage/useraccount">User Account</b-breadcrumb-item>
+      <b-breadcrumb-item :active="true">{{ user.name }}</b-breadcrumb-item>
+    </b-breadcrumb>
+    <b-alert variant="success"
+      :show="dismissSuccessCountDown"
+      @dismissed="dismissSuccessCountDown=0"
+      dismissible fade>
+        {{alertMessage}}
+    </b-alert>
+    <b-alert variant="danger"
+      :show="dismissErrorCountDown"
+      @dismissed="dismissErrorCountDown=0"
+      dismissible fade>
+        <p>{{alertMessage}}</p>
+        <ul>
+          <li v-for="error in errors">{{ error }}</li>
+        </ul>
+    </b-alert>
+    <div class="panel panel-primary" >
+      <div class="panel-heading">Grant Priviledges</div>
+      <div class="panel-body">
+
+        <!-- Form Start -->
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Activity</th>
+              <th scope="col">{{label}}</th>
+              <th scope="col">Create</th>
+              <th scope="col">Read</th>
+              <th scope="col">Update</th>
+              <th scope="col">Delete</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <!-- Select Activities -->
+                <b-col cols="12" md="12" lg="12">
+                  <b-form-group class="checkBoxContainer" label="" label-for="">
+                    <!-- <b-form-select class="privCheckbox" id="activities" v-model="selectedActivity.id" :options="activityOptions" @change="changePriv"> -->
+                    <b-form-select class="privCheckbox" id="activities" v-model="selectedItem" @change="changePriv">
+                      <option value="null" hidden>Select activity</option>
+                      <option v-for="item in items" :value="item.privileges">{{item.title}}</option>
+                    </b-form-select>
+                  </b-form-group>
+                </b-col>
+              </td>
+              <td>
+                <!-- Grant All Priv -->
+                <b-col cols="12" md="1" lg="1">
+                  <b-form-group class="checkBoxContainer">
+                    <b-form-checkbox
+                      class="privCheckbox"
+                      name="all_chckbox"
+                      v-model="grant"
+                      value="1"
+                      unchecked-value="0"
+                      :disabled="status"
+                      size="lg"
+                      @change="grantAll"
+                    >
+                    </b-form-checkbox>
+                  </b-form-group>
+                </b-col>
+              </td>
+              <td>
+                <!-- Create Priv -->
+                <b-col cols="12" md="1" lg="1">
+                  <b-form-group class="checkBoxContainer">
+                    <b-form-checkbox
+                      class="privCheckbox"
+                      v-model="selectedActivity.create_priv"
+                      name="create_chckbox"
+                      value="1"
+                      unchecked-value="0"
+                      :disabled="status"
+                      size="lg"
+                    >
+                    </b-form-checkbox>
+                  </b-form-group>
+                </b-col>
+              </td>
+              <td>
+                <!-- Read Priv -->
+                <b-col cols="12" md="1" lg="1">
+                  <b-form-group class="checkBoxContainer">
+                    <b-form-checkbox
+                      class="privCheckbox"
+                      v-model="selectedActivity.read_priv"
+                      name="read_chckbox"
+                      value="1"
+                      unchecked-value="0"
+                      :disabled="status"
+                      size="lg"
+                    >
+                    </b-form-checkbox>
+                  </b-form-group>
+                </b-col>
+              </td>
+              <td>
+                <!-- Update Priv -->
+                <b-col cols="12" md="1" lg="1">
+                  <b-form-group class="checkBoxContainer">
+                    <b-form-checkbox
+                      class="privCheckbox"
+                      v-model="selectedActivity.update_priv"
+                      name="update_chckbox"
+                      value="1"
+                      unchecked-value="0"
+                      :disabled="status"
+                      size="lg"
+                    >
+                    </b-form-checkbox>
+                  </b-form-group>
+                </b-col>
+              </td>
+              <td>
+                <!-- Delete Priv -->
+                <b-col cols="12" md="1" lg="1">
+                  <b-form-group class="checkBoxContainer">
+                    <b-form-checkbox
+                      class="privCheckbox"
+                      v-model="selectedActivity.delete_priv"
+                      name="delete_chckbox"
+                      value="1"
+                      unchecked-value="0"
+                      :disabled="status"
+                      size="lg"
+                    >
+                    </b-form-checkbox>
+                  </b-form-group>
+                </b-col>
+              </td>
+              <td>
+                <b-col md="2" lg="2">
+                  <b-form-group class="checkBoxContainer col-md-12 ">
+                      <b-button @click="grantPrivilege" size="sm" variant="success">Grant</b-button>
+                  </b-form-group>
+                </b-col>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <b-form-row>
+
+        </b-form-row>
+        <!-- Form End -->
+      </div>
+      <!--  end of panel-body -->
+    </div>
+    <!-- end of panel -->
+    <div class="myTable px-4 py-3 my-1">
+      <b-row>
+        <b-col lg="4" class="my-1 ">
+          <b-form-group
+          class="filter"
+          label="Filter"
+          label-for="Filter">
+            <b-input-group  size="sm">
+              <b-form-input
+                v-model="filter"
+                type="search"
+                id="filterInput"
+                placeholder="Type to Search">
+              </b-form-input>
+            </b-input-group>
+          </b-form-group>
+        </b-col>
+      </b-row>
+
+      <b-table
+        class="my-3 table-striped"
+        show-empty
+        responsive
+        head-variant="dark"
+        bordered
+        hover
+        stacked="md"
+        :items="items"
+        :fields="fields"
+        :current-page="currentPage"
+        :per-page="perPage"
+        :filter="filter">
+
+        <template v-slot:cell(privileges.create_priv)="row" >
+          <a v-if="row.item.privileges.create_priv">Authorized</a>
+          <a v-else>Unauthorized</a>
+        </template>
+
+        <template v-slot:cell(privileges.read_priv)="row" >
+          <a v-if="row.item.privileges.read_priv">Authorized</a>
+          <a v-else>Unauthorized</a>
+        </template>
+
+        <template v-slot:cell(privileges.update_priv)="row" >
+          <a v-if="row.item.privileges.update_priv">Authorized</a>
+          <a v-else>Unauthorized</a>
+        </template>
+
+        <template v-slot:cell(privileges.delete_priv)="row" >
+          <a v-if="row.item.privileges.delete_priv">Authorized</a>
+          <a v-else>Unauthorized</a>
+        </template>
+
+
+      </b-table>
+
+      <hr/>
+      <b-row>
+        <b-col sm="4" md="6" lg="1" class="my-1">
+          <b-form-group
+          class="perpageselect"
+          label=""
+          label-for="perPageSelect">
+            <b-form-select
+              v-model="perPage"
+              id="perPageSelect"
+              size="sm"
+              :options="pageOptions"
+            ></b-form-select>
+          </b-form-group>
+        </b-col>
+
+        <b-col sm="4" md="3" class="my-1 col-md-3 offset-md-8">
+          <b-pagination
+            v-model="currentPage"
+            :total-rows="totalRows"
+            :per-page="perPage"
+            align="fill"
+            size="sm"
+            class="my-0"
+          ></b-pagination>
+        </b-col>
+      </b-row>
+    </div>
+      <!-- end of table -->
+  </div>
+</template>   
+
+<style>
+  .panel-body{
+    padding: 10px 20px;
+  }
+
+  thead{
+    text-align: center;
+  }
+
+  .table tbody tr td, .table th {
+    vertical-align: middle;
+  }
+
+</style>
+
+<script>
+  import Axios from "axios";
+
+  export default{
+    name: 'UserPrivilegeManager',
+    data() {
+      return {
+        items: [],
+        fields: [
+          { key: 'title', label: 'Activity', class: 'text-center', sortable: true},
+          { key: 'privileges.create_priv', label: 'Create Privileges', sortable: true, class: 'text-center' },
+          { key: 'privileges.read_priv', label: 'Read Privileges', sortable: true, class: 'text-center' },
+          { key: 'privileges.update_priv', label: 'Update Privileges', sortable: true, class: 'text-center' },
+          { key: 'privileges.delete_priv', label: 'Delete Privileges', sortable: true, class: 'text-center' },
+        ],
+
+        totalRows: 1,
+        currentPage: 1,
+        perPage: 5,
+        pageOptions: [5, 10, 15, 20, 25],
+        filter: null,
+
+        user: {
+          id: null,
+          name: null
+        },
+        status: true,
+        grant: 0,
+        label: 'Select all',
+        selectedItem : null,
+        selectedActivity: {
+          id: null,
+          create_priv: 0,
+          read_priv: 0,
+          update_priv: 0,
+          delete_priv: 0
+         },
+
+         activityOptions: [],
+         alertMessage: "",
+         errors: [],
+         dismissSecs: 7,
+         dismissSuccessCountDown: 0,
+         dismissErrorCountDown: 0,
+      }
+    },
+
+    mounted: function(){
+      this.getUserPriviledge();
+    },
+    created() {
+        this.user = {
+          id: this.$route.params.id,
+          name: this.$route.params.first_name + " " + this.$route.params.last_name
+        }
+    },
+    methods:{
+      // get all user priviledges
+      getUserPriviledge: function(){
+        Axios
+          .get('http://localhost/api/v1/users/' + this.user.id + '/privileges', {
+            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+          })
+          .then(response => {
+            // console.log(response.data);
+            this.items = response.data;
+            this.totalRows = this.items.length;
+            for (var i = 0; i < response.data.length; i++) {
+              // console.log(response.data[i].course_code);
+              this.activityOptions.push(
+                {
+                  value: response.data[i].activity_id,
+                  text: response.data[i].title
+                },
+              );
+            }
+          })
+          .catch(error => {
+            this.alertMessage = error.response.data.message;
+            const values = Object.values(error.response.data.errors);
+            for(const val of values){
+              for(const err of val){
+                this.errors.push(err);
+              }
+            }
+            this.dismissErrorCountDown = this.dismissSecs;
+          });
+      },
+
+      // enables check boxes when theres an activity selected
+      changePriv: function(){
+       this.status = false;
+       // Axios
+       //   .get('http://localhost/api/v1/users/' + this.user.id + '/privileges/' + this.selectedActivity.id, {
+       //     headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+       //   })
+       //   .then(response => {
+       //     // console.log(response.data);
+           this.selectedActivity.id = this.selectedItem.id;
+           this.selectedActivity.create_priv = this.selectedItem.create_priv;
+           this.selectedActivity.read_priv = this.selectedItem.read_priv;
+           this.selectedActivity.update_priv = this.selectedItem.update_priv;
+           this.selectedActivity.delete_priv = this.selectedItem.delete_priv;
+       //
+               if(this.selectedActivity.create_priv == 1 &&
+                 this.selectedActivity.read_priv == 1 &&
+                 this.selectedActivity.update_priv == 1 &&
+                 this.selectedActivity.delete_priv == 1
+               ){
+                 this.label = "Unselect all"
+                 this.grant = 1
+               }
+               else {
+                 this.label = "Select all"
+                 this.grant = 0
+               }
+       //   })
+       //   .catch(error => {
+       //     this.alertMessage = error.response.data.message;
+       //     const values = Object.values(error.response.data.errors);
+       //     for(const val of values){
+       //       for(const err of val){
+       //         this.errors.push(err);
+       //       }
+       //     }
+       //     this.dismissErrorCountDown = this.dismissSecs;
+       //   });
+
+       // console.log(this.items)
+      },
+
+      // Granting user privilege
+      grantPrivilege: function(){
+        this.errors = [];
+        // console.log(this.selectedActivity)
+        if (this.selectedActivity.id == null){
+          this.alertMessage = "Failed to grant user privilege.";
+          this.errors.push("Activity select box is required.");
+          this.dismissErrorCountDown = this.dismissSecs;
+        }else{
+          this.errors = [];
+          console.log(this.selectedActivity)
+          Axios
+            .put('http://localhost/api/v1/privileges/' + this.selectedActivity.id, this.selectedActivity,{
+              headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+            })
+            .then(response => {
+                // console.log(response)
+              this.alertMessage = response.data.message;
+              this.dismissSuccessCountDown = this.dismissSecs;
+              this.selectedItem = null;
+              this.selectedActivity = {
+                 id: null,
+                 create_priv: 0,
+                 read_priv: 0,
+                 update_priv: 0,
+                 delete_priv: 0
+              };
+              this.label = "Select all"
+              this.grant = 0
+              this.status = true;
+              this.getUserPriviledge();
+            })
+            .catch(error => {
+              this.alertMessage = error.response.data.message;
+              const values = Object.values(error.response.data.errors);
+              for(const val of values){
+                for(const err of val){
+                  this.errors.push(err);
+                }
+              }
+              this.dismissErrorCountDown = this.dismissSecs;
+            });
+        }
+      },
+
+      // checked all priv check box
+      grantAll: function() {
+        if (this.grant == 1){
+          this.label = "Select all"
+          this.grant = 0
+        }
+        else if(this.grant == 0){
+          this.label = "Unselect all"
+          this.grant = 1
+        }
+          this.selectedActivity.create_priv = this.grant;
+          this.selectedActivity.read_priv = this.grant;
+          this.selectedActivity.update_priv = this.grant;
+          this.selectedActivity.delete_priv = this.grant;
+      }
+    }
+  }
+</script>
