@@ -708,8 +708,8 @@
   import {AgGridVue} from "ag-grid-vue";
   import Datepicker from 'vuejs-datepicker';
   import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue';
-  import '../../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
-  import '../../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
+  import '../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
+  import '../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
   import InstructorActionButtons from "./ActionButtons/InstructorActionButtons.vue";
   import PreferredSubjectButtons from "./ActionButtons/PreferredSubjectButtons.vue";
 
