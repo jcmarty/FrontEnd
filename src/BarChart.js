@@ -1,60 +1,39 @@
 import { Bar } from 'vue-chartjs';
-import Axios from "axios";
-var d = new Date();
-var n = d.getFullYear();
-
 export default{
   extends: Bar,
-
   data(){
       return{
-
-        items: [],
-
         chartdata: {
-          labels: ["ACT", "BSIT", "BSCS", "HUMS"],
+          labels: ["January", "February", "March", "April", "May", "June", "July"],
 					datasets: [{
-					  label: n + " 1st Semester",
-					  backgroundColor: "rgb(255, 9, 6)",
+					  label: "My First dataset",
+					  backgroundColor: "rgba(38, 185, 154, 0.31)",
 					  borderColor: "rgba(38, 185, 154, 0.7)",
 					  pointBorderColor: "rgba(38, 185, 154, 0.7)",
 					  pointBackgroundColor: "rgba(38, 185, 154, 0.7)",
 					  pointHoverBackgroundColor: "#fff",
 					  pointHoverBorderColor: "rgba(220,220,220,1)",
 					  pointBorderWidth: 1,
-					  data: [100, 50, 25, 70],
-					},
-          {
-					  label: n + " 2nd Semester",
-					  backgroundColor: "rgb(27, 86, 243)",
-					  borderColor: "rgba(38, 185, 154, 0.7)",
-					  pointBorderColor: "rgba(38, 185, 154, 0.7)",
-					  pointBackgroundColor: "rgba(38, 185, 154, 0.7)",
+					  data: [31, 74, 6, 39, 20, 85, 7]
+					}, {
+					  label: "My Second dataset",
+					  backgroundColor: "rgba(3, 88, 106, 0.3)",
+					  borderColor: "rgba(3, 88, 106, 0.70)",
+					  pointBorderColor: "rgba(3, 88, 106, 0.70)",
+					  pointBackgroundColor: "rgba(3, 88, 106, 0.70)",
 					  pointHoverBackgroundColor: "#fff",
-					  pointHoverBorderColor: "rgba(220,220,220,1)",
+					  pointHoverBorderColor: "rgba(151,187,205,1)",
 					  pointBorderWidth: 1,
-					  data: [50, 100, 75, 20],
+					  data: [82, 23, 66, 9, 99, 4, 2]
 					}]
         },
         options: {
-
           responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-        }
+          maintainAspectRatio: false
         }
       }
   },
   mounted(){
     this.renderChart(this.chartdata, this.options);
-  },
-
-  methods:{
-
   }
 }
