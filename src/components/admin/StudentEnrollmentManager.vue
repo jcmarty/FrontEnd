@@ -3,226 +3,237 @@
   <div>
     <h1>Manage Student Enrollment</h1>
     <hr/>
-    <div class="panel panel-primary recordMaintenanceForm" v-if="showStudentForm">
-      <div class="panel-heading">Enroll Student</div>
-      <div class="panel-body">
-
-        <b-form id="Add_Semester_Form">
-          <b-form-row>
-
-            <!-- Student Number -->
-            <b-col cols="12" md="6" lg="3">
-              <b-form-group class="studentno"
-                            label="Student No."
-                            label-for="studentNo">
-                <b-form-input type="text"
-                              v-model="student_number"
-                              id="studentNo"
-                              @keyup="searchNumber"
-                              :state="state"
-                              maxlength=12
-                              placeholder="Search Student Number here..."></b-form-input>
-              </b-form-group>
-            </b-col>
-            <!-- Student Number -->
-
-            <!-- fullName -->
-            <b-col cols="12" md="6" lg="6">
-              <b-form-group class="fullname"
-                            label="Full Name"
-                            label-for="fullName">
-                <b-form-input type="text"
-                              v-model="full_name"
-                              id="fullName"
-                              required></b-form-input>
-              </b-form-group>
-            </b-col>
-            <!-- fullName -->
-
-            <!-- Date Enrolled-->
-            <b-col cols="12" md="6" lg="3">
-              <b-form-group class="dateEnrolled"
-                            label="Date Enrolled"
-                            label-for="dateEnrolled">
-                <b-form-input type="date"
-                              v-model="selectedDate"
-                              id="dateEnrolled"></b-form-input>
-              </b-form-group>
-            </b-col>
-            <!-- Date Enrolled -->
-
-            <!-- Academic Year -->
-            <b-col cols="12" md="6" lg="3">
-              <b-form-group class="Academic"
-                            label="Academic"
-                            label-for="Academic">
-                <b-form-select v-model="selectedAcademic" id="Academic">
-                  <option value="null" hidden>Select Academic</option>
-                  <option :value="ay.id" v-for="ay in academicYearOptions">{{ay.academic_year}}</option>
-                </b-form-select>
-              </b-form-group>
-            </b-col>
-            <!-- Academic Year -->
-
-            <!-- Semester  -->
-            <b-col cols="12" md="6" lg="3">
-              <b-form-group class="semester"
-                            label="Semester"
-                            label-for="Semester">
-                <b-form-select v-model="selectedSemester" id="Semester">
-                  <option value="null" hidden>Select Semester</option>
-                  <option :value="sem.id" v-for="sem in semesterOptions">{{sem.semester}}</option>
-                </b-form-select>
-              </b-form-group>
-            </b-col>
-            <!-- Semester  -->
-
-            <!-- Student Status -->
-            <b-col cols="12" md="6" lg="3">
-              <b-form-group class="studentStatus"
-                            label="Student Status"
-                            label-for="studentStatus">
-                <b-form-select v-model="selectedStudentStatus" id="studentStatus">
-                  <option value="null" hidden>Select Student Status</option>
-                  <option value="New">New</option>
-                  <option value="Old">Old</option>
-                  <option value="Transferee">Transferee</option>
-                </b-form-select>
-              </b-form-group>
-            </b-col>
-            <!-- Student Status -->
-
-            <!-- Academic Status -->
-            <b-col cols="12" md="6" lg="3">
-              <b-form-group class="academicstatus"
-                            label="Academic Status"
-                            label-for="academicStatus">
-                <b-form-select v-model="selectedAcademicStatus" id="academicStatus">
-                  <option value="null" hidden>Select Academic Status</option>
-                  <option value="Regular">Regular</option>
-                  <option value="Irregular">Irregular</option>
-                </b-form-select>
-              </b-form-group>
-            </b-col>
-            <!-- Academic Status -->
-
-          </b-form-row>
-
-          <b-form-row>
-            <!-- Course -->
-            <b-col cols="12" md="6" lg="3">
-              <b-form-group class="course"
-                            label="Course"
-                            label-for="Course">
-                <b-form-select v-model="selectedCourse"
-                               id="Course"
-                               :options="courseOptions"
-                               @change="getCurriculum">
-                  <option value="null" hidden>Select Course</option>
-                </b-form-select>
-              </b-form-group>
-            </b-col>
-            <!-- Course -->
-
-            <!-- Curriculum -->
-            <b-col cols="12" md="6" lg="3">
-              <b-form-group class="curriculum"
-                            label="Curriculum"
-                            label-for="Curriculum">
-                <b-form-select v-model="selectedCurriculum"
-                               id="Curriculum"
-                               @change="setYearLevel">
-                  <option value="null" hidden>Select Curriculum</option>
-                  <option v-for="curriculum in curriculumOptions " v-bind:value="{id: curriculum.id, subjects: curriculum.curriculum_subjects}">{{curriculum.curriculum_title}}</option>
-                </b-form-select>
-              </b-form-group>
-            </b-col>
-            <!-- Curriculum -->
-
-            <!-- yearLevel -->
-            <b-col cols="12" md="6" lg="3">
-              <b-form-group class="yearlevel"
-                            label="Year Level"
-                            label-for="yearLevel">
-                <b-form-select v-model="selectedYearLevel"
-                               id="yearLevel"
-                               :options="yearOptions"
-                               @change="setSubjects">
-                  <option value="null" hidden>Select Year Level</option>
-                </b-form-select>
-              </b-form-group>
-            </b-col>
-            <!-- yearLevel -->
-
-            <!-- enroll button -->
-            <b-col cols="12" md="6" lg="3">
-              <b-button class="mt-4"
-                        variant="success"
-                        @click="showAddSubject"
-                        block>
-                Enroll
-              </b-button>
-            </b-col>
-            <!-- enroll button -->
-
-          </b-form-row>
-        </b-form> <!-- end of b-form -->
-      </div> <!--end of panel body -->
-    </div> <!-- end of panel primary -->
-
-    <!-- Form for Enrolling Subjects -->
-    <div class="conatiner d-flex flex-row justify-content-between" v-if="showSubjectsForm">
-      <!-- Subjects per course -->
-      <div class="myTable w-50 mr-2 p-3 d-flex flex-column ">
-        <p class="h6 text-dark mb-3" align="center" v-if="selectedSemester == 1">{{selectedCourse.course_code}} / {{selectedYearLevel}} / 1st Semester</p>
-        <p class="h6 text-dark mb-3" align="center" v-if="selectedSemester == 2">{{selectedCourse.course_code}} / {{selectedYearLevel}} / 2nd Semester</p>
-        <p class="h6 text-dark mb-3" align="center" v-if="selectedSemester == 3">{{selectedCourse.course_code}} / {{selectedYearLevel}} / Summer</p>
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Subject Code</th>
-              <th scope="col">Description</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- loop subject record here -->
-            <tr :key="index" v-for="subject, index in subjectOptions" class="subjectBtn"
-            >
-              <td width="25%"align="center">{{subject.subject.subject_code}}</td>
-              <td width="65%" align="center">{{subject.subject.subject_description}}</td>
-              <td width="10%" align="center">
-                <b-button size="sm" variant="success":value="subject" @click="addSubject(index,subject)">+</b-button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <div class="container">
+      <!-- start of stepper -->
+      <div class="stepper">
+        <ul>
+          <li>Academic Information</li>
+          <li>Add Subjects</li>
+          <li>Verify & Enroll</li>
+        </ul>
       </div>
-      <!-- subjects to be enrolled -->
-      <div class="myTable w-50 ml-2 p-3 d-flex flex-column ">
-        <p class="h6 text-dark mb-3" align="center">Subject to be Enrolled</p>
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Subject Code</th>
-              <th scope="col">Description</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr :key="index" v-for="addedSubject, index in addedSubjects" class="subjectBtn">
-              <td width="25%" align="center">{{addedSubject.subject.subject_code}}</td>
-              <td width="65%" align="center">{{addedSubject.subject.subject_description}}</td>
-              <td width="10%" align="center">
-                <b-button size="sm" variant="warning" :value="addedSubject" @click="removeSubject(index, addedSubject)">x</b-button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <!-- end of stepper -->
+
+      <!-- start of panel -->
+      <div class="panel panel-primary recordMaintenanceForm" v-if="showStudentForm">
+        <div class="panel-heading">Enroll Student</div>
+        <div class="panel-body">
+
+          <b-form id="enrollStudentForm">
+            <b-form-row>
+
+              <!-- Student Number -->
+              <b-col cols="12" md="6" lg="3">
+                <b-form-group class="studentno"
+                              label="Student No."
+                              label-for="studentNo">
+                  <b-form-input type="text"
+                                v-model="student_number"
+                                id="studentNo"
+                                @keyup="searchNumber"
+                                :state="state"
+                                maxlength=12
+                                placeholder="Search Student Number here..."></b-form-input>
+                </b-form-group>
+              </b-col>
+              <!-- Student Number -->
+
+              <!-- fullName -->
+              <b-col cols="12" md="6" lg="6">
+                <b-form-group class="fullname"
+                              label="Full Name"
+                              label-for="fullName">
+                  <b-form-input type="text"
+                                v-model="full_name"
+                                id="fullName"
+                                required></b-form-input>
+                </b-form-group>
+              </b-col>
+              <!-- fullName -->
+
+              <!-- Date Enrolled-->
+              <b-col cols="12" md="6" lg="3">
+                <b-form-group class="dateEnrolled"
+                              label="Date Enrolled"
+                              label-for="dateEnrolled">
+                  <b-form-input type="date"
+                                v-model="selectedDate"
+                                id="dateEnrolled"></b-form-input>
+                </b-form-group>
+              </b-col>
+              <!-- Date Enrolled -->
+
+              <!-- Academic Year -->
+              <b-col cols="12" md="6" lg="3">
+                <b-form-group class="Academic"
+                              label="Academic"
+                              label-for="Academic">
+                  <b-form-select v-model="selectedAcademic" id="Academic">
+                    <option value="null" hidden>Select Academic</option>
+                    <option :value="{ id: ay.id, academic_year: ay.academic_year}" v-for="ay in academicYearOptions">{{ay.academic_year}}</option>
+                  </b-form-select>
+                </b-form-group>
+              </b-col>
+              <!-- Academic Year -->
+
+              <!-- Semester  -->
+              <b-col cols="12" md="6" lg="3">
+                <b-form-group class="semester"
+                              label="Semester"
+                              label-for="Semester">
+                  <b-form-select v-model="selectedSemester" id="Semester">
+                    <option value="null" hidden>Select Semester</option>
+                    <option :value="{ id: sem.id, semester: sem.semester}" v-for="sem in semesterOptions">{{sem.semester}}</option>
+                  </b-form-select>
+                </b-form-group>
+              </b-col>
+              <!-- Semester  -->
+
+              <!-- Student Status -->
+              <b-col cols="12" md="6" lg="3">
+                <b-form-group class="studentStatus"
+                              label="Student Status"
+                              label-for="studentStatus">
+                  <b-form-select v-model="selectedStudentStatus" id="studentStatus">
+                    <option value="null" hidden>Select Student Status</option>
+                    <option value="New">New</option>
+                    <option value="Old">Old</option>
+                    <option value="Transferee">Transferee</option>
+                  </b-form-select>
+                </b-form-group>
+              </b-col>
+              <!-- Student Status -->
+
+              <!-- Academic Status -->
+              <b-col cols="12" md="6" lg="3">
+                <b-form-group class="academicstatus"
+                              label="Academic Status"
+                              label-for="academicStatus">
+                  <b-form-select v-model="selectedAcademicStatus" id="academicStatus">
+                    <option value="null" hidden>Select Academic Status</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Irregular">Irregular</option>
+                  </b-form-select>
+                </b-form-group>
+              </b-col>
+              <!-- Academic Status -->
+
+            </b-form-row>
+
+            <b-form-row>
+              <!-- Course -->
+              <b-col cols="12" md="6" lg="3">
+                <b-form-group class="course"
+                              label="Course"
+                              label-for="Course">
+                  <b-form-select v-model="selectedCourse"
+                                 id="Course"
+                                 :options="courseOptions"
+                                 @change="getCurriculum">
+                    <option value="null" hidden>Select Course</option>
+                  </b-form-select>
+                </b-form-group>
+              </b-col>
+              <!-- Course -->
+
+              <!-- Curriculum -->
+              <b-col cols="12" md="6" lg="3">
+                <b-form-group class="curriculum"
+                              label="Curriculum"
+                              label-for="Curriculum">
+                  <b-form-select v-model="selectedCurriculum"
+                                 id="Curriculum"
+                                 @change="setYearLevel">
+                    <option value="null" hidden>Select Curriculum</option>
+                    <option v-for="curriculum in curriculumOptions " v-bind:value="{id: curriculum.id, subjects: curriculum.curriculum_subjects}">{{curriculum.curriculum_title}}</option>
+                  </b-form-select>
+                </b-form-group>
+              </b-col>
+              <!-- Curriculum -->
+
+              <!-- yearLevel -->
+              <b-col cols="12" md="6" lg="3">
+                <b-form-group class="yearlevel"
+                              label="Year Level"
+                              label-for="yearLevel">
+                  <b-form-select v-model="selectedYearLevel"
+                                 id="yearLevel"
+                                 :options="yearOptions"
+                                 @change="setSubjects">
+                    <option value="null" hidden>Select Year Level</option>
+                  </b-form-select>
+                </b-form-group>
+              </b-col>
+              <!-- yearLevel -->
+
+              <!-- enroll button -->
+              <b-col cols="12" md="6" lg="3">
+                <b-button class="mt-4"
+                          variant="success"
+                          @click="showAddSubject"
+                          block>
+                  Enroll
+                </b-button>
+              </b-col>
+              <!-- enroll button -->
+
+            </b-form-row>
+          </b-form> <!-- end of b-form -->
+        </div> <!--end of panel body -->
+      </div> <!-- end of panel primary -->
+
+      <!-- Form for Enrolling Subjects -->
+
+      <div class="conatiner d-flex flex-row justify-content-between" v-if="showSubjectsForm">
+        <!-- Subjects per course -->
+        <div class="w-50 mr-2 p-3 d-flex flex-column bg-white shadow-sm">
+          <p class="h6 text-dark mb-3" align="center" v>{{selectedCourse.course_code}} / {{selectedYearLevel}} / {{selectedSemester.semester}}</p>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Subject Code</th>
+                <th scope="col">Description</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- loop subject record here -->
+              <tr :key="index" v-for="subject, index in subjectOptions" class="subjectBtn">
+                <td width="25%"align="center">{{subject.subject.subject_code}}</td>
+                <td width="65%" align="center">{{subject.subject.subject_description}}</td>
+                <td width="10%" align="center">
+                  <b-button size="sm" variant="success":value="subject" @click="addSubject(index,subject)">+</b-button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- subjects to be enrolled -->
+        <div class="w-50 ml-2 p-3 d-flex flex-column bg-white shadow-sm">
+          <p class="h6 text-dark mb-3" align="center">Subject to be Enrolled</p>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Subject Code</th>
+                <th scope="col">Description</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr :key="index" v-for="addedSubject, index in addedSubjects" class="subjectBtn">
+                <td width="25%" align="center">{{addedSubject.subject.subject_code}}</td>
+                <td width="65%" align="center">{{addedSubject.subject.subject_description}}</td>
+                <td width="10%" align="center">
+                  <b-button size="sm" variant="warning" :value="addedSubject" @click="removeSubject(index, addedSubject)">x</b-button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
+      <!-- end of table -->
     </div>
-    <!-- end of table -->
-
+    <!-- end of container -->
   </div>
 
 </template>
@@ -263,8 +274,8 @@
         // form models
         state: null,
         student_id: null,
-        selectedAcademic: this.$store.getters.getSettings.current_ay,
-        selectedSemester: this.$store.getters.getSettings.current_sem,
+        selectedAcademic: this.$store.getters.getCurrentAcademicYear,
+        selectedSemester: this.$store.getters.getCurrentSemester,
         selectedStudentStatus: null,
         selectedAcademicStatus: null,
         selectedCourse: null,

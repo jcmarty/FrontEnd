@@ -2,6 +2,10 @@ import Vue from "vue";
 import Vuex from "vuex";
 import router from "./router";
 import Axios from "axios";
+import axiosRetry from 'axios-retry';
+const baseUrl = "http://localhost/api/v1/";
+
+axiosRetry(Axios, { retries: 2 });
 
 Vue.use(Vuex);
 
@@ -14,13 +18,11 @@ export default new Vuex.Store({
     settings: {
       user_activities: []
     },
-    // Academic Year Array of Object
     academic_years : [],
-    // Semester Array of Object
+    current_academic_year : null,
     semesters : [],
-    // Courses Array of Object
+    current_semester : null,
     courses: [],
-    // Rooms Array of Object
     rooms: [],
   },
   mutations: {
@@ -42,10 +44,24 @@ export default new Vuex.Store({
 
     setAcademicYears(state, payload){
       state.academic_years = payload;
+      // searchs the current academic year and pass it to current ay variable
+      var current_ay = state.academic_years.find(academic_year => academic_year.id == state.settings.current_ay);
+      // pass the current AY
+      state.current_academic_year = {
+        id : current_ay.id,
+        academic_year : current_ay.academic_year
+      };
     },
 
     setSemesters(state, payload){
       state.semesters = payload;
+      // searchs the current semester and pass it to current sem variable
+      var current_sem = state.semesters.find(semester => semester.id == state.settings.current_sem);
+      // pass the current semester
+      state.current_semester = {
+        id : current_sem.id,
+        semester : current_sem.semester
+      };
     },
 
     setCourses(state, payload){
@@ -72,6 +88,7 @@ export default new Vuex.Store({
       state.rooms = payload;
     }, // end of setRooms
   },
+
   actions: {
     //TODO: Move login / api request code here?
     logout(context){
@@ -79,6 +96,11 @@ export default new Vuex.Store({
       context.commit('setAuthenticated', false);
       context.commit('setUser', null);
       context.commit('setToken', null);
+      // context.commit('setAcademicYears', []);
+      // context.commit('setSemesters', null);
+      // context.commit('setCourses', null);
+      // context.commit('setRooms', null);
+
       // from this
       // router.replace("/login");
       // to this
@@ -96,18 +118,75 @@ export default new Vuex.Store({
     setAppSettings(context, payload){
       context.commit('setAppSettings', payload);
     },
-    setAcademicYears(context, payload){
-      context.commit('setAcademicYears', payload);
-    },
-    setSemesters(context, payload){
-      context.commit('setSemesters', payload);
-    },
-    setCourses(context, payload){
-      context.commit('setCourses', payload);
-    },
-    setRooms(context, payload){
-      context.commit('setRooms', payload);
-    },
+
+    // get all academic year
+    loadAcademicYears(context, token){
+      if (token != null) {
+        Axios
+          .get(baseUrl + "academic_years", {
+            headers: {'Authorization': 'Bearer ' + token}
+          })
+          .then(response => {
+            let payload = response.data
+            context.commit('setAcademicYears', payload);
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      }
+    }, // end of loadAcademicYears
+
+    // get all semester
+    loadSemesters(context, token){
+      if (token != null) {
+        Axios
+          .get(baseUrl + "semesters", {
+            headers: {'Authorization': 'Bearer ' + token}
+          })
+          .then(response => {
+            let payload = response.data
+            context.commit('setSemesters', payload);
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      }
+    }, // end of loadSemesters
+
+    // get all courses
+    loadCourses(context, token){
+      if (token != null) {
+        Axios
+          .get(baseUrl + "courses", {
+            headers: {'Authorization': 'Bearer ' + token}
+          })
+          .then(response => {
+            let payload = response.data
+            context.commit('setCourses', payload);
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      }
+    }, // end of loadCourses
+
+    // get all rooms
+    loadRooms(context, token){
+      if (token != null) {
+        Axios
+          .get(baseUrl + "rooms", {
+            headers: {'Authorization': 'Bearer ' + token}
+          })
+          .then(response => {
+            let payload = response.data
+            context.commit('setRooms', payload);
+          })
+          .catch(error => {
+            console.log(error)
+          })
+      }
+    }, // end of loadRooms
+
   },
   getters: {
     getSettings(state){
@@ -125,8 +204,14 @@ export default new Vuex.Store({
     getAcademicYears(state){
       return state.academic_years;
     },
+    getCurrentAcademicYear(state){
+      return state.current_academic_year;
+    },
     getSemesters(state){
       return state.semesters;
+    },
+    getCurrentSemester(state){
+      return state.current_semester;
     },
     getCourses(state){
       return state.courses;
