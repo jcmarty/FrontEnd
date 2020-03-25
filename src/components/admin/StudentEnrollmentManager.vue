@@ -24,7 +24,7 @@
             <b-form-row>
 
               <!-- Student Number -->
-              <b-col cols="12" md="6" lg="3">
+              <b-col cols="12" md="2" lg="2">
                 <b-form-group class="studentno"
                               label="Student No."
                               label-for="studentNo">
@@ -40,7 +40,33 @@
               <!-- Student Number -->
 
               <!-- fullName -->
-              <b-col cols="12" md="6" lg="6">
+              <b-col cols="12" md="2" lg="2">
+                <b-form-group class="fullname"
+                              label="Full Name"
+                              label-for="fullName">
+                  <b-form-input type="text"
+                                v-model="full_name"
+                                id="fullName"
+                                required></b-form-input>
+                </b-form-group>
+              </b-col>
+              <!-- fullName -->
+
+              <!-- fullName -->
+              <b-col cols="12" md="2" lg="2">
+                <b-form-group class="fullname"
+                              label="Full Name"
+                              label-for="fullName">
+                  <b-form-input type="text"
+                                v-model="full_name"
+                                id="fullName"
+                                required></b-form-input>
+                </b-form-group>
+              </b-col>
+              <!-- fullName -->
+
+              <!-- fullName -->
+              <b-col cols="12" md="2" lg="2">
                 <b-form-group class="fullname"
                               label="Full Name"
                               label-for="fullName">
@@ -53,7 +79,7 @@
               <!-- fullName -->
 
               <!-- Date Enrolled-->
-              <b-col cols="12" md="6" lg="3">
+              <b-col cols="12" md="2" lg="2">
                 <b-form-group class="dateEnrolled"
                               label="Date Enrolled"
                               label-for="dateEnrolled">
@@ -166,22 +192,19 @@
                 </b-form-group>
               </b-col>
               <!-- yearLevel -->
-
-              <!-- enroll button -->
-              <b-col cols="12" md="6" lg="3">
-                <b-button class="mt-4 float-right"
-                          variant="primary"
-                          @click="showAddSubject"
-                          block
-                          >
-                  Next <i class="fa fa-arrow-right" aria-hidden="true"/>
-                </b-button>
-              </b-col>
-              <!-- enroll button -->
-
             </b-form-row>
           </b-form> <!-- end of b-form -->
         </div> <!--end of panel body -->
+        <!-- enroll button -->
+
+        <b-button class="mx-4 mb-3 float-right"
+                  variant="primary"
+                  @click="showAddSubject"
+                  v-if="showStudentForm"
+                  >
+          Next <i class="fa fa-arrow-right" aria-hidden="true"/>
+        </b-button>
+        <!-- enroll button -->
       <!-- </div> -->
        <!-- end of panel primary -->
 
