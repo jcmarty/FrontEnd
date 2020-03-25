@@ -5,20 +5,21 @@
     <hr/>
     <div class="container">
       <!-- start of stepper -->
-      <div class="stepper">
+      <!-- <div class="stepper">
         <ul>
           <li>Academic Information</li>
           <li>Add Subjects</li>
           <li>Verify & Enroll</li>
         </ul>
-      </div>
+      </div> -->
       <!-- end of stepper -->
 
       <!-- start of panel -->
-      <div class="panel panel-primary recordMaintenanceForm" v-if="showStudentForm">
+      <!-- <div class="panel panel-primary recordMaintenanceForm" v-if="showStudentForm">
         <div class="panel-heading">Enroll Student</div>
-        <div class="panel-body">
-
+        <div class="panel-body"> -->
+        <div class="mx-4 mb-3 h4 text-dark" v-if="showStudentForm">Enroll Student</div>
+        <div class="mx-4 mb-4 p-3 d-flex bg-white shadow" v-if="showStudentForm">
           <b-form id="enrollStudentForm">
             <b-form-row>
 
@@ -68,7 +69,7 @@
                 <b-form-group class="Academic"
                               label="Academic"
                               label-for="Academic">
-                  <b-form-select v-model="selectedAcademic" id="Academic">
+                  <b-form-select v-model="selectedAcademicYear" id="Academic">
                     <option value="null" hidden>Select Academic</option>
                     <option :value="{ id: ay.id, academic_year: ay.academic_year}" v-for="ay in academicYearOptions">{{ay.academic_year}}</option>
                   </b-form-select>
@@ -168,11 +169,12 @@
 
               <!-- enroll button -->
               <b-col cols="12" md="6" lg="3">
-                <b-button class="mt-4"
-                          variant="success"
+                <b-button class="mt-4 float-right"
+                          variant="primary"
                           @click="showAddSubject"
-                          block>
-                  Enroll
+                          block
+                          >
+                  Next <i class="fa fa-arrow-right" aria-hidden="true"/>
                 </b-button>
               </b-col>
               <!-- enroll button -->
@@ -180,11 +182,12 @@
             </b-form-row>
           </b-form> <!-- end of b-form -->
         </div> <!--end of panel body -->
-      </div> <!-- end of panel primary -->
+      <!-- </div> -->
+       <!-- end of panel primary -->
 
       <!-- Form for Enrolling Subjects -->
-
-      <div class="conatiner d-flex flex-row justify-content-between" v-if="showSubjectsForm">
+      <div class="mx-4 mb-3 h4 text-dark" v-if="showSubjectsForm">Add Subjects</div>
+      <div class="mx-4 mb-4 p-3 d-flex flex-row justify-content-between bg-white shadow" v-if="showSubjectsForm">
         <!-- Subjects per course -->
         <div class="w-50 mr-2 p-3 d-flex flex-column bg-white shadow-sm">
           <p class="h6 text-dark mb-3" align="center" v>{{selectedCourse.course_code}} / {{selectedYearLevel}} / {{selectedSemester.semester}}</p>
@@ -202,12 +205,13 @@
                 <td width="25%"align="center">{{subject.subject.subject_code}}</td>
                 <td width="65%" align="center">{{subject.subject.subject_description}}</td>
                 <td width="10%" align="center">
-                  <b-button size="sm" variant="success":value="subject" @click="addSubject(index,subject)">+</b-button>
+                  <b-button size="sm" variant="success":value="subject" @click="addSubject(index,subject)"><i class="fa fa-plus-circle" aria-hidden="true"/></b-button>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
+
         <!-- subjects to be enrolled -->
         <div class="w-50 ml-2 p-3 d-flex flex-column bg-white shadow-sm">
           <p class="h6 text-dark mb-3" align="center">Subject to be Enrolled</p>
@@ -224,7 +228,7 @@
                 <td width="25%" align="center">{{addedSubject.subject.subject_code}}</td>
                 <td width="65%" align="center">{{addedSubject.subject.subject_description}}</td>
                 <td width="10%" align="center">
-                  <b-button size="sm" variant="warning" :value="addedSubject" @click="removeSubject(index, addedSubject)">x</b-button>
+                  <b-button size="sm" variant="warning" :value="addedSubject" @click="removeSubject(index, addedSubject)"><i class="fa fa-minus-circle" aria-hidden="true"/></b-button>
                 </td>
               </tr>
             </tbody>
@@ -232,6 +236,40 @@
         </div>
       </div>
       <!-- end of table -->
+      <b-button
+                class="mx-4"
+                variant="primary"
+                @click="showEnrollStudet"
+                v-if="showSubjectsForm"
+                ><i class="fa fa-arrow-left" aria-hidden="true"/> Previous
+      </b-button>
+      <b-button
+            class="mx-4 float-right"
+            variant="primary"
+            @click="showVerify"
+            v-if="showSubjectsForm"
+            >Next <i class="fa fa-arrow-right" aria-hidden="true"/>
+      </b-button>
+      <!-- end of subject to be enrolled -->
+
+      <!-- start of verification -->
+      <div class="conatiner" v-if="showVerifyForm">
+        this is verification
+      </div>
+      <b-button
+                class="mx-4"
+                variant="primary"
+                @click="showAddSubject"
+                v-if="showVerifyForm"
+                ><i class="fa fa-arrow-left" aria-hidden="true"/> Previous
+      </b-button>
+      <b-button
+            class="mx-4 float-right"
+            variant="primary"
+            @click="enrollStudent"
+            v-if="showVerifyForm"
+            >Enroll <i class="fa fa-arrow-right" aria-hidden="true"/>
+      </b-button>
     </div>
     <!-- end of container -->
   </div>
@@ -241,6 +279,8 @@
 <script>
 
   import Axios from 'axios'
+  import axiosRetry from 'axios-retry';
+  axiosRetry(Axios, { retries: 3 });
   export default {
     name: 'StudentEnrollmentManager',
     data() {
@@ -274,7 +314,7 @@
         // form models
         state: null,
         student_id: null,
-        selectedAcademic: this.$store.getters.getCurrentAcademicYear,
+        selectedAcademicYear: this.$store.getters.getCurrentAcademicYear,
         selectedSemester: this.$store.getters.getCurrentSemester,
         selectedStudentStatus: null,
         selectedAcademicStatus: null,
@@ -294,9 +334,12 @@
         addedSubjects: [],
 
         student_number: null,
-        displaSelectedSemester: null,
         showStudentForm: true,
         showSubjectsForm: false,
+        showVerifyForm: false,
+        enrollmentData: null,
+
+        // for alert messages
         alertMessage: '',
         errors: [],
         dismissSecs: 7,
@@ -313,54 +356,28 @@
     },
 
     methods: {
-      // show adding for subjects to be enrolled
-      showAddSubject: function(){
-        this.showStudentForm = false;
-        this.showSubjectsForm = true;
-      }, // end of function showAddSubject
+      // enroll student
+      enrollStudent: function(){
+         this.enrollmentData = {
+           academic_year_id	: this.selectedAcademicYear.id,
+           semester_id : this.selectedSemester.id,
+           student_id	: this.student_id,
+           curriculum_id : this.selectedCurriculum.id,
+           course_id : this.selectedCourse.id,
+           year_level : this.selectedYearLevel,
+           active : 1
+         };
 
-      // add selected subject to array addedsubjects
-      addSubject: function(index, subject) {
-        this.addedSubjects.unshift(subject);
-        this.$delete(this.subjectOptions, index);
-      }, // end of function addSubject
-
-      // removes selected subject from addedsubjects and returns it to subject option variable
-      removeSubject: function(index, addedSubject) {
-        this.subjectOptions.push(addedSubject);
-        this.$delete(this.addedSubjects, index);
-        // sort subjects by id
-        this.subjectOptions.sort(function(a, b) {
-          return a.id - b.id;
-        });
-      }, // end of function removeSubject
-
-      // Search student using student number
-      searchNumber: function() {
-        this.student_number = this.student_number.length == 4 ? this.student_number + '-' : this.student_number
-        this.student_number = this.student_number.length == 7 ? this.student_number + '-' : this.student_number
-        if (this.student_number.length > 11) {
-          let data = this.rowData.filter(obj => obj.student_number == this.student_number)
-          if (data.length > 0) {
-            var info = data[0]
-            var suff = info.suffix_name != null ? info.suffix_name + ',. ' : ', '
-            var middle = info.middle_name != null ? info.middle_name : ''
-            this.full_name = info.last_name + suff + info.first_name + ' ' + middle
-            this.student_id = info.id
-            this.state = true
-          } else {
-            this.state = false
-            this.full_name = null
-            this.student_id = null
-          }
-        } else {
-          // sets the state of input box to default
-          this.state = null
-          // set all values to null
-          this.full_name = null
-          this.student_id = null
-        }
-      }, // end of function searchNumber
+         Axios.post('http://localhost/api/v1/enrollments', this.enrollmentData,{
+           headers: { Authorization: 'Bearer ' + this.$store.getters.getToken }
+         })
+           .then(response => {
+             console.log(response.data.message);
+           })
+           .catch(error => {
+             console.log(error.response)
+           })
+      }, // end of function enrollStudent
 
       getClassSched: function() {
         Axios.get('http://localhost/api/v1/class_schedules', {
@@ -398,6 +415,9 @@
         } else {
           this.curriculumOptions = curriculums
         }
+        // clears values in select boxes
+        this.selectedCurriculum = null;
+        this.selectedYearLevel = null;
       }, // end of function getCurriculum
 
       // SET YEAR LEVEL BASED ON SELECTED COURSE
@@ -415,6 +435,8 @@
             { value: '2nd Year', text: '2nd Year' }
           ]
         }
+        // clears values in select boxes
+        this.selectedYearLevel = null;
       }, // end of function setYearLevel
 
       // get all subject based on selected course, curriculum, year level and semester.
@@ -423,19 +445,81 @@
         this.addedSubjects = [];
         this.subjectOptions = [];
         var year = this.selectedYearLevel
-        var sem = this.selectedSemester
+        var semester_id = this.selectedSemester.id
         var subjects = this.selectedCurriculum.subjects
 
         if(subjects.length == 0){
           this.subjectOptions = [];
         }else{
-          for(var i = 0; i < subjects.length; i++){
-            if(subjects[i].year_level == year && subjects[i].semester_id == sem){
-                this.subjectOptions.push(subjects[i]);
+          subjects.forEach(subject => {
+            if(subject.year_level == year && subject.semester_id == semester_id){
+              this.subjectOptions.push(subject);
             }
-          }
+          });
         }
       }, // end of function setSubjects
+
+      // Search student using student number
+      searchNumber: function() {
+        this.student_number = this.student_number.length == 4 ? this.student_number + '-' : this.student_number
+        this.student_number = this.student_number.length == 7 ? this.student_number + '-' : this.student_number
+        if (this.student_number.length > 11) {
+          let data = this.rowData.filter(obj => obj.student_number == this.student_number)
+          if (data.length > 0) {
+            var info = data[0]
+            var suff = info.suffix_name != null ? info.suffix_name + ',. ' : ', '
+            var middle = info.middle_name != null ? info.middle_name : ''
+            this.full_name = info.last_name + suff + info.first_name + ' ' + middle
+            this.student_id = info.id
+            this.state = true
+          } else {
+            this.state = false
+            this.full_name = null
+            this.student_id = null
+          }
+        } else {
+          // sets the state of input box to default
+          this.state = null
+          // set all values to null
+          this.full_name = null
+          this.student_id = null
+        }
+      }, // end of function searchNumber
+
+      // show the final form of enrollment
+      showVerify: function(){
+        this.showSubjectsForm = false;
+        this.showVerifyForm = true
+      }, // end of showVerifyForm
+
+      // show adding for subjects to be enrolled
+      showAddSubject: function(){
+        this.showStudentForm = false;
+        this.showVerifyForm = false
+        this.showSubjectsForm = true;
+      }, // end of function showAddSubject
+
+      // show enroll student form
+      showEnrollStudet: function(){
+        this.showStudentForm = true;
+        this.showSubjectsForm = false;
+      }, // end of showEnrollStudet
+
+      // add selected subject to array addedsubjects
+      addSubject: function(index, subject) {
+        this.addedSubjects.unshift(subject);
+        this.$delete(this.subjectOptions, index);
+      }, // end of function addSubject
+
+      // removes selected subject from addedsubjects and returns it to subject option variable
+      removeSubject: function(index, addedSubject) {
+        this.subjectOptions.push(addedSubject);
+        this.$delete(this.addedSubjects, index);
+        // sort subjects by id
+        this.subjectOptions.sort(function(a, b) {
+          return a.id - b.id;
+        });
+      }, // end of function removeSubject
 
       // start of testing
       test: function() {
