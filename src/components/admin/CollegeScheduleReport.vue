@@ -58,7 +58,7 @@
             <b-form-select id="Curriculum" v-model="selectedCurriculum" @change="changeCurr">
               <option value="null" hidden>Select Curriculum</option>
               <option v-if="Curriculumrow === null" value="null" disabled>No Curriculums</option>
-              <option v-else v-for="curriculum in Curriculumrow " v-bind:value="{id: curriculum.id, subjects: curriculum.curriculum_subjects}">{{curriculum.curriculum_title}}</option>
+              <option v-else v-for="curriculum in Curriculumrow " v-bind:value="{id: curriculum.id, subjects: curriculum.curriculum_subjects, curriculum_title:curriculum.curriculum_title}">{{curriculum.curriculum_title}}</option>
             </b-form-select>
           </b-form-group>
         </b-col>
@@ -111,6 +111,8 @@
             <h5>{{selectedSemester.semester}}</h5>
             <h5 v-if="selectedCourse === null">" "</h5>
             <h5 v-else>{{selectedCourse.course_code}}</h5>
+            <h5 v-if="selectedCurriculum === null">" "</h5>
+            <h5 v-else>{{selectedCurriculum.curriculum_title}} {{selectedYearLevel}}</h5>
         </center>
       </b-form-row>
 
@@ -237,6 +239,8 @@
 
     mounted () {
       this.getFilteredClassSchedule();
+
+
     }, // End of Mounted
 
     methods:{
@@ -256,7 +260,7 @@
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
-            // console.log(response.data);
+
             this.items = response.data;
             this.totalRows = this.items.length;
           })
@@ -314,6 +318,7 @@
 
       // SET YEAR LEVEL BASED ON SELECTED COURSE
       changeCurr: function(){
+        console.log(this.selectedCurriculum);
         if(this.selectedCourse.year == "4"){
           this.year_options = [
             { value: '1st Year', text: '1st Year' },
