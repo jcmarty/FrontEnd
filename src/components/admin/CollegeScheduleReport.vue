@@ -109,6 +109,8 @@
           <center>
             <h5>SY ({{selectedAcademicYear.academic_year}})</h5>
             <h5>{{selectedSemester.semester}}</h5>
+            <h5 v-if="selectedCourse === null">" "</h5>
+            <h5 v-else>{{selectedCourse.course_code}}</h5>
         </center>
       </b-form-row>
 
