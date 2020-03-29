@@ -14,6 +14,9 @@
       @dismissed="dismissErrorCountDown=0"
       dismissible fade>
         <p>{{alertMessage}}</p>
+        <ul>
+          <li v-for="error in errors">{{ error }}</li>
+        </ul>
     </b-alert>
     <!-- End of Alert Message -->
 
@@ -23,9 +26,10 @@
         <div class="panel-heading">Add Subject</div>
         <div class="panel-body">
           <b-form id="Add_College_Subject_Form">
+            <!-- First Row -->
             <b-form-row>
                 <!-- Suject Code -->
-              <b-col cols="12" md="6" lg="12">
+              <b-col cols="12" md="6" lg="3">
                 <b-form-group
                   class="subjectcode"
                   label="Subject Code"
@@ -37,24 +41,47 @@
                     required></b-form-input>
                 </b-form-group>
               </b-col>
-            </b-form-row>
+              <!-- Subject Code -->
 
-          <b-form-row>
+              <!--  Subject title -->
+              <b-col cols="12" md="6" lg="9">
+                <b-form-group
+                  class="subject_title"
+                  label="Subject Title"
+                  label-for="subjectTitle">
+                  <b-form-input
+                    type="text"
+                    v-model="subject.subject_title"
+                    id="subjectTitle"
+                    required></b-form-input>
+                </b-form-group>
+              </b-col>
+              <!-- Subject title -->
+            </b-form-row>
+            <!-- First Row -->
+
+            <!-- Second Row -->
+            <b-form-row>
               <!--  Subject Description -->
               <b-col cols="12" md="6" lg="12">
                 <b-form-group
                   class="subjectdesc"
                   label="Subject Description"
                   label-for="subjDesc">
-                  <b-form-input
+                  <b-form-textarea
                     type="text"
                     v-model="subject.subject_description"
                     id="subjDesc"
-                    required></b-form-input>
+                    rows="3"
+                    max-rows="8"
+                    required></b-form-textarea>
                 </b-form-group>
               </b-col>
+              <!-- Subject Description -->
             </b-form-row>
+            <!-- Second Row -->
 
+            <!-- Third Row -->
             <b-form-row>
               <!-- Lecture Units -->
               <b-col cols="12" md="6" lg="6">
@@ -69,6 +96,8 @@
                     required></b-form-input>
                 </b-form-group>
               </b-col>
+              <!-- Lecture Units -->
+
 
               <!-- Laboratory Units -->
               <b-col cols="12" md="6" lg="6">
@@ -83,7 +112,15 @@
                     required></b-form-input>
                 </b-form-group>
               </b-col>
+              <!-- Laboratory Units -->
 
+            </b-form-row>
+            <!-- Third Row -->
+
+            <b-form-row>
+              <b-col cols="12" md="12" lg="12">
+                <hr/>
+              </b-col>
             </b-form-row>
 
             <!-- Form Buttons -->
@@ -99,6 +136,7 @@
                 </b-button>
               </b-col>
             </b-form-row>
+            <!-- Form Buttons -->
 
           </b-form> <!-- End of b-form  -->
         </div> <!-- End of Panel Body  -->
@@ -146,6 +184,12 @@
         :current-page="currentPage"
         :per-page="perPage"
         :filter="filter">
+
+        <template v-slot:cell(details)="row">
+          <b-button variant="info" size="sm"  @click="showDetails(row.item, row.index, $event.target)" class="mr-1">
+            <i class="fa fa-eye text-light" aria-hidden="true"/> View
+          </b-button>
+        </template>
 
         <template v-slot:cell(active)="row" >
           <b-form-checkbox switch size="sm" :checked="row.item.status"  @change="StatusUpdate(row.item, $event.target)">
@@ -196,67 +240,98 @@
       <!-- end of table -->
 
     <!-- Start Of Edit Modal -->
-    <b-modal id="editSubjModal" ref="editSubjModal" title=" Edit Subject" size="md" no-close-on-backdrop>
-        <b-form-row>
+    <b-modal id="editSubjModal" ref="editSubjModal" title=" Edit Subject" size="lg" no-close-on-backdrop>
+      <!-- First Row -->
+      <b-form-row>
+          <!-- Suject Code -->
+        <b-col cols="12" md="6" lg="3">
+          <b-form-group
+            class="subjectcode"
+            label="Subject Code"
+            label-for="subjCode">
+            <b-form-input
+              type="text"
+              v-model="subject.subject_code"
+              id="subjCode"
+              required></b-form-input>
+          </b-form-group>
+        </b-col>
         <!-- Subject Code -->
-          <b-col cols="12" md="6" lg="6">
-            <b-form-group
-              class="subjectcode"
-              label="Subject Code"
-              label-for="subjCode">
-              <b-form-input
-                type="text"
-                v-model="subject.subject_code"
-                id="subjCode">
-              </b-form-input>
-            </b-form-group>
-          </b-col>
 
-          <!--  Subject Description -->
-          <b-col cols="12" md="6" lg="6">
-            <b-form-group
-              class="subjectdesc"
-              label="Subject Description"
-              label-for="subjDesc">
-              <b-form-input
-                type="text"
-                v-model="subject.subject_description"
-                id="subjDesc">
-              </b-form-input>
-            </b-form-group>
-          </b-col>
-        </b-form-row>
+        <!--  Subject title -->
+        <b-col cols="12" md="6" lg="9">
+          <b-form-group
+            class="subject_title"
+            label="Subject Title"
+            label-for="subjectTitle">
+            <b-form-input
+              type="text"
+              v-model="subject.subject_title"
+              id="subjectTitle"
+              required></b-form-input>
+          </b-form-group>
+        </b-col>
+        <!-- Subject title -->
+      </b-form-row>
+      <!-- First Row -->
 
-        <b-form-row>
-          <!-- Lecture Units -->
-          <b-col cols="12" md="6" lg="6">
-            <b-form-group
-              class="lecUnits"
-              label="Lecture Units"
-              label-for="lec">
-              <b-form-input
-                type="number"
-                v-model="subject.lec"
-                id="lec">
-              </b-form-input>
-            </b-form-group>
-          </b-col>
+      <!-- Second Row -->
+      <b-form-row>
+        <!--  Subject Description -->
+        <b-col cols="12" md="6" lg="12">
+          <b-form-group
+            class="subjectdesc"
+            label="Subject Description"
+            label-for="subjDesc">
+            <b-form-textarea
+              type="text"
+              v-model="subject.subject_description"
+              id="subjDesc"
+              rows="3"
+              max-rows="8"
+              required></b-form-textarea>
+          </b-form-group>
+        </b-col>
+        <!-- Subject Description -->
+      </b-form-row>
+      <!-- Second Row -->
 
-          <!-- Laboratory Units -->
-          <b-col cols="12" md="6" lg="6">
-            <b-form-group
-              class="labUnits"
-              label="Laboratory Units"
-              label-for="lab">
-              <b-form-input
-                type="number"
-                v-model="subject.lab"
-                id="lab">
-              </b-form-input>
-            </b-form-group>
-          </b-col>
+      <!-- Third Row -->
+      <b-form-row>
+        <!-- Lecture Units -->
+        <b-col cols="12" md="6" lg="6">
+          <b-form-group
+            class="lecUnits"
+            label="Lecture Units"
+            label-for="lec">
+            <b-form-input
+              type="number"
+              v-model="subject.lec"
+              id="lec"
+              required></b-form-input>
+          </b-form-group>
+        </b-col>
+        <!-- Lecture Units -->
 
-        </b-form-row>
+
+        <!-- Laboratory Units -->
+        <b-col cols="12" md="6" lg="6">
+          <b-form-group
+            class="labUnits"
+            label="Laboratory Units"
+            label-for="lab">
+            <b-form-input
+              type="number"
+              v-model="subject.lab"
+              id="lab"
+              required></b-form-input>
+          </b-form-group>
+        </b-col>
+        <!-- Laboratory Units -->
+
+      </b-form-row>
+      <!-- Third Row -->
+
 
         <!-- Modal Footer Template -->
         <template v-slot:modal-footer="{ cancel, ok }">
@@ -289,6 +364,43 @@
       </template>
     </b-modal> <!-- End of delete Modal -->
 
+    <b-modal id="showDetailModal" ref="showDetailModal" title="Subject Details" size="lg">
+      <table class="table table-hover table-bordered">
+          <tr>
+            <th width="35%">Subject Code</th>
+            <td>{{this.subject.subject_code}}</td>
+          </tr>
+          <tr>
+            <th width="35%">Subject Title</th>
+            <td>{{this.subject.subject_title}}</td>
+          </tr>
+          <tr>
+            <th width="35%">Subject Description</th>
+            <td>{{this.subject.subject_description}}</td>
+          </tr>
+          <tr>
+            <th width="35%">Lecture</th>
+            <td>{{this.subject.lec}}</td>
+          </tr>
+          <tr>
+            <th width="35%">Laboratory</th>
+            <td>{{this.subject.lab}}</td>
+          </tr>
+          <tr>
+            <th width="35%">Total Units</th>
+            <td>{{this.subject.units}}</td>
+          </tr>
+      </table>
+
+      <template v-slot:modal-footer="{ cancel }">
+        <!-- Emulate built in modal footer ok and cancel button actions -->
+        <b-col>
+          <b-button class="float-right" variant="secondary" @click="$bvModal.hide('showDetailModal')">
+            Close
+          </b-button>
+        </b-col>
+      </template>
+    </b-modal> <!-- End of show detail Modal -->
   </div> <!-- End of Main Div -->
 </template>   <!-- End of Template -->
 
@@ -302,10 +414,11 @@
         fields: [
 
           { key: 'subject_code', label: 'Subject Code', sortable: true, class: 'text-center' },
-          { key: 'subject_description', label: 'Subject Description', sortable: true, class: 'text-center' },
-          { key: 'lec', label: 'Lec units', sortable: true, class: 'text-center' },
-          { key: 'lab', label: 'Lab Unit', sortable: true, class: 'text-center' },
-          { key: 'units', label: 'Units', sortable: true, class: 'text-center' },
+          { key: 'subject_title', label: 'Subject Title', sortable: true, class: 'text-center' },
+          { key: 'details', label: 'Details' , class: 'text-center' },
+          // { key: 'lec', label: 'Lec units', sortable: true, class: 'text-center' },
+          // { key: 'lab', label: 'Lab Unit', sortable: true, class: 'text-center' },
+          // { key: 'units', label: 'Units', sortable: true, class: 'text-center' },
           { key: 'active', label: 'Active', sortable: true, class: 'text-center' },
           { key: 'actions', label: 'Actions' , class: 'text-center' }
         ],
@@ -319,6 +432,7 @@
         subject: {
           id: null,
           subject_code: null,
+          subject_title: null,
           subject_description: null,
           lec: 0,
           lab: 0,
@@ -465,11 +579,26 @@
         };
       }, // End of Reset Form Function
 
+      showDetails: function(item, index){
+        this.subject = {
+          id: item.id,
+          subject_code: item.subject_code,
+          subject_title: item.subject_title,
+          subject_description: item.subject_description,
+          lec: item.lec,
+          lab: item.lab,
+          units: item.units,
+          active: item.active
+        };
+        this.$root.$emit('bv::show::modal', 'showDetailModal')
+      },
+
       EditModal: function(item, index) {
 
         this.subject = {
           id: item.id,
           subject_code: item.subject_code,
+          subject_title: item.subject_title,
           subject_description: item.subject_description,
           lec: item.lec,
           lab: item.lab,
@@ -536,13 +665,12 @@
 </script>
 
 <style>
+
   .addPanelSubject{
-    width: 35%;
-    position: relative;
-    left: 335px;
+    width: 70%;
+    margin: 0 auto;
+    /* position: relative;
+    left: 335px; */
   }
-
-
-
 
 </style>
