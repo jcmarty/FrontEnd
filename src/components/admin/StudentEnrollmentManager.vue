@@ -4,29 +4,20 @@
     <h1>Manage Student Enrollment</h1>
     <hr/>
     <div class="container">
-      <!-- start of stepper -->
-      <!-- <div class="stepper">
-        <ul>
-          <li>Academic Information</li>
-          <li>Add Subjects</li>
-          <li>Verify & Enroll</li>
-        </ul>
-      </div> -->
-      <!-- end of stepper -->
 
-      <!-- start of panel -->
-      <!-- <div class="panel panel-primary recordMaintenanceForm" v-if="showStudentForm">
-        <div class="panel-heading">Enroll Student</div>
-        <div class="panel-body"> -->
-        <div class="mx-4 mb-3 h4 text-dark" v-if="showStudentForm">Enroll Student</div>
-        <div class="mx-4 mb-4 p-3 d-flex bg-white shadow" v-if="showStudentForm">
-          <b-form id="enrollStudentForm">
+      <!-- Tabs with card integration -->
+<b-card no-body class="shadow">
+  <b-tabs v-model="tabIndex" card justified>
+    <b-tab class="px-4" title="Academic Information">
+        <!-- <div class="mx-4 mb-3 h4 text-dark" v-if="showStudentForm">Enroll Student</div> -->
+        <div class="pt-3" v-if="showStudentForm">
+          <!-- <b-form id="enrollStudentForm"> -->
             <b-form-row>
 
               <!-- Student Number -->
-              <b-col cols="12" md="2" lg="2">
+              <b-col cols="12" md="3" lg="3">
                 <b-form-group class="studentno"
-                              label="Student No."
+                              label="Student Number"
                               label-for="studentNo">
                   <b-form-input type="text"
                                 v-model="student_number"
@@ -34,13 +25,13 @@
                                 @keyup="searchNumber"
                                 :state="state"
                                 maxlength=12
-                                placeholder="Search Student Number here..."></b-form-input>
+                                placeholder="Student Number here..."></b-form-input>
                 </b-form-group>
               </b-col>
               <!-- Student Number -->
 
               <!-- fullName -->
-              <b-col cols="12" md="2" lg="2">
+              <b-col cols="12" md="3" lg="3">
                 <b-form-group class="fullname"
                               label="Full Name"
                               label-for="fullName">
@@ -52,34 +43,23 @@
               </b-col>
               <!-- fullName -->
 
-              <!-- fullName -->
-              <b-col cols="12" md="2" lg="2">
-                <b-form-group class="fullname"
-                              label="Full Name"
-                              label-for="fullName">
+              <!-- address -->
+              <b-col cols="12" md="3" lg="3">
+                <b-form-group class="address"
+                              label="Address"
+                              label-for="address">
                   <b-form-input type="text"
-                                v-model="full_name"
-                                id="fullName"
+                                v-model="address"
+                                id="address"
                                 required></b-form-input>
                 </b-form-group>
               </b-col>
-              <!-- fullName -->
+              <!-- address -->
 
-              <!-- fullName -->
-              <b-col cols="12" md="2" lg="2">
-                <b-form-group class="fullname"
-                              label="Full Name"
-                              label-for="fullName">
-                  <b-form-input type="text"
-                                v-model="full_name"
-                                id="fullName"
-                                required></b-form-input>
-                </b-form-group>
-              </b-col>
-              <!-- fullName -->
+
 
               <!-- Date Enrolled-->
-              <b-col cols="12" md="2" lg="2">
+              <b-col cols="12" md="2" lg="3">
                 <b-form-group class="dateEnrolled"
                               label="Date Enrolled"
                               label-for="dateEnrolled">
@@ -149,7 +129,7 @@
 
             <b-form-row>
               <!-- Course -->
-              <b-col cols="12" md="6" lg="3">
+              <b-col cols="12" md="6" lg="6">
                 <b-form-group class="course"
                               label="Course"
                               label-for="Course">
@@ -193,20 +173,36 @@
               </b-col>
               <!-- yearLevel -->
             </b-form-row>
-          </b-form> <!-- end of b-form -->
+          <!-- </b-form> -->
+           <!-- end of b-form -->
         </div> <!--end of panel body -->
         <!-- enroll button -->
 
-        <b-button class="mx-4 mb-3 float-right"
+        <!-- <b-button class="mx-4 mb-3 float-right"
                   variant="primary"
                   @click="showAddSubject"
                   v-if="showStudentForm"
                   >
           Next <i class="fa fa-arrow-right" aria-hidden="true"/>
-        </b-button>
+        </b-button> -->
         <!-- enroll button -->
-      <!-- </div> -->
-       <!-- end of panel primary -->
+
+    </b-tab>
+    <b-tab class="" title="Edit profile">
+      <b-card>I'm the card in tab</b-card>
+    </b-tab>
+    <b-tab title="Premium Plan">Sibzamini!</b-tab>
+    <b-tab title="Info">I'm the last tab</b-tab>
+  </b-tabs>
+  <div class="pb-3 px-4">
+    <hr/>
+      <b-button variant="primary" @click="tabIndex--">Previous</b-button>
+      <b-button variant="primary" class="float-right" @click="tabIndex++">Next</b-button>
+
+  </div>
+</b-card>
+
+
 
       <!-- Form for Enrolling Subjects -->
       <div class="mx-4 mb-3 h4 text-dark" v-if="showSubjectsForm">Add Subjects</div>
@@ -335,6 +331,7 @@
         },
 
         // form models
+        tabIndex: 0,
         state: null,
         student_id: null,
         selectedAcademicYear: this.$store.getters.getCurrentAcademicYear,
@@ -346,6 +343,7 @@
         selectedYearLevel: null,
         selectedDate: null,
         full_name: null,
+        address: "",
 
         // form options
         academicYearOptions: this.$store.getters.getAcademicYears,
@@ -376,6 +374,7 @@
       // this.getSemesters();
       // this.getAcademicYear();
       this.getRegisteredStudents()
+      console.log(this.$store.getters.getCourses)
     },
 
     methods: {
@@ -493,6 +492,7 @@
             var suff = info.suffix_name != null ? info.suffix_name + ',. ' : ', '
             var middle = info.middle_name != null ? info.middle_name : ''
             this.full_name = info.last_name + suff + info.first_name + ' ' + middle
+            this.address = info.address
             this.student_id = info.id
             this.state = true
           } else {

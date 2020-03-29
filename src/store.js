@@ -75,7 +75,7 @@ export default new Vuex.Store({
                 course_code: payload[i].course_code,
                 curriculum: payload[i].curriculum
               },
-              text: payload[i].course_code
+              text: payload[i].course_code + " - " + payload[i].course_desc
             },
           );
         }
