@@ -4,14 +4,12 @@
     <h1>Manage Student Enrollment</h1>
     <hr/>
     <div class="container">
-
-      <!-- Tabs with card integration -->
-<b-card no-body class="shadow">
-  <b-tabs v-model="tabIndex" card justified>
-    <b-tab class="px-4" title="Academic Information">
-        <!-- <div class="mx-4 mb-3 h4 text-dark" v-if="showStudentForm">Enroll Student</div> -->
+      <div class="" v-if="loadOverlay">
+        <b-spinner variant="primary"></b-spinner>
+      </div>
+        <div class="mx-4 mb-3 h4 text-dark" v-if="showStudentForm">Enroll Student</div>
         <div class="pt-3" v-if="showStudentForm">
-          <!-- <b-form id="enrollStudentForm"> -->
+
             <b-form-row>
 
               <!-- Student Number -->
@@ -23,9 +21,14 @@
                                 v-model="student_number"
                                 id="studentNo"
                                 @keyup="searchNumber"
-                                :state="state"
+                                :state="student_numberState"
                                 maxlength=12
-                                placeholder="Student Number here..."></b-form-input>
+                                aria-describedby="student_number-feedback">
+                                placeholder="Student Number here...">
+                  </b-form-input>
+                  <b-form-invalid-feedback id="student_number-feedback">
+                    {{studentNumberMessage}}
+                  </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <!-- Student Number -->
@@ -38,7 +41,7 @@
                   <b-form-input type="text"
                                 v-model="full_name"
                                 id="fullName"
-                                required></b-form-input>
+                                disabled></b-form-input>
                 </b-form-group>
               </b-col>
               <!-- fullName -->
@@ -51,7 +54,7 @@
                   <b-form-input type="text"
                                 v-model="address"
                                 id="address"
-                                required></b-form-input>
+                                disabled></b-form-input>
                 </b-form-group>
               </b-col>
               <!-- address -->
@@ -65,7 +68,13 @@
                               label-for="dateEnrolled">
                   <b-form-input type="date"
                                 v-model="selectedDate"
-                                id="dateEnrolled"></b-form-input>
+                                id="dateEnrolled"
+                                :state="dateEnrolledState"
+                                aria-describedby="dateEnrolled-feedback">
+                  </b-form-input>
+                  <b-form-invalid-feedback id="dateEnrolled-feedback">
+                    Date enrolled is required.
+                  </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <!-- Date Enrolled -->
@@ -101,12 +110,19 @@
                 <b-form-group class="studentStatus"
                               label="Student Status"
                               label-for="studentStatus">
-                  <b-form-select v-model="selectedStudentStatus" id="studentStatus">
+                  <b-form-select
+                    v-model="selectedStudentStatus"
+                    id="studentStatus"
+                    :state="studentStatusState"
+                    aria-describedby="studentStatus-feedback">
                     <option value="null" hidden>Select Student Status</option>
                     <option value="New">New</option>
                     <option value="Old">Old</option>
                     <option value="Transferee">Transferee</option>
                   </b-form-select>
+                  <b-form-invalid-feedback id="studentStatus-feedback">
+                    Student Status is required.
+                  </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <!-- Student Status -->
@@ -116,11 +132,18 @@
                 <b-form-group class="academicstatus"
                               label="Academic Status"
                               label-for="academicStatus">
-                  <b-form-select v-model="selectedAcademicStatus" id="academicStatus">
+                  <b-form-select
+                    v-model="selectedAcademicStatus"
+                    id="academicStatus"
+                    :state="academicStatusState"
+                    aria-describedby="academicStatus-feedback">
                     <option value="null" hidden>Select Academic Status</option>
                     <option value="Regular">Regular</option>
                     <option value="Irregular">Irregular</option>
                   </b-form-select>
+                  <b-form-invalid-feedback id="academicStatus-feedback">
+                    Academic Status is required.
+                  </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <!-- Academic Status -->
@@ -136,9 +159,14 @@
                   <b-form-select v-model="selectedCourse"
                                  id="Course"
                                  :options="courseOptions"
-                                 @change="getCurriculum">
+                                 @change="getCurriculum"
+                                 :state="courseState"
+                                 aria-describedby="course-feedback">
                     <option value="null" hidden>Select Course</option>
                   </b-form-select>
+                  <b-form-invalid-feedback id="course-feedback">
+                    Course is required.
+                  </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <!-- Course -->
@@ -150,10 +178,15 @@
                               label-for="Curriculum">
                   <b-form-select v-model="selectedCurriculum"
                                  id="Curriculum"
-                                 @change="setYearLevel">
+                                 @change="setYearLevel"
+                                 :state="curriculumState"
+                                 aria-describedby="curriculum-feedback">
                     <option value="null" hidden>Select Curriculum</option>
                     <option v-for="curriculum in curriculumOptions " v-bind:value="{id: curriculum.id, subjects: curriculum.curriculum_subjects}">{{curriculum.curriculum_title}}</option>
                   </b-form-select>
+                  <b-form-invalid-feedback id="curriculum-feedback">
+                    Curriculum is required.
+                  </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <!-- Curriculum -->
@@ -166,55 +199,33 @@
                   <b-form-select v-model="selectedYearLevel"
                                  id="yearLevel"
                                  :options="yearOptions"
-                                 @change="setSubjects">
+                                 @change="setSubjects"
+                                 :state="yearLevelState"
+                                 aria-describedby="yearLevel-feedback">
                     <option value="null" hidden>Select Year Level</option>
                   </b-form-select>
+                  <b-form-invalid-feedback id="yearLevel-feedback">
+                    Year Level is required.
+                  </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <!-- yearLevel -->
             </b-form-row>
-          <!-- </b-form> -->
-           <!-- end of b-form -->
+
         </div> <!--end of panel body -->
-        <!-- enroll button -->
-
-        <!-- <b-button class="mx-4 mb-3 float-right"
-                  variant="primary"
-                  @click="showAddSubject"
-                  v-if="showStudentForm"
-                  >
-          Next <i class="fa fa-arrow-right" aria-hidden="true"/>
-        </b-button> -->
-        <!-- enroll button -->
-
-    </b-tab>
-    <b-tab class="" title="Edit profile">
-      <b-card>I'm the card in tab</b-card>
-    </b-tab>
-    <b-tab title="Premium Plan">Sibzamini!</b-tab>
-    <b-tab title="Info">I'm the last tab</b-tab>
-  </b-tabs>
-  <div class="pb-3 px-4">
-    <hr/>
-      <b-button variant="primary" @click="tabIndex--">Previous</b-button>
-      <b-button variant="primary" class="float-right" @click="tabIndex++">Next</b-button>
-
-  </div>
-</b-card>
-
 
 
       <!-- Form for Enrolling Subjects -->
       <div class="mx-4 mb-3 h4 text-dark" v-if="showSubjectsForm">Add Subjects</div>
-      <div class="mx-4 mb-4 p-3 d-flex flex-row justify-content-between bg-white shadow" v-if="showSubjectsForm">
+      <div class="mx-4 mb-4 d-flex flex-row justify-content-between " v-if="showSubjectsForm">
         <!-- Subjects per course -->
-        <div class="w-50 mr-2 p-3 d-flex flex-column bg-white shadow-sm">
-          <p class="h6 text-dark mb-3" align="center" v>{{selectedCourse.course_code}} / {{selectedYearLevel}} / {{selectedSemester.semester}}</p>
+        <div class="w-50 mr-2 p-3 d-flex flex-column bg-white shadow">
+          <p class="h6 text-dark mb-3" align="center">{{selectedCourse.course_code}} / {{selectedYearLevel}} / {{selectedSemester.semester}}</p>
           <table class="table">
             <thead>
               <tr>
                 <th scope="col">Subject Code</th>
-                <th scope="col">Description</th>
+                <th scope="col">Subject Title</th>
                 <th scope="col">Action</th>
               </tr>
             </thead>
@@ -222,7 +233,7 @@
               <!-- loop subject record here -->
               <tr :key="index" v-for="subject, index in subjectOptions" class="subjectBtn">
                 <td width="25%"align="center">{{subject.subject.subject_code}}</td>
-                <td width="65%" align="center">{{subject.subject.subject_description}}</td>
+                <td width="65%" align="center">{{subject.subject.subject_title}}</td>
                 <td width="10%" align="center">
                   <b-button size="sm" variant="success":value="subject" @click="addSubject(index,subject)"><i class="fa fa-plus-circle" aria-hidden="true"/></b-button>
                 </td>
@@ -232,22 +243,22 @@
         </div>
 
         <!-- subjects to be enrolled -->
-        <div class="w-50 ml-2 p-3 d-flex flex-column bg-white shadow-sm">
+        <div class="w-50 ml-2 p-3 d-flex flex-column bg-white shadow">
           <p class="h6 text-dark mb-3" align="center">Subject to be Enrolled</p>
           <table class="table">
             <thead>
               <tr>
                 <th scope="col">Subject Code</th>
-                <th scope="col">Description</th>
+                <th scope="col">Subject Title</th>
                 <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>
               <tr :key="index" v-for="addedSubject, index in addedSubjects" class="subjectBtn">
                 <td width="25%" align="center">{{addedSubject.subject.subject_code}}</td>
-                <td width="65%" align="center">{{addedSubject.subject.subject_description}}</td>
+                <td width="65%" align="center">{{addedSubject.subject.subject_title}}</td>
                 <td width="10%" align="center">
-                  <b-button size="sm" variant="warning" :value="addedSubject" @click="removeSubject(index, addedSubject)"><i class="fa fa-minus-circle" aria-hidden="true"/></b-button>
+                  <b-button size="sm" variant="danger" :value="addedSubject" @click="removeSubject(index, addedSubject)"><i class="fa fa-times-circle" aria-hidden="true"/></b-button>
                 </td>
               </tr>
             </tbody>
@@ -255,6 +266,13 @@
         </div>
       </div>
       <!-- end of table -->
+      <b-button class="mx-4 mb-3 float-right"
+                variant="primary"
+                @click="showAddSubject"
+                v-if="showStudentForm"
+                >
+                Next <i class="fa fa-arrow-right" aria-hidden="true"/>
+      </b-button>
       <b-button
                 class="mx-4"
                 variant="primary"
@@ -263,11 +281,11 @@
                 ><i class="fa fa-arrow-left" aria-hidden="true"/> Previous
       </b-button>
       <b-button
-            class="mx-4 float-right"
-            variant="primary"
-            @click="showVerify"
-            v-if="showSubjectsForm"
-            >Next <i class="fa fa-arrow-right" aria-hidden="true"/>
+                class="mx-4 float-right"
+                variant="primary"
+                @click="showVerify"
+                v-if="showSubjectsForm"
+                >Next <i class="fa fa-arrow-right" aria-hidden="true"/>
       </b-button>
       <!-- end of subject to be enrolled -->
 
@@ -332,7 +350,6 @@
 
         // form models
         tabIndex: 0,
-        state: null,
         student_id: null,
         selectedAcademicYear: this.$store.getters.getCurrentAcademicYear,
         selectedSemester: this.$store.getters.getCurrentSemester,
@@ -359,6 +376,18 @@
         showSubjectsForm: false,
         showVerifyForm: false,
         enrollmentData: null,
+        verifyForm: true,
+        subjectForm: true,
+
+        // for data validation
+        loadOverlay: false,
+        studentNumberMessage: null,
+        student_numberState: null,
+        studentStatusState: null,
+        academicStatusState: null,
+        courseState: null,
+        curriculumState: null,
+        yearLevelState: null,
 
         // for alert messages
         alertMessage: '',
@@ -378,6 +407,7 @@
     },
 
     methods: {
+
       // enroll student
       enrollStudent: function(){
          this.enrollmentData = {
@@ -494,16 +524,19 @@
             this.full_name = info.last_name + suff + info.first_name + ' ' + middle
             this.address = info.address
             this.student_id = info.id
-            this.state = true
+            this.student_numberState = true
           } else {
-            this.state = false
+            this.student_numberState = false
+            this.studentNumberMessage = "Student number doesn't exist."
             this.full_name = null
+            this.address = null
             this.student_id = null
           }
         } else {
           // sets the state of input box to default
-          this.state = null
+          this.student_numberState  = null
           // set all values to null
+          this.address = null
           this.full_name = null
           this.student_id = null
         }
@@ -517,9 +550,67 @@
 
       // show adding for subjects to be enrolled
       showAddSubject: function(){
-        this.showStudentForm = false;
-        this.showVerifyForm = false
-        this.showSubjectsForm = true;
+        // form validation
+
+        // student number
+        if(this.student_number == null){
+          this.student_numberState = false
+          this.studentNumberMessage = "Student Number is required."
+        }else{
+          this.studentStatusState = true;
+        }
+
+        // date enrolled
+        if(this.selectedDate == null){
+          this.dateEnrolledState = false
+        }else{
+          this.dateEnrolledState = true;
+        }
+
+        // student status
+        if(this.selectedStudentStatus == null){
+          this.studentStatusState = false;
+        }else{
+          this.studentStatusState = true;
+        }
+
+        // academic status
+        if(this.selectedAcademicStatus == null){
+          this.academicStatusState = false;
+        }else{
+          this.academicStatusState = true;
+        }
+
+        // course
+        if(this.selectedCourse == null){
+          this.courseState = false;
+        }else{
+          this.courseState = true;
+        }
+
+        // curriculum
+        if(this.selectedCurriculum == null){
+          this.curriculumState = false;
+        }else{
+          this.curriculumState = true;
+        }
+
+        if(this.selectedYearLevel == null){
+          this.yearLevelState = false;
+        }else{
+          this.yearLevelState = true;
+          this.showStudentForm = false;
+          this.showVerifyForm = false
+          // hides all form and shows subject form
+          this.showSubjectsForm = true;
+        }
+
+        // studentStatusState: null,
+        // academicStatusState: null,
+        // courseState: null,
+        // curriculumState: null,
+        // yearLevelState: null,
+
       }, // end of function showAddSubject
 
       // show enroll student form
@@ -553,21 +644,22 @@
             student_number: ''
           }
         } else {
-          var p = this.$route.params
+          var params = this.$route.params
 
-          var suff = p.suffix_name != null ? p.suffix_name + ',. ' : ', '
-          var middle = p.middle_name != null ? p.middle_name : ''
+          var suff = params.suffix_name != null ? params.suffix_name + ',. ' : ', '
+          var middle = params.middle_name != null ? params.middle_name : ''
 
           this.RegStudent = {
             id: this.$route.params.id,
-            name: p.last_name + ' ' + suff + ', ' + p.first_name + ' ' + middle,
+            name: params.last_name + ' ' + suff + ', ' + params.first_name + ' ' + middle,
             // this.$route.params.last_name +" "+this.$route.params.suffix_name+", "+this.$route.params.first_name+" "+this.$route.params.middle_name,
             student_number: this.$route.params.student_number
           }
 
-          this.full_name = p.last_name + suff + p.first_name + ' ' + middle
-          this.student_id = p.id
-          this.student_number = this.$route.params.student_number
+          this.full_name = params.last_name + suff + params.first_name + ' ' + middle;
+          this.student_id = params.id;
+          this.student_number = params.student_number;
+          this.address = params.address;
         }
         // console.log(this.$route.params);
       }
