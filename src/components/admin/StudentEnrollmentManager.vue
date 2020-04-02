@@ -1,17 +1,17 @@
 <template>
-
   <div>
+    <!-- page title -->
     <h1>Manage Student Enrollment</h1>
     <hr/>
+
+    <!-- form container -->
     <div class="container">
-      <div class="" v-if="loadOverlay">
-        <b-spinner variant="primary"></b-spinner>
-      </div>
-        <div class="mx-4 mb-3 h4 text-dark" v-if="showStudentForm">Enroll Student</div>
-        <div class="pt-3" v-if="showStudentForm">
 
+      <div id="" class="mx-3 mb-4 p-4 bg-white shadow" v-if="showStudentForm">
+        <div class=" h5 font-weight-bold text-dark"  v-if="showStudentForm">Academic Information</div>
+        <hr/>
+        <div class="" v-if="showStudentForm">
             <b-form-row>
-
               <!-- Student Number -->
               <b-col cols="12" md="3" lg="3">
                 <b-form-group class="studentno"
@@ -23,7 +23,7 @@
                                 @keyup="searchNumber"
                                 :state="student_numberState"
                                 maxlength=12
-                                aria-describedby="student_number-feedback">
+                                aria-describedby="student_number-feedback"
                                 placeholder="Student Number here...">
                   </b-form-input>
                   <b-form-invalid-feedback id="student_number-feedback">
@@ -69,6 +69,7 @@
                   <b-form-input type="date"
                                 v-model="selectedDate"
                                 id="dateEnrolled"
+                                @change="dateEnrolledState = null"
                                 :state="dateEnrolledState"
                                 aria-describedby="dateEnrolled-feedback">
                   </b-form-input>
@@ -113,6 +114,7 @@
                   <b-form-select
                     v-model="selectedStudentStatus"
                     id="studentStatus"
+                    @change="studentStatusState = null"
                     :state="studentStatusState"
                     aria-describedby="studentStatus-feedback">
                     <option value="null" hidden>Select Student Status</option>
@@ -135,6 +137,7 @@
                   <b-form-select
                     v-model="selectedAcademicStatus"
                     id="academicStatus"
+                    @change="academicStatusState = null"
                     :state="academicStatusState"
                     aria-describedby="academicStatus-feedback">
                     <option value="null" hidden>Select Academic Status</option>
@@ -212,105 +215,163 @@
               <!-- yearLevel -->
             </b-form-row>
 
-        </div> <!--end of panel body -->
-
-
-      <!-- Form for Enrolling Subjects -->
-      <div class="mx-4 mb-3 h4 text-dark" v-if="showSubjectsForm">Add Subjects</div>
-      <div class="mx-4 mb-4 d-flex flex-row justify-content-between " v-if="showSubjectsForm">
-        <!-- Subjects per course -->
-        <div class="w-50 mr-2 p-3 d-flex flex-column bg-white shadow">
-          <p class="h6 text-dark mb-3" align="center">{{selectedCourse.course_code}} / {{selectedYearLevel}} / {{selectedSemester.semester}}</p>
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Subject Code</th>
-                <th scope="col">Subject Title</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- loop subject record here -->
-              <tr :key="index" v-for="subject, index in subjectOptions" class="subjectBtn">
-                <td width="25%"align="center">{{subject.subject.subject_code}}</td>
-                <td width="65%" align="center">{{subject.subject.subject_title}}</td>
-                <td width="10%" align="center">
-                  <b-button size="sm" variant="success":value="subject" @click="addSubject(index,subject)"><i class="fa fa-plus-circle" aria-hidden="true"/></b-button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- subjects to be enrolled -->
-        <div class="w-50 ml-2 p-3 d-flex flex-column bg-white shadow">
-          <p class="h6 text-dark mb-3" align="center">Subject to be Enrolled</p>
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Subject Code</th>
-                <th scope="col">Subject Title</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr :key="index" v-for="addedSubject, index in addedSubjects" class="subjectBtn">
-                <td width="25%" align="center">{{addedSubject.subject.subject_code}}</td>
-                <td width="65%" align="center">{{addedSubject.subject.subject_title}}</td>
-                <td width="10%" align="center">
-                  <b-button size="sm" variant="danger" :value="addedSubject" @click="removeSubject(index, addedSubject)"><i class="fa fa-times-circle" aria-hidden="true"/></b-button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
         </div>
       </div>
-      <!-- end of table -->
-      <b-button class="mx-4 mb-3 float-right"
-                variant="primary"
-                @click="showAddSubject"
-                v-if="showStudentForm"
-                >
-                Next <i class="fa fa-arrow-right" aria-hidden="true"/>
-      </b-button>
+      <!-- end of academic form -->
+
+
+      <!-- academc form btn -->
+      <b-form-row class="d-flex justify-content-end">
+        <b-button class="mx-3"
+                  variant="primary"
+                  @click="showAddSubject"
+                  v-if="showStudentForm"
+                  >
+                  Next <i class="fa fa-arrow-right" aria-hidden="true"/>
+        </b-button>
+      </b-form-row>
+      <!-- academc form btn -->
+
+      <!-- Form for Enrolling Subjects -->
+      <div id="" class="mx-3 mb-4 p-4 bg-white shadow" v-if="showSubjectsForm">
+        <!-- form title -->
+        <div class=" h5 font-weight-bold text-dark"  v-if="showSubjectsForm">Add Subjects</div>
+        <hr/>
+
+        <b-table
+          class="my-3 table-striped"
+          show-empty
+          responsive
+          head-variant="dark"
+          bordered
+          hover
+          stacked="md"
+          :items="items"
+          :fields="fields"
+          :current-page="currentPage"
+          :per-page="perPage"
+          :filter="filter">
+
+
+          <template v-slot:head(action)="row">
+            <b-form-checkbox id="selectAll" v-model="allSelected" @change="selectAll($event)" value="1">
+            </b-form-checkbox>
+          </template>
+
+          <template v-slot:cell(action)="row" >
+            <b-form-checkbox v-model="selected" :value="row.item" >
+            </b-form-checkbox>
+          </template>
+
+        </b-table>
+
+          <b-row>
+            <b-col sm="4" md="6" lg="1" class="my-1">
+              <b-form-group
+              class="perpageselect"
+              label=""
+              label-for="perPageSelect">
+                <b-form-select
+                  v-model="perPage"
+                  id="perPageSelect"
+                  size="sm"
+                  :options="pageOptions"
+                ></b-form-select>
+              </b-form-group>
+            </b-col>
+
+            <b-col sm="4" md="3" class="my-1 col-md-3 offset-md-8">
+              <b-pagination
+                v-model="currentPage"
+                :total-rows="totalRows"
+                :per-page="perPage"
+                align="fill"
+                size="sm"
+                class="my-0"
+              ></b-pagination>
+            </b-col>
+          </b-row>
+      </div>
+      <!-- end of subjects to be enrolled -->
+
+      <!-- subjects form btn -->
       <b-button
-                class="mx-4"
+                class="mx-3"
                 variant="primary"
                 @click="showEnrollStudet"
                 v-if="showSubjectsForm"
                 ><i class="fa fa-arrow-left" aria-hidden="true"/> Previous
       </b-button>
       <b-button
-                class="mx-4 float-right"
+                class="mx-3 float-right"
                 variant="primary"
                 @click="showVerify"
                 v-if="showSubjectsForm"
                 >Next <i class="fa fa-arrow-right" aria-hidden="true"/>
       </b-button>
-      <!-- end of subject to be enrolled -->
+      <!-- subjects form btn -->
 
-      <!-- start of verification -->
-      <div class="conatiner" v-if="showVerifyForm">
-        this is verification
+
+      <!-- start of verification form -->
+      <div id="" class="mx-3 mb-4 p-4 bg-white shadow" v-if="showVerifyForm">
+        <!-- form title -->
+        <div class=" h5 font-weight-bold text-dark">Verification</div>
+        <hr/>
+
+        <b-card  header-tag="header" class="my-3">
+          <template v-slot:header>
+            <h6 class="font-weight-bold mb-0">Student Academic Information</h6>
+          </template>
+
+        </b-card>
+
+        <b-card  header-tag="header" class="">
+          <template v-slot:header>
+            <h6 class="font-weight-bold mb-0">Subjects</h6>
+          </template>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Subject Code</th>
+                <th scope="col">Title</th>
+                <th scope="col">Units</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in selected">
+                <td align="center" scope="col">{{item.subject.subject_code}}</td>
+                <td align="center" scope="col">{{item.subject.subject_title}}</td>
+                <td align="center" scope="col">{{item.subject.units}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </b-card>
+      <!-- <div class="conatiner" v-if="showVerifyForm">
+        this is verification -->
       </div>
+      <!-- end of verification form -->
+
+      <!-- verification form btn -->
       <b-button
-                class="mx-4"
+                class="mx-3"
                 variant="primary"
                 @click="showAddSubject"
                 v-if="showVerifyForm"
                 ><i class="fa fa-arrow-left" aria-hidden="true"/> Previous
       </b-button>
       <b-button
-            class="mx-4 float-right"
+            class="mx-3 float-right"
             variant="primary"
             @click="enrollStudent"
             v-if="showVerifyForm"
             >Enroll <i class="fa fa-arrow-right" aria-hidden="true"/>
       </b-button>
+      <!-- verification form btn -->
+
     </div>
     <!-- end of container -->
-  </div>
 
+  </div>
 </template>
 
 <script>
@@ -324,18 +385,15 @@
       return {
         items: [],
         fields: [
-          { key: 'room_number', label: 'Room Number', class: 'text-center', sortable: true },
-          { key: 'room_name', label: 'Room Name', sortable: true, class: 'text-center' },
-          { key: 'room_type', label: 'Room Type', sortable: true, class: 'text-center' },
-          { key: 'room_capacity', label: 'Room Capacity', sortable: true, class: 'text-center' },
-          { key: 'active', label: 'Active', sortable: true, class: 'text-center' },
-          { key: 'actions', label: 'Actions', class: 'text-center' }
+          { key: 'action', label: '', class: 'text-center'},
+          { key: 'subject.subject_code', label: 'Subject Code', sortable: true, class: 'text-center' },
+          { key: 'subject.subject_title', label: 'Title', sortable: true, class: 'text-center' },
         ],
 
         totalRows: 1,
         currentPage: 1,
-        perPage: 5,
-        pageOptions: [5, 10, 15, 20, 25],
+        perPage: 10,
+        pageOptions: [10, 15, 20, 25],
         filter: null,
 
         semesters: {
@@ -383,11 +441,17 @@
         loadOverlay: false,
         studentNumberMessage: null,
         student_numberState: null,
+        dateEnrolledState: null,
         studentStatusState: null,
         academicStatusState: null,
         courseState: null,
         curriculumState: null,
         yearLevelState: null,
+
+        // for subject checkboxes
+        selected: [],
+        allSelected: false,
+        indeterminate: false,
 
         // for alert messages
         alertMessage: '',
@@ -405,8 +469,75 @@
       this.getRegisteredStudents()
       console.log(this.$store.getters.getCourses)
     },
-
+    computed: {
+          // selectAll: {
+          //     get: function () {
+          //       // if(this.items.length == this.selected.length){
+          //       //   return true;
+          //       // }else{
+          //       //   return false
+          //       // }
+          //       console.log("items " + this.items.length)
+          //       console.log("selected " + this.selected.length)
+          //         return this.items ? this.selected.length == this.items.length : false;
+          //         // if(this.selected.length == this.items.length){
+          //         //   return true;
+          //         // }else{
+          //         //   return false
+          //         // }
+          //     },
+          //     set: function (value) {
+          //
+          //
+          //         if (value == true) {
+          //             var selected = [];
+          //             this.items.forEach(function (item) {
+          //                 selected.push(item);
+          //             });
+          //             this.selected = selected;
+          //         }else{
+          //
+          //         }
+          //
+          //
+          //     }
+          // }
+      },
+    watch: {
+      // whenever question changes, this function will run
+      selected: function () {
+        var e = document.getElementById("selectAll")
+        if(this.selected.length == this.items.length){
+          e.checked = true;
+        }else{
+          e.checked = false;
+        }
+        console.log("selected : " + this.selected.length + " | items : " + this.items.length)
+      }
+    },
     methods: {
+      selectAll: function(e){
+        this.selected = [];
+        var e = document.getElementById("selectAll")
+        if(e.checked == true){
+          var selected = [];
+            this.items.forEach(function (item) {
+              selected.push(item);
+            });
+            this.selected = selected;
+        }else{
+          this.selected = [];
+        }
+        // if(this.allSelected == 1){
+        //   var selected = [];
+        //              this.items.forEach(function (item) {
+        //                  selected.push(item);
+        //              });
+        //              this.selected = selected;
+        // }else{
+        //
+        // }
+      },
 
       // enroll student
       enrollStudent: function(){
@@ -461,6 +592,7 @@
 
       // gets all curriculum record
       getCurriculum: function() {
+        this.courseState = null;
         var curriculums = this.selectedCourse.curriculum
         if (curriculums.length == 0) {
           this.curriculumOptions = null
@@ -474,6 +606,7 @@
 
       // SET YEAR LEVEL BASED ON SELECTED COURSE
       setYearLevel: function() {
+        this.curriculumState = null;
         if (this.selectedCourse.year == '4') {
           this.yearOptions = [
             { value: '1st Year', text: '1st Year' },
@@ -493,8 +626,9 @@
 
       // get all subject based on selected course, curriculum, year level and semester.
       setSubjects: function(){
+        this.yearLevelState = null;
         // clears subject select box
-        this.addedSubjects = [];
+        this.items = []
         this.subjectOptions = [];
         var year = this.selectedYearLevel
         var semester_id = this.selectedSemester.id
@@ -509,6 +643,8 @@
             }
           });
         }
+        this.items = this.subjectOptions
+        this.totalRows = this.items.length;
       }, // end of function setSubjects
 
       // Search student using student number
@@ -544,6 +680,8 @@
 
       // show the final form of enrollment
       showVerify: function(){
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
         this.showSubjectsForm = false;
         this.showVerifyForm = true
       }, // end of showVerifyForm
@@ -551,54 +689,73 @@
       // show adding for subjects to be enrolled
       showAddSubject: function(){
         // form validation
-
+        var checker;
         // student number
-        if(this.student_number == null){
+        if(this.student_number == "" || this.student_number == null){
           this.student_numberState = false
           this.studentNumberMessage = "Student Number is required."
+          checker = true;
         }else{
-          this.studentStatusState = true;
+          if(this.student_id == null){
+            this.student_numberState = false
+            this.studentNumberMessage = "Student number doesn't exist."
+            checker = true;
+          }
+          this.studentStatusState = null;
         }
 
         // date enrolled
         if(this.selectedDate == null){
           this.dateEnrolledState = false
+          checker = true;
         }else{
-          this.dateEnrolledState = true;
+          this.dateEnrolledState = null;
         }
 
         // student status
         if(this.selectedStudentStatus == null){
           this.studentStatusState = false;
+          checker = true;
         }else{
-          this.studentStatusState = true;
+          this.studentStatusState = null;
         }
 
         // academic status
         if(this.selectedAcademicStatus == null){
           this.academicStatusState = false;
+          checker = true;
         }else{
-          this.academicStatusState = true;
+          this.academicStatusState = null;
         }
 
         // course
         if(this.selectedCourse == null){
           this.courseState = false;
+          checker = true;
         }else{
-          this.courseState = true;
+          this.courseState = null;
         }
 
         // curriculum
         if(this.selectedCurriculum == null){
           this.curriculumState = false;
+          checker = true;
         }else{
-          this.curriculumState = true;
+          this.curriculumState = null;
         }
 
         if(this.selectedYearLevel == null){
           this.yearLevelState = false;
+          checker = true;
         }else{
-          this.yearLevelState = true;
+          this.yearLevelState = null;
+        }
+
+        if(checker){
+
+        }else{
+          document.body.scrollTop = 0;
+          document.documentElement.scrollTop = 0;
           this.showStudentForm = false;
           this.showVerifyForm = false
           // hides all form and shows subject form
@@ -615,6 +772,8 @@
 
       // show enroll student form
       showEnrollStudet: function(){
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
         this.showStudentForm = true;
         this.showSubjectsForm = false;
       }, // end of showEnrollStudet
