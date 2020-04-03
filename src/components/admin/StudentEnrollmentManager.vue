@@ -717,21 +717,6 @@
            })
       }, // end of function enrollStudent
 
-      getClassSched: function() {
-        Axios.get('http://localhost/api/v1/class_schedules', {
-          headers: { Authorization: 'Bearer ' + this.$store.getters.getToken }
-        })
-          .then(response => {
-            //console.log(response.data.data);
-            this.items = response.data
-            this.totalRows = this.items.length
-          })
-          .catch(error => {
-            this.alertMessage = error.response.data.message
-            this.dismissErrorCountDown = this.dismissSecs
-          })
-      }, // end of function getClassSched
-
       // this function will get all student records
       getRegisteredStudents: function() {
         Axios.get('http://localhost/api/v1/students', {
