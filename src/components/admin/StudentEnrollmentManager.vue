@@ -7,79 +7,11 @@
     <!-- form container -->
     <div class="container">
 
-      <div id="" class="mx-3 mb-4 p-4 bg-white shadow" v-if="showStudentForm">
+      <div id="" class="mx-3 mb-4 p-4 bg-white shadow rounded" v-if="showStudentForm">
         <div class=" h5 font-weight-bold text-dark"  v-if="showStudentForm">Academic Information</div>
         <hr/>
         <div class="" v-if="showStudentForm">
             <b-form-row>
-              <!-- Student Number -->
-              <b-col cols="12" md="3" lg="3">
-                <b-form-group class="studentno"
-                              label="Student Number"
-                              label-for="studentNo">
-                  <b-form-input type="text"
-                                v-model="student_number"
-                                id="studentNo"
-                                @keyup="searchNumber"
-                                :state="student_numberState"
-                                maxlength=12
-                                aria-describedby="student_number-feedback"
-                                placeholder="Student Number here...">
-                  </b-form-input>
-                  <b-form-invalid-feedback id="student_number-feedback">
-                    {{studentNumberMessage}}
-                  </b-form-invalid-feedback>
-                </b-form-group>
-              </b-col>
-              <!-- Student Number -->
-
-              <!-- fullName -->
-              <b-col cols="12" md="3" lg="3">
-                <b-form-group class="fullname"
-                              label="Full Name"
-                              label-for="fullName">
-                  <b-form-input type="text"
-                                v-model="full_name"
-                                id="fullName"
-                                disabled></b-form-input>
-                </b-form-group>
-              </b-col>
-              <!-- fullName -->
-
-              <!-- address -->
-              <b-col cols="12" md="3" lg="3">
-                <b-form-group class="address"
-                              label="Address"
-                              label-for="address">
-                  <b-form-input type="text"
-                                v-model="address"
-                                id="address"
-                                disabled></b-form-input>
-                </b-form-group>
-              </b-col>
-              <!-- address -->
-
-
-
-              <!-- Date Enrolled-->
-              <b-col cols="12" md="2" lg="3">
-                <b-form-group class="dateEnrolled"
-                              label="Date Enrolled"
-                              label-for="dateEnrolled">
-                  <b-form-input type="date"
-                                v-model="selectedDate"
-                                id="dateEnrolled"
-                                @change="dateEnrolledState = null"
-                                :state="dateEnrolledState"
-                                aria-describedby="dateEnrolled-feedback">
-                  </b-form-input>
-                  <b-form-invalid-feedback id="dateEnrolled-feedback">
-                    Date enrolled is required.
-                  </b-form-invalid-feedback>
-                </b-form-group>
-              </b-col>
-              <!-- Date Enrolled -->
-
               <!-- Academic Year -->
               <b-col cols="12" md="6" lg="3">
                 <b-form-group class="Academic"
@@ -106,8 +38,74 @@
               </b-col>
               <!-- Semester  -->
 
+              <!-- Student Number -->
+              <b-col cols="12" md="3" lg="3">
+                <b-form-group class="studentno"
+                              label="Student Number"
+                              label-for="studentNo">
+                  <b-form-input type="text"
+                                v-model="student_number"
+                                id="studentNo"
+                                @keyup="searchNumber"
+                                :state="student_numberState"
+                                maxlength=12
+                                aria-describedby="student_number-feedback"
+                                placeholder="Search Student Number...">
+                  </b-form-input>
+                  <b-form-invalid-feedback id="student_number-feedback">
+                    {{studentNumberMessage}}
+                  </b-form-invalid-feedback>
+                </b-form-group>
+              </b-col>
+              <!-- Student Number -->
+
+              <!-- Date Enrolled-->
+              <b-col cols="12" md="2" lg="3">
+                <b-form-group class="dateEnrolled"
+                              label="Date Enrolled"
+                              label-for="dateEnrolled">
+                  <b-form-input type="date"
+                                v-model="selectedDate"
+                                id="dateEnrolled"
+                                @change="dateEnrolledState = null"
+                                :state="dateEnrolledState"
+                                aria-describedby="dateEnrolled-feedback">
+                  </b-form-input>
+                  <b-form-invalid-feedback id="dateEnrolled-feedback">
+                    Date enrolled is required.
+                  </b-form-invalid-feedback>
+                </b-form-group>
+              </b-col>
+              <!-- Date Enrolled -->
+
+              <!-- fullName -->
+              <b-col cols="12" md="3" lg="3">
+                <b-form-group class="fullname"
+                              label="Full Name"
+                              label-for="fullName">
+                  <b-form-input type="text"
+                                v-model="full_name"
+                                id="fullName"
+                                disabled></b-form-input>
+                </b-form-group>
+              </b-col>
+              <!-- fullName -->
+
+              <!-- address -->
+              <b-col cols="12" md="5" lg="5">
+                <b-form-group class="address"
+                              label="Address"
+                              label-for="address">
+                  <b-form-input type="text"
+                                v-model="address"
+                                id="address"
+                                disabled></b-form-input>
+                </b-form-group>
+              </b-col>
+              <!-- address -->
+
               <!-- Student Status -->
-              <b-col cols="12" md="6" lg="3">
+              <b-col cols="12" md="2" lg="2">
                 <b-form-group class="studentStatus"
                               label="Student Status"
                               label-for="studentStatus">
@@ -117,7 +115,7 @@
                     @change="studentStatusState = null"
                     :state="studentStatusState"
                     aria-describedby="studentStatus-feedback">
-                    <option value="null" hidden>Select Student Status</option>
+                    <option value="null" hidden>Student Status</option>
                     <option value="New">New</option>
                     <option value="Old">Old</option>
                     <option value="Transferee">Transferee</option>
@@ -130,7 +128,7 @@
               <!-- Student Status -->
 
               <!-- Academic Status -->
-              <b-col cols="12" md="6" lg="3">
+              <b-col cols="12" md="2" lg="2">
                 <b-form-group class="academicstatus"
                               label="Academic Status"
                               label-for="academicStatus">
@@ -140,7 +138,7 @@
                     @change="academicStatusState = null"
                     :state="academicStatusState"
                     aria-describedby="academicStatus-feedback">
-                    <option value="null" hidden>Select Academic Status</option>
+                    <option value="null" hidden>Academic Status</option>
                     <option value="Regular">Regular</option>
                     <option value="Irregular">Irregular</option>
                   </b-form-select>
@@ -155,7 +153,7 @@
 
             <b-form-row>
               <!-- Course -->
-              <b-col cols="12" md="6" lg="6">
+              <b-col cols="12" md="3" lg="3">
                 <b-form-group class="course"
                               label="Course"
                               label-for="Course">
@@ -185,7 +183,7 @@
                                  :state="curriculumState"
                                  aria-describedby="curriculum-feedback">
                     <option value="null" hidden>Select Curriculum</option>
-                    <option v-for="curriculum in curriculumOptions " v-bind:value="{id: curriculum.id, subjects: curriculum.curriculum_subjects}">{{curriculum.curriculum_title}}</option>
+                    <option v-for="curriculum in curriculumOptions " v-bind:value="{id: curriculum.id, subjects: curriculum.curriculum_subjects, curriculum: curriculum}">{{curriculum.curriculum_title}}</option>
                   </b-form-select>
                   <b-form-invalid-feedback id="curriculum-feedback">
                     Curriculum is required.
@@ -213,6 +211,29 @@
                 </b-form-group>
               </b-col>
               <!-- yearLevel -->
+
+              <!-- block -->
+              <b-col cols="12" md="6" lg="3">
+                <b-form-group class="block"
+                              label="Block"
+                              label-for="block">
+                  <b-form-select v-model="selectedBlock"
+                                 id="block"
+                                 @change="onChangeBlock"
+                                 :state="blockState"
+                                 aria-describedby="block-feedback">
+                    <option value="null" hidden>Select Block</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                  </b-form-select>
+                  <b-form-invalid-feedback id="block-feedback">
+                    Block is required.
+                  </b-form-invalid-feedback>
+                </b-form-group>
+              </b-col>
+              <!-- block -->
             </b-form-row>
 
         </div>
@@ -233,11 +254,17 @@
       <!-- academc form btn -->
 
       <!-- Form for Enrolling Subjects -->
-      <div id="" class="mx-3 mb-4 p-4 bg-white shadow" v-if="showSubjectsForm">
+      <div id="" class="mx-3 mb-4 p-4 bg-white shadow rounded" v-if="showSubjectsForm">
         <!-- form title -->
         <div class=" h5 font-weight-bold text-dark"  v-if="showSubjectsForm">Add Subjects</div>
         <hr/>
-
+        <!-- table title -->
+        <div class=" h6 font-weight-bold text-center text-dark">
+          {{selectedCourse.course_code}} |
+          {{selectedCurriculum.curriculum.curriculum_title}} |
+          {{selectedYearLevel.toUpperCase()}} |
+          BLOCK {{selectedBlock}}
+        </div>
         <b-table
           class="my-3 table-striped"
           show-empty
@@ -313,41 +340,195 @@
 
 
       <!-- start of verification form -->
-      <div id="" class="mx-3 mb-4 p-4 bg-white shadow" v-if="showVerifyForm">
+      <div id="" class="mx-3 mb-4 p-4 bg-white shadow rounded" v-if="showVerifyForm">
         <!-- form title -->
         <div class=" h5 font-weight-bold text-dark">Verification</div>
         <hr/>
+        <div class="d-flex align-items-center flex-column">
+          <!-- start of enrollment information -->
+          <b-card  header-tag="header" class="d-flex my-3 w-75">
+            <template v-slot:header>
+              <h6 class="font-weight-bold text-dark mb-0"><i class="fa fa-info-circle fa-lg mr-2" aria-hidden="true"/>   Enrollment Info</h6>
+            </template>
 
-        <b-card  header-tag="header" class="my-3">
-          <template v-slot:header>
-            <h6 class="font-weight-bold mb-0">Student Academic Information</h6>
-          </template>
+            <!-- date enrolled -->
+            <div class="row mx-5 mt-2">
+              <div class="mb-3 column w-50">
+                <h6 class="font-weight-bold">Date Enrolled :</h6>
+              </div>
+              <div class="column w-50">
+                <h6>{{selectedDate}}</h6>
+              </div>
+            </div>
+            <!-- end of date enrolled -->
 
-        </b-card>
+            <!-- academic year -->
+            <div class="row mx-5 mt-2">
+              <div class="mb-3 column w-50">
+                <h6 class="font-weight-bold">Academic Year :</h6>
+              </div>
+              <div class="column w-50">
+                <h6>{{selectedAcademicYear.academic_year}}</h6>
+              </div>
+            </div>
+            <!-- end of academic year -->
 
-        <b-card  header-tag="header" class="">
-          <template v-slot:header>
-            <h6 class="font-weight-bold mb-0">Subjects</h6>
-          </template>
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Subject Code</th>
-                <th scope="col">Title</th>
-                <th scope="col">Units</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="item in selected">
-                <td align="center" scope="col">{{item.subject.subject_code}}</td>
-                <td align="center" scope="col">{{item.subject.subject_title}}</td>
-                <td align="center" scope="col">{{item.subject.units}}</td>
-              </tr>
-            </tbody>
-          </table>
-        </b-card>
-      <!-- <div class="conatiner" v-if="showVerifyForm">
-        this is verification -->
+            <!-- semester -->
+            <div class="row mx-5">
+              <div class="mb-3 column w-50">
+                <h6 class="font-weight-bold">Semester :</h6>
+              </div>
+              <div class="column w-50">
+                <h6>{{selectedSemester.semester.toUpperCase()}}</h6>
+              </div>
+            </div>
+            <!-- end of semester -->
+
+            <!-- Course -->
+            <div class="row mx-5">
+              <div class="mb-3 column w-50">
+                <h6 class="font-weight-bold">Course :</h6>
+              </div>
+              <div class="column w-50">
+                <h6>{{selectedCourse.course_code}}</h6>
+              </div>
+            </div>
+            <!-- end of Course -->
+
+            <!-- Curriculum -->
+            <div class="row mx-5">
+              <div class="mb-3 column w-50">
+                <h6 class="font-weight-bold">Curriculum :</h6>
+              </div>
+              <div class="column w-50">
+                <h6>{{selectedCurriculum.curriculum.curriculum_title.toUpperCase()}}</h6>
+              </div>
+            </div>
+            <!-- end of Curriculum -->
+
+            <!-- year level -->
+            <div class="row mx-5">
+              <div class="mb-3 column w-50">
+                <h6 class="font-weight-bold">Year Level :</h6>
+              </div>
+              <div class="column w-50">
+                <h6>{{selectedYearLevel.toUpperCase()}}</h6>
+              </div>
+            </div>
+            <!-- end of year level -->
+
+            <!--block -->
+            <div class="row mx-5">
+              <div class="column w-50">
+                <h6 class="font-weight-bold">Block :</h6>
+              </div>
+              <div class="column w-50">
+                <h6>{{selectedBlock}}</h6>
+              </div>
+            </div>
+            <!-- end of block -->
+
+          </b-card>
+          <!-- end of enrollment info -->
+
+          <!-- Start of student information -->
+          <b-card  header-tag="header" class="my-3 w-75">
+
+            <!-- card title -->
+            <template v-slot:header>
+              <h6 class="font-weight-bold text-dark mb-0"><i class="fa fa-user fa-lg mr-2" aria-hidden="true"/> Student Info</h6>
+            </template>
+
+            <!-- student number -->
+            <div class="row mx-5 mt-2">
+              <div class="mb-3 column w-50">
+                <h6 class="font-weight-bold">Student Number :</h6>
+              </div>
+              <div class="column w-50">
+                <h6>{{student_number}}</h6>
+              </div>
+            </div>
+            <!-- end of student number -->
+
+            <!-- full name -->
+            <div class="row mx-5">
+              <div class="mb-3 column w-50">
+                <h6 class="font-weight-bold">Full Name :</h6>
+              </div>
+              <div class="column w-50">
+                <h6>{{full_name.toUpperCase()}}</h6>
+              </div>
+            </div>
+            <!-- end of full name -->
+
+
+            <!-- contact number -->
+            <div class="row mx-5">
+              <div class="mb-3 column w-50">
+                <h6 class="font-weight-bold">Contact Number :</h6>
+              </div>
+              <div class="column w-50">
+                <h6>{{student_param.cellphone}}</h6>
+              </div>
+            </div>
+            <!-- end of contact number -->
+
+            <!-- email -->
+            <div class="row mx-5">
+              <div class="mb-3 column w-50">
+                <h6 class="font-weight-bold">Email :</h6>
+              </div>
+              <div class="column w-50">
+                <h6>{{student_param.email}}</h6>
+              </div>
+            </div>
+            <!-- end of email -->
+
+            <!-- address -->
+            <div class="row mx-5">
+              <div class="column w-50">
+                <h6 class="font-weight-bold">Address :</h6>
+              </div>
+              <div class="column w-50">
+                <h6>
+                  {{student_param.address.toUpperCase()}}
+                  {{student_param.barangay ? " " + student_param.barangay.toUpperCase() : " "}}
+                  {{student_param.city ? " " + student_param.city.toUpperCase() : " "}}
+                  {{student_param.province ? " " + student_param.province.toUpperCase() : " "}}
+                  {{student_param.postal ? " " + student_param.postal.toUpperCase() : " "}}
+                </h6>
+              </div>
+            </div>
+            <!-- end of address -->
+
+          </b-card>
+          <!-- End of student information -->
+
+          <!-- Start of Subjects -->
+          <b-card  header-tag="header" class="w-75">
+            <template v-slot:header>
+              <h6 class="font-weight-bold text-dark mb-0"><i class="fa fa-book fa-lg mr-2" aria-hidden="true"/> Subjects</h6>
+            </template>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th scope="col">Subject Code</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Units</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="item in selected">
+                  <td align="center" scope="col">{{item.subject.subject_code}}</td>
+                  <td align="center" scope="col">{{item.subject.subject_title}}</td>
+                  <td align="center" scope="col">{{item.subject.units}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </b-card>
+          <!-- end of subjects -->
+        </div>
+        <!-- card container -->
       </div>
       <!-- end of verification form -->
 
@@ -364,7 +545,7 @@
             variant="primary"
             @click="enrollStudent"
             v-if="showVerifyForm"
-            >Enroll <i class="fa fa-arrow-right" aria-hidden="true"/>
+            >Enroll <i class="fa fa-user-plus" aria-hidden="true"/>
       </b-button>
       <!-- verification form btn -->
 
@@ -417,6 +598,7 @@
         selectedCurriculum: null,
         selectedYearLevel: null,
         selectedDate: null,
+        selectedBlock: null,
         full_name: null,
         address: "",
 
@@ -430,6 +612,7 @@
         addedSubjects: [],
 
         student_number: null,
+        student_param: null,
         showStudentForm: true,
         showSubjectsForm: false,
         showVerifyForm: false,
@@ -447,6 +630,7 @@
         courseState: null,
         curriculumState: null,
         yearLevelState: null,
+        blockState: null,
 
         // for subject checkboxes
         selected: [],
@@ -467,42 +651,9 @@
       // this.getSemesters();
       // this.getAcademicYear();
       this.getRegisteredStudents()
-      console.log(this.$store.getters.getCourses)
+      // console.log(this.$store.getters.getCourses)
     },
-    computed: {
-          // selectAll: {
-          //     get: function () {
-          //       // if(this.items.length == this.selected.length){
-          //       //   return true;
-          //       // }else{
-          //       //   return false
-          //       // }
-          //       console.log("items " + this.items.length)
-          //       console.log("selected " + this.selected.length)
-          //         return this.items ? this.selected.length == this.items.length : false;
-          //         // if(this.selected.length == this.items.length){
-          //         //   return true;
-          //         // }else{
-          //         //   return false
-          //         // }
-          //     },
-          //     set: function (value) {
-          //
-          //
-          //         if (value == true) {
-          //             var selected = [];
-          //             this.items.forEach(function (item) {
-          //                 selected.push(item);
-          //             });
-          //             this.selected = selected;
-          //         }else{
-          //
-          //         }
-          //
-          //
-          //     }
-          // }
-      },
+
     watch: {
       // whenever question changes, this function will run
       selected: function () {
@@ -548,14 +699,18 @@
            curriculum_id : this.selectedCurriculum.id,
            course_id : this.selectedCourse.id,
            year_level : this.selectedYearLevel,
-           active : 1
+           block : this.selectedBlock,
+           active : 1,
+           subjects : this.selected,
+           status: 'ENROLLED'
          };
 
          Axios.post('http://localhost/api/v1/enrollments', this.enrollmentData,{
            headers: { Authorization: 'Bearer ' + this.$store.getters.getToken }
          })
            .then(response => {
-             console.log(response.data.message);
+             // console.log(response.data.message);
+             console.log(response.data);
            })
            .catch(error => {
              console.log(error.response)
@@ -647,6 +802,11 @@
         this.totalRows = this.items.length;
       }, // end of function setSubjects
 
+      // function for block
+      onChangeBlock: function(){
+        this.blockState = null;
+      }, // end of function block
+
       // Search student using student number
       searchNumber: function() {
         this.student_number = this.student_number.length == 4 ? this.student_number + '-' : this.student_number
@@ -660,6 +820,7 @@
             this.full_name = info.last_name + suff + info.first_name + ' ' + middle
             this.address = info.address
             this.student_id = info.id
+            this.student_param = info;
             this.student_numberState = true
           } else {
             this.student_numberState = false
@@ -751,6 +912,13 @@
           this.yearLevelState = null;
         }
 
+        if(this.selectedBlock == null){
+          this.blockState = false;
+          checker = true;
+        }else{
+          this.blockState = null;
+        }
+
         if(checker){
 
         }else{
@@ -761,13 +929,6 @@
           // hides all form and shows subject form
           this.showSubjectsForm = true;
         }
-
-        // studentStatusState: null,
-        // academicStatusState: null,
-        // courseState: null,
-        // curriculumState: null,
-        // yearLevelState: null,
-
       }, // end of function showAddSubject
 
       // show enroll student form
@@ -819,6 +980,7 @@
           this.student_id = params.id;
           this.student_number = params.student_number;
           this.address = params.address;
+          this.student_param = params;
         }
         // console.log(this.$route.params);
       }
