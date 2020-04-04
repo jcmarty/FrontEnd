@@ -5,7 +5,6 @@
 
 
     <div class="myTable px-4 py-3 my-5">
-      <!-- Adding Form Start  -->
       <b-form-row class="d-print-none">
         <b-col  cols="12" md="6" lg="4">
           <b-form-group

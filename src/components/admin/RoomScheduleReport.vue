@@ -1,11 +1,9 @@
 <template>
   <div>
-    <h1>Room Schedule Report</h1><hr/>
-
+    <h1 class="d-print-none">Room Schedule Report</h1>
+    <hr class="d-print-none"/>
 
   <div class="myTable px-4 py-3 my-5">
-    <!-- Adding Form Start  -->
-
       <b-form-row class="d-print-none">
         <b-col  cols="12" md="6" lg="4">
           <b-form-group
@@ -24,7 +22,7 @@
         </b-col>
       </b-form-row>
 
-      <b-form-row class="d-print-none">
+      <!-- <b-form-row class="d-print-none">
         <b-col class="ml-3 mt-2"  cols="12" md="6" lg="2">
           <b-form-group class="academicyear" label="Academic Year" label-for="academicYear">
             <b-form-select id="academicYear" v-model="selectedAcademicYear" @change="">
@@ -41,17 +39,25 @@
               <option  :value="sem.id" v-for="sem in semesterOptions" >{{sem.semester}}</option>
             </b-form-select>
           </b-form-group>
-        </b-col>
+        </b-col> -->
 
         <b-col class="ml-3 mt-2" cols="12" md="6" lg="2">
           <b-form-group class="roomnumber" label="Room No." label-for="RoomNo">
-            <b-form-select id="RoomNo" v-model="selected" @change="getRoomSchedule()">
+            <b-form-select id="RoomNo" v-model="selected" @change="getFilteredClassSchedule()">
               <option value="null" hidden>Select Room</option>
               <option v-for="rooms in rowData" :value="rooms.id">{{rooms.room_number}}</option>
             </b-form-select>
           </b-form-group>
         </b-col>
+    </b-form-row>
 
+    <b-form-row class="d-print-none">
+      <b-col class="py-4">
+        <!-- Add New Room Button -->
+        <b-button variant="primary" onclick="window.print()">
+          Print
+        </b-button>
+      </b-col>
     </b-form-row>
     <!-- Main table element -->
     <b-table
@@ -67,26 +73,10 @@
       :current-page="currentPage"
       :per-page="perPage"
       :filter="filter">
-
-      <template v-slot:cell(active)="row" >
-      <b-badge  variant="success" pill v-if="row.item.active">Active</b-badge>
-      <b-badge  variant="danger"  pill v-else>Inactive</b-badge>
-
-      </template>
-
-      <template v-slot:cell(actions)="row">
-        <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" class="mr-1">
-          <b-icon-pencil/>
-        </b-button>
-
-        <b-button variant="danger" size="sm" @click="DeleteModal(row.item, $event.target)" v-b-tooltip.hover title="Delete Room">
-          <b-icon-trash/>
-        </b-button>
-      </template>
     </b-table>
 
-    <hr/>
-    <b-row>
+    <hr class="d-print-none"/>
+    <b-row class="d-print-none">
       <b-col sm="4" md="6" lg="1" class="my-1">
         <b-form-group
         class="perpageselect"
@@ -114,8 +104,6 @@
     </b-row>
   </div>
     <!-- end of table -->
-
-
 
   </div>
 </template>
@@ -145,16 +133,37 @@ import Axios from "axios";
               pageOptions: [5, 10, 15, 20, 25],
               filter: null,
 
-              selected: null,
+              academicYearOptions: this.$store.getters.getAcademicYears,
+              semesterOptions: this.$store.getters.getSemesters,
+
+              selected: 0,
             }
         },
 
           mounted () {
             this.getRooms();
             this.getRoomSchedule();
+            this.getFilteredClassSchedule();
           },
 
           methods: {
+            // gets all created schedule
+            getFilteredClassSchedule: function(){
+              Axios
+                .get('http://localhost/api/v1/class_schedules', {
+                  params: {
+                    room_id: this.selected,
+                    active: 1,
+                  },
+                  headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+                })
+                .then(response => {
+                  this.items = response.data;
+                  this.totalRows = this.items.length;
+                  console.log(response.data)
+                })
+            },
+
             getRooms: function(){
               Axios
                 .get('http://localhost/api/v1/rooms', {
@@ -164,19 +173,7 @@ import Axios from "axios";
                   // console.log(response.data);
                   this.rowData = response.data;
                 })
-            },
-            getRoomSchedule: function(id){
-              Axios
-                .get('http://localhost/api/v1/rooms/' + this.selected + '/schedules ',{
-                  headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-                })
-                .then(response => {
-                  // console.log(response.data);
-                  this.items = response.data;
-                  this.totalRows = this.items.length;
-                })
-            },
-
+              },
             }
           }
 </script>
