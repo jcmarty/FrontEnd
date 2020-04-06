@@ -22,10 +22,10 @@
         </b-col>
       </b-form-row>
 
-      <!-- <b-form-row class="d-print-none">
+      <b-form-row class="d-print-none">
         <b-col class="ml-3 mt-2"  cols="12" md="6" lg="2">
           <b-form-group class="academicyear" label="Academic Year" label-for="academicYear">
-            <b-form-select id="academicYear" v-model="selectedAcademicYear" @change="">
+            <b-form-select id="academicYear" v-model="selectedAcademicYear">
               <option value="null" hidden>Select Academic Year</option>
               <option  :value="ay.id" v-for="ay in academicYearOptions" >{{ay.academic_year}}</option>
             </b-form-select>
@@ -34,12 +34,12 @@
 
         <b-col class="ml-3 mt-2" cols="12" md="6" lg="2">
           <b-form-group class="semester" label="Semester" label-for="Semester">
-            <b-form-select id="Semester" v-model="selectedSemester" @change="changeSemester">
+            <b-form-select id="Semester" v-model="selectedSemester">
               <option value="null" hidden>Select Semester</option>
               <option  :value="sem.id" v-for="sem in semesterOptions" >{{sem.semester}}</option>
             </b-form-select>
           </b-form-group>
-        </b-col> -->
+        </b-col>
 
         <b-col class="ml-3 mt-2" cols="12" md="6" lg="2">
           <b-form-group class="roomnumber" label="Room No." label-for="RoomNo">
@@ -135,6 +135,8 @@ import Axios from "axios";
 
               academicYearOptions: this.$store.getters.getAcademicYears,
               semesterOptions: this.$store.getters.getSemesters,
+              selectedAcademicYear: this.$store.getters.getSettings.current_ay,
+              selectedSemester: this.$store.getters.getSettings.current_sem,
 
               selected: 0,
             }
@@ -153,6 +155,8 @@ import Axios from "axios";
                 .get('http://localhost/api/v1/class_schedules', {
                   params: {
                     room_id: this.selected,
+                    academic_year_id: this.selectedAcademicYear,
+                    semester_id: this.selectedSemester,
                     active: 1,
                   },
                   headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
@@ -173,6 +177,27 @@ import Axios from "axios";
                   // console.log(response.data);
                   this.rowData = response.data;
                 })
+              },
+
+              // clears selected values when semester select box has changed
+              changeSemester: function(){
+                // clears select boxes
+                this.day_options = [];
+                this.time_start_options = []
+                this.SubjectsRow = [];
+                this.instructorRow = null;
+                this.roomRow = null;
+
+                // clear select box selected values
+                // this.selectedCurriculum = null;
+                this.selectedYearLevel = null;
+                this.selectedSubject = null;
+                this.selectedBlock = null;
+                this.selectedBatch = null;
+                this.selectedInstructor = null;
+                this.selectedRoom = null;
+                this.selectedDay = null;
+                this.selectedTimeStart = null;
               },
             }
           }

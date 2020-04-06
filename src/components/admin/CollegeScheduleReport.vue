@@ -37,7 +37,7 @@
           <b-form-group class="semester" label="Semester" label-for="Semester">
             <b-form-select id="Semester" v-model="selectedSemester" @change="changeSemester">
               <option value="null" hidden>Select Semester</option>
-              <option  :value="{id:sem.id, semester: sem.semester}" v-for="sem in semesterOptions" >{{sem.semester}}</option>
+              <option  :value="{id: sem.id, semester: sem.semester}" v-for="sem in semesterOptions" >{{sem.semester}}</option>
             </b-form-select>
           </b-form-group>
         </b-col>
@@ -202,8 +202,8 @@
         current_ay: [],
         current_sem: [],
 
-        selectedAcademicYear: this.$store.getters.getSettings.current_ay,
-        selectedSemester: this.$store.getters.getSettings.current_sem,
+        selectedAcademicYear: this.$store.getters.getCurrentAcademicYear,
+        selectedSemester: this.$store.getters.getCurrentSemester,
         selectedCourse: null,
         selectedCurriculum: null,
         selectedSubject: null,
@@ -249,8 +249,8 @@
         Axios
           .get('http://localhost/api/v1/class_schedules', {
             params: {
-              academic_year_id: this.selectedAcademicYear,
-              semester_id: this.selectedSemester,
+              academic_year_id: this.selectedAcademicYear.id,
+              semester_id: this.selectedSemester.id,
               course_id: this.selectedCourse.id,
               year_level: this.selectedYearLevel,
               block : this.selectedBlock,
