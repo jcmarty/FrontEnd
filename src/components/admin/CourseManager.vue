@@ -6,94 +6,96 @@
     <!-- Adding Form Start  -->
 
     <div class="addPanel">
-      <div class="panel panel-primary recordMaintenanceForm" v-if="showForm">
-        <div class="panel-heading">Add a Course</div>
-        <div class="panel-body">
-          <b-form id="Add_Course_Form">
+      <transition name="fade">
+        <div class="panel panel-primary recordMaintenanceForm" v-if="showForm">
+          <div class="panel-heading">Add a Course</div>
+          <div class="panel-body">
+            <b-form id="Add_Course_Form">
+                <b-form-row>
+                  <!-- Course Code -->
+                  <b-col cols="12" md="6" lg="4">
+                  <b-form-group
+                    class="coursecode"
+                    label="Course Code"
+                    label-for="courseCode">
+                    <b-form-input
+                      type="text"
+                      v-model="course.course_code"
+                      id="courseCode"
+                      required>
+                    </b-form-input>
+                  </b-form-group>
+                </b-col>
+
+                <!--  Course Description -->
+                <b-col cols="12" md="6" lg="8">
+                  <b-form-group
+                    class="coursedesc"
+                    label="Description"
+                    label-for="courseDesc">
+                    <b-form-input
+                      type="text"
+                      v-model="course.course_desc"
+                      id="courseDesc"
+                      required>
+                    </b-form-input>
+                  </b-form-group>
+                </b-col>
+              </b-form-row>
+
               <b-form-row>
-                <!-- Course Code -->
+                <!-- Year Duration-->
                 <b-col cols="12" md="6" lg="4">
-                <b-form-group
-                  class="coursecode"
-                  label="Course Code"
-                  label-for="courseCode">
-                  <b-form-input
-                    type="text"
-                    v-model="course.course_code"
-                    id="courseCode"
-                    required>
-                  </b-form-input>
-                </b-form-group>
-              </b-col>
+                  <b-form-group
+                    class="yearduration"
+                    label="Year Duration"
+                    label-for="yearDuration">
+                    <b-form-input
+                      type="number"
+                      v-model="course.year_duration "
+                      id="yearDuration"
+                      required>
+                    </b-form-input>
+                  </b-form-group>
+                </b-col>
 
-              <!--  Course Description -->
-              <b-col cols="12" md="6" lg="8">
-                <b-form-group
-                  class="coursedesc"
-                  label="Course Desc"
-                  label-for="courseDesc">
-                  <b-form-input
-                    type="text"
-                    v-model="course.course_desc"
-                    id="courseDesc"
-                    required>
-                  </b-form-input>
-                </b-form-group>
-              </b-col>
-            </b-form-row>
+                <!--  Course Manager -->
+                <b-col cols="12" md="6" lg="8">
+                  <b-form-group
+                    class="coursemajor"
+                    label="Course Major"
+                    label-for="courseMajor">
+                    <b-form-input
+                      type="text"
+                      v-model="course.course_major"
+                      id="courseMajor"
+                      required>
+                    </b-form-input>
+                  </b-form-group>
+                </b-col>
+              </b-form-row>
 
-            <b-form-row>
-              <!-- Year Duration-->
-              <b-col cols="12" md="6" lg="4">
-                <b-form-group
-                  class="yearduration"
-                  label="Year Duration"
-                  label-for="yearDuration">
-                  <b-form-input
-                    type="text"
-                    v-model="course.year_duration "
-                    id="yearDuration"
-                    required>
-                  </b-form-input>
-                </b-form-group>
-              </b-col>
+              <!-- Form Buttons -->
+              <b-form-row>
+                <b-col>
+                  <b-button variant="danger" @click="toggleForm">
+                    Cancel
+                  </b-button>
+                </b-col>
+                <b-col class="d-flex justify-content-end">
+                  <b-button variant="success" id="Add_Course_Btn" @click="addCourse">
+                    Add
+                  </b-button>
+                </b-col>
+              </b-form-row>
 
-              <!--  Course Manager -->
-              <b-col cols="12" md="6" lg="8">
-                <b-form-group
-                  class="coursemajor"
-                  label="Course Major"
-                  label-for="courseMajor">
-                  <b-form-input
-                    type="text"
-                    v-model="course.course_major"
-                    id="courseMajor"
-                    required>
-                  </b-form-input>
-                </b-form-group>
-              </b-col>
-            </b-form-row>
-
-            <!-- Form Buttons -->
-            <b-form-row>
-              <b-col>
-                <b-button variant="danger" @click="toggleForm">
-                  Cancel
-                </b-button>
-              </b-col>
-              <b-col class="d-flex justify-content-end">
-                <b-button variant="success" id="Add_Course_Btn" @click="addCourse">
-                  Add
-                </b-button>
-              </b-col>
-            </b-form-row>
-
-          </b-form> <!-- End of b-form  -->
-        </div> <!-- End of Panel Body  -->
-      </div> <!-- End of Panel  -->
+            </b-form> <!-- End of b-form  -->
+          </div> <!-- End of Panel Body  -->
+        </div> <!-- End of Panel  -->
+      </transition>
     </div> <!-- End of addPanel  -->
 
-    <div class="myTable px-4 py-3 my-5">
+    <div class="myTable px-4 py-3 ">
       <!-- Adding Form Start  -->
       <b-row>
         <b-col lg="4" class="my-1 ">
@@ -469,6 +471,7 @@
         };
       }, // End of Reset Form Function
       EditModal: function(item, index) {
+        this.showForm = false;
         this.course = {
           id: item.id,
           course_code: item.course_code,
