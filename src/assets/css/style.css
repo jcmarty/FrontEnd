@@ -1,6 +1,6 @@
 html, body, #app, #admin{
 	height: 100%;
-
+	scroll-behavior: smooth;
 }
 /************************
  *        Login         *
@@ -4163,4 +4163,13 @@ ul.notifications {
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+
+@-webkit-keyframes fadeIn {
+    from { opacity: 0; }
+      to { opacity: 1; }
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+      to { opacity: 1; }
 }
