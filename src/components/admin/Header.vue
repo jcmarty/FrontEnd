@@ -1,6 +1,6 @@
 <template>
 <!-- top navigation -->
-<div class="top_nav">
+<div class="top_nav d-print-none">
   <div class="nav_menu">
     <b-navbar>
         <div class="nav toggle">
