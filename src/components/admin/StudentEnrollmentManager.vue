@@ -741,8 +741,6 @@
 <script>
 
   import Axios from 'axios'
-  import axiosRetry from 'axios-retry';
-  axiosRetry(Axios, { retries: 3 });
   export default {
     name: 'StudentEnrollmentManager',
     data() {
@@ -1083,7 +1081,7 @@
       showVerify: function(){
         document.body.scrollTop = 0;
         document.documentElement.scrollTop = 0;
-        
+
         if(this.selected.length == 0){
           this.dismissErrorCountDown = 4
           this.alertMessage = "Failed to proceed, no subject selected."

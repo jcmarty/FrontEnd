@@ -1,11 +1,11 @@
 <template>
   <div>
-    <h1>Manage Student Grades</h1>
+    <h1 class="d-print-none">Manage Student Grades</h1>
+    <hr class="d-print-none"/>
 
     <div class="myTable px-4 py-3 my-5">
-      <!-- Adding Form Start  -->
-      <b-row>
-        <b-col lg="4" class="my-1 ">
+      <b-form-row class="d-print-none">
+        <b-col  cols="12" md="6" lg="4">
           <b-form-group
           class="filter"
           label="Filter"
@@ -20,14 +20,50 @@
             </b-input-group>
           </b-form-group>
         </b-col>
+      </b-form-row>
 
-        <b-col class="py-4">
-          <!-- Add New Room Button -->
-          <b-button variant="primary" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
-            Add New Room
-          </b-button>
+      <b-form-row class="d-print-none">
+        <b-col  cols="12" md="6" lg="2">
+          <b-form-group class="academicyear" label="Academic Year" label-for="academicYear">
+            <b-form-select id="academicYear" v-model="selectedAcademicYear" @change="">
+              <option value="null" hidden>Select Academic Year</option>
+              <option  :value="{id: ay.id, academic_year: ay.academic_year}" v-for="ay in academicYearOptions" >{{ay.academic_year}}</option>
+            </b-form-select>
+          </b-form-group>
         </b-col>
-      </b-row>
+
+        <b-col  cols="12" md="6" lg="2">
+          <b-form-group class="semester" label="Semester" label-for="Semester">
+            <b-form-select id="Semester" v-model="selectedSemester" @change="">
+              <option value="null" hidden>Select Semester</option>
+              <option  :value="{id: sem.id, semester: sem.semester}" v-for="sem in semesterOptions" >{{sem.semester}}</option>
+            </b-form-select>
+          </b-form-group>
+        </b-col>
+
+        <b-col cols="12" md="6" lg="4">
+          <b-form-group class="instructor" label="Instructor" label-for="Instructor">
+            <b-form-select id="Instructor" @change="getSubject" v-model="selectedInstructor">
+              <option value="null" hidden>Select Instructor</option>
+              <option v-if="instructorRow === null" value="null" disabled>No Instructors</option>
+              <option v-else v-for="data in instructorRow" v-bind:value="data.id">{{data.last_name}}, {{data.middle_name}} {{data.first_name}}</option>
+            </b-form-select>
+          </b-form-group>
+        </b-col>
+
+        <b-col cols="12" md="6" lg="4">
+          <b-form-group class="subject" label="Subject" label-for="Subject">
+            <b-form-select id="Subject" @change="filterStudentSchedule" v-model="selectedSubject">
+              <option value="null" hidden>Select Subject</option>
+              <option v-if="SubjectsRow === null" value="null" disabled>No Subjects</option>
+              <option v-else v-for="data in SubjectsRow" v-bind:value="{id: data.id, subject_code: data.subject_code ,subject_id: data.subject_id}">
+                {{data.subject_code}} - {{data.subject.subject.subject_title}}
+              </option>
+            </b-form-select>
+          </b-form-group>
+        </b-col>
+      </b-form-row>
+
 
       <!-- Main table element -->
       <b-table
@@ -37,32 +73,36 @@
         head-variant="dark"
         bordered
         hover
-        stacked="md"
         :items="items"
         :fields="fields"
         :current-page="currentPage"
         :per-page="perPage"
         :filter="filter">
 
-        <template v-slot:cell(active)="row" >
-        <b-badge  variant="success" pill v-if="row.item.active">Active</b-badge>
-        <b-badge  variant="danger"  pill v-else>Inactive</b-badge>
-
+        <template v-slot:cell(full_name)="row" >
+          <p v-if="row.item.enrollment.student.suffix_name">{{row.item.enrollment.student.last_name}} {{row.item.enrollment.student.suffix_name}}, {{row.item.enrollment.student.middle_name}} {{row.item.enrollment.student.first_name}} </p>
+          <p v-else>{{row.item.enrollment.student.last_name}}, {{row.item.enrollment.student.middle_name}} {{row.item.enrollment.student.first_name}} </p>
         </template>
 
-        <template v-slot:cell(actions)="row">
-          <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" class="mr-1">
-            <b-icon-pencil/>
-          </b-button>
+        <template v-slot:cell(prelim_grade)="row" >
+          <input type="text" class="Grade" v-model="Grades.prelim_grade"></input>
+        </template>
 
-          <b-button variant="danger" size="sm" @click="DeleteModal(row.item, $event.target)" v-b-tooltip.hover title="Delete Room">
-            <b-icon-trash/>
-          </b-button>
+        <template v-slot:cell(midterm_grade)="row" >
+          <input type="text" class="Grade" v-model="Grades.midterm_grade"></input>
+        </template>
+
+        <template v-slot:cell(prefinal_grade)="row" >
+          <input type="text" class="Grade" v-model="Grades.prefinal_grade"></input>
+        </template>
+
+        <template v-slot:cell(final_grade)="row" >
+          <input type="text" class="Grade" v-model="Grades.final_grade"></input>
         </template>
       </b-table>
 
-      <hr/>
-      <b-row>
+      <hr class="d-print-none"/>
+      <b-row class="d-print-none">
         <b-col sm="4" md="6" lg="1" class="my-1">
           <b-form-group
           class="perpageselect"
@@ -101,17 +141,15 @@
       return {
         items: [],
         fields: [
-          { key: 'enrollment_id', label: 'Room Number', class: 'text-center', sortable: true},
-          { key: 'schedule_id', label: 'Room Name', sortable: true, class: 'text-center' },
-          { key: 'prelim_grade', label: 'Prelim', sortable: true, class: 'text-center' },
-          { key: 'midterm_grade', label: 'Midterm ', sortable: true, class: 'text-center' },
-          { key: 'prefinal_grade', label: 'Prefinals', sortable: true, class: 'text-center' },
-          { key: 'final_grade', label: 'Finals' , class: 'text-center' },
-          { key: 'semestral', label: 'Semestral' , class: 'text-center' },
-          { key: 'remarks', label: 'Remarks' , class: 'text-center' },
-          { key: 'figure', label: 'Figure' , class: 'text-center' }
+          { key: 'enrollment.student.student_number', label: 'Student Number', sortable: true, class: 'text-center' },
+          { key: 'full_name', label: 'Student Name', class: 'text-center', sortable: true , class: 'text-center' },
+          { key: 'prelim_grade', label: 'Prelim Grade', class: 'text-center', sortable: true , class: 'text-center'},
+          { key: 'midterm_grade', label: 'Midterm Grade', class: 'text-center', sortable: true , class: 'text-center' },
+          { key: 'prefinal_grade', label: 'Pre-Final Grade', class: 'text-center', sortable: true , class: 'text-center' },
+          { key: 'final_grade', label: 'Final Grade', class: 'text-center', sortable: true , class: 'text-center'},
         ],
 
+        filteredClass: [],
         totalRows: 1,
         currentPage: 1,
         perPage: 5,
@@ -124,23 +162,114 @@
         dismissSecs: 7,
         dismissSuccessCountDown: 0,
         dismissErrorCountDown: 0,
+
+        selectedInstructor: null,
+        selectedSubject: null,
+        selectedAcademicYear: this.$store.getters.getCurrentAcademicYear,
+        selectedSemester: this.$store.getters.getCurrentSemester,
+
+        academicYearOptions: this.$store.getters.getAcademicYears,
+        semesterOptions: this.$store.getters.getSemesters,
+
+        SubjectsRow: null,
+        instructorRow: null,
+        StudentScheduleRow: null,
+        dataFilter: null,
+
+        subjRow: null,
+
+        Grades:{
+          prelim_grade: null,
+          midterm_grade:null,
+          prefinal_grade:null,
+          final_grade:null
+        }
+
       }
     },
 
     mounted () {
-
+      this.getFilteredClassSchedule();
+      this.getInstructors();
+      this.getSubject();
+      this.getStudentSchedule();
     },
 
     methods:{
-      // Toggle Form Function
-      toggleForm: function(){
-        this.resetform();
-        if(this.showForm){
-          this.showForm = false;
-        } else {
-          this.showForm = true;
+
+      // gets all created schedule
+      getFilteredClassSchedule: function(){
+        Axios
+          .get('http://localhost/api/v1/class_schedules', {
+            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+          })
+          .then(response => {
+            this.filteredClass = response.data;
+
+          })
+      },
+
+      // gets all instructor that prefers the selected subject
+      getInstructors: function(){
+        Axios
+          .get('http://localhost/api/v1/instructors', {
+            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+          })
+          .then(response => {
+            this.instructorRow = response.data;
+          })
+
+      },
+
+      getSubject: function(){
+        var class_schedules = this.filteredClass;
+        var filtered_subject = [];
+
+        for (var i = 0; i < class_schedules.length; i++) {
+          if (class_schedules[i].instructor_id == this.selectedInstructor && class_schedules[i].academic_year_id == this.selectedAcademicYear.id && class_schedules[i].semester_id == this.selectedSemester.id) {
+            filtered_subject.find(subject => {
+              return subject.subject_code == class_schedules[i].subject_code
+            }) ? console.log() : filtered_subject.push(class_schedules[i]);
+
+            // !filtered_subject.includes(/class_schedules[i].subject_code) ? filtered_subject.push(class_schedules[i]) === -1 : console.log();
+            // filtered_subject.push(class_schedules[i])/
+          }
         }
-      }, // End of Toggle Form Function
+        this.SubjectsRow = filtered_subject;
+
+    },
+
+      getStudentSchedule: function(){
+        Axios
+          .get('http://localhost/api/v1/student_schedules', {
+            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+          })
+          .then(response => {
+            this.StudentScheduleRow = response.data;
+          })
+      },
+
+      filterStudentSchedule: function(){
+        var Subject = this.selectedSubject;
+        var studSched = this.StudentScheduleRow;
+        var filteredSub = [];
+        for (var i = 0; i < studSched.length; i++) {
+          if (studSched[i].subject_id == Subject.subject_id) {
+            filteredSub.find(student => {
+              return student.enrollment.student.student_number == studSched[i].enrollment.student.student_number
+            }) ? console.log() : filteredSub.push(studSched[i]);
+          }
+        }
+
+        this.items = filteredSub;
+        this.totalRows = this.items.length;
+        console.log(this.items)
+      }
     }
   }
 </script>
+<style>
+  .Grade {
+    width: 70px;
+  }
+</style>
