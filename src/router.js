@@ -35,6 +35,7 @@ import StudentsReport from "./components/admin/StudentsReport.vue";
 import UserPrivilegeManager from "./components/admin/UserPrivilegeManager.vue";
 import ActivityLogs from "./components/admin/ActivityLogs.vue";
 import ResetPassword from "./components/admin/ResetPassword.vue";
+import StudentSubjectManager from "./components/admin/StudentSubjectManager.vue";
 
 // for testing only
 import RequirementsTesting from "./components/admin/RequirementsTesting.vue";
@@ -347,6 +348,16 @@ export default new Router({
                 setTimeout(() => next(), 2000);
               },
             },
+
+            {
+              path: '/StudentSubjectManager',
+              name: 'StudentSubjectManager',
+              component: StudentSubjectManager,
+              beforeEnter(to, from, next){
+                setTimeout(() => next(), 2000);
+              },
+            },
+
 
           ]
         },

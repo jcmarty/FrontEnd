@@ -668,6 +668,7 @@
             :per-page="perEnrollPage"
             :filter="filterEnroll">
 
+            <!--  -->
             <template v-slot:table-colgroup="scope">
               <col
                 v-for="field in scope.fields"
@@ -678,6 +679,15 @@
                 }"
               >
             </template>
+
+            <!-- view subjects btn -->
+            <template v-slot:cell(view_subjects)="row" >
+
+              <b-button variant="info" size="sm"  @click="viewStudentSubjects(row.item, row.index, $event.target)" >
+                <i class="fa fa-book" aria-hidden="true"/> View
+              </b-button>
+            </template>
+
 
             <!-- full name template -->
             <template v-slot:cell(full_name)="row" >
@@ -764,6 +774,7 @@
           { key: 'block', label: 'Block', class: 'text-center' },
           { key: 'student_status', label: 'Status', class: 'text-center' },
           { key: 'academic_status', label: 'Academic', class: 'text-center' },
+          { key: 'view_subjects', label: 'Subjects', class: 'text-center' },
         ],
 
         totalRows: 1,
@@ -875,6 +886,12 @@
     },
 
     methods: {
+      viewStudentSubjects: function(item){
+        this.$router.replace({
+          name: 'StudentSubjectManager',
+          params: item
+        })
+      },
 
       toggleForm: function(){
         if(this.showStudentForm){
@@ -1083,7 +1100,7 @@
       showVerify: function(){
         document.body.scrollTop = 0;
         document.documentElement.scrollTop = 0;
-        
+
         if(this.selected.length == 0){
           this.dismissErrorCountDown = 4
           this.alertMessage = "Failed to proceed, no subject selected."
