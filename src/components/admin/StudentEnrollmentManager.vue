@@ -371,7 +371,7 @@
       <b-button
                 class="mx-3"
                 variant="primary"
-                @click="showEnrollStudet"
+                @click="showEnrollStudent"
                 v-if="showSubjectsForm"
                 ><i class="fa fa-arrow-left" aria-hidden="true"/> Previous
       </b-button>
@@ -858,7 +858,7 @@
     },
 
     mounted() {
-      this.test()
+      this.quickEnroll()
       // this.getSemesters();
       // this.getAcademicYear();
       this.getRegisteredStudents();
@@ -897,8 +897,8 @@
         }else{
           this.showAddBtn = false;
           this.showStudentForm = true;
+          this.clearForm();
         }
-        this.clearForm();
       },
 
       getEnrollmentRecords: function(){
@@ -1207,16 +1207,16 @@
       }, // end of function showAddSubject
 
       // show enroll student form
-      showEnrollStudet: function(){
+      showEnrollStudent: function(){
         document.body.scrollTop = 0;
         document.documentElement.scrollTop = 0;
         this.selected = [];
         this.showSubjectsForm = false;
         this.showStudentForm = true;
-      }, // end of showEnrollStudet
+      }, // end of showEnrollStudent
 
-      // start of testing
-      test: function() {
+      // start of quickEnroll
+      quickEnroll: function() {
         if (Object.keys(this.$route.params).length === 0) {
           this.RegStudent = {
             id: '',
@@ -1224,11 +1224,15 @@
             student_number: ''
           }
         } else {
-          var params = this.$route.params
+          // show the enrolment form
+          this.showEnrollStudent();
 
+          var params = this.$route.params;
+          this.student_param = this.$route.params;
           var suff = params.suffix_name != null ? params.suffix_name + ',. ' : ', '
           var middle = params.middle_name != null ? params.middle_name : ''
 
+          
           this.RegStudent = {
             id: this.$route.params.id,
             name: params.last_name + ' ' + suff + ', ' + params.first_name + ' ' + middle,
@@ -1240,10 +1244,9 @@
           this.student_id = params.id;
           this.student_number = params.student_number;
           this.address = params.address;
-          this.student_param = params;
         }
         // console.log(this.$route.params);
-      },
+      }, // end of function quickEnroll
 
       // clear select boxes
       clearForm: function(){
