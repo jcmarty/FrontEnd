@@ -105,7 +105,7 @@
       </b-form-row>
 
       <b-form-row class="d-none d-print-block">
-          <center>
+          <center><br/><br/>
             <h5>SY ({{selectedAcademicYear.academic_year}})</h5>
             <h5>{{selectedSemester.semester}}</h5>
             <h5 v-if="selectedCourse === null">" "</h5>
@@ -124,7 +124,6 @@
         head-variant="dark"
         bordered
         hover
-        stacked="md"
         :items="items"
         :fields="fields"
         :current-page="currentPage"
@@ -177,7 +176,7 @@
           { key: 'time_start', label: 'Time Start', sortable: true, class: 'text-center' },
           { key: 'time_end', label: 'Time End', sortable: true, class: 'text-center' },
           { key: 'subject_code', label: 'Subject Code', sortable: true, class: 'text-center' },
-          { key: 'subject.subject.subject_description', label: 'Description', sortable: true, class: 'text-center' },
+          { key: 'subject.subject.subject_title', label: 'Subject Title', sortable: true, class: 'text-center' },
           { key: 'room.room_number', label: 'Room', sortable: true, class: 'text-center' },
           { key: 'instructor.last_name', label: 'Instructor', sortable: true, class: 'text-center' },
           { key: 'block', label: 'Block', sortable: true, class: 'text-center' },
@@ -259,9 +258,9 @@
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
-
             this.items = response.data;
             this.totalRows = this.items.length;
+            console.log(response.data)
           })
       },
 
@@ -317,7 +316,6 @@
 
       // SET YEAR LEVEL BASED ON SELECTED COURSE
       changeCurr: function(){
-        console.log(this.selectedCurriculum);
         if(this.selectedCourse.year == "4"){
           this.year_options = [
             { value: '1st Year', text: '1st Year' },
