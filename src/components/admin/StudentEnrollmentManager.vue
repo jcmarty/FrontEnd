@@ -682,7 +682,6 @@
 
             <!-- view subjects btn -->
             <template v-slot:cell(view_subjects)="row" >
-
               <b-button variant="info" size="sm"  @click="viewStudentSubjects(row.item, row.index, $event.target)" >
                 <i class="fa fa-book" aria-hidden="true"/> View
               </b-button>
