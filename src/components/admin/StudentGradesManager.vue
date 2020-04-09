@@ -112,7 +112,8 @@
                     prelim_disabled: false,
                     midterm_disabled: true,
                     prefinal_disabled: true,
-                    final_disabled: true
+                    final_disabled: true,
+                    semestral_disabled: true
                   }"
               >
                   <i class="fa fa-pencil"></i>
@@ -135,7 +136,8 @@
                     prelim_disabled: true,
                     midterm_disabled: false,
                     prefinal_disabled: true,
-                    final_disabled: true
+                    final_disabled: true,
+                    semestral_disabled: true
                   }"
               >
                   <i class="fa fa-pencil"></i>
@@ -158,7 +160,8 @@
                     prelim_disabled: true,
                     midterm_disabled: true,
                     prefinal_disabled: false,
-                    final_disabled: true
+                    final_disabled: true,
+                    semestral_disabled: true
                   }"
               >
                   <i class="fa fa-pencil"></i>
@@ -181,7 +184,8 @@
                     prelim_disabled: true,
                     midterm_disabled: true,
                     prefinal_disabled: true,
-                    final_disabled: false
+                    final_disabled: false,
+                    semestral_disabled: true
                   }"
               >
                   <i class="fa fa-pencil"></i>
@@ -191,6 +195,12 @@
                 <i class="fa fa-save"></i>
               </b-button>
             </b-form-group>
+        </template>
+
+        <template v-slot:cell(semestral)="row" >
+            <input type="text" class="Grade" :disabled="input_status.semestral_disabled" :value="(row.item.prelim_grade + row.item.midterm_grade + row.item.prefinal_grade + row.item.final_grade) / 4 ">
+            </input>
+
         </template>
       </b-table>
     </b-overlay>
@@ -242,6 +252,7 @@
           { key: 'midterm_grade', label: 'Midterm Grade', class: 'text-center',  class: 'text-center' },
           { key: 'prefinal_grade', label: 'Pre-Final Grade', class: 'text-center',  class: 'text-center' },
           { key: 'final_grade', label: 'Final Grade', class: 'text-center', class: 'text-center'},
+          { key: 'semestral', label: 'Semestral Grade', class: 'text-center', class: 'text-center'},
         ],
 
         filteredClass: [],
@@ -277,14 +288,16 @@
           prelim_grade: null,
           midterm_grade:null,
           prefinal_grade:null,
-          final_grade:null
+          final_grade:null,
+          semestral: null,
         },
 
         input_status: {
           prelim_disabled: true,
           midterm_disabled: true,
           prefinal_disabled: true,
-          final_disabled: true
+          final_disabled: true,
+          semestral_disabled: true
         },
 
         isLoading: false,
@@ -378,7 +391,8 @@
           prelim_disabled: true,
           midterm_disabled: true,
           prefinal_disabled: true,
-          final_disabled: true
+          final_disabled: true,
+          semestral_disabled: true
         }
 
         for (var i = 0; i < this.items.length; i++) {
@@ -410,7 +424,8 @@
           prelim_disabled: true,
           midterm_disabled: true,
           prefinal_disabled: true,
-          final_disabled: true
+          final_disabled: true,
+          semestral_disabled: true
         }
 
         for (var i = 0; i < this.items.length; i++) {
@@ -441,7 +456,8 @@
           prelim_disabled: true,
           midterm_disabled: true,
           prefinal_disabled: true,
-          final_disabled: true
+          final_disabled: true,
+          semestral_disabled: true
         }
 
         for (var i = 0; i < this.items.length; i++) {
@@ -472,10 +488,11 @@
           prelim_disabled: true,
           midterm_disabled: true,
           prefinal_disabled: true,
-          final_disabled: true
+          final_disabled: true,
+          semestral_disabled: true
         }
-
         for (var i = 0; i < this.items.length; i++) {
+
           Axios
             .put('http://localhost/api/v1/student_schedules/' + this.items[i].id , this.items[i],{
               headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
@@ -497,6 +514,19 @@
             });
         }
       },
+
+      SemestralGradeComputation: function(){
+        var SemestralGrade;
+        var data = this.items;
+
+
+
+        for (var i = 0; i < data.length; i++) {
+          SemestralGrade = data[i].prelim_grade + data[i].midterm_grade + data[i].prefinal_grade + data[i].final_grade / 4;
+          data[i].semestral = SemestralGrade;
+        }
+
+      }
 
     }
   }
