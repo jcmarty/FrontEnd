@@ -342,35 +342,15 @@
               var totalGrade = parseFloat(prelim) + parseFloat(midterm) + parseFloat(prefinal) + parseFloat(final);
               var semestralGrade = totalGrade / 4;
               var fa = "FAILED";
-              var ps = "PASSED"
-              if (semestralGrade < 75 ) {
-                return("fa");
+              var ps = "PASSED";
+              var inc = "INCOMPLETE";
+              if (prelim == 0 || midterm == 0 || prefinal == 0 || final == 0 ) {
+                return(inc);
               }
-              else if (semestralGrade >= 75 && semestralGrade < 78) {
-                return(ps);
+              else if (semestralGrade < 75 ) {
+                return(fa);
               }
-              else if (semestralGrade >= 78 && semestralGrade < 80) {
-                return(ps);
-              }
-              else if (semestralGrade >= 80 && semestralGrade < 83) {
-                return(ps);
-              }
-              else if (semestralGrade >= 83 && semestralGrade < 85) {
-                return(ps);
-              }
-              else if (semestralGrade >= 85 && semestralGrade < 88) {
-                return(ps);
-              }
-              else if (semestralGrade >= 88 && semestralGrade < 91) {
-                return(ps);
-              }
-              else if (semestralGrade >= 91 && semestralGrade < 94) {
-                return(ps);
-              }
-              else if (semestralGrade >= 94 && semestralGrade < 96) {
-                return(ps);
-              }
-              else if (semestralGrade >= 96 && semestralGrade <= 100) {
+              else if (semestralGrade >= 75 ) {
                 return(ps);
               }
 
