@@ -64,8 +64,24 @@
         </b-col>
       </b-form-row>
 
-
+      <!-- Alert Message -->
+      <b-alert variant="success"
+        :show="dismissSuccessCountDown"
+        @dismissed="dismissSuccessCountDown=0"
+        dismissible fade>
+          {{alertMessage}}
+      </b-alert>
+      <b-alert variant="danger"
+        :show="dismissErrorCountDown"
+        @dismissed="dismissErrorCountDown=0"
+        dismissible fade>
+          <p>{{alertMessage}}</p>
+          <ul>
+            <li v-for="error in errors">{{ error }}</li>
+          </ul>
+      </b-alert>
       <!-- Main table element -->
+      <b-overlay :show="isLoading" rounded="sm">
       <b-table
         class="my-3 table-striped"
         show-empty
@@ -79,27 +95,106 @@
         :per-page="perPage"
         :filter="filter">
 
+
         <template v-slot:cell(full_name)="row" >
           <p v-if="row.item.enrollment.student.suffix_name">{{row.item.enrollment.student.last_name}} {{row.item.enrollment.student.suffix_name}}, {{row.item.enrollment.student.middle_name}} {{row.item.enrollment.student.first_name}} </p>
           <p v-else>{{row.item.enrollment.student.last_name}}, {{row.item.enrollment.student.middle_name}} {{row.item.enrollment.student.first_name}} </p>
         </template>
 
         <template v-slot:cell(prelim_grade)="row" >
-          <input type="text" class="Grade" v-model="Grades.prelim_grade"></input>
+          <input type="text" class="Grade" v-model="row.item.prelim_grade" :disabled="input_status.prelim_disabled">
+        </template>
+
+        <template v-slot:head(prelim_grade)="row" >
+            <b-form-group class="Prelim" label="Prelim Grades" label-for="Prelim">
+              <b-button v-if="input_status.prelim_disabled" size="sm" variant="warning" :hidden="hidebutton"
+                  @click="input_status = {
+                    prelim_disabled: false,
+                    midterm_disabled: true,
+                    prefinal_disabled: true,
+                    final_disabled: true
+                  }"
+              >
+                  <i class="fa fa-pencil"></i>
+              </b-button>
+
+              <b-button v-if="!input_status.prelim_disabled" size="sm" variant="success" @click="PrelimSaveGrades">
+                <i class="fa fa-save"></i>
+              </b-button>
+            </b-form-group>
         </template>
 
         <template v-slot:cell(midterm_grade)="row" >
-          <input type="text" class="Grade" v-model="Grades.midterm_grade"></input>
+          <input type="text" class="Grade" v-model="row.item.midterm_grade" :disabled="input_status.midterm_disabled"></input>
+        </template>
+
+        <template v-slot:head(midterm_grade)="row" >
+            <b-form-group class="Midterm" label="Midterm Grades" label-for="Midterm">
+              <b-button v-if="input_status.midterm_disabled" size="sm" variant="warning" :hidden="hidebutton"
+                  @click="input_status = {
+                    prelim_disabled: true,
+                    midterm_disabled: false,
+                    prefinal_disabled: true,
+                    final_disabled: true
+                  }"
+              >
+                  <i class="fa fa-pencil"></i>
+              </b-button>
+
+              <b-button v-if="!input_status.midterm_disabled" size="sm" variant="success" @click="MidtermSaveGrades">
+                <i class="fa fa-save"></i>
+              </b-button>
+            </b-form-group>
         </template>
 
         <template v-slot:cell(prefinal_grade)="row" >
-          <input type="text" class="Grade" v-model="Grades.prefinal_grade"></input>
+          <input type="text" class="Grade" v-model="row.item.prefinal_grade" :disabled="input_status.prefinal_disabled"></input>
+        </template>
+
+        <template v-slot:head(prefinal_grade)="row" >
+            <b-form-group class="Prefinal" label="Prefinal Grades" label-for="Prefinal">
+              <b-button v-if="input_status.prefinal_disabled" size="sm" variant="warning" :hidden="hidebutton"
+                  @click="input_status = {
+                    prelim_disabled: true,
+                    midterm_disabled: true,
+                    prefinal_disabled: false,
+                    final_disabled: true
+                  }"
+              >
+                  <i class="fa fa-pencil"></i>
+              </b-button>
+
+              <b-button v-if="!input_status.prefinal_disabled" size="sm" variant="success" @click="PrefinalSaveGrades">
+                <i class="fa fa-save"></i>
+              </b-button>
+            </b-form-group>
         </template>
 
         <template v-slot:cell(final_grade)="row" >
-          <input type="text" class="Grade" v-model="Grades.final_grade"></input>
+            <input type="text" class="Grade" v-model="row.item.final_grade" :disabled="input_status.final_disabled"></input>
+        </template>
+
+        <template v-slot:head(final_grade)="row" >
+            <b-form-group class="Final" label="Final Grades" label-for="Final">
+              <b-button v-if="input_status.final_disabled" size="sm" variant="warning" :hidden="hidebutton"
+                  @click="input_status = {
+                    prelim_disabled: true,
+                    midterm_disabled: true,
+                    prefinal_disabled: true,
+                    final_disabled: false
+                  }"
+              >
+                  <i class="fa fa-pencil"></i>
+              </b-button>
+
+              <b-button v-if="!input_status.final_disabled" size="sm" variant="success" @click="FinalSaveGrades">
+                <i class="fa fa-save"></i>
+              </b-button>
+            </b-form-group>
         </template>
       </b-table>
+    </b-overlay>
+
 
       <hr class="d-print-none"/>
       <b-row class="d-print-none">
@@ -143,10 +238,10 @@
         fields: [
           { key: 'enrollment.student.student_number', label: 'Student Number', sortable: true, class: 'text-center' },
           { key: 'full_name', label: 'Student Name', class: 'text-center', sortable: true , class: 'text-center' },
-          { key: 'prelim_grade', label: 'Prelim Grade', class: 'text-center', sortable: true , class: 'text-center'},
-          { key: 'midterm_grade', label: 'Midterm Grade', class: 'text-center', sortable: true , class: 'text-center' },
-          { key: 'prefinal_grade', label: 'Pre-Final Grade', class: 'text-center', sortable: true , class: 'text-center' },
-          { key: 'final_grade', label: 'Final Grade', class: 'text-center', sortable: true , class: 'text-center'},
+          { key: 'prelim_grade', label: 'Prelim Grade', class: 'text-center',  class: 'text-center'},
+          { key: 'midterm_grade', label: 'Midterm Grade', class: 'text-center',  class: 'text-center' },
+          { key: 'prefinal_grade', label: 'Pre-Final Grade', class: 'text-center',  class: 'text-center' },
+          { key: 'final_grade', label: 'Final Grade', class: 'text-center', class: 'text-center'},
         ],
 
         filteredClass: [],
@@ -183,7 +278,18 @@
           midterm_grade:null,
           prefinal_grade:null,
           final_grade:null
-        }
+        },
+
+        input_status: {
+          prelim_disabled: true,
+          midterm_disabled: true,
+          prefinal_disabled: true,
+          final_disabled: true
+        },
+
+        isLoading: false,
+
+        hidebutton: true
 
       }
     },
@@ -199,13 +305,14 @@
 
       // gets all created schedule
       getFilteredClassSchedule: function(){
+        this.isLoading = true;
         Axios
           .get('http://localhost/api/v1/class_schedules', {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
             this.filteredClass = response.data;
-
+            this.isLoading = false
           })
       },
 
@@ -254,22 +361,149 @@
         var studSched = this.StudentScheduleRow;
         var filteredSub = [];
         for (var i = 0; i < studSched.length; i++) {
-          if (studSched[i].subject_id == Subject.subject_id) {
-            filteredSub.find(student => {
-              return student.enrollment.student.student_number == studSched[i].enrollment.student.student_number
-            }) ? console.log() : filteredSub.push(studSched[i]);
+          if (studSched[i].subject_id == Subject.subject_id && studSched[i].enrollment.academic_year_id == this.selectedAcademicYear.id && studSched[i].enrollment.semester_id == this.selectedSemester.id ) {
+            filteredSub.push(studSched[i]);
           }
         }
 
         this.items = filteredSub;
         this.totalRows = this.items.length;
-        console.log(this.items)
-      }
+        this.hidebutton = false;
+
+      },
+
+      PrelimSaveGrades: function(){
+        // console.log(this.items);
+        this.input_status = {
+          prelim_disabled: true,
+          midterm_disabled: true,
+          prefinal_disabled: true,
+          final_disabled: true
+        }
+
+        for (var i = 0; i < this.items.length; i++) {
+          Axios
+            .put('http://localhost/api/v1/student_schedules/' + this.items[i].id , this.items[i],{
+              headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+            })
+            .then(response => {
+              this.getFilteredClassSchedule();
+              this.alertMessage = response.data.message;
+              this.dismissSuccessCountDown = this.dismissSecs;
+            })
+            .catch(error => {
+              this.alertMessage = error.response.data.message;
+              const values = Object.values(error.response.data.errors);
+              for(const val of values){
+                for(const err of val){
+                  this.errors.push(err);
+                }
+              }
+              this.dismissErrorCountDown = this.dismissSecs;
+            });
+        }
+
+      },
+
+      MidtermSaveGrades: function(){
+        this.input_status = {
+          prelim_disabled: true,
+          midterm_disabled: true,
+          prefinal_disabled: true,
+          final_disabled: true
+        }
+
+        for (var i = 0; i < this.items.length; i++) {
+          Axios
+            .put('http://localhost/api/v1/student_schedules/' + this.items[i].id , this.items[i],{
+              headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+            })
+            .then(response => {
+              this.getFilteredClassSchedule();
+              this.alertMessage = "Students Grade Successfully Upddated.";
+              this.dismissSuccessCountDown = this.dismissSecs;
+            })
+            .catch(error => {
+              this.alertMessage = error.response.data.message;
+              const values = Object.values(error.response.data.errors);
+              for(const val of values){
+                for(const err of val){
+                  this.errors.push(err);
+                }
+              }
+              this.dismissErrorCountDown = this.dismissSecs;
+            });
+        }
+      },
+
+      PrefinalSaveGrades: function(){
+        this.input_status = {
+          prelim_disabled: true,
+          midterm_disabled: true,
+          prefinal_disabled: true,
+          final_disabled: true
+        }
+
+        for (var i = 0; i < this.items.length; i++) {
+          Axios
+            .put('http://localhost/api/v1/student_schedules/' + this.items[i].id , this.items[i],{
+              headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+            })
+            .then(response => {
+              this.getFilteredClassSchedule();
+              this.alertMessage = response.data.message;
+              this.dismissSuccessCountDown = this.dismissSecs;
+            })
+            .catch(error => {
+              this.alertMessage = error.response.data.message;
+              const values = Object.values(error.response.data.errors);
+              for(const val of values){
+                for(const err of val){
+                  this.errors.push(err);
+                }
+              }
+              this.dismissErrorCountDown = this.dismissSecs;
+            });
+        }
+      },
+
+      FinalSaveGrades: function(){
+        this.input_status = {
+          prelim_disabled: true,
+          midterm_disabled: true,
+          prefinal_disabled: true,
+          final_disabled: true
+        }
+
+        for (var i = 0; i < this.items.length; i++) {
+          Axios
+            .put('http://localhost/api/v1/student_schedules/' + this.items[i].id , this.items[i],{
+              headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+            })
+            .then(response => {
+              this.getFilteredClassSchedule();
+              this.alertMessage = response.data.message;
+              this.dismissSuccessCountDown = this.dismissSecs;
+            })
+            .catch(error => {
+              this.alertMessage = error.response.data.message;
+              const values = Object.values(error.response.data.errors);
+              for(const val of values){
+                for(const err of val){
+                  this.errors.push(err);
+                }
+              }
+              this.dismissErrorCountDown = this.dismissSecs;
+            });
+        }
+      },
+
     }
   }
 </script>
 <style>
   .Grade {
-    width: 70px;
+    width: 50px;
+    text-align: center;
   }
 </style>
