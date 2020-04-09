@@ -1021,15 +1021,7 @@
 
         this.$router.replace({
           name: 'StudentEnrollmentManager',
-          params: {
-            id: item.id,
-            student_number: item.student_number,
-            first_name: item.first_name,
-            middle_name: item.middle_name,
-            suffix_name: item.suffix_name,
-            last_name: item.last_name,
-            address: item.address
-          }
+          params: item
         })
       },
 
