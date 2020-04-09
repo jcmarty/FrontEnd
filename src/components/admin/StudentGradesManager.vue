@@ -197,11 +197,12 @@
             </b-form-group>
         </template>
 
-        <template v-slot:cell(semestral)="row" >
-            <input type="text" class="Grade" :disabled="input_status.semestral_disabled" :value="(row.item.prelim_grade + row.item.midterm_grade + row.item.prefinal_grade + row.item.final_grade) / 4 ">
-            </input>
+        <!-- <template v-slot:cell(semestral)="row" > -->
+          <!-- <input type="text" class="Grade" :disabled="input_status.semestral_disabled" :value="(row.item.prelim_grade + row.item.midterm_grade + row.item.prefinal_grade + row.item.final_grade) / 4 "> -->
+            <!-- <input type="text" class="Grade" v-model="row.item.prelim_grade" :disabled="input_status.semestral_disabled" >
+            </input> -->
 
-        </template>
+        <!-- </template> -->
       </b-table>
     </b-overlay>
 
@@ -252,7 +253,18 @@
           { key: 'midterm_grade', label: 'Midterm Grade', class: 'text-center',  class: 'text-center' },
           { key: 'prefinal_grade', label: 'Pre-Final Grade', class: 'text-center',  class: 'text-center' },
           { key: 'final_grade', label: 'Final Grade', class: 'text-center', class: 'text-center'},
-          { key: 'semestral', label: 'Semestral Grade', class: 'text-center', class: 'text-center'},
+          {
+            key: 'semestral',
+            label: 'Semestral Grade',
+            class: 'text-center',
+            sortable: true,
+            sortByFormatted: true,
+            formatter: (value, key, item) => {
+              var totalGrade = parseFloat(item.prelim_grade) + parseFloat(item.midterm_grade) + parseFloat(item.prefinal_grade) + parseFloat(item.final_grade);
+              var semestralGrade = totalGrade / 4
+              return parseFloat(semestralGrade);
+            },
+          },
         ],
 
         filteredClass: [],

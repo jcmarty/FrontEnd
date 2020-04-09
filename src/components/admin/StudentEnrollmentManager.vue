@@ -689,11 +689,11 @@
 
 
             <!-- full name template -->
-            <template v-slot:cell(full_name)="row" >
+            <!-- <template v-slot:cell(full_name)="row" >
                 {{row.item.student.last_name}}{{row.item.student.suffix_name?  " " + row.item.student.suffix_name  + ", " : ", "}}
                 {{row.item.student.first_name}}
                 {{row.item.student.middle_name? row.item.student.middle_name : ""}}
-            </template>
+            </template> -->
 
           </b-table>
         </b-overlay>
@@ -764,7 +764,18 @@
         enrollmentRecords : [],
         enrollmentFields: [
           { key: 'student.student_number', label: 'Student Number', sortable: true, class: 'text-center'},
-          { key: 'full_name', label: 'Full Name', sortable: true, class: 'text-center' },
+          {
+            key: 'full_name',
+            label: 'Full Name',
+            class: 'text-center',
+            sortable: true,
+            sortByFormatted: true,
+            formatter: (value, key, item) => {
+              var suffix = item.student.suffix_name? " " + item.student.suffix_name : "";
+              var middle = item.student.middle_name? " " + item.student.middle_name: "";
+              return item.student.last_name  + suffix + ', ' + item.student.first_name + middle;
+            },
+          },
           { key: 'course.course_code', label: 'Course', sortable: true, class: 'text-center' },
           { key: 'curriculum.curriculum_title', label: 'Curriculum', sortable: true, class: 'text-center' },
           { key: 'year_level', label: 'Year Level', sortable: true, class: 'text-center' },
@@ -1232,7 +1243,7 @@
           var suff = params.suffix_name != null ? params.suffix_name + ',. ' : ', '
           var middle = params.middle_name != null ? params.middle_name : ''
 
-          
+
           this.RegStudent = {
             id: this.$route.params.id,
             name: params.last_name + ' ' + suff + ', ' + params.first_name + ' ' + middle,
