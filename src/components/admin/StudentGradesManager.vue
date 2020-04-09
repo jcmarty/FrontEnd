@@ -96,10 +96,10 @@
         :filter="filter">
 
 
-        <template v-slot:cell(full_name)="row" >
+        <!-- <template v-slot:cell(full_name)="row" >
           <p v-if="row.item.enrollment.student.suffix_name">{{row.item.enrollment.student.last_name}} {{row.item.enrollment.student.suffix_name}}, {{row.item.enrollment.student.middle_name}} {{row.item.enrollment.student.first_name}} </p>
           <p v-else>{{row.item.enrollment.student.last_name}}, {{row.item.enrollment.student.middle_name}} {{row.item.enrollment.student.first_name}} </p>
-        </template>
+        </template> -->
 
         <template v-slot:cell(prelim_grade)="row" >
           <input type="text" class="Grade" v-model="row.item.prelim_grade" :disabled="input_status.prelim_disabled">
@@ -248,11 +248,22 @@
         items: [],
         fields: [
           { key: 'enrollment.student.student_number', label: 'Student Number', sortable: true, class: 'text-center' },
-          { key: 'full_name', label: 'Student Name', class: 'text-center', sortable: true , class: 'text-center' },
-          { key: 'prelim_grade', label: 'Prelim Grade', class: 'text-center',  class: 'text-center'},
-          { key: 'midterm_grade', label: 'Midterm Grade', class: 'text-center',  class: 'text-center' },
-          { key: 'prefinal_grade', label: 'Pre-Final Grade', class: 'text-center',  class: 'text-center' },
-          { key: 'final_grade', label: 'Final Grade', class: 'text-center', class: 'text-center'},
+          {
+            key: 'full_name',
+            label: 'Full Name',
+            class: 'text-center',
+            sortable: true,
+            sortByFormatted: true,
+            formatter: (value, key, item) => {
+              var suffix = item.enrollment.student.suffix_name? " " + item.enrollment.student.suffix_name: "";
+              var middle = item.enrollment.student.middle_name? " " + item.enrollment.student.middle_name: "";
+              return item.enrollment.student.last_name  + suffix + ', ' + item.enrollment.student.first_name + middle;
+            },
+          },
+          { key: 'prelim_grade', label: 'Prelim Grade', class: 'text-center'},
+          { key: 'midterm_grade', label: 'Midterm Grade', class: 'text-center'},
+          { key: 'prefinal_grade', label: 'Pre-Final Grade', class: 'text-center'},
+          { key: 'final_grade', label: 'Final Grade', class: 'text-center'},
           {
             key: 'semestral',
             label: 'Semestral Grade',
@@ -260,9 +271,109 @@
             sortable: true,
             sortByFormatted: true,
             formatter: (value, key, item) => {
-              var totalGrade = parseFloat(item.prelim_grade) + parseFloat(item.midterm_grade) + parseFloat(item.prefinal_grade) + parseFloat(item.final_grade);
+              var prelim = item.prelim_grade? item.prelim_grade : 0;
+              var midterm = item.midterm_grade? item.midterm_grade : 0;
+              var prefinal = item.prefinal_grade? item.prefinal_grade : 0;
+              var final = item.final_grade? item.final_grade : 0;
+
+              var totalGrade = parseFloat(prelim) + parseFloat(midterm) + parseFloat(prefinal) + parseFloat(final);
               var semestralGrade = totalGrade / 4
+
               return parseFloat(semestralGrade);
+            },
+          },
+          {
+            key: 'figure',
+            label: 'Figure',
+            class: 'text-center',
+            sortable: true,
+            sortByFormatted: true,
+            formatter: (value, key, item) => {
+              var prelim = item.prelim_grade? item.prelim_grade : 0;
+              var midterm = item.midterm_grade? item.midterm_grade : 0;
+              var prefinal = item.prefinal_grade? item.prefinal_grade : 0;
+              var final = item.final_grade? item.final_grade : 0;
+              var totalGrade = parseFloat(prelim) + parseFloat(midterm) + parseFloat(prefinal) + parseFloat(final);
+              var semestralGrade = totalGrade / 4;
+              if (semestralGrade < 75 ) {
+                return(5.00);
+              }
+              else if (semestralGrade >= 75 && semestralGrade < 78) {
+                return(3.00);
+              }
+              else if (semestralGrade >= 78 && semestralGrade < 80) {
+                return(2.75);
+              }
+              else if (semestralGrade >= 80 && semestralGrade < 83) {
+                return(2.50);
+              }
+              else if (semestralGrade >= 83 && semestralGrade < 85) {
+                return(2.25);
+              }
+              else if (semestralGrade >= 85 && semestralGrade < 88) {
+                return(2.00);
+              }
+              else if (semestralGrade >= 88 && semestralGrade < 91) {
+                return(1.75);
+              }
+              else if (semestralGrade >= 91 && semestralGrade < 94) {
+                return(1.50);
+              }
+              else if (semestralGrade >= 94 && semestralGrade < 96) {
+                return(1.25);
+              }
+              else if (semestralGrade >= 96 && semestralGrade <= 100) {
+                return(1.00);
+              }
+
+            },
+          },
+          {
+            key: 'remarks',
+            label: 'Remarks',
+            class: 'text-center',
+            sortable: true,
+            sortByFormatted: true,
+            formatter: (value, key, item) => {
+              var prelim = item.prelim_grade? item.prelim_grade : 0;
+              var midterm = item.midterm_grade? item.midterm_grade : 0;
+              var prefinal = item.prefinal_grade? item.prefinal_grade : 0;
+              var final = item.final_grade? item.final_grade : 0;
+              var totalGrade = parseFloat(prelim) + parseFloat(midterm) + parseFloat(prefinal) + parseFloat(final);
+              var semestralGrade = totalGrade / 4;
+              var fa = "FAILED";
+              var ps = "PASSED"
+              if (semestralGrade < 75 ) {
+                return("fa");
+              }
+              else if (semestralGrade >= 75 && semestralGrade < 78) {
+                return(ps);
+              }
+              else if (semestralGrade >= 78 && semestralGrade < 80) {
+                return(ps);
+              }
+              else if (semestralGrade >= 80 && semestralGrade < 83) {
+                return(ps);
+              }
+              else if (semestralGrade >= 83 && semestralGrade < 85) {
+                return(ps);
+              }
+              else if (semestralGrade >= 85 && semestralGrade < 88) {
+                return(ps);
+              }
+              else if (semestralGrade >= 88 && semestralGrade < 91) {
+                return(ps);
+              }
+              else if (semestralGrade >= 91 && semestralGrade < 94) {
+                return(ps);
+              }
+              else if (semestralGrade >= 94 && semestralGrade < 96) {
+                return(ps);
+              }
+              else if (semestralGrade >= 96 && semestralGrade <= 100) {
+                return(ps);
+              }
+
             },
           },
         ],
