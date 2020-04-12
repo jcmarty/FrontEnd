@@ -686,15 +686,7 @@
                 <i class="fa fa-book" aria-hidden="true"/> View
               </b-button>
             </template>
-
-
-            <!-- full name template -->
-            <!-- <template v-slot:cell(full_name)="row" >
-                {{row.item.student.last_name}}{{row.item.student.suffix_name?  " " + row.item.student.suffix_name  + ", " : ", "}}
-                {{row.item.student.first_name}}
-                {{row.item.student.middle_name? row.item.student.middle_name : ""}}
-            </template> -->
-
+            
           </b-table>
         </b-overlay>
         <!-- end of enrollment table -->
