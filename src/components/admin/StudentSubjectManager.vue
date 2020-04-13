@@ -4,6 +4,24 @@
     <h1>Manage Student Subjects</h1>
     <hr/>
 
+    <!-- Alert Message -->
+    <b-alert class="mx-3" variant="success"
+      :show="dismissSuccessCountDown"
+      @dismissed="dismissSuccessCountDown=0"
+      dismissible fade>
+        {{alertMessage}}
+    </b-alert>
+    <b-alert class="mx-3" variant="danger"
+      :show="dismissErrorCountDown"
+      @dismissed="dismissErrorCountDown=0"
+      dismissible fade>
+        <p>{{alertMessage}}</p>
+        <ul>
+          <li v-for="error in errors">{{ error }}</li>
+        </ul>
+    </b-alert>
+    <!-- End of Alert Message -->
+
     <!-- edit student academic info -->
     <transition name="fade">
       <!-- start of academic form -->
@@ -315,24 +333,6 @@
       </div>
     </transition>
     <!-- end of student information -->
-
-    <!-- Alert Message -->
-    <b-alert class="mx-3" variant="success"
-      :show="dismissSuccessCountDown"
-      @dismissed="dismissSuccessCountDown=0"
-      dismissible fade>
-        {{alertMessage}}
-    </b-alert>
-    <b-alert class="mx-3" variant="danger"
-      :show="dismissErrorCountDown"
-      @dismissed="dismissErrorCountDown=0"
-      dismissible fade>
-        <p>{{alertMessage}}</p>
-        <ul>
-          <li v-for="error in errors">{{ error }}</li>
-        </ul>
-    </b-alert>
-    <!-- End of Alert Message -->
 
     <!-- start of student subject table -->
     <b-overlay :show="isLoading" rounded="sm">
@@ -658,9 +658,9 @@
           })
           .then(response => {
 
-            console.log(response)
-            // this.dismissSuccessCountDown = 7;
-            // this.alertMessage = "Academic information successfully updated.";
+            // console.log(response)
+            this.dismissSuccessCountDown = 7;
+            this.alertMessage = "Academic information successfully updated.";
 
             var myParam = {
               enrollment_id : this.studentRecord.id
@@ -676,6 +676,11 @@
 
       // get enrolled subjects of student
       getStudentSchedules: function(myParam){
+
+        // scroll page to the top
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+
         this.isLoading = true;
         this.subjectRecords = [];
         Axios
@@ -693,7 +698,7 @@
           this.subjectRecords = response.data;
           this.perEnrollPage = response.data.length;
 
-          console.log(this.studentRecord)
+          // console.log(this.studentRecord)
           // console.log(response.data)
         })
         .catch(error => {
@@ -745,15 +750,16 @@
       // adds selected subject from add Modal
       addSubject : function(){
 
-        var toAdd = {
-          enrollment_id : this.studentRecord.id,
-          subject_id : null,
-          status : 'ENROLLED',
-          active  : 1
-        };
+
 
         for(var i = 0; i < this.selected.length; i++ ){
-          toAdd.subject_id = this.selected[i].id;
+          var toAdd = {
+            enrollment_id : this.studentRecord.id,
+            subject_id : this.selected[i].id,
+            status : 'ENROLLED',
+            active  : 1
+          };
+          // toAdd.subject_id = this.selected[i].id;
           Axios
           .post('http://localhost/api/v1/student_schedules', toAdd,{
             headers: { Authorization: 'Bearer ' + this.$store.getters.getToken }
@@ -869,6 +875,11 @@
           this.showUpdateForm = false;
         }else{
           // this.showAddBtn = false;
+
+          // scroll page to the top
+          document.body.scrollTop = 0;
+          document.documentElement.scrollTop = 0;
+
           this.showUpdateForm = true;
         }
       }, // end of function toggleForm

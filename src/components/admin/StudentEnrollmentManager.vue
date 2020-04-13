@@ -686,7 +686,7 @@
                 <i class="fa fa-book" aria-hidden="true"/> View
               </b-button>
             </template>
-            
+
           </b-table>
         </b-overlay>
         <!-- end of enrollment table -->
@@ -907,6 +907,7 @@
       getEnrollmentRecords: function(){
         this.enrollTableOverLay = true;
         Axios.get('http://localhost/api/v1/enrollments', {
+          params: {active : 1},
           headers: { Authorization: 'Bearer ' + this.$store.getters.getToken }
         })
           .then(response => {
