@@ -102,7 +102,7 @@
         </template> -->
 
         <template v-slot:cell(prelim_grade)="row" >
-          <input type="text" class="Grade" v-model="row.item.prelim_grade" :disabled="input_status.prelim_disabled">
+          <input type="number" class="Grade" v-model="row.item.prelim_grade" :disabled="input_status.prelim_disabled" max="100"/>
         </template>
 
         <template v-slot:head(prelim_grade)="row" >
@@ -126,7 +126,7 @@
         </template>
 
         <template v-slot:cell(midterm_grade)="row" >
-          <input type="text" class="Grade" v-model="row.item.midterm_grade" :disabled="input_status.midterm_disabled"></input>
+          <input type="number" class="Grade" v-model="row.item.midterm_grade" :disabled="input_status.midterm_disabled" max="100"></input>
         </template>
 
         <template v-slot:head(midterm_grade)="row" >
@@ -150,7 +150,7 @@
         </template>
 
         <template v-slot:cell(prefinal_grade)="row" >
-          <input type="text" class="Grade" v-model="row.item.prefinal_grade" :disabled="input_status.prefinal_disabled"></input>
+          <input type="number" class="Grade" v-model="row.item.prefinal_grade" :disabled="input_status.prefinal_disabled" max="100"></input>
         </template>
 
         <template v-slot:head(prefinal_grade)="row" >
@@ -174,7 +174,7 @@
         </template>
 
         <template v-slot:cell(final_grade)="row" >
-            <input type="text" class="Grade" v-model="row.item.final_grade" :disabled="input_status.final_disabled"></input>
+            <input type="number" class="Grade" v-model="row.item.final_grade" :disabled="input_status.final_disabled" max="100"></input>
         </template>
 
         <template v-slot:head(final_grade)="row" >
