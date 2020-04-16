@@ -686,7 +686,7 @@
                 <i class="fa fa-book" aria-hidden="true"/> View
               </b-button>
             </template>
-            
+
           </b-table>
         </b-overlay>
         <!-- end of enrollment table -->
