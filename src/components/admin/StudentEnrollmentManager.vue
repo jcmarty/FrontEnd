@@ -907,6 +907,7 @@
       getEnrollmentRecords: function(){
         this.enrollTableOverLay = true;
         Axios.get('http://localhost/api/v1/enrollments', {
+          params: {active : 1},
           headers: { Authorization: 'Bearer ' + this.$store.getters.getToken }
         })
           .then(response => {
