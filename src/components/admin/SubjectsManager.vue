@@ -2,23 +2,6 @@
   <div> <!-- Start of Main Div -->
     <h1>Manage Subjects</h1>
     <hr/>
-    <!-- Alert Message -->
-    <b-alert variant="success"
-      :show="dismissSuccessCountDown"
-      @dismissed="dismissSuccessCountDown=0"
-      dismissible fade>
-        {{alertMessage}}
-    </b-alert>
-    <b-alert variant="danger"
-      :show="dismissErrorCountDown"
-      @dismissed="dismissErrorCountDown=0"
-      dismissible fade>
-        <p>{{alertMessage}}</p>
-        <ul>
-          <li v-for="error in errors">{{ error }}</li>
-        </ul>
-    </b-alert>
-    <!-- End of Alert Message -->
 
     <!-- Adding Form Start  -->
     <div class="addPanelSubject">
@@ -143,6 +126,7 @@
       </div>  <!-- End of Panel  -->
     </div> <!-- End of Col  -->
 
+
     <div class="myTable px-4 py-3 my-5">
       <!-- Adding Form Start  -->
       <b-row>
@@ -170,6 +154,24 @@
         </b-col>
       </b-row>
 
+      <!-- Alert Message -->
+      <b-alert variant="success"
+        :show="dismissSuccessCountDown"
+        @dismissed="dismissSuccessCountDown=0"
+        dismissible fade>
+          {{alertMessage}}
+      </b-alert>
+      <b-alert variant="danger"
+        :show="dismissErrorCountDown"
+        @dismissed="dismissErrorCountDown=0"
+        dismissible fade>
+          <p>{{alertMessage}}</p>
+          <ul>
+            <li v-for="error in errors">{{ error }}</li>
+          </ul>
+      </b-alert>
+      <!-- End of Alert Message -->
+
       <!-- Main table element -->
       <b-table
         class="my-3 table-striped"
@@ -185,12 +187,6 @@
         :per-page="perPage"
         :filter="filter">
 
-        <template v-slot:cell(details)="row">
-          <b-button variant="info" size="sm"  @click="showDetails(row.item, row.index, $event.target)" class="mr-1">
-            <i class="fa fa-eye text-light" aria-hidden="true"/> View
-          </b-button>
-        </template>
-
         <template v-slot:cell(active)="row" >
           <b-form-checkbox switch size="sm" :checked="row.item.status"  @change="StatusUpdate(row.item, $event.target)">
             <b-badge variant="success" pill v-if="row.item.active">Active</b-badge>
@@ -199,13 +195,18 @@
         </template>
 
         <template v-slot:cell(actions)="row">
-          <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" class="mr-1">
+          <b-button variant="info" size="sm"  @click="showDetails(row.item, row.index, $event.target)" v-b-tooltip.hover title="View Room Details">
+            <i class="fa fa-eye text-light"/>
+          </b-button>
+
+          <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Edit Room">
             <b-icon-pencil/>
           </b-button>
 
           <b-button variant="danger" size="sm" @click="DeleteModal(row.item, $event.target)" v-b-tooltip.hover title="Delete Room">
             <b-icon-trash/>
           </b-button>
+
         </template>
       </b-table>
 
@@ -415,10 +416,6 @@
 
           { key: 'subject_code', label: 'Subject Code', sortable: true, class: 'text-center' },
           { key: 'subject_title', label: 'Subject Title', sortable: true, class: 'text-center' },
-          { key: 'details', label: 'Details' , class: 'text-center' },
-          // { key: 'lec', label: 'Lec units', sortable: true, class: 'text-center' },
-          // { key: 'lab', label: 'Lab Unit', sortable: true, class: 'text-center' },
-          // { key: 'units', label: 'Units', sortable: true, class: 'text-center' },
           { key: 'active', label: 'Active', sortable: true, class: 'text-center' },
           { key: 'actions', label: 'Actions' , class: 'text-center' }
         ],

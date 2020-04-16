@@ -413,6 +413,9 @@
       </template>
     </b-modal> <!-- End of delete Modal -->
 
+
+<!-- remove change password and replace with reset password -->
+
   </div> <!-- End of Main Div -->
 </template> <!-- End of Template -->
 
@@ -1009,9 +1012,11 @@
       }, // End of Reset Form Function
 
       EditModal: function(item, index) {
+        console.log(this.users)
         this.users = {
           id: item.id,
           username: item.username,
+          password: item.password,
           password: item.password,
           email: item.email,
           first_name: item.first_name,

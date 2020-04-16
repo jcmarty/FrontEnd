@@ -10,11 +10,12 @@
         <b-navbar-brand href="admin">
           <img src="../../assets/images/comteq_logo.png" alt="Comteq Logo" class="responsive"/>
         </b-navbar-brand>
-
+        
         <b-navbar-nav>
           <!--  TODO:  Replace firstname with full name or role? -->
           <b-nav-item-dropdown :text="user.first_name + ' ' + user.last_name" right>
             <b-dropdown-item href="#" v-on:click="logout()"><i class="fa fa-sign-out pull-right"></i> Log Out</b-dropdown-item>
+            <b-dropdown-item href="#" v-on:click="logout()"><i class="fas fa-users-cog pull-right"></i>Account Settings</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
     </b-navbar>
