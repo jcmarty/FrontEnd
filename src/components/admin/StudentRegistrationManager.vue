@@ -921,12 +921,13 @@
           })
           .catch(error => {
             this.alertMessage = error.response.data.message;
-            const values = Object.values(error.response.data.errors);
-            for(const val of values){
-              for(const err of val){
-                this.errors.push(err);
-              }
-            }
+            // const values = Object.values(error.response.data.errors);
+            // for(const val of values){
+            //   for(const err of val){
+            //     this.errors.push(err);
+            //   }
+            // }
+            console.log(error.response.data)
             this.dismissErrorCountDown = this.dismissSecs;
           })
       },
