@@ -1084,7 +1084,7 @@
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
-            this.alertMessage = response.data.message;
+            // this.alertMessage = response.data.message;
             this.items = response.data;
             this.totalRows = this.items.length;
             this.registerOverlay = false;
@@ -1147,68 +1147,6 @@
           });
           this.$refs['EditStudentModal'].hide();
         },
-
-<<<<<<< HEAD
-      RegStudents: function(){
-        Axios
-          .post('http://localhost/api/v1/students', this.Students, {
-            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-          })
-          .then(response => {
-            this.alertMessage = "New student record successfully created.";
-            this.getStudents();
-            this.dismissSuccessCountDown = this.dismissSecs;
-            this.showForm = false;
-            this.Students = {
-              student_number: null,
-              first_name: null,
-              middle_name: null,
-              last_name: null,
-              suffix_name: null,
-              gender: null,
-              civil_status: null,
-              citizenship:null,
-              address: null,
-              barangay: null,
-              city: null,
-              postal: null,
-              province: null,
-              telephone: null,
-              cellphone: null,
-              email: null,
-              birth_date: null,
-              birth_place: null,
-              father_name: null,
-              mother_name: null,
-              contact_person: null,
-              contact_address: null,
-              contact_number: null,
-              blood_type: null,
-              photo_url: null,
-              user_id: null,
-              school_last_attended: null,
-              school_address: null,
-              college_last_attended: null,
-              college_address: null,
-              active: 1,
-            };
-          })
-          .catch(error => {
-            this.alertMessage = error.response.data.message;
-            // const values = Object.values(error.response.data.errors);
-            // for(const val of values){
-            //   for(const err of val){
-            //     this.errors.push(err);
-            //   }
-            // }
-            console.log(error.response.data)
-            this.dismissErrorCountDown = this.dismissSecs;
-          })
-      },
-=======
-
->>>>>>> 1cd1bb56bdeb4269b8ed2d7e28935776b6054f85
-
 
       ClearStudentFields: function(){
         this.Students = {
