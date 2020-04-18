@@ -1084,7 +1084,7 @@
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
-            this.alertMessage = response.data.message;
+            // this.alertMessage = response.data.message;
             this.items = response.data;
             this.totalRows = this.items.length;
             this.registerOverlay = false;
@@ -1147,9 +1147,6 @@
           });
           this.$refs['EditStudentModal'].hide();
         },
-
-
-
 
       ClearStudentFields: function(){
         this.Students = {
