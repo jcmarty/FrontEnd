@@ -616,12 +616,12 @@
         </template>
 
         <template v-slot:cell(actions)="row">
-          <b-button variant="info" size="sm"  @click="enroll(row.item, row.index, $event.target)">
+          <b-button variant="info" size="sm"  @click="enroll(row.item, row.index, $event.target)" v-b-tooltip.hover title="Enroll Me!">
             <b-icon-people-fill/>
           </b-button>
 
-          <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)">
-            <b-icon-pencil/>
+          <b-button variant="info" size="sm"  @click="ViewInfo(row.item, row.index, $event.target)" v-b-tooltip.hover title="View Information">
+            <b-icon-info/>
           </b-button>
 
           <!-- <b-button variant="danger" size="sm" @click="DeleteModal(row.item, $event.target)" v-b-tooltip.hover title="Delete Room">
@@ -1268,7 +1268,7 @@
         })
       },
 
-      EditModal: function(item, index) {
+      ViewInfo: function(item) {
         this.Students = {
           id: item.id,
           student_number: item.student_number,
@@ -1304,7 +1304,43 @@
           active: 1,
         },
 
-        this.$root.$emit('bv::show::modal', 'EditStudentModal')
+        this.$router.replace({
+          name: 'StudentInformationManager',
+          params: {
+            id: item.id,
+            student_number: item.student_number,
+            first_name: item.first_name,
+            middle_name: item.middle_name,
+            last_name: item.last_name,
+            suffix_name: item.suffix_name,
+            gender: item.gender,
+            civil_status: item.civil_status,
+            citizenship:item.citizenship,
+            address: item.address,
+            barangay: item.barangay,
+            city: item.city,
+            postal: item.postal,
+            province: item.province,
+            telephone: item.telephone,
+            cellphone: item.cellphone,
+            email: item.email,
+            birth_date: item.birth_date,
+            birth_place: item.birth_place,
+            father_name: item.father_name,
+            mother_name: item.mother_name,
+            contact_person: item.contact_person,
+            contact_address: item.contact_address,
+            contact_number: item.contact_number,
+            blood_type: item.blood_type,
+            photo_url: item.photo_url,
+            user_id: item.user_id,
+            school_last_attended: item.school_last_attended,
+            school_address: item.school_address,
+            college_last_attended: item.college_last_attended,
+            college_address: item.college_address,
+            active: 1,
+          }
+        })
       },
 
       StatusUpdate: function(item){
