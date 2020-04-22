@@ -38,6 +38,15 @@
           <b-button
             class="float-right"
             v-if="!information_disable"
+            variant="danger"
+            @click="cancelForm"
+            v-b-tooltip.hover title="Cancel">
+            <i class="fa fa-times-circle"></i>
+          </b-button>
+
+          <b-button
+            class="float-right"
+            v-if="!information_disable"
             variant="success"
             @click="StudInfoUpdate"
             v-b-tooltip.hover title="Update">
@@ -728,7 +737,43 @@
         });
       }, // End of Update Room Function
 
-
+      cancelForm: function(){
+        this.information_disable = true;
+        this.Students = {
+          id: this.$route.params.id,
+          student_number: this.$route.params.student_number,
+          first_name: this.$route.params.first_name,
+          middle_name: this.$route.params.middle_name,
+          last_name: this.$route.params.last_name,
+          suffix_name: this.$route.params.suffix_name,
+          gender: this.$route.params.gender,
+          civil_status: this.$route.params.civil_status,
+          citizenship:this.$route.params.citizenship,
+          address: this.$route.params.address,
+          barangay: this.$route.params.barangay,
+          city: this.$route.params.city,
+          postal: this.$route.params.postal,
+          province: this.$route.params.province,
+          telephone: this.$route.params.telephone,
+          cellphone: this.$route.params.cellphone,
+          email: this.$route.params.email,
+          birth_date: this.$route.params.birth_date,
+          birth_place: this.$route.params.birth_place,
+          father_name: this.$route.params.father_name,
+          mother_name: this.$route.params.mother_name,
+          contact_person: this.$route.params.contact_person,
+          contact_address: this.$route.params.contact_address,
+          contact_number: this.$route.params.contact_number,
+          blood_type: this.$route.params.blood_type,
+          photo_url: "sample.jpg",
+          user_id: this.$route.params.user_id,
+          school_last_attended: this.$route.params.school_last_attended,
+          school_address: this.$route.params.school_address,
+          college_last_attended: this.$route.params.college_last_attended,
+          college_address: this.$route.params.college_address,
+          active: 1,
+        }
+      },
 
 
     }

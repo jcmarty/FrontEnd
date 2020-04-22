@@ -40,11 +40,23 @@
           <b-button
             class="float-right"
             v-if="!information_disable"
+            variant="danger"
+            @click="cancelForm"
+            v-b-tooltip.hover title="Cancel">
+            <i class="fa fa-times-circle"></i>
+          </b-button>
+
+          <b-button
+            class="float-right"
+            v-if="!information_disable"
             variant="success"
             @click="updateInstructor"
             v-b-tooltip.hover title="Update">
             <i class="fa fa-save"/>
           </b-button>
+
+
+
     </div>
 
     <hr/>
@@ -411,6 +423,30 @@
             this.updateErrorCountDown = this.dismissSecs;
           });
       },
+
+      cancelForm: function(){
+        this.information_disable = true;
+        this.instructor = {
+          id: this.$route.params.id,
+          name: this.$route.params.first_name + " " + this.$route.params.last_name,
+          employee_id: this.$route.params.employee_id,
+          first_name: this.$route.params.first_name,
+          middle_name: this.$route.params.middle_name,
+          last_name: this.$route.params.last_name,
+          birth_date: this.$route.params.birth_date,
+          gender: this.$route.params.gender,
+          email: this.$route.params.email,
+          contact_no: this.$route.params.contact_no,
+          address: this.$route.params.address,
+          city: this.$route.params.city,
+          province: this.$route.params.province,
+          postal_code: this.$route.params.postal_code,
+          work_experience: this.$route.params.work_experience,
+          certifications: this.$route.params.certifications,
+          educational_attainment: this.$route.params.educational_attainment,
+          active: 1
+        }
+      }
     }
   }
 </script>
