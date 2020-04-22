@@ -120,7 +120,7 @@
 
       <template v-slot:cell(actions)="row">
 
-        <b-button variant="danger" size="sm" @click="DeleteModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Information">
+        <b-button variant="danger" size="sm" @click="DeleteModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Delete">
           <b-icon-trash/>
         </b-button>
 
