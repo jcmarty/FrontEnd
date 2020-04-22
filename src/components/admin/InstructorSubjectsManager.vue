@@ -2,7 +2,7 @@
   <div>
     <h1>Manage Instructor Preferred Subjects</h1>
     <b-breadcrumb>
-      <b-breadcrumb-item @click="$router.go(-1)">Instructors</b-breadcrumb-item>
+      <b-breadcrumb-item to="/manage/instructor">Instructors</b-breadcrumb-item>
       <b-breadcrumb-item :active="true">{{ instructor.name }}</b-breadcrumb-item>
     </b-breadcrumb>
 
@@ -77,7 +77,7 @@
     </div>
 
     <b-modal id="deletePreferredSubjModal" ref="deletePreferredSubjModal" title="Delete Preferred Subject" size="lg">
-      <p>Are you sure you want to remove {{ this.preferredSubject.subject_description }}?</p>
+      <p>Are you sure you want to remove (){{ preferredSubject.subject_code }}) {{preferredSubject.subject_title}}?</p>
       <template v-slot:modal-footer="{ cancel, ok }">
         <!-- Emulate built in modal footer ok and cancel button actions -->
         <b-button size="sm" variant="danger" @click="hideModal('deletePreferredSubjModal')">
@@ -89,69 +89,106 @@
       </template>
     </b-modal>
 
-    <!-- DataGrid for displaying instructor's preferred subjects -->
-    <ag-grid-vue class="ag-theme-material"
-      :columnDefs="columnDefs"
-      :rowData="rowData"
-      :animateRows="true"
-      :pagination="true"
-      :paginationPageSize="10"
-      :gridOptions="gridOptions">
-    </ag-grid-vue>
+    <b-table
+      class="my-3 table-striped MyTable"
+      responsive
+      show-empty
+      head-variant="dark"
+      bordered
+      hover
+      :items="items"
+      :fields="fields"
+      :current-page="currentPage"
+      :per-page="perPage"
+      :filter="filter">
+
+      <template v-slot:cell(actions)="row">
+
+        <b-button variant="danger" size="sm" @click="DeleteModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Information">
+          <b-icon-trash/>
+        </b-button>
+
+      </template>
+    </b-table>
+
+    <hr/>
+    <b-row>
+      <b-col sm="4" md="6" lg="1" class="my-1">
+        <b-form-group
+        class="perpageselect"
+        label=""
+        label-for="perPageSelect">
+          <b-form-select
+            v-model="perPage"
+            id="perPageSelect"
+            size="sm"
+            :options="pageOptions"
+          ></b-form-select>
+        </b-form-group>
+      </b-col>
+
+      <b-col sm="4" md="3" class="my-1 col-md-3 offset-md-8">
+        <b-pagination
+          v-model="currentPage"
+          :total-rows="totalRows"
+          :per-page="perPage"
+          align="fill"
+          size="sm"
+          class="my-0"
+        ></b-pagination>
+      </b-col>
+    </b-row>
   </div>
 </template>
 <script>
   import Axios from "axios";
-  import {AgGridVue} from "ag-grid-vue";
-  import PreferredSubjectButtons from "./ActionButtons/PreferredSubjectButtons.vue";
   export default{
     name: 'InstructorSubjectsManager',
-    components: {
-      AgGridVue,
-      PreferredSubjectButtons
-    },
     data(){
       return {
-          settings: this.$store.getters.getSettings,
-          instructor: {
-            id: null,
-            name: null
-          },
-          columnDefs: null,
-          rowData: null,
+        items: [],
+        fields: [
+          { key: 'subject.subject_code', label: 'Day', class: 'text-center', sortable: true},
+          { key: 'subject.subject_title', label: 'Time Start', sortable: true, class: 'text-center' },
+          { key: 'academic_year.academic_year', label: 'Academic Year', sortable: true, class: 'text-center' },
+          { key: 'semester.semester', label: 'Semseter', sortable: true, class: 'text-center' },
+          { key: 'actions', label: 'Actions' , class: 'text-center' }
+        ],
+
+        totalRows: 1,
+        currentPage: 1,
+        perPage: 5,
+        pageOptions: [5, 10, 15, 20, 25],
+        filter: null,
+
+        settings: this.$store.getters.getSettings,
+        instructor: {
           id: null,
-          preferredSubject: {
-            subject_id: null,
-            subject_code: null,
-            subject_description: null,
-            academic_year_id: null,
-            semester_id: null,
-            active: 1
-          },
-          subjectOptions: [],
-          academicYearOptions: [],
-          semesterOptions: [],
-          alertMessage: "",
-          errors: [],
-          dismissSecs: 7,
-          dismissSuccessCountDown: 0,
-          dismissErrorCountDown: 0,
+          name: null
+        },
+        columnDefs: null,
+        rowData: null,
+        id: null,
+
+        preferredSubject: {
+          subject_id: null,
+          subject_code: null,
+          subject_title: null,
+          academic_year_id: null,
+          semester_id: null,
+          active: 1
+        },
+        subjectOptions: [],
+        academicYearOptions: [],
+        semesterOptions: [],
+        alertMessage: "",
+        errors: [],
+        dismissSecs: 7,
+        dismissSuccessCountDown: 0,
+        dismissErrorCountDown: 0,
       }
     },
-    beforeMount() {
-      this.gridOptions = {
-        context: {
-            componentParent: this
-        }
-      };
-      this.columnDefs = [
-        {headerName: 'Subject Code', field: 'subject.subject_code', sortable: true, filter: true},
-        {headerName: 'Description', field: 'subject.subject_description', sortable: true, filter: true},
-        {headerName: 'Academic Year', field: 'academic_year.academic_year', sortable: true, filter: true},
-        {headerName: 'Semester', field: 'semester.semester', sortable: true, filter: true},
-        {headerName: 'Actions', field: 'id', width: 150, cellRendererFramework: 'PreferredSubjectButtons'}
-      ];
-    },
+
     mounted() {
       this.getSubjects();
       this.getPreferredSubjects();
@@ -219,7 +256,7 @@
           })
           .then(response => {
             // console.log(response.data);
-            this.rowData = response.data;
+            this.items = response.data;
           })
           .catch(error => {
             // console.log(error.response);
@@ -233,7 +270,7 @@
           .then(response => {
             //console.log(response.data);
             for(const subject of response.data){
-              this.subjectOptions.push({value: subject.id, text: subject.subject_code + " - " +subject.subject_description});
+              this.subjectOptions.push({value: subject.id, text: subject.subject_code + " - " +subject.subject_title});
             }
           })
           .catch(error => {
@@ -268,6 +305,22 @@
           .catch(error => {
             // console.log(error.response.data.message);
           })
+      },
+
+      DeleteModal: function(item){
+          this.id = item.id,
+        this.preferredSubject = {
+          subject_id: item.subject_id,
+          subject_code: item.subject.subject_code,
+          subject_title: item.subject.subject_title,
+          academic_year_id: item.academic_year_id,
+          semester_id: item.semester_id,
+          active: item.active,
+
+        };
+
+
+          this.$root.$emit('bv::show::modal', 'deletePreferredSubjModal')
       },
     }
   }

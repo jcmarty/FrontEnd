@@ -401,7 +401,7 @@ html, body, #app, #admin{
     position: fixed
 }
 body .container.body .right_col {
-    background: #F7F7F7
+    background: #F7F7F7;
 }
 .nav-md .container.body .right_col {
     padding: 10px 20px 20px 20px;
@@ -548,8 +548,10 @@ body {
     font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
     font-size: 13px;
     font-weight: 400;
-    line-height: 1.471
+    line-height: 1.471;
 }
+
+
 .main_container .top_nav {
     display: block;
     margin-left: 230px

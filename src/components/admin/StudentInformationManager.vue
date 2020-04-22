@@ -29,7 +29,6 @@
           <b-button
             class="float-right"
             v-if="information_disable"
-            size="sm"
             variant="warning"
             @click="information_disable = false"
             v-b-tooltip.hover title="Edit">
@@ -39,7 +38,7 @@
           <b-button
             class="float-right"
             v-if="!information_disable"
-            size="sm" variant="success"
+            variant="success"
             @click="StudInfoUpdate"
             v-b-tooltip.hover title="Update">
             <i class="fa fa-save"/>
@@ -606,8 +605,8 @@
           city: null,
           postal: null,
           province: null,
-          telephone: null,
-          cellphone: null,
+          telephone: 0,
+          cellphone: 0,
           email: null,
           birth_date: null,
           birth_place: null,
@@ -615,7 +614,7 @@
           mother_name: null,
           contact_person: null,
           contact_address: null,
-          contact_number: null,
+          contact_number: 0,
           blood_type: null,
           photo_url: null,
           user_id: null,
@@ -667,9 +666,6 @@
       }
     },
 
-    mounted: function(){
-
-    },
     created() {
         this.Students = {
           id: this.$route.params.id,

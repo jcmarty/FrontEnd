@@ -1,23 +1,7 @@
 <template>
   <div>
     <h1>Manage Student Registration</h1>
-    <!-- Alert Message -->
-    <b-alert variant="success"
-      :show="dismissSuccessCountDown"
-      @dismissed="dismissSuccessCountDown=0"
-      dismissible fade>
-        {{alertMessage}}
-    </b-alert>
-    <b-alert variant="danger"
-      :show="dismissErrorCountDown"
-      @dismissed="dismissErrorCountDown=0"
-      dismissible fade>
-        <p>{{alertMessage}}</p>
-        <ul>
-          <li v-for="error in errors">{{ error }}</li>
-        </ul>
-    </b-alert>
-    <!-- End of Alert Message -->
+
 
     <transition name="fade">
       <!-- start of academic form -->
@@ -172,8 +156,8 @@
               </b-col>
             </b-form-row>
 
+          </div>
       </div>
-    </div>
       <!-- end of academic form -->
     </transition>
 
@@ -565,14 +549,10 @@
     </transition>
 
     <transition name="fade">
-      <div class="px-4 py-3 mt-4 mx-3 shadow rounded" v-if="RegisterTableForm">
+      <div class="px-4 py-3 mt-4 mx-3 shadow rounded bg-white" v-if="RegisterTableForm">
       <!-- Adding Form Start  -->
       <b-row>
         <b-col lg="4" class="my-1 ">
-          <b-form-group
-          class="filter"
-          label="Filter"
-          label-for="Filter">
             <b-input-group  size="sm">
               <b-form-input
                 v-model="filter"
@@ -581,10 +561,9 @@
                 placeholder="Type to Search">
               </b-form-input>
             </b-input-group>
-          </b-form-group>
         </b-col>
 
-        <b-col class="py-4">
+        <b-col class="">
           <!-- Add New Room Button -->
           <b-button variant="primary" @click="toggleForm" class="toggleFormBtn" v-if="RegisterTableForm">
             Register new Student
@@ -593,15 +572,31 @@
       </b-row>
 
       <b-overlay :show="registerOverlay" rounded="sm">
+        <!-- Alert Message -->
+        <b-alert variant="success"
+          :show="dismissSuccessCountDown"
+          @dismissed="dismissSuccessCountDown=0"
+          dismissible fade>
+            {{alertMessage}}
+        </b-alert>
+        <b-alert variant="danger"
+          :show="dismissErrorCountDown"
+          @dismissed="dismissErrorCountDown=0"
+          dismissible fade>
+            <p>{{alertMessage}}</p>
+            <ul>
+              <li v-for="error in errors">{{ error }}</li>
+            </ul>
+        </b-alert>
+        <!-- End of Alert Message -->
       <!-- Main table element -->
       <b-table
-        class="my-3 table-striped"
-        show-empty
+        class="my-3 table-striped MyTable"
         responsive
+        show-empty
         head-variant="dark"
         bordered
         hover
-        stacked="md"
         :items="items"
         :fields="fields"
         :current-page="currentPage"
@@ -680,15 +675,15 @@
       return{
         items: [],
         fields: [
-          { key: 'student_number', label: 'Room Number', class: 'text-left'},
-          { key: 'full_name', label: 'Full Name', class: 'text-left'},
-          { key: 'birth_date', label: 'Birthdate', class: 'text-left'},
-          { key: 'gender', label: 'Gender', class: 'text-left'},
-          { key: 'address', label: 'Address', class: 'text-left'},
-          { key: 'barangay', label: 'Barangay', class: 'text-left'},
-          { key: 'city', label: 'City', class: 'text-left'},
-          { key: 'active', label: 'Active', class: 'text-left'},
-          { key: 'actions', label: 'Action', class: 'text-left'},
+          { key: 'student_number', label: 'Room Number', class: 'text-center'},
+          { key: 'full_name', label: 'Full Name', class: 'text-center'},
+          { key: 'birth_date', label: 'Birthdate', class: 'text-center'},
+          { key: 'gender', label: 'Gender', class: 'text-center'},
+          { key: 'address', label: 'Address', class: 'text-center'},
+          { key: 'barangay', label: 'Barangay', class: 'text-center'},
+          { key: 'city', label: 'City', class: 'text-center'},
+          { key: 'active', label: 'Active', class: 'text-center'},
+          { key: 'actions', label: 'Actions', class: 'text-center' },
         ],
 
         Students: {
@@ -707,7 +702,7 @@
           postal: null,
           province: null,
           telephone: null,
-          cellphone: null,
+          cellphone: 0,
           email: null,
           birth_date: null,
           birth_place: null,
@@ -715,7 +710,7 @@
           mother_name: null,
           contact_person: null,
           contact_address: null,
-          contact_number: null,
+          contact_number: 0,
           blood_type: null,
           photo_url: null,
           user_id: null,
@@ -1266,41 +1261,6 @@
       },
 
       ViewInfo: function(item) {
-        this.Students = {
-          id: item.id,
-          student_number: item.student_number,
-          first_name: item.first_name,
-          middle_name: item.middle_name,
-          last_name: item.last_name,
-          suffix_name: item.suffix_name,
-          gender: item.gender,
-          civil_status: item.civil_status,
-          citizenship:item.citizenship,
-          address: item.address,
-          barangay: item.barangay,
-          city: item.city,
-          postal: item.postal,
-          province: item.province,
-          telephone: item.telephone,
-          cellphone: item.cellphone,
-          email: item.email,
-          birth_date: item.birth_date,
-          birth_place: item.birth_place,
-          father_name: item.father_name,
-          mother_name: item.mother_name,
-          contact_person: item.contact_person,
-          contact_address: item.contact_address,
-          contact_number: item.contact_number,
-          blood_type: item.blood_type,
-          photo_url: item.photo_url,
-          user_id: item.user_id,
-          school_last_attended: item.school_last_attended,
-          school_address: item.school_address,
-          college_last_attended: item.college_last_attended,
-          college_address: item.college_address,
-          active: 1,
-        },
-
         this.$router.replace({
           name: 'StudentInformationManager',
           params: {

@@ -2,7 +2,7 @@
   <div>
     <h1>Manage Instructor Time Availability</h1>
     <b-breadcrumb>
-      <b-breadcrumb-item @click="$router.go(-1)">Instructors</b-breadcrumb-item>
+      <b-breadcrumb-item to="/manage/instructor">Instructors</b-breadcrumb-item>
       <b-breadcrumb-item :active="true">{{ instructor.name }}</b-breadcrumb-item>
     </b-breadcrumb>
 
@@ -105,81 +105,124 @@
       </template>
     </b-modal>
 
-    <!-- DataGrid for displaying instructor's preferred subjects -->
-    <ag-grid-vue class="ag-theme-material"
-      :columnDefs="columnDefs"
-      :rowData="rowData"
-      :animateRows="true"
-      :pagination="true"
-      :paginationPageSize="10"
-      :gridOptions="gridOptions">
-    </ag-grid-vue>
+    <b-table
+      class="my-3 table-striped MyTable"
+      responsive
+      show-empty
+      head-variant="dark"
+      bordered
+      hover
+      :items="items"
+      :fields="fields"
+      :current-page="currentPage"
+      :per-page="perPage"
+      :filter="filter">
+
+      <template v-slot:cell(actions)="row">
+
+        <b-button variant="danger" size="sm" @click="DeleteModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Information">
+          <b-icon-trash/>
+        </b-button>
+
+      </template>
+    </b-table>
+
+    <hr/>
+    <b-row>
+      <b-col sm="4" md="6" lg="1" class="my-1">
+        <b-form-group
+        class="perpageselect"
+        label=""
+        label-for="perPageSelect">
+          <b-form-select
+            v-model="perPage"
+            id="perPageSelect"
+            size="sm"
+            :options="pageOptions"
+          ></b-form-select>
+        </b-form-group>
+      </b-col>
+
+      <b-col sm="4" md="3" class="my-1 col-md-3 offset-md-8">
+        <b-pagination
+          v-model="currentPage"
+          :total-rows="totalRows"
+          :per-page="perPage"
+          align="fill"
+          size="sm"
+          class="my-0"
+        ></b-pagination>
+      </b-col>
+    </b-row>
+
   </div>
 </template>
 <script>
   import Axios from "axios";
-  import {AgGridVue} from "ag-grid-vue";
   import moment from 'moment';
-  import InstructorAvailabilitiesButtons from "./InstructorAvailabilitiesButtons.vue";
   import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue';
 
   export default{
     name: 'InstructorAvailabilitiesManager',
     components: {
-      AgGridVue,
-      InstructorAvailabilitiesButtons,
       VueTimepicker
     },
     data(){
       return {
-          settings: this.$store.getters.getSettings,
-          instructor: {
-            id: null,
-            name: null
-          },
-          columnDefs: null,
-          rowData: null,
+        items: [],
+        fields: [
+          { key: 'day', label: 'Day', class: 'text-center', sortable: true},
+          { key: 'time_start', label: 'Time Start', sortable: true, class: 'text-center' },
+          { key: 'time_end', label: 'Time End', sortable: true, class: 'text-center' },
+          { key: 'academic_year.academic_year', label: 'Academic Year', sortable: true, class: 'text-center' },
+          { key: 'semester.semester', label: 'Semseter', sortable: true, class: 'text-center' },
+          { key: 'actions', label: 'Actions' , class: 'text-center' }
+        ],
+
+        totalRows: 1,
+        currentPage: 1,
+        perPage: 5,
+        pageOptions: [5, 10, 15, 20, 25],
+        filter: null,
+
+        settings: this.$store.getters.getSettings,
+        instructor: {
           id: null,
-          timeAvailability: {
-            day: null,
-            time_start: null,
-            time_end: null,
-            academic_year_id: null,
-            semester_id: null,
-            active: 1
-          },
-          dayOptions: [
-            {value: 'Monday', text: 'Monday'},
-            {value: 'Tuesday', text: 'Tuesday'},
-            {value: 'Wednesday', text: 'Wednesday'},
-            {value: 'Thursday', text: 'Thursday'},
-            {value: 'Friday', text: 'Friday'},
-            {value: 'Saturday', text: 'Saturday'},
-          ],
-          academicYearOptions: [],
-          semesterOptions: [],
-          alertMessage: "",
-          errors: [],
-          dismissSecs: 7,
-          dismissSuccessCountDown: 0,
-          dismissErrorCountDown: 0,
+          name: null
+        },
+
+        columnDefs: null,
+        rowData: null,
+        id: null,
+
+        timeAvailability: {
+          day: null,
+          time_start: null,
+          time_end: null,
+          academic_year_id: null,
+          semester_id: null,
+          active: 1
+        },
+
+        dayOptions: [
+          {value: 'Monday', text: 'Monday'},
+          {value: 'Tuesday', text: 'Tuesday'},
+          {value: 'Wednesday', text: 'Wednesday'},
+          {value: 'Thursday', text: 'Thursday'},
+          {value: 'Friday', text: 'Friday'},
+          {value: 'Saturday', text: 'Saturday'},
+        ],
+
+        academicYearOptions: [],
+        semesterOptions: [],
+        alertMessage: "",
+        errors: [],
+        dismissSecs: 7,
+        dismissSuccessCountDown: 0,
+        dismissErrorCountDown: 0,
       }
     },
-    beforeMount() {
-      this.gridOptions = {
-        context: {
-            componentParent: this
-        }
-      };
-      this.columnDefs = [
-        {headerName: 'Day', field: 'day', sortable: true, filter: true},
-        {headerName: 'Time Start', field: 'time_start', sortable: true},
-        {headerName: 'Time End', field: 'time_end', sortable: true},
-        {headerName: 'Academic Year', field: 'academic_year.academic_year', sortable: true, filter: true},
-        {headerName: 'Semester', field: 'semester.semester', sortable: true, filter: true},
-        {headerName: 'Actions', field: 'id', width: 150, cellRendererFramework: 'InstructorAvailabilitiesButtons'}
-      ];
-    },
+
     mounted() {
       this.getTimeAvailabilities();
       this.getAcademicYears();
@@ -187,6 +230,7 @@
       this.timeAvailability.academic_year_id = this.settings.current_ay;
       this.timeAvailability.semester_id = this.settings.current_sem;
     },
+
     created() {
         console.log(this.$route.params);
         this.instructor = {
@@ -194,10 +238,12 @@
           name: this.$route.params.first_name + " " + this.$route.params.last_name
         }
     },
+
     methods: {
       hideModal: function($modal){
         this.$refs[$modal].hide();
       },
+
       getTimeAvailabilities: function(){
         Axios
           .get('http://localhost/api/v1/instructors/' + this.instructor.id + '/availabilities', {
@@ -205,7 +251,15 @@
           })
           .then(response => {
             //console.log(response.data);
-            this.rowData = response.data;
+            this.items = response.data;
+            for(var j = 0; j < this.items.length; j++){
+              if(this.items[j].active == 1){
+                this.items[j].status = true
+              }else{
+                this.items[j].status = false;
+              }
+            }
+            this.totalRows = this.items.length;
 
           })
           .catch(error => {
@@ -307,6 +361,21 @@
           .catch(error => {
             console.log(error.response.data.message);
           })
+      },
+
+      DeleteModal: function(item){
+          this.id = item.id,
+        this.timeAvailability = {
+          day: item.day,
+          time_start: item.time_start,
+          time_end: item.time_end,
+          academic_year_id: item.academic_year_id,
+          semester_id: item.semester_id,
+          active: item.active,
+
+        };
+
+          this.$root.$emit('bv::show::modal', 'deleteAvailabilityModal')
       },
     }
   }
