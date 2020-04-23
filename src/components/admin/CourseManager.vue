@@ -3,13 +3,33 @@
     <h1>Manage Course</h1>
     <hr/>
 
+    <!-- Alert Message -->
+    <b-alert variant="success"
+      :show="dismissSuccessCountDown"
+      @dismissed="dismissSuccessCountDown=0"
+      dismissible fade>
+        {{alertMessage}}
+    </b-alert>
+    <b-alert variant="danger"
+      :show="dismissErrorCountDown"
+      @dismissed="dismissErrorCountDown=0"
+      dismissible fade>
+        <p>{{alertMessage}}</p>
+        <ul>
+          <li v-for="error in errors">{{ error }}</li>
+        </ul>
+    </b-alert>
+
     <!-- Adding Form Start  -->
 
     <div class="addPanel">
       <transition name="fade">
-        <div class="panel panel-primary recordMaintenanceForm" v-if="showForm">
+        <!-- <div class="panel panel-primary recordMaintenanceForm" v-if="showForm">
           <div class="panel-heading">Add a Course</div>
-          <div class="panel-body">
+          <div class="panel-body"> -->
+        <div id="" class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded" v-if="showForm">
+          <div class=" h5 font-weight-bold text-dark" >Add New Subject</div>
+          <hr/>
             <b-form id="Add_Course_Form">
                 <b-form-row>
                   <!-- Course Code -->
@@ -75,6 +95,12 @@
                 </b-col>
               </b-form-row>
 
+              <b-form-row>
+                <b-col cols="12" md="12" lg="12">
+                  <hr/>
+                </b-col>
+              </b-form-row>
+
               <!-- Form Buttons -->
               <b-form-row>
                 <b-col>
@@ -90,12 +116,11 @@
               </b-form-row>
 
             </b-form> <!-- End of b-form  -->
-          </div> <!-- End of Panel Body  -->
-        </div> <!-- End of Panel  -->
+          </div> <!-- End of form container  -->
       </transition>
     </div> <!-- End of addPanel  -->
 
-    <div class="myTable px-4 py-3 ">
+    <div class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded">
       <!-- Adding Form Start  -->
       <b-row>
         <b-col lg="4" class="my-1 ">
@@ -114,7 +139,7 @@
           </b-form-group>
         </b-col>
 
-        <b-col class="py-4">
+        <b-col class="pt-4">
           <!-- Add New Room Button -->
           <b-button variant="primary" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
             Add New Course
@@ -122,55 +147,40 @@
         </b-col>
       </b-row>
 
-      <!-- Alert Message -->
-      <b-alert variant="success"
-        :show="dismissSuccessCountDown"
-        @dismissed="dismissSuccessCountDown=0"
-        dismissible fade>
-          {{alertMessage}}
-      </b-alert>
-      <b-alert variant="danger"
-        :show="dismissErrorCountDown"
-        @dismissed="dismissErrorCountDown=0"
-        dismissible fade>
-          <p>{{alertMessage}}</p>
-          <ul>
-            <li v-for="error in errors">{{ error }}</li>
-          </ul>
-      </b-alert>
-
       <!-- Main table element -->
-      <b-table
-        class="my-3 table-striped"
-        show-empty
-        responsive
-        head-variant="dark"
-        bordered
-        hover
-        stacked="md"
-        :items="items"
-        :fields="fields"
-        :current-page="currentPage"
-        :per-page="perPage"
-        :filter="filter">
+      <b-overlay :show="isLoading" rounded="sm">
+        <b-table
+          class="my-3 table-striped"
+          show-empty
+          responsive
+          head-variant="dark"
+          bordered
+          hover
+          stacked="md"
+          :items="items"
+          :fields="fields"
+          :current-page="currentPage"
+          :per-page="perPage"
+          :filter="filter">
 
-        <template v-slot:cell(year_duration)="row" >
-          <p v-if="row.item.year_duration">{{row.item.year_duration}} years</p>
-        </template>
+          <template v-slot:cell(year_duration)="row" >
+            <p v-if="row.item.year_duration">{{row.item.year_duration}} years</p>
+          </template>
 
-        <template v-slot:cell(active)="row" >
-          <b-form-checkbox switch size="sm" :checked="row.item.status"  @change="StatusUpdate(row.item, $event.target)">
-            <b-badge variant="success" pill v-if="row.item.active">Active</b-badge>
-            <b-badge variant="danger"  pill v-else>Inactive</b-badge>
-          </b-form-checkbox>
-        </template>
+          <template v-slot:cell(active)="row" >
+            <b-form-checkbox switch size="sm" :checked="row.item.status"  @change="StatusUpdate(row.item, $event.target)">
+              <b-badge variant="success" pill v-if="row.item.active">Active</b-badge>
+              <b-badge variant="danger"  pill v-else>Inactive</b-badge>
+            </b-form-checkbox>
+          </template>
 
-        <template v-slot:cell(actions)="row">
-          <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" class="mr-1">
-            <b-icon-pencil/>
-          </b-button>
-        </template>
-      </b-table>
+          <template v-slot:cell(actions)="row">
+            <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" class="mr-1">
+              <b-icon-pencil/>
+            </b-button>
+          </template>
+        </b-table>
+      </b-overlay>
 
       <hr/>
       <b-row>
@@ -188,7 +198,7 @@
           </b-form-group>
         </b-col>
 
-        <b-col sm="4" md="3" class="my-1 col-md-3 offset-md-8">
+        <b-col offset-lg="6" sm="12" md="4" lg="5"class="my-1">
           <b-pagination
             v-model="currentPage"
             :total-rows="totalRows"
@@ -308,6 +318,7 @@
     name: 'CoursesManager',
     data() {
       return {
+        isLoading: false,
         items: [],
         fields: [
           { key: 'course_code', label: 'Course Code', sortable: true, class: 'text-center'},
@@ -357,6 +368,7 @@
 
       // Get course Function
       getCourses: function(){
+        this.isLoading = true;
         Axios
           .get('http://localhost/api/v1/courses', {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
@@ -371,10 +383,13 @@
               }
             }
             this.totalRows = this.items.length;
+            this.isLoading = false;
+            this.backToTop();
           })
           .catch(error => {
             this.alertMessage = error.response.data.message;
             this.dismissErrorCountDown = this.dismissSecs;
+            this.backToTop();
           })
       }, // End of Get Course function
 
@@ -391,6 +406,7 @@
             this.dismissSuccessCountDown = this.dismissSecs;
             this.showForm = false;
             this.resetform();
+            this.backToTop();
           })
           .catch(error => {
             this.alertMessage = error.response.data.message;
@@ -401,6 +417,7 @@
               }
             }
             this.dismissErrorCountDown = this.dismissSecs;
+            this.backToTop();
           })
       }, // End of Add Course Function
 
@@ -416,6 +433,7 @@
           this.alertMessage = response.data.message;
           this.dismissSuccessCountDown = this.dismissSecs;
           this.resetform();
+          this.backToTop();
         })
         .catch(error => {
           this.alertMessage = error.response.data.message;
@@ -426,6 +444,7 @@
             }
           }
           this.dismissErrorCountDown = this.dismissSecs;
+          this.backToTop();
         });
         this.$refs['editCourseModal'].hide();
       },// End of Update Course Function
@@ -442,10 +461,12 @@
             this.alertMessage = response.data.message;
             this.dismissSuccessCountDown = this.dismissSecs;
             this.resetform();
+            this.backToTop();
           })
           .catch(error => {
             this.alertMessage = error.response.data.message;
             this.dismissErrorCountDown = this.dismissSecs;
+            this.backToTop();
           });
         this.$refs['deleteCourseModal'].hide();
       }, // End of Delete Course Function
@@ -458,6 +479,7 @@
         } else {
           this.showForm = true;
         }
+        this.backToTop();
       }, // End of Toggle Form Function
 
       // Reset Form Function
@@ -518,6 +540,7 @@
           }
           this.dismissSuccessCountDown = this.dismissSecs;
           this.resetform();
+
         })
         .catch(error => {
           this.alertMessage = error.response.data.message;
@@ -527,9 +550,16 @@
               this.errors.push(err);
             }
           }
+          this.backToTop();
           this.dismissErrorCountDown = this.dismissSecs;
         });
       }, // end of Status Update Function
+
+      backToTop: function(){
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+      },
+
     } // End of Methods
   } // End of Export Default
 </script>
