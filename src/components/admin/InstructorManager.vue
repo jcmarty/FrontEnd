@@ -1,7 +1,8 @@
 <template>
   <div>
     <h1>Manage Instructors</h1>
-    <<!-- Alert Message -->
+    <hr/>
+    <!-- Alert Message -->
     <b-alert variant="success"
       :show="dismissSuccessCountDown"
       @dismissed="dismissSuccessCountDown=0"
@@ -487,7 +488,6 @@
     <b-table
       class="my-3 table-striped MyTable"
       responsive
-      show-empty
       head-variant="dark"
       bordered
       hover

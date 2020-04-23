@@ -591,7 +591,7 @@
         <!-- End of Alert Message -->
       <!-- Main table element -->
       <b-table
-        class="my-3 table-striped MyTable"
+        class="my-3 table-striped"
         responsive
         show-empty
         head-variant="dark"
@@ -675,7 +675,7 @@
       return{
         items: [],
         fields: [
-          { key: 'student_number', label: 'Room Number', class: 'text-center'},
+          { key: 'student_number', label: 'Student Number', class: 'text-center'},
           { key: 'full_name', label: 'Full Name', class: 'text-center'},
           { key: 'birth_date', label: 'Birthdate', class: 'text-center'},
           { key: 'gender', label: 'Gender', class: 'text-center'},
@@ -683,7 +683,7 @@
           { key: 'barangay', label: 'Barangay', class: 'text-center'},
           { key: 'city', label: 'City', class: 'text-center'},
           { key: 'active', label: 'Active', class: 'text-center'},
-          { key: 'actions', label: 'Actions', class: 'text-center' },
+          { key: 'actions', label: 'Actions' , class: 'text-center' }
         ],
 
         Students: {
@@ -815,7 +815,7 @@
         var checker;
 
         // last name
-        if (this.Students.last_name == null) {
+        if (this.Students.last_name == null || this.Students.last_name == "" ) {
             this.last_name_state = false;
             checker = true;
         } else {
@@ -823,7 +823,7 @@
         }
 
         // first Name
-        if (this.Students.first_name == null) {
+        if (this.Students.first_name == null || this.Students.first_name == "") {
             this.first_name_state = false,
             checker = true;
         } else {
@@ -831,7 +831,7 @@
         }
 
         // school last Attended
-        if (this.Students.school_last_attended == null) {
+        if (this.Students.school_last_attended == null || this.Students.school_last_attended == "") {
             this.school_last_attended_state = false;
             checker = true;
         } else {
@@ -839,7 +839,7 @@
         }
 
         // school Address
-        if (this.Students.school_address == null) {
+        if (this.Students.school_address == null || this.Students.school_address =="") {
             this.school_address_state = false;
             checker = true;
         } else {
@@ -859,7 +859,7 @@
         var checker;
 
         // Present Address
-        if (this.Students.address == null) {
+        if (this.Students.address == null || this.Students.address == "") {
             this.present_address_state = false;
             checker = true;
         } else {
@@ -867,7 +867,7 @@
         }
 
         // Barangay
-        if (this.Students.barangay == null) {
+        if (this.Students.barangay == null || this.Students.barangay == "") {
             this.barangay_state = false,
             checker = true;
         } else {
@@ -875,7 +875,7 @@
         }
 
         // City / Municipality
-        if (this.Students.city == null) {
+        if (this.Students.city == null || this.Students.city == "") {
             this.cityMunicipality_state = false;
             checker = true;
         } else {
@@ -883,7 +883,7 @@
         }
 
         // Province
-        if (this.Students.province == null) {
+        if (this.Students.province == null || this.Students.province == "") {
             this.province_state = false;
             checker = true;
         } else {
@@ -891,7 +891,7 @@
         }
 
         // Postal
-        if (this.Students.postal == null) {
+        if (this.Students.postal == null || this.Students.postal == "") {
             this.postalCode_state = false;
             checker = true;
         } else {
@@ -899,7 +899,7 @@
         }
 
         // Birthdate
-        if (this.Students.birth_date == null) {
+        if (this.Students.birth_date == null || this.Students.birth_date == "") {
             this.birthDate_state = false;
             checker = true;
         } else {
@@ -907,7 +907,7 @@
         }
 
         // Gender
-        if (this.Students.gender == null) {
+        if (this.Students.gender == null || this.Students.gender == "") {
             this.gender_state = false;
             checker = true;
         } else {
@@ -915,7 +915,7 @@
         }
 
         // Cellphone Number
-        if (this.Students.cellphone == null) {
+        if (this.Students.cellphone == null || this.Students.cellphone == "") {
             this.cellphone_state = false;
             checker = true;
         } else {
@@ -923,7 +923,7 @@
         }
 
         // Place of Birth
-        if (this.Students.birth_place == null) {
+        if (this.Students.birth_place == null || this.Students.birth_place == "") {
             this.placeofBirth_state = false;
             checker = true;
         } else {
@@ -931,7 +931,7 @@
         }
 
         // Citizenship
-        if (this.Students.citizenship == null) {
+        if (this.Students.citizenship == null || this.Students.citizenship == "") {
             this.citizenShip_state = false;
             checker = true;
         } else {
@@ -939,7 +939,7 @@
         }
 
         // Civilstatus
-        if (this.Students.civil_status == null) {
+        if (this.Students.civil_status == null || this.Students.civil_status == "") {
             this.civilStatus_state = false;
             checker = true;
         } else {
@@ -963,7 +963,7 @@
       RegStudents: function(){
         var checker;
         // father's name
-        if (this.Students.father_name == null) {
+        if (this.Students.father_name == null || this.Students.father_name == "") {
             this.fathersName_state = false;
             checker = true;
         } else {
@@ -971,7 +971,7 @@
         }
 
         // mother's Name
-        if (this.Students.mother_name == null) {
+        if (this.Students.mother_name == null || this.Students.mother_name == "") {
           this.mothersName_state = false;
           checker = true;
         } else {
@@ -979,7 +979,7 @@
         }
 
         // Guardian Name
-        if (this.Students.contact_person == null) {
+        if (this.Students.contact_person == null || this.Students.contact_person == "") {
             this.guardianName_state = false;
             checker = true
         } else {
@@ -987,7 +987,7 @@
         }
 
         // Guardian address
-        if (this.Students.contact_address == null) {
+        if (this.Students.contact_address == null || this.Students.contact_address == "") {
             this.guardianContactAddress_state = false;
             checker = true;
         } else {
@@ -995,7 +995,7 @@
         }
 
         // Guardian Name
-        if (this.Students.contact_number == null) {
+        if (this.Students.contact_number == 0 || this.Students.contact_number == "") {
             this.guardianContactNumber_state = false;
             checker = true;
         } else {
@@ -1167,7 +1167,7 @@
           mother_name: null,
           contact_person: null,
           contact_address: null,
-          contact_number: null,
+          contact_number: 0,
           blood_type: null,
           photo_url: null,
           user_id: null,
