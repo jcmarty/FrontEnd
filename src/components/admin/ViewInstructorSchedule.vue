@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- page title -->
-    <h1>Instructors Schedule Report</h1>
+    <h1>View Schedule Report</h1>
     <hr/>
 
     <!-- start of filters -->
@@ -51,9 +51,7 @@
         :filter="filter">
 
         <template v-slot:cell(actions)="row">
-          <b-button size="sm" variant="info" @click="" v-b-tooltip.hover title="View Schedule"
-            :to="{ name: 'ViewInstructorSchedule', params: { id: 'asdasd' } }"
-          >
+          <b-button size="sm" variant="info" @click="" v-b-tooltip.hover title="View Students">
             <i class="fa fa-eye"/>
           </b-button>
         </template>
@@ -67,12 +65,10 @@
 
 <script>
 import Axios from "axios";
-import {AgGridVue} from "ag-grid-vue";
 import '../../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
 import '../../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
-const baseUrl = "http://localhost/api/v1/";
 export default {
-  name: 'InstructorScheduleReport',
+  name: 'ViewInstructorSchedule',
   data() {
     return {
       selectedAcademicYear: this.$store.getters.getCurrentAcademicYear,
@@ -101,9 +97,6 @@ export default {
   },
 
   mounted () {
-    this.getSettings();
-    this.$store.dispatch('loadAcademicYears', this.$store.getters.getToken);
-    this.$store.dispatch('loadSemesters', this.$store.getters.getToken);
     this.backToTop();
     this.getInstructors();
     // this.getInstructorSchedule();
@@ -139,17 +132,6 @@ export default {
       document.body.scrollTop = 0;
       document.documentElement.scrollTop = 0;
     }, // end of backToTop
-
-    // get all settng from db
-    getSettings: function(){
-      Axios.get(baseUrl + "settings", {
-        headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-      })
-      .then(response => {
-          this.$store.dispatch('setAppSettings', response.data);
-          console.log(response.data);
-      });
-    }, // end of function getSettings
   }
 }
 </script>
