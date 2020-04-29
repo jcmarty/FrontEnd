@@ -34,7 +34,7 @@
               <!-- Academic Year -->
               <b-col cols="12" md="6" lg="3">
                 <b-form-group class="Academic"
-                              label="Academic"
+                              label="Academic Year"
                               label-for="Academic">
                   <b-form-select v-model="selectedAcademicYear" id="Academic">
                     <option value="null" hidden>Select Academic</option>
