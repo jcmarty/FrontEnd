@@ -1,18 +1,18 @@
 <template>
   <div>
     <!-- page title -->
-    <h1>Instructors Schedule Report</h1>
-    <hr/>
-
+    <h1 class="d-print-none">Instructors Schedule Report</h1>
+    <hr class="d-print-none"/>
+    <div class="px-4">
     <!-- start of filters -->
-    <b-row>
+    <b-row class="d-print-none">
       <!-- Academic Year -->
       <b-col cols="12" md="6" lg="3">
-        <b-form-group class="Academic"
+        <b-form-group class="Academic text-dark"
                       label="Academic Year"
                       label-for="Academic">
           <b-form-select v-model="selectedAcademicYear" id="Academic">
-            <option value="null" hidden>Select Academic</option>
+            <option value="null" hidden>Select Academic Year</option>
             <option :value="{ id: ay.id, academic_year: ay.academic_year}" v-for="ay in this.$store.getters.getAcademicYears">{{ay.academic_year}}</option>
           </b-form-select>
         </b-form-group>
@@ -21,7 +21,7 @@
 
       <!-- Semester  -->
       <b-col cols="12" md="6" lg="3">
-        <b-form-group class="semester"
+        <b-form-group class="semester text-dark"
                       label="Semester"
                       label-for="Semester">
           <b-form-select v-model="selectedSemester" id="Semester">
@@ -31,40 +31,144 @@
         </b-form-group>
       </b-col>
       <!-- Semester  -->
+
+      <!-- Semester  -->
+      <b-col cols="12" md="6" lg="3">
+        <b-form-group class="instructor text-dark"
+                      label="Instructor"
+                      label-for="Instructor">
+          <b-form-select v-model="selectedInstructor" id="Instructor" @change="onChangeInstructor">
+            <option value="null" hidden>Select Instructor</option>
+            <option :value="ins" v-for="ins in instructorOptions">{{ins.first_name}} {{ins.last_name}}</option>
+          </b-form-select>
+        </b-form-group>
+      </b-col>
+      <!-- Semester  -->
+
+      <!-- print button -->
+      <b-col cols="12" md="6" lg="3">
+        <b-button v-if="selectedInstructor" class="mt-4"  variant="info" onclick="window.print()">
+          Print <i class="fa fa-print"/>
+        </b-button>
+      </b-col>
+      <!-- print button -->
+
     </b-row>
     <!-- end of filters -->
 
     <!-- start of instructor table -->
-    <b-overlay :show="isLoading" rounded="sm">
+    <div class="d-print-none mt-4 mb-4 px-4 pt-4 bg-white shadow rounded">
+      <b-overlay :show="isLoading" rounded="sm">
+        <b-table
+          class="d-print-block table-striped "
+          show-empty
+          responsive
+          head-variant=""
+          bordered
+          hover
+          :items="items"
+          :fields="fields"
+          :current-page="currentPage"
+          :per-page="perPage"
+          :filter="filter">
+
+          <template v-slot:cell(actions)="row" class="d-print-none">
+            <!-- <b-button size="sm" variant="info" @click="" v-b-tooltip.hover title="View Students"
+              :to="{ name: '', params: { id: 'asdasd' } }"
+            > -->
+              <a :to="asdasd" href="#" v-b-tooltip.hover title="View Students"><i class="fa fa-eye fa-lg"/></a>
+            <!-- </b-button> -->
+          </template>
+
+        </b-table>
+      </b-overlay>
+
+      <hr/>
+      <b-row>
+        <b-col lg="1">
+          <b-form-group
+          class="perpageselect"
+          label=""
+          label-for="perPageSelect">
+            <b-form-select
+              v-model="perPage"
+              id="perPageSelect"
+              size="sm"
+              :options="pageOptions"
+            ></b-form-select>
+          </b-form-group>
+        </b-col>
+
+        <b-col lg="3">
+          <b-form-group class="pt-2">
+            <p>Showing 1 to {{this.perPage}} of {{this.items.length}} entries</p>
+          </b-form-group>
+        </b-col>
+
+        <b-col offset-lg="4" lg="4" >
+          <b-pagination
+            v-model="currentPage"
+            :total-rows="totalRows"
+            :per-page="perPage"
+            align="fill"
+            size="sm"
+            class="my-0 float-right"
+          ></b-pagination>
+        </b-col>
+      </b-row>
+    </div>
+    <!-- end of instructor table -->
+
+    <!-- for printing only -->
+    <div class="header d-none d-print-block">
+      <img src="../../assets/images/comteq_logo.png" alt="Comteq Logo" class="logo"/>
+    </div>
+    <div class="content d-none d-print-block my-5">
+      <p v-if="selectedInstructor" class="h4 text-dark text-center">{{selectedInstructor.last_name}}, {{selectedInstructor.first_name}}</p>
       <b-table
-        class="my-3 table-striped"
+        id="print_table"
+        class=" table-striped "
         show-empty
-        responsive
-        head-variant="dark"
         bordered
-        hover
-        stacked="md"
+        responsive
         :items="items"
         :fields="fields"
         :current-page="currentPage"
         :per-page="perPage"
         :filter="filter">
-
-        <template v-slot:cell(actions)="row">
-          <b-button size="sm" variant="info" @click="" v-b-tooltip.hover title="View Schedule"
-            :to="{ name: 'ViewInstructorSchedule', params: { id: 'asdasd' } }"
-          >
-            <i class="fa fa-eye"/>
-          </b-button>
-        </template>
       </b-table>
-    </b-overlay>
-    <!-- end of instructor table -->
+    </div>
+    <div class="footer  d-none d-print-block text-center">This is the Footer</div>
 
 
   </div>
+  <!-- end of class container -->
+  </div>
 </template>
-
+<style>
+.header {
+  position: absolute;
+  top: 0;
+}
+.header .logo {
+  width:300px;
+  height:auto;
+}
+.content p{
+  margin-top: 100px;
+}
+#print_table {
+  margin-top : 30px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+}
+@page {
+  margin: 40cm;
+  /* orientation: landscape; */
+}
+</style>
 <script>
 import Axios from "axios";
 import {AgGridVue} from "ag-grid-vue";
@@ -75,18 +179,39 @@ export default {
   name: 'InstructorScheduleReport',
   data() {
     return {
-      selectedAcademicYear: this.$store.getters.getCurrentAcademicYear,
-      selectedSemester: this.$store.getters.getCurrentSemester,
+      selectedAcademicYear: null,
+      selectedSemester: null,
 
       // variables for table
       isLoading: false,
       items: [],
       fields: [
-        { key: 'room_number', label: 'Room Number', class: 'text-center', sortable: true},
-        { key: 'room_name', label: 'Room Name', sortable: true, class: 'text-center' },
-        { key: 'room_type', label: 'Room Type', sortable: true, class: 'text-center' },
-        { key: 'room_capacity', label: 'Room Capacity', sortable: true, class: 'text-center' },
-        { key: 'actions', label: 'Actions' , class: 'text-center' }
+        { key: 'day', label: 'Day', class: 'text-center', sortable: true},
+        { key: 'time', label: 'Time', sortable: true, class: 'text-center' ,
+          sortByFormatted: true,
+          formatter: (value, key, item) => {
+            return this.timeFormatter(item.time_start) + "-" + this.timeFormatter(item.time_end);
+            // return item.time_start  + "-" + item.time_end;
+          }
+        },
+        { key: 'subject', label: 'Subject', sortable: true, class: 'text-center' ,
+          sortByFormatted: true,
+          formatter: (value, key, item) => {
+            return item.subject.subject.subject_code + " - " + item.subject.subject.subject_title;
+          }
+        },
+        { key: 'course', label: 'Course', sortable: true, class: 'text-center',
+          sortByFormatted: true,
+          formatter: (value, key, item) => {
+            if(item.batch == 1){
+              return item.course_code + " - BLK " + item.block + " - Batch " + item.batch;
+            }else{
+              return item.course_code + " - BLK " + item.block;
+            }
+          }
+        },
+        { key: 'room.room_number', label: 'Room' , class: 'text-center' },
+        { key: 'actions', label: 'Action' , class: 'text-center d-print-none' }
       ],
       totalRows: 1,
       currentPage: 1,
@@ -94,6 +219,9 @@ export default {
       pageOptions: [5, 10, 15, 20, 25],
       filter: null,
       // end of variables for table
+
+      selectedInstructor: null,
+      instructorOptions: null,
     }
   },
   beforeMount() {
@@ -101,16 +229,51 @@ export default {
   },
 
   mounted () {
+    // get current setting from db
     this.getSettings();
+
+    // get current ay and semester based on saved setting
     this.$store.dispatch('loadAcademicYears', this.$store.getters.getToken);
     this.$store.dispatch('loadSemesters', this.$store.getters.getToken);
+
+    this.selectedAcademicYear = this.$store.getters.getCurrentAcademicYear,
+    this.selectedSemester = this.$store.getters.getCurrentSemester,
+
+    // return page to the top
     this.backToTop();
+
+    // get all instructors
     this.getInstructors();
     // this.getInstructorSchedule();
   },
 
   methods: {
 
+    // this function runs when instructor select box changes and ..
+    // get the schedule of selected instructor based on the selected ay and semester
+    onChangeInstructor: function (){
+      var params = {
+        academic_year_id : this.selectedAcademicYear.id,
+        semester_id : this.selectedSemester.id,
+        instructor_id : this.selectedInstructor.id,
+      };
+      // console.log(params)
+
+      this.isLoading = true;
+      Axios
+        .get('http://localhost/api/v1/class_schedules', {
+          params : params,
+          headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+        })
+        .then(response => {
+          this.items = response.data;
+          this.totalRows = this.items.length
+          this.isLoading = false;
+          console.log(response.data)
+        })
+    }, // end of function onChangeInstructor
+
+    // get all instructor record
     getInstructors: function(){
     this.isLoading = true;
     Axios
@@ -119,21 +282,10 @@ export default {
       })
       .then(response => {
         this.isLoading = false;
-        console.log(response.data);
-        this.items = response.data;
+        this.instructorOptions = response.data;
       })
     }, // end of function getInstructors
 
-
-    getInstructorSchedule: function(id){
-    Axios
-      .get('http://localhost/api/v1/instructors/' + this.selected + '/class_schedules',{
-        headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-      })
-      .then(response => {
-        this.InstructorScheduleRowData = response.data;
-      })
-    }, // end of function getInstructorSchedule
 
     backToTop: function(){
       document.body.scrollTop = 0;
@@ -150,6 +302,17 @@ export default {
           console.log(response.data);
       });
     }, // end of function getSettings
+
+    timeFormatter : function(time){
+
+      var split = time.split(":");
+      var hour = split[0];
+      var min = split[1];
+
+      var h = hour % 12 || 12;
+      var ampm = (hour < 12 || hour == 24) ? "AM" : "PM";
+      return h + ":" + min + ampm;
+    },
   }
 }
 </script>
