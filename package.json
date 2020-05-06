@@ -12,7 +12,7 @@
     "ag-grid-community": "^21.2.2",
     "ag-grid-vue": "^21.2.2",
     "axios": "^0.19.2",
-    "axios-retry": "^3.1.4",
+    "axios-retry": "^3.1.8",
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.11.0",
     "chart.js": "^2.9.3",

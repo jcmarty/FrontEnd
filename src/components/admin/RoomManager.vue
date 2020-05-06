@@ -2,12 +2,35 @@
   <div> <!-- Start of Main Div -->
 
     <h1>Manage Rooms</h1>
+    <hr/>
+
+    <!-- Alert Message -->
+    <b-alert variant="success"
+      :show="dismissSuccessCountDown"
+      @dismissed="dismissSuccessCountDown=0"
+      dismissible fade>
+        {{alertMessage}}
+    </b-alert>
+    <b-alert variant="danger"
+      :show="dismissErrorCountDown"
+      @dismissed="dismissErrorCountDown=0"
+      dismissible fade>
+        <p>{{alertMessage}}</p>
+        <ul>
+          <li v-for="error in errors">{{ error }}</li>
+        </ul>
+    </b-alert>
 
     <!-- Adding Form Start  -->
       <div class="addPanel">
-        <div class="panel panel-primary recordMaintenanceForm" v-if="showForm" >
+        <!-- <div class="panel panel-primary recordMaintenanceForm" v-if="showForm" >
           <div class="panel-heading">Add a Room</div>
-          <div class="panel-body">
+          <div class="panel-body"> -->
+        <transition name="fade">
+          <!-- <div class="mx-3 mt-4 mb-4 px-4 py-2 bg-white shadow rounded"> -->
+        <div id="" class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded" v-if="showForm">
+          <div class=" h5 font-weight-bold text-dark" >Add New Room</div>
+          <hr/>
             <b-form id="Add_Room_Form">
             <b-form-row>
               <!-- Room Number -->
@@ -69,26 +92,34 @@
               </b-col>
            </b-form-row>
 
-              <!-- Form Buttons -->
+             <b-form-row>
+               <b-col cols="12" md="12" lg="12">
+                 <hr/>
+               </b-col>
+             </b-form-row>
+
+             <!-- Form Buttons -->
              <b-form-row>
                <b-col>
                  <b-button variant="danger" @click="toggleForm">
-                    Cancel
-                  </b-button>
+                   Cancel
+                 </b-button>
                </b-col>
                <b-col class="d-flex justify-content-end">
-                  <b-button variant="success" id="Add_Room_Btn" @click="addRoom">
-                    Add
-                  </b-button>
+                 <b-button variant="success" id="Add_College_Subject_Btn" @click="addRoom">
+                   Add
+                 </b-button>
                </b-col>
-            </b-form-row>
+             </b-form-row>
+             <!-- Form Buttons -->
 
             </b-form> <!-- End of b-form  -->
           </div>  <!-- End of Panel Body  -->
-        </div>  <!-- End of Panel  -->
+        </transition>
       </div> <!-- End of Add Panel  -->
 
-    <div class="myTable px-4 py-3 my-5">
+    <!-- <div class="myTable px-4 py-3 my-5"> -->
+    <div class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded">
       <!-- Adding Form Start  -->
       <b-row>
         <b-col lg="4" class="my-1 ">
@@ -107,7 +138,7 @@
           </b-form-group>
         </b-col>
 
-        <b-col class="py-4">
+        <b-col class="pt-4">
           <!-- Add New Room Button -->
           <b-button variant="primary" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
             Add New Room
@@ -115,51 +146,36 @@
         </b-col>
       </b-row>
 
-      <!-- Alert Message -->
-      <b-alert variant="success"
-        :show="dismissSuccessCountDown"
-        @dismissed="dismissSuccessCountDown=0"
-        dismissible fade>
-          {{alertMessage}}
-      </b-alert>
-      <b-alert variant="danger"
-        :show="dismissErrorCountDown"
-        @dismissed="dismissErrorCountDown=0"
-        dismissible fade>
-          <p>{{alertMessage}}</p>
-          <ul>
-            <li v-for="error in errors">{{ error }}</li>
-          </ul>
-      </b-alert>
-
       <!-- Main table element -->
-      <b-table
-        class="my-3 table-striped"
-        show-empty
-        responsive
-        head-variant="dark"
-        bordered
-        hover
-        stacked="md"
-        :items="items"
-        :fields="fields"
-        :current-page="currentPage"
-        :per-page="perPage"
-        :filter="filter">
+      <b-overlay :show="isLoading" rounded="sm">
+        <b-table
+          class="my-3 table-striped"
+          show-empty
+          responsive
+          head-variant="dark"
+          bordered
+          hover
+          stacked="md"
+          :items="items"
+          :fields="fields"
+          :current-page="currentPage"
+          :per-page="perPage"
+          :filter="filter">
 
-        <template v-slot:cell(active)="row" >
-          <b-form-checkbox switch size="sm" :checked="row.item.status"  @change="StatusUpdate(row.item, $event.target)">
-            <b-badge variant="success" pill v-if="row.item.active">Active</b-badge>
-            <b-badge variant="danger"  pill v-else>Inactive</b-badge>
-          </b-form-checkbox>
-        </template>
+          <template v-slot:cell(active)="row" >
+            <b-form-checkbox switch size="sm" :checked="row.item.status"  @change="StatusUpdate(row.item, $event.target)">
+              <b-badge variant="success" pill v-if="row.item.active">Active</b-badge>
+              <b-badge variant="danger"  pill v-else>Inactive</b-badge>
+            </b-form-checkbox>
+          </template>
 
-        <template v-slot:cell(actions)="row">
-          <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Edit Room">
-            <b-icon-pencil/>
-          </b-button>
-        </template>
-      </b-table>
+          <template v-slot:cell(actions)="row">
+            <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Edit Room">
+              <b-icon-pencil/>
+            </b-button>
+          </template>
+        </b-table>
+      </b-overlay>
 
       <hr/>
       <b-row>
@@ -177,7 +193,7 @@
           </b-form-group>
         </b-col>
 
-        <b-col sm="4" md="3" class="my-1 col-md-3 offset-md-8">
+        <b-col offset-lg="6" sm="12" md="4" lg="5"class="my-1">
           <b-pagination
             v-model="currentPage"
             :total-rows="totalRows"
@@ -302,6 +318,7 @@
     name: 'RoomsManager',
     data() {
       return {
+        isLoading: false,
         items: [],
         fields: [
           { key: 'room_number', label: 'Room Number', class: 'text-center', sortable: true},
@@ -320,10 +337,10 @@
 
         room: {
           id: null,
-          room_number: 0,
+          room_number: null,
           room_name: null,
           room_type: null,
-          room_capacity: 0,
+          room_capacity: null,
           active: 0
         },
 
@@ -348,11 +365,13 @@
     methods:{
       // Get Room Function
       getRooms: function(){
+        this.isLoading = true;
         Axios
           .get('http://localhost/api/v1/rooms', {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
+            this.isLoading = false;
             this.items = response.data;
             for(var j = 0; j < this.items.length; j++){
               if(this.items[j].active == 1){
@@ -362,10 +381,13 @@
               }
             }
             this.totalRows = this.items.length;
+            this.backToTop();
           })
           .catch(error => {
+            this.isLoading = false;
             this.alertMessage = error.response.data.message;
             this.dismissErrorCountDown = this.dismissSecs;
+            this.backToTop();
           })
       }, // End of Get Room function
 
@@ -382,6 +404,7 @@
             this.dismissSuccessCountDown = this.dismissSecs;
             this.showForm = false;
             this.resetform();
+            this.backToTop();
           })
           .catch(error => {
             this.alertMessage = error.response.data.message;
@@ -391,6 +414,7 @@
                 this.errors.push(err);
               }
             }
+            this.backToTop();
             this.dismissErrorCountDown = this.dismissSecs;
           })
       }, // End of Add Room Function
@@ -407,6 +431,7 @@
           this.alertMessage = response.data.message;
           this.dismissSuccessCountDown = this.dismissSecs;
           this.resetform();
+          this.backToTop();
         })
         .catch(error => {
           this.alertMessage = error.response.data.message;
@@ -416,6 +441,7 @@
               this.errors.push(err);
             }
           }
+          this.backToTop();
           this.dismissErrorCountDown = this.dismissSecs;
         });
         this.$refs['editRoomModal'].hide();
@@ -433,6 +459,7 @@
             this.alertMessage = response.data.message;
             this.dismissSuccessCountDown = this.dismissSecs;
             this.resetform();
+            this.backToTop();
           })
           .catch(error => {
             this.alertMessage = error.response.data.message;
@@ -442,6 +469,7 @@
                 this.errors.push(err);
               }
             }*/
+            this.backToTop();
             this.dismissErrorCountDown = this.dismissSecs;
           });
         this.$refs['deleteRoomModal'].hide();
@@ -455,15 +483,16 @@
         } else {
           this.showForm = true;
         }
+        this.backToTop();
       }, // End of Toggle Form Function
 
       // Reset Form Function
       resetform: function(){
         this.room = {
-          room_number: 0,
+          room_number: null,
           room_name: null,
           room_type: null,
-          room_capacity: 0,
+          room_capacity: null,
           active: 1
         };
       }, // End of Reset Form Function
@@ -488,8 +517,7 @@
           room_capacity: item.room_capacity,
           active: item.active
         },
-
-          this.$root.$emit('bv::show::modal', 'deleteRoomModal')
+        this.$root.$emit('bv::show::modal', 'deleteRoomModal')
       },
 
       StatusUpdate: function(item){
@@ -517,6 +545,7 @@
           }
           this.dismissSuccessCountDown = this.dismissSecs;
           this.resetform();
+          this.backToTop();
         })
         .catch(error => {
           this.alertMessage = error.response.data.message;
@@ -526,9 +555,15 @@
               this.errors.push(err);
             }
           }
+          this.backToTop();
           this.dismissErrorCountDown = this.dismissSecs;
         });
       }, // end of Status Update Function
+
+      backToTop: function(){
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+      },
     } // End of Methods
   } // End of Export Default
 </script>
