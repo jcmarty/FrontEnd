@@ -47,6 +47,7 @@
 
       <!-- print button -->
       <b-col cols="12" md="6" lg="3">
+        <!-- <b-button v-if="selectedInstructor" class="mt-4"  variant="info" onclick="window.print()"> -->
         <b-button v-if="selectedInstructor" class="mt-4"  variant="info" onclick="window.print()">
           Print <i class="fa fa-print"/>
         </b-button>
@@ -120,60 +121,41 @@
     <!-- end of instructor table -->
 
     <!-- for printing only -->
-    <div class="header d-none d-print-block">
-      <img src="../../assets/images/comteq_logo.png" alt="Comteq Logo" class="logo"/>
-    </div>
-    <div class="content d-none d-print-block my-5">
-      <p v-if="selectedInstructor" class="h4 text-dark text-center">{{selectedInstructor.last_name}}, {{selectedInstructor.first_name}}</p>
-      <b-table
-        id="print_table"
-        class=" table-striped "
-        show-empty
-        bordered
-        responsive
-        :items="items"
-        :fields="fields"
-        :current-page="currentPage"
-        :per-page="perPage"
-        :filter="filter">
-      </b-table>
-    </div>
-    <div class="footer  d-none d-print-block text-center">This is the Footer</div>
+    <div id="to_print">
+      <div class="header d-none d-print-block">
+        <!-- <img src="../../assets/images/comteq_logo.png" alt="Comteq Logo" class="logo"/> -->
+        <img src="../../assets/images/header_logo.png" alt="Comteq Logo" class="logo"/>
+      </div>
+      <div class="content d-none d-print-block ">
 
+        <!-- dark blue #002060 -->
+        <!-- red #ff0000 -->
+        <p v-if="selectedInstructor" style="color: #002060" class="h2 font-weight-bold text-center mt-3">SY {{selectedAcademicYear.academic_year}}</p>
+        <p v-if="selectedInstructor" style="color: #ff0000" class="h4 font-weight-bold text-center">{{selectedSemester.semester}}</p>
+        <p v-if="selectedInstructor" class="h1 font-weight-bold text-center">{{selectedInstructor.last_name}}, {{selectedInstructor.first_name}}</p>
+        <b-table
+          id="print_table"
+          class=" table-striped "
+          show-empty
+          bordered
+          responsive
+          :items="items"
+          :fields="fields"
+          :current-page="currentPage"
+          :per-page="perPage"
+          :filter="filter">
+        </b-table>
+      </div>
+      <!-- <div class="footer  d-none d-print-block text-center">This is the Footer</div> -->
+    </div>
 
   </div>
   <!-- end of class container -->
   </div>
 </template>
-<style>
-.header {
-  position: absolute;
-  top: 0;
-}
-.header .logo {
-  width:300px;
-  height:auto;
-}
-.content p{
-  margin-top: 100px;
-}
-#print_table {
-  margin-top : 30px;
-}
-.footer {
-  position: absolute;
-  bottom: 0;
-}
-@page {
-  margin: 40cm;
-  /* orientation: landscape; */
-}
-</style>
+
 <script>
 import Axios from "axios";
-import {AgGridVue} from "ag-grid-vue";
-import '../../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
-import '../../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
 const baseUrl = "http://localhost/api/v1/";
 export default {
   name: 'InstructorScheduleReport',
@@ -316,3 +298,74 @@ export default {
   }
 }
 </script>
+
+<style>
+
+.reset{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+/* @page{
+  orientation: landscape;} */
+
+@media print {
+  body {
+    margin: 0 auto  ;
+    padding: 0;
+  }
+  body * {
+    /* border: 1px solid red; */
+    margin: 0;
+    padding: 0;
+    }
+  @page {
+    size: landscape ;
+    margin-top: 1cm;
+  }
+  #to_print{
+    position: absolute;
+    font-family: "Bookman Old Style";
+    color: black;
+    left: 0;
+    top: 0;
+    margin: 0;
+  }
+  .header {
+    margin: 0px 0px 10px 0px;
+    width: 100%;
+    position: relative;
+    top: 0;
+    left: 0;
+  }
+  /* @page :left {
+  margin-right: 200mm;
+  }
+
+  @page :right {
+    margin-left: 200mm;
+  } */
+
+  .header .logo {
+    position: relative;
+    width: 100%;
+    height: auto ;
+    margin: 0 auto;
+  }
+  .content p{
+    /* margin-top: 30px; */
+  }
+  #print_table {
+    margin-top : 20px;
+    font-size: 14pt;
+  }
+  .footer {
+    position: absolute;
+    bottom: 0;
+  }
+}
+
+
+
+
+</style>
