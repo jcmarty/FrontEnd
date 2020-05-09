@@ -70,6 +70,7 @@
                   <router-link tag="li" to="/reports/schedule/shs"><a class="super_child_menu">Senior High</a></router-link>
                 </b-collapse>
               </li>
+              <router-link tag="li" to="/reports/student" v-if="isAuthorized(this.$store.getters.getSettings.schedule_management, 0)"><a>Student Reports</a></router-link>
               <router-link tag="li" to="/reports/schedule/room" v-if="isAuthorized(this.$store.getters.getSettings.schedule_management, 0)"><a>Room Schedule</a></router-link>
               <router-link tag="li" to="/reports/schedule/instructor" v-if="isAuthorized(this.$store.getters.getSettings.schedule_management, 0)"><a>Instructor Schedule</a></router-link>
               <router-link tag="li" to="#" v-if="isAuthorized(this.$store.getters.getSettings.instructor_management, 0)"><a>Instructors List</a></router-link>

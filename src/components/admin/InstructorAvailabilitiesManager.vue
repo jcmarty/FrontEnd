@@ -25,8 +25,8 @@
         </ul>
     </b-alert>
 
-    <div class="panel panel-primary recordMaintenanceForm">
-      <div class="panel-heading">Add Time Availability</div>
+    <div id="" class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded">
+      <h5 class=" h5 font-weight-bold text-dark">Add Time Availability</h5><hr/>
       <div class="panel-body">
         <b-form>
           <b-form-row>
@@ -105,11 +105,11 @@
       </template>
     </b-modal>
 
+    <div class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded">
     <b-table
       class="my-3 table-striped MyTable"
       responsive
       show-empty
-      head-variant="dark"
       bordered
       hover
       :items="items"
@@ -154,7 +154,7 @@
         ></b-pagination>
       </b-col>
     </b-row>
-
+    </div>
   </div>
 </template>
 <script>

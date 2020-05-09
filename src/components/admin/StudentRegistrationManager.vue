@@ -594,7 +594,6 @@
         class="my-3 table-striped"
         responsive
         show-empty
-        head-variant="dark"
         bordered
         hover
         :items="items"

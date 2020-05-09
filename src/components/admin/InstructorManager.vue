@@ -319,7 +319,6 @@
             class="my-3 table-striped MyTable"
             responsive
             show-empty
-            head-variant="dark"
             bordered
             hover
             :items="PrefSubItems"
@@ -425,7 +424,6 @@
             class="my-3 table-striped MyTable"
             responsive
             show-empty
-            head-variant="dark"
             bordered
             hover
             :items="TimeAvailItems"
@@ -488,7 +486,6 @@
     <b-table
       class="my-3 table-striped MyTable"
       responsive
-      head-variant="dark"
       bordered
       hover
       :items="items"
