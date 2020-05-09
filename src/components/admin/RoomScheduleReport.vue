@@ -2,77 +2,61 @@
   <div>
     <h1 class="d-print-none">Room Schedule Report</h1>
     <hr class="d-print-none"/>
-
-  <div class="myTable px-4 py-3 my-5">
-      <b-form-row class="d-print-none">
-        <b-col  cols="12" md="6" lg="4">
-          <b-form-group
-          class="filter"
-          label="Filter"
-          label-for="Filter">
-            <b-input-group  size="sm">
-              <b-form-input
-                v-model="filter"
-                type="search"
-                id="filterInput"
-                placeholder="Type to Search">
-              </b-form-input>
-            </b-input-group>
-          </b-form-group>
-        </b-col>
-      </b-form-row>
-
-      <b-form-row class="d-print-none">
-        <b-col  cols="12" md="6" lg="2">
-          <b-form-group class="academicyear" label="Academic Year" label-for="academicYear">
-            <b-form-select id="academicYear" v-model="selectedAcademicYear" @change="">
-              <option value="null" hidden>Select Academic Year</option>
-              <option  :value="{id: ay.id, academic_year: ay.academic_year}" v-for="ay in academicYearOptions" >{{ay.academic_year}}</option>
-            </b-form-select>
-          </b-form-group>
-        </b-col>
-
-        <b-col  cols="12" md="6" lg="2">
-          <b-form-group class="semester" label="Semester" label-for="Semester">
-            <b-form-select id="Semester" v-model="selectedSemester" @change="changeSemester">
-              <option value="null" hidden>Select Semester</option>
-              <option  :value="{id: sem.id, semester: sem.semester}" v-for="sem in semesterOptions" >{{sem.semester}}</option>
-            </b-form-select>
-          </b-form-group>
-        </b-col>
-
-        <b-col cols="12" md="6" lg="2">
-          <b-form-group class="roomnumber" label="Room No." label-for="RoomNo">
-            <b-form-select id="RoomNo" v-model="selectedRoom" @change="getFilteredClassSchedule()">
-              <option value="null" hidden>Select Room</option>
-              <option v-for="rooms in rowData" :value="rooms.id">{{rooms.room_number}}</option>
-            </b-form-select>
-          </b-form-group>
-        </b-col>
-    </b-form-row>
-
+    <div class="px-4">
     <b-form-row class="d-print-none">
+      <b-col  cols="12" md="6" lg="2">
+        <b-form-group class="academicyear" label="Academic Year" label-for="academicYear">
+          <b-form-select id="academicYear" v-model="selectedAcademicYear" @change="">
+            <option value="null" hidden>Select Academic Year</option>
+            <option  :value="{id: ay.id, academic_year: ay.academic_year}" v-for="ay in academicYearOptions" >{{ay.academic_year}}</option>
+          </b-form-select>
+        </b-form-group>
+      </b-col>
+
+      <b-col  cols="12" md="6" lg="2">
+        <b-form-group class="semester" label="Semester" label-for="Semester">
+          <b-form-select id="Semester" v-model="selectedSemester" @change="changeSemester">
+            <option value="null" hidden>Select Semester</option>
+            <option  :value="{id: sem.id, semester: sem.semester}" v-for="sem in semesterOptions" >{{sem.semester}}</option>
+          </b-form-select>
+        </b-form-group>
+      </b-col>
+
+      <b-col cols="12" md="6" lg="2">
+        <b-form-group class="roomnumber" label="Room No." label-for="RoomNo">
+          <b-form-select id="RoomNo" v-model="selectedRoom" @change="getFilteredClassSchedule()">
+            <option value="null" hidden>Select Room</option>
+            <option v-for="rooms in rowData" :value="rooms.id">{{rooms.room_number}}</option>
+          </b-form-select>
+        </b-form-group>
+      </b-col>
+
       <b-col class="py-4">
         <!-- Add New Room Button -->
         <b-button variant="primary" onclick="window.print()">
           Print
         </b-button>
       </b-col>
-    </b-form-row>
+  </b-form-row>
 
+
+
+
+
+  <div class="d-print-none mt-4 mb-4 px-4 pt-4 bg-white shadow rounded">
     <center>
       <img src="../../assets/images/comteq_logo.png" alt="Comteq Logo" class="responsive d-none d-print-block" id="ComteqLogoPrint"/>
     </center>
 
     <b-form-row class="d-none d-print-block">
         <center>
-          <h4>COMTEQ Computer & Business College</h4>
-          <h5>1200 4th floor Savers Appliance Depot, Rizal Ave, East Tapinac Olongapo City Zambales. </h5>
+          <h5>COMTEQ Computer & Business College</h5>
+          <h6>1200 4th floor Savers Appliance Depot, Rizal Ave, East Tapinac Olongapo City Zambales. </h6>
       </center>
     </b-form-row>
 
     <b-form-row class="d-none d-print-block">
-        <center><br/><br/>
+        <center><br/>
           <h6>SY ({{selectedAcademicYear.academic_year}})</h6>
           <h6>{{selectedSemester.semester}}</h6>
           <h6 v-if="selectedRoom === null">" "</h6>
@@ -84,7 +68,6 @@
       class="my-3 table-striped"
       show-empty
       responsive
-      head-variant="dark"
       bordered
       hover
       :items="items"
@@ -93,9 +76,6 @@
       :per-page="perPage"
       :filter="filter">
 
-      <template v-slot:cell(time)="row" >
-        {{row.item.time_start}} - {{row.item.time_end}}
-      </template>
     </b-table>
 
     <hr class="d-print-none"/>
@@ -126,6 +106,7 @@
       </b-col>
     </b-row>
   </div>
+</div>
     <!-- end of table -->
 
   </div>
@@ -147,7 +128,13 @@ import Axios from "axios";
                 { key: 'day', label: 'Day', sortable: true, class: 'text-center' },
                 // { key: 'time_start', label: 'Time Start', sortable: true, class: 'text-center' },
                 // { key: 'time_end', label: 'Time End', sortable: true, class: 'text-center' },
-                { key: 'time', label: 'Time', sortable: true, class: 'text-center' },
+                { key: 'time', label: 'Time', sortable: true, class: 'text-center',
+                sortByFormatted: true,
+                formatter: (value, key, item) => {
+                  return this.timeFormatter(item.time_start) + "-" + this.timeFormatter(item.time_end);
+                  // return item.time_start  + "-" + item.time_end;
+                  }
+                },
                 { key: 'block', label: 'Block', sortable: true, class: 'text-center' },
 
               ],
@@ -223,11 +210,30 @@ import Axios from "axios";
                 this.selectedDay = null;
                 this.selectedTimeStart = null;
               },
+
+              timeFormatter : function(time){
+
+                var split = time.split(":");
+                var hour = split[0];
+                var min = split[1];
+
+                var h = hour % 12 || 12;
+                var ampm = (hour < 12 || hour == 24) ? "AM" : "PM";
+                return h + ":" + min + ampm;
+              },
             }
           }
 </script>
-<style media="Print">
-  @page{
-    size: landscape;
+<style type="text/css">
+  @media print{
+    @page{
+      size:landscape;
+      margin: 0;
+    }
   }
+  #ComteqLogoPrint{
+    height: 100px;
+  }
+  /* .pagebreak { page-break-before: disable; } */
+
 </style>

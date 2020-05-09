@@ -194,7 +194,6 @@
           <b-table
             class="my-3 table-striped"
             show-empty
-            head-variant="dark"
             bordered
             hover
             :items="items"

@@ -152,10 +152,8 @@
           class="my-3 table-striped"
           show-empty
           responsive
-          head-variant="dark"
           bordered
           hover
-          stacked="md"
           :items="items"
           :fields="fields"
           :current-page="currentPage"

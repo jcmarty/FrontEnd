@@ -3,7 +3,7 @@
     <h1 class="d-print-none">Manage Student Grades</h1>
     <hr class="d-print-none"/>
 
-    <div class="myTable px-4 py-3 my-5">
+    <div class="px-4 py-3 mt-4 mx-3 shadow rounded bg-white">
       <b-form-row class="d-print-none">
         <b-col  cols="12" md="6" lg="4">
           <b-form-group
@@ -86,7 +86,6 @@
         class="my-3 table-striped"
         show-empty
         responsive
-        head-variant="dark"
         bordered
         hover
         :items="items"
