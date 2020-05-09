@@ -145,35 +145,10 @@
   <!-- end of class container -->
   </div>
 </template>
-<style>
-.header {
-  position: absolute;
-  top: 0;
-}
-.header .logo {
-  width:300px;
-  height:auto;
-}
-.content p{
-  margin-top: 100px;
-}
-#print_table {
-  margin-top : 30px;
-}
-.footer {
-  position: absolute;
-  bottom: 0;
-}
-@page {
-  margin: 40cm;
-  /* orientation: landscape; */
-}
-</style>
+
 <script>
 import Axios from "axios";
 import {AgGridVue} from "ag-grid-vue";
-import '../../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
-import '../../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
 const baseUrl = "http://localhost/api/v1/";
 export default {
   name: 'InstructorScheduleReport',

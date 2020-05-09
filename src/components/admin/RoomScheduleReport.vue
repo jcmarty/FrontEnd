@@ -44,25 +44,6 @@
 
 
   <div class="d-print-none mt-4 mb-4 px-4 pt-4 bg-white shadow rounded">
-    <center>
-      <img src="../../assets/images/comteq_logo.png" alt="Comteq Logo" class="responsive d-none d-print-block" id="ComteqLogoPrint"/>
-    </center>
-
-    <b-form-row class="d-none d-print-block">
-        <center>
-          <h5>COMTEQ Computer & Business College</h5>
-          <h6>1200 4th floor Savers Appliance Depot, Rizal Ave, East Tapinac Olongapo City Zambales. </h6>
-      </center>
-    </b-form-row>
-
-    <b-form-row class="d-none d-print-block">
-        <center><br/>
-          <h6>SY ({{selectedAcademicYear.academic_year}})</h6>
-          <h6>{{selectedSemester.semester}}</h6>
-          <h6 v-if="selectedRoom === null">" "</h6>
-          <h6 v-else>{{selectedRoom.room_id}}</h6>
-      </center>
-    </b-form-row>
     <!-- Main table element -->
     <b-table
       class="my-3 table-striped"
@@ -105,6 +86,45 @@
         ></b-pagination>
       </b-col>
     </b-row>
+  </div>
+
+  <!-- printing -->
+
+  <div class="d-none d-print-block mt-4 mb-4 px-4 pt-4 bg-white ">
+    <center>
+      <img src="../../assets/images/comteq_logo.png" alt="Comteq Logo" class="responsive d-none d-print-block" id="ComteqLogoPrint"/>
+    </center>
+
+    <b-form-row class="d-none d-print-block">
+        <center>
+          <h5>COMTEQ Computer & Business College</h5>
+          <h6>1200 4th floor Savers Appliance Depot, Rizal Ave, East Tapinac Olongapo City Zambales. </h6>
+      </center>
+    </b-form-row>
+
+    <b-form-row class="d-none d-print-block">
+        <center><br/>
+          <h6>SY ({{selectedAcademicYear.academic_year}})</h6>
+          <h6>{{selectedSemester.semester}}</h6>
+          <h6 v-if="selectedRoom === null">" "</h6>
+          <h6 v-else>{{selectedRoom.room_id}}</h6>
+      </center>
+    </b-form-row>
+    <!-- Main table element -->
+    <b-table
+      class="my-3 table-striped"
+      show-empty
+      responsive
+      bordered
+      hover
+      :items="items"
+      :fields="fields"
+      :current-page="currentPage"
+      :per-page="perPage"
+      :filter="filter">
+
+    </b-table>
+
   </div>
 </div>
     <!-- end of table -->
@@ -224,16 +244,8 @@ import Axios from "axios";
             }
           }
 </script>
-<style type="text/css">
-  @media print{
+<style media="print">
     @page{
-      size:landscape;
-      margin: 0;
+      size: landscape;
     }
-  }
-  #ComteqLogoPrint{
-    height: 100px;
-  }
-  /* .pagebreak { page-break-before: disable; } */
-
 </style>

@@ -31,7 +31,6 @@ import UserAccountManager from "./components/admin/UserAccountManager.vue";
 import StudentRegistrationManager from "./components/admin/StudentRegistrationManager.vue";
 import StudentEnrollmentManager from "./components/admin/StudentEnrollmentManager.vue";
 import StudentGradesManager from "./components/admin/StudentGradesManager.vue";
-import StudentsReport from "./components/admin/StudentsReport.vue";
 import UserPrivilegeManager from "./components/admin/UserPrivilegeManager.vue";
 import ActivityLogs from "./components/admin/ActivityLogs.vue";
 import ResetPassword from "./components/admin/ResetPassword.vue";
@@ -39,6 +38,7 @@ import StudentSubjectManager from "./components/admin/StudentSubjectManager.vue"
 import StudentInformationManager from "./components/admin/StudentInformationManager.vue";
 import InstructorInformationManager from "./components/admin/InstructorInformationManager.vue";
 import ViewInstructorSchedule from "./components/admin/ViewInstructorSchedule.vue";
+import StudentReport from "./components/admin/StudentReport.vue";
 
 
 
@@ -314,41 +314,18 @@ export default new Router({
               },
             },
             {
-              path: '/reports/students',
-              name: 'StudentsReport',
-              component: StudentsReport,
+              path: '/reports/student',
+              name: 'StudentReport',
+              component: StudentReport,
               beforeEnter(to, from, next){
                 setTimeout(() => next(), 2000);
               },
             },
-            {
-              path: '/manage/user/privilege',
-              name: 'StudentsReport',
-              component: StudentsReport,
-              beforeEnter(to, from, next){
-                setTimeout(() => next(), 2000);
-              },
-            },
-            {
-              path: '/manage/user/privilege',
-              name: 'StudentsReport',
-              component: StudentsReport,
-              beforeEnter(to, from, next){
-                setTimeout(() => next(), 2000);
-              },
-            },
+
             {
               path: '/manage/student/requirements',
               name: 'RequirementsTesting',
               component: RequirementsTesting,
-              beforeEnter(to, from, next){
-                setTimeout(() => next(), 2000);
-              },
-            },
-            {
-              path: '/manage/user/privilege',
-              name: 'UserPrivilegeManager',
-              component: UserPrivilegeManager,
               beforeEnter(to, from, next){
                 setTimeout(() => next(), 2000);
               },
@@ -410,6 +387,7 @@ export default new Router({
             setTimeout(() => next(), 1000);
           },
         },
+
       ]
     }
   ]
