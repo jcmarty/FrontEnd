@@ -37,7 +37,7 @@ import ResetPassword from "./components/admin/ResetPassword.vue";
 import StudentSubjectManager from "./components/admin/StudentSubjectManager.vue";
 import StudentInformationManager from "./components/admin/StudentInformationManager.vue";
 import InstructorInformationManager from "./components/admin/InstructorInformationManager.vue";
-import ViewInstructorSchedule from "./components/admin/ViewInstructorSchedule.vue";
+import StudentPerSubjectReport from "./components/admin/StudentPerSubjectReport.vue";
 import StudentReport from "./components/admin/StudentReport.vue";
 
 
@@ -178,8 +178,8 @@ export default new Router({
             },
             {
               path: '/view/instructor_schedule/',
-              name: 'ViewInstructorSchedule',
-              component: ViewInstructorSchedule,
+              name: 'StudentPerSubjectReport',
+              component: StudentPerSubjectReport,
               beforeEnter(to, from, next){
                 setTimeout(() => next(), 2000);
               },

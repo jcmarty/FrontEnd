@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- page title -->
-    <h1>View Schedule Report</h1>
+    <h1>View Students</h1>
     <hr/>
 
     <!-- start of filters -->
@@ -68,7 +68,7 @@ import Axios from "axios";
 import '../../../node_modules/ag-grid-community/dist/styles/ag-grid.css';
 import '../../../node_modules/ag-grid-community/dist/styles/ag-theme-material.css';
 export default {
-  name: 'ViewInstructorSchedule',
+  name: 'StudentPerSubjectReport',
   data() {
     return {
       selectedAcademicYear: this.$store.getters.getCurrentAcademicYear,

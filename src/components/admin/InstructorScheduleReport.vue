@@ -77,7 +77,7 @@
             <!-- <b-button size="sm" variant="info" @click="" v-b-tooltip.hover title="View Students"
               :to="{ name: '', params: { id: 'asdasd' } }"
             > -->
-              <a :to="asdasd" href="#" v-b-tooltip.hover title="View Students"><i class="fa fa-eye fa-lg"/></a>
+              <a :to="{ name: 'manageCurriculumSubjects', params: { data: this.selectedInstructor } }" href="#" v-b-tooltip.hover title="View Students"><i class="fa fa-eye fa-lg"/></a>
             <!-- </b-button> -->
           </template>
 
