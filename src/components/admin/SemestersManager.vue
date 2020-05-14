@@ -3,11 +3,32 @@
     <h1>Manage Semesters</h1>
     <hr/>
 
+    <!-- Alert Message -->
+    <b-alert variant="success"
+      :show="dismissSuccessCountDown"
+      @dismissed="dismissSuccessCountDown=0"
+      dismissible fade>
+        {{alertMessage}}
+    </b-alert>
+    <b-alert variant="danger"
+      :show="dismissErrorCountDown"
+      @dismissed="dismissErrorCountDown=0"
+      dismissible fade>
+        <p>{{alertMessage}}</p>
+        <ul>
+          <li v-for="error in errors">{{ error }}</li>
+        </ul>
+    </b-alert>
+    <!-- End of Alert Message -->
+
     <!-- Adding Form Start  -->
     <div class="addPanelSemester">
-      <div class="panel panel-primary recordMaintenanceForm" v-if="showForm">
-        <div class="panel-heading">Add a Semester</div>
-        <div class="panel-body">
+
+      <transition name="fade">
+      <div class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded" v-if="showForm">
+        <div class="h5 font-weight-bold text-dark" >Add New Semester</div>
+        <hr/>
+
           <b-form id="Add_Semester_Form">
             <b-form-row>
               <!-- Semester -->
@@ -40,11 +61,11 @@
             </b-form-row>
 
           </b-form> <!-- End of b-form  -->
-        </div> <!-- End of Panel Body  -->
       </div> <!-- End of Panel  -->
+      </transition>
     </div> <!-- End of Col  -->
 
-    <div class="myTable px-4 py-3 my-5">
+    <div class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded">
       <!-- Adding Form Start  -->
       <b-row>
         <b-col lg="4" class="my-1 ">
@@ -71,25 +92,9 @@
         </b-col>
       </b-row>
 
-      <!-- Alert Message -->
-      <b-alert variant="success"
-        :show="dismissSuccessCountDown"
-        @dismissed="dismissSuccessCountDown=0"
-        dismissible fade>
-          {{alertMessage}}
-      </b-alert>
-      <b-alert variant="danger"
-        :show="dismissErrorCountDown"
-        @dismissed="dismissErrorCountDown=0"
-        dismissible fade>
-          <p>{{alertMessage}}</p>
-          <ul>
-            <li v-for="error in errors">{{ error }}</li>
-          </ul>
-      </b-alert>
-      <!-- End of Alert Message -->
 
       <!-- Main table element -->
+      <b-overlay :show="isLoading" rounded="sm">
       <b-table
         class="my-3 table-striped"
         show-empty
@@ -108,6 +113,7 @@
           </b-button>
         </template>
       </b-table>
+      </b-overlay>
 
       <hr/>
       <b-row>
@@ -140,7 +146,7 @@
       <!-- end of table -->
 
     <!-- Start Of Edit Modal -->
-    <b-modal id="editSemesterModal" ref="editSemesterModal" title="Edit Semester" size="sm" no-close-on-backdrop>
+    <b-modal id="editSemesterModal" ref="editSemesterModal" title="Edit Semester" size="md" no-close-on-backdrop>
       <b-form-row>
       <!-- Semester  -->
         <b-col cols="12" md="6" lg="12">
@@ -215,6 +221,7 @@
           semester:null
         },
 
+        isLoading: false,
         showForm: false,
         alertMessage: "",
         errors: [],
@@ -231,15 +238,18 @@
     methods:{
       // Get Semester Function
       getSemesters: function(){
+        this.isLoading = true;
         Axios
           .get('http://localhost/api/v1/semesters', {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
+            this.isLoading = false;
             this.items = response.data;
             this.totalRows = this.items.length;
           })
           .catch(error => {
+            this.isLoading = false;
             this.alertMessage = error.response.data.message;
             this.dismissErrorCountDown = this.dismissSecs;
           })
@@ -355,8 +365,8 @@
 
 <style>
 .addPanelSemester{
-  width: 25%;
+  width: 50%;
   position: relative;
-  left: 350px;
+  left: 280px;
 }
 </style>

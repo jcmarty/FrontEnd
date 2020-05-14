@@ -5,12 +5,12 @@
       <router-link tag="a" to="/admin" class="site_title"><i class="fa fa-calendar"></i> <span>{{this.$store.getters.getUser.role}}</span></router-link>
     </div>
 
-    <div class="clearfix"></div>
 
+    <div class="profile clearfix"></div>
     <!-- menu profile quick info -->
     <div class="profile clearfix">
       <div class="profile_info">
-        <h2> Welcome {{this.$store.getters.getUser.first_name}}</h2>
+        <h2> Welcome {{this.$store.getters.getUser.first_name}} {{this.$store.getters.getUser.last_name}}!</h2>
       </div>
     </div>
     <!-- /menu profile quick info -->

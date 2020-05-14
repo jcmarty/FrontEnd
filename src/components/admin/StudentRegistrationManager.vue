@@ -1,6 +1,25 @@
 <template>
   <div>
     <h1>Manage Student Registration</h1>
+    <hr/>
+
+    <!-- Alert Message -->
+    <b-alert variant="success"
+      :show="dismissSuccessCountDown"
+      @dismissed="dismissSuccessCountDown=0"
+      dismissible fade>
+        {{alertMessage}}
+    </b-alert>
+    <b-alert variant="danger"
+      :show="dismissErrorCountDown"
+      @dismissed="dismissErrorCountDown=0"
+      dismissible fade>
+        <p>{{alertMessage}}</p>
+        <ul>
+          <li v-for="error in errors">{{ error }}</li>
+        </ul>
+    </b-alert>
+    <!-- End of Alert Message -->
 
 
     <transition name="fade">
@@ -571,25 +590,9 @@
         </b-col>
       </b-row>
 
-      <b-overlay :show="registerOverlay" rounded="sm">
-        <!-- Alert Message -->
-        <b-alert variant="success"
-          :show="dismissSuccessCountDown"
-          @dismissed="dismissSuccessCountDown=0"
-          dismissible fade>
-            {{alertMessage}}
-        </b-alert>
-        <b-alert variant="danger"
-          :show="dismissErrorCountDown"
-          @dismissed="dismissErrorCountDown=0"
-          dismissible fade>
-            <p>{{alertMessage}}</p>
-            <ul>
-              <li v-for="error in errors">{{ error }}</li>
-            </ul>
-        </b-alert>
-        <!-- End of Alert Message -->
+
       <!-- Main table element -->
+      <b-overlay :show="registerOverlay" rounded="sm">
       <b-table
         class="my-3 table-striped"
         responsive
@@ -1078,10 +1081,11 @@
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
+            this.registerOverlay = false;
             // this.alertMessage = response.data.message;
             this.items = response.data;
             this.totalRows = this.items.length;
-            this.registerOverlay = false;
+
 
             for (var i = 0; i < this.items.length; i++) {
               // this.items[i].full_name = this.items[i].last_name;

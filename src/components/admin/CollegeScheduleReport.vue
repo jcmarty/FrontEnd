@@ -3,95 +3,78 @@
     <h1 class="d-print-none">Class Schedule Report</h1>
     <hr class="d-print-none"/>
 
+    <b-form-row class="d-print-none">
+      <b-col  cols="12" md="6" lg="2">
+        <b-form-group class="academicyear" label="Academic Year" label-for="academicYear">
+          <b-form-select id="academicYear" v-model="selectedAcademicYear" @change="">
+            <option value="null" hidden>Select Academic Year</option>
+            <option  :value="{id: ay.id, academic_year: ay.academic_year}" v-for="ay in academicYearOptions" >{{ay.academic_year}}</option>
+          </b-form-select>
+        </b-form-group>
+      </b-col>
 
-    <div class="myTable px-4 py-3 my-5">
-      <b-form-row class="d-print-none">
-        <b-col  cols="12" md="6" lg="4">
-          <b-form-group
-          class="filter"
-          label="Filter"
-          label-for="Filter">
-            <b-input-group  size="sm">
-              <b-form-input
-                v-model="filter"
-                type="search"
-                id="filterInput"
-                placeholder="Type to Search">
-              </b-form-input>
-            </b-input-group>
-          </b-form-group>
-        </b-col>
-      </b-form-row>
+      <b-col  cols="12" md="6" lg="2">
+        <b-form-group class="semester" label="Semester" label-for="Semester">
+          <b-form-select id="Semester" v-model="selectedSemester" @change="changeSemester">
+            <option value="null" hidden>Select Semester</option>
+            <option  :value="{id: sem.id, semester: sem.semester}" v-for="sem in semesterOptions" >{{sem.semester}}</option>
+          </b-form-select>
+        </b-form-group>
+      </b-col>
 
-      <b-form-row class="d-print-none">
-        <b-col  cols="12" md="6" lg="2">
-          <b-form-group class="academicyear" label="Academic Year" label-for="academicYear">
-            <b-form-select id="academicYear" v-model="selectedAcademicYear" @change="">
-              <option value="null" hidden>Select Academic Year</option>
-              <option  :value="{id: ay.id, academic_year: ay.academic_year}" v-for="ay in academicYearOptions" >{{ay.academic_year}}</option>
-            </b-form-select>
-          </b-form-group>
-        </b-col>
+      <b-col cols="12" md="6" lg="2">
+        <b-form-group class="course" label="Course" label-for="Course">
+          <b-form-select id="Course" v-model="selectedCourse" @change="getCurriculum()" :options="course_options">
+            <option value="null" hidden>Select Course</option>
+            <!-- <option v-for="course in CourseRow"
+              v-bind:value="{id:course.id , year:course.year_duration}">{{course.course_code}}</option> -->
+          </b-form-select>
+        </b-form-group>
+      </b-col>
 
-        <b-col  cols="12" md="6" lg="2">
-          <b-form-group class="semester" label="Semester" label-for="Semester">
-            <b-form-select id="Semester" v-model="selectedSemester" @change="changeSemester">
-              <option value="null" hidden>Select Semester</option>
-              <option  :value="{id: sem.id, semester: sem.semester}" v-for="sem in semesterOptions" >{{sem.semester}}</option>
-            </b-form-select>
-          </b-form-group>
-        </b-col>
+      <b-col cols="12" md="6" lg="2">
+        <b-form-group class="curriculum" label="Curriculum" label-for="Curriculum">
+          <b-form-select id="Curriculum" v-model="selectedCurriculum" @change="changeCurr">
+            <option value="null" hidden>Select Curriculum</option>
+            <option v-if="Curriculumrow === null" value="null" disabled>No Curriculums</option>
+            <option v-else v-for="curriculum in Curriculumrow " v-bind:value="{id: curriculum.id, subjects: curriculum.curriculum_subjects, curriculum_title:curriculum.curriculum_title}">{{curriculum.curriculum_title}}</option>
+          </b-form-select>
+        </b-form-group>
+      </b-col>
 
-        <b-col cols="12" md="6" lg="2">
-          <b-form-group class="course" label="Course" label-for="Course">
-            <b-form-select id="Course" v-model="selectedCourse" @change="getCurriculum()" :options="course_options">
-              <option value="null" hidden>Select Course</option>
-              <!-- <option v-for="course in CourseRow"
-                v-bind:value="{id:course.id , year:course.year_duration}">{{course.course_code}}</option> -->
-            </b-form-select>
-          </b-form-group>
-        </b-col>
+      <b-col cols="12" md="6" lg="2">
+        <b-form-group class="yearlevel" label="Year Level" label-for="yearLevel">
+          <b-form-select id="yearLevel" v-model="selectedYearLevel" @change="getSubject()" :options="year_options">
+            <option value="null" hidden>Select Year Level</option>
+            <option v-if="selectedCurriculum === null" value="null" disabled>No year levels</option>
+          </b-form-select>
+        </b-form-group>
+      </b-col>
 
-        <b-col cols="12" md="6" lg="2">
-          <b-form-group class="curriculum" label="Curriculum" label-for="Curriculum">
-            <b-form-select id="Curriculum" v-model="selectedCurriculum" @change="changeCurr">
-              <option value="null" hidden>Select Curriculum</option>
-              <option v-if="Curriculumrow === null" value="null" disabled>No Curriculums</option>
-              <option v-else v-for="curriculum in Curriculumrow " v-bind:value="{id: curriculum.id, subjects: curriculum.curriculum_subjects, curriculum_title:curriculum.curriculum_title}">{{curriculum.curriculum_title}}</option>
-            </b-form-select>
-          </b-form-group>
-        </b-col>
+      <b-col cols="12" md="6" lg="2">
+        <b-form-group class="block" label="Block" label-for="Block">
+          <b-form-select id="block" @change="getFilteredClassSchedule" v-bind:value="blockData" v-model="selectedBlock">
+            <option value="null" hidden>Block</option>
+            <option value="1" >1</option>
+            <option value="2" >2</option>
+            <option value="3" >3</option>
+            <option value="4" >4</option>
+          </b-form-select>
+        </b-form-group>
+      </b-col>
+    </b-form-row>
 
-        <b-col cols="12" md="6" lg="2">
-          <b-form-group class="yearlevel" label="Year Level" label-for="yearLevel">
-            <b-form-select id="yearLevel" v-model="selectedYearLevel" @change="getSubject()" :options="year_options">
-              <option value="null" hidden>Select Year Level</option>
-              <option v-if="selectedCurriculum === null" value="null" disabled>No year levels</option>
-            </b-form-select>
-          </b-form-group>
-        </b-col>
+    <b-form-row class="d-print-none">
+      <b-col class="py-4">
+        <!-- Add New Room Button -->
+        <b-button variant="primary" onclick="window.print()" class="float-right">
+          Print
+        </b-button>
+      </b-col>
+    </b-form-row>
 
-        <b-col cols="12" md="6" lg="2">
-          <b-form-group class="block" label="Block" label-for="Block">
-            <b-form-select id="block" @change="getFilteredClassSchedule" v-bind:value="blockData" v-model="selectedBlock">
-              <option value="null" hidden>Block</option>
-              <option value="1" >1</option>
-              <option value="2" >2</option>
-              <option value="3" >3</option>
-              <option value="4" >4</option>
-            </b-form-select>
-          </b-form-group>
-        </b-col>
-      </b-form-row>
 
-      <b-form-row class="d-print-none">
-        <b-col class="py-4">
-          <!-- Add New Room Button -->
-          <b-button variant="primary" onclick="window.print()">
-            Print
-          </b-button>
-        </b-col>
-      </b-form-row>
+    <div class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded">
 
       <center>
         <img src="../../assets/images/comteq_logo.png" alt="Comteq Logo" class="responsive d-none d-print-block" id="ComteqLogoPrint"/>
@@ -117,11 +100,11 @@
 
 
       <!-- Main table element -->
+      <b-overlay :show="isLoading" rounded="sm">
       <b-table
         class="my-3 table-striped"
         show-empty
         responsive
-        head-variant="dark"
         bordered
         hover
         :items="items"
@@ -130,6 +113,7 @@
         :per-page="perPage"
         :filter="filter">
       </b-table>
+      </b-overlay>
 
       <hr class="d-print-none"/>
       <b-row class="d-print-none">
@@ -170,6 +154,7 @@
     name: 'CollegeScheduleReport',
     data() {
       return {
+        isLoading: false,
         items: [],
         fields: [
           { key: 'day', label: 'Day', class: 'text-center', sortable: true},
@@ -245,6 +230,7 @@
 
       // gets all created schedule
       getFilteredClassSchedule: function(){
+        this.isLoading = true;
         Axios
           .get('http://localhost/api/v1/class_schedules', {
             params: {
@@ -258,6 +244,7 @@
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
+            this.isLoading = false;
             this.items = response.data;
             this.totalRows = this.items.length;
             console.log(response.data)

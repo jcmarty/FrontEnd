@@ -123,7 +123,7 @@
                 label="Contact No"
                 label-for="contact_no">
                 <b-form-input
-                  type="text"
+                  type="number"
                   v-model="instructor.contact_no"
                   id="contact_no">
                 </b-form-input>
@@ -314,6 +314,7 @@
           </b-col>
         </b-form-row>
 
+        <b-overlay :show="isLoading" rounded="sm">
         <b-form-row>
           <b-table
             class="my-3 table-striped MyTable"
@@ -334,6 +335,7 @@
             </template>
           </b-table>
         </b-form-row>
+        </b-overlay>
 
         <b-form-row>
           <b-col>
@@ -419,6 +421,7 @@
           </b-col>
         </b-form-row>
 
+        <b-overlay :show="isLoading" rounded="sm">
         <b-form-row>
           <b-table
             class="my-3 table-striped MyTable"
@@ -439,6 +442,7 @@
             </template>
           </b-table>
         </b-form-row>
+        </b-overlay>
 
         <b-form-row>
           <b-col>
@@ -477,12 +481,13 @@
 
       <b-col class="">
         <!-- Add New Room Button -->
-        <b-button variant="primary" @click="toggleForm" class="toggleFormBtn">
+        <b-button variant="primary" @click="toggleForm" class="toggleFormBtn" v-if="InsTableAddBtn">
           Add new Instructor
         </b-button>
       </b-col>
     </b-row>
 
+    <b-overlay :show="isLoading" rounded="sm">
     <b-table
       class="my-3 table-striped MyTable"
       responsive
@@ -517,6 +522,7 @@
 
       </template>
     </b-table>
+    </b-overlay>
 
     <hr/>
     <b-row>
@@ -587,8 +593,8 @@
 
         PrefSubItems: [],
         PrefSubFields: [
-          { key: 'subject_code', label: 'Subject Code', class: 'text-center', sortable: true},
-          { key: 'subject_title', label: 'Subject Title', sortable: true, class: 'text-center' },
+          { key: 'subject.subject_code', label: 'Subject Code', class: 'text-center', sortable: true},
+          { key: 'subject.subject_title', label: 'Subject Title', sortable: true, class: 'text-center' },
           { key: 'academic_year.academic_year', label: 'Academic Year', sortable: true, class: 'text-center' },
           { key: 'semester.semester', label: 'Semester', sortable: true, class: 'text-center' },
           { key: 'actions', label: 'Actions' , class: 'text-center' }
@@ -639,11 +645,13 @@
           active: 1
         },
 
+
         InsPersonalInfoForm: false,
         InsEducAttainmentForm: false,
         InsPrefSubjectForm: false,
         InsTimeAvailabilityForm: false,
         InsTableForm:  true,
+        InsTableAddBtn:  true,
 
         settings: this.$store.getters.getSettings,
         tabIndex: 0,
@@ -692,6 +700,7 @@
           active: 1
         },
 
+        isLoading: false,
         calendarIcon: "fa fa-calendar",
         birthDateFormat: "MMM dd, yyyy",
         showForm: false,
@@ -802,11 +811,13 @@
       },
 
       getInstructors: function(){
+        this.isLoading = true;
         Axios
           .get('http://localhost/api/v1/instructors', {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
+            this.isLoading = false;
             //console.log(response.data);
             this.items = response.data;
             for(var j = 0; j < this.items.length; j++){
@@ -819,6 +830,7 @@
             this.totalRows = this.items.length;
           })
           .catch(error => {
+            this.isLoading = false;
             this.alertMessage = error.response.data.message;
             this.dismissErrorCountDown = this.dismissSecs;
           })
@@ -911,25 +923,28 @@
       toggleForm: function(){
         if(this.InsPersonalInfoForm){
           this.InsPersonalInfoForm = false;
-          this.InsTableForm = true;
+          this.InsTableAddBtn = true;
         } else {
           this.InsPersonalInfoForm = true;
-          this.InsTableForm = false;
+          this.InsTableAddBtn = false;
         }
       },
 
       CancelInsForm: function(){
+        this.clearInstructorData()
         this.InsPersonalInfoForm = false;
-        this.InsTableForm = true;
+        this.InsTableAddBtn = true;
       },
 
       ShowEducationalForm: function(){
         this.InsPersonalInfoForm = false;
+        this.InsTableForm = false;
         this.InsEducAttainmentForm = true;
       },
 
       BackPersonalForm: function(){
         this.InsPersonalInfoForm = true;
+        this.InsTableForm = true;
         this.InsEducAttainmentForm = false;
       },
 
@@ -955,17 +970,21 @@
       },
 
       Finish: function(){
+        this.InsTimeAvailabilityForm = false;
         this.clearInstructorData()
-        this.toggleForm()
+        this.InsTableForm = true;
+        this.InsTableAddBtn = true;
 
       },
 
       getTimeAvailabilities: function(){
+        this.isLoading = true;
         Axios
           .get('http://localhost/api/v1/instructors/' + this.instructor.id + '/availabilities', {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
+            this.isLoading = false;
             //console.log(response.data);
             this.TimeAvailItems = response.data;
             for(var j = 0; j < this.TimeAvailItems.length; j++){
@@ -979,6 +998,7 @@
 
           })
           .catch(error => {
+            this.isLoading = false;
             console.log(error.response);
           })
       },
@@ -1018,11 +1038,13 @@
           })
       },
       getPreferredSubjects: function(){
+        this.isLoading = true;
         Axios
           .get('http://localhost/api/v1/instructors/' + this.instructor.id + '/preferred_subjects', {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
+            this.isLoading = false;
             //console.log(response.data);
             this.PrefSubItems = response.data;
             for(var j = 0; j < this.PrefSubItems.length; j++){
@@ -1035,6 +1057,7 @@
             this.PrefSubtotalRows = this.PrefSubItems.length;
           })
           .catch(error => {
+            this.isLoading = false;
             console.log(error.response);
           })
       },

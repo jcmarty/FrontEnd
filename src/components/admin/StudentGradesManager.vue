@@ -278,6 +278,7 @@
               var totalGrade = parseFloat(prelim) + parseFloat(midterm) + parseFloat(prefinal) + parseFloat(final);
               var semestralGrade = totalGrade / 4
               // limiting semestral grade to 2 decimal places
+              item.semestral = semestralGrade;
               return parseFloat(semestralGrade).toFixed(2);
             },
           },
@@ -301,31 +302,58 @@
                 // return(5.00);
               }
               else if (semestralGrade >= 75 && semestralGrade < 78) {
-                // return(3.00);
+                var num  = 3.00;
+                num = num.toFixed( 2 )
+                item.figure = num;
+                 return(3.00);
               }
               else if (semestralGrade >= 78 && semestralGrade < 80) {
-                // return(2.75);
+                var num  = 2.75;
+                num = num.toFixed( 2 )
+                item.figure = num;
+                 return(2.75);
               }
               else if (semestralGrade >= 80 && semestralGrade < 83) {
-                // return(2.50);
+                var num  = 2.50;
+                num = num.toFixed( 2 )
+                item.figure = num;
+                 return(2.50);
               }
               else if (semestralGrade >= 83 && semestralGrade < 85) {
-                // return(2.25);
+                var num  = 2.25;
+                num = num.toFixed( 2 )
+                item.figure = num;
+                return(2.25);
               }
               else if (semestralGrade >= 85 && semestralGrade < 88) {
-                // return(2.00);
+                var num  = 2.00;
+                num = num.toFixed( 2 )
+                item.figure = num;
+                return(2.00);
               }
               else if (semestralGrade >= 88 && semestralGrade < 91) {
-                // return(1.75);
+                var num  = 1.75;
+                num = num.toFixed( 2 )
+                item.figure = num;
+                 return(1.75);
               }
               else if (semestralGrade >= 91 && semestralGrade < 94) {
-                // return(1.50);
+                var num  = 1.50;
+                num = num.toFixed( 2 )
+                item.figure = num;
+                 return(1.50);
               }
               else if (semestralGrade >= 94 && semestralGrade < 96) {
-                // return(1.25);
+                var num  = 1.25;
+                num = num.toFixed( 2 )
+                item.figure = num;
+                return(1.25);
               }
               else if (semestralGrade >= 96 && semestralGrade <= 100) {
-                // return(1.00);
+                var num  = 1.00;
+                num = num.toFixed( 2 )
+                item.figure = num;
+                 return(1.00);
               }
 
             },
@@ -347,12 +375,15 @@
               var ps = "PASSED";
               var inc = "INCOMPLETE";
               if (prelim == 0 || midterm == 0 || prefinal == 0 || final == 0 ) {
+                item.remarks = inc;
                 return(inc);
               }
               else if (semestralGrade < 75 ) {
+                item.remarks = fa;
                 return(fa);
               }
               else if (semestralGrade >= 75 ) {
+                item.remarks = ps;
                 return(ps);
               }
 

@@ -3,11 +3,31 @@
     <h1>Manage User Accounts</h1>
     <hr/>
 
+    <!-- Alert Message -->
+    <b-alert variant="success"
+      :show="dismissSuccessCountDown"
+      @dismissed="dismissSuccessCountDown=0"
+      dismissible fade>
+        {{alertMessage}}
+    </b-alert>
+    <b-alert variant="danger"
+      :show="dismissErrorCountDown"
+      @dismissed="dismissErrorCountDown=0"
+      dismissible fade>
+        <p>{{alertMessage}}</p>
+        <ul>
+          <li v-for="error in errors">{{ error }}</li>
+        </ul>
+    </b-alert>
+    <!-- End of Alert Message -->
+
     <!-- Adding Form Start  -->
     <div class="addPanel">
-      <div class="panel panel-primary recordMaintenanceForm" v-if="showForm">
-        <div class="panel-heading">Add New User Account</div>
-        <div class="panel-body">
+
+      <transition name="fade">
+      <div class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded" v-if="showForm">
+        <div class=" h5 font-weight-bold text-dark" >Add New User Account</div>
+        <hr/>
           <b-form id="Add_UserAccount_Form">
             <b-form-row>
               <!-- Username -->
@@ -147,11 +167,11 @@
 
         </b-form>
       </div>  <!-- End of Panel Body  -->
-    </div>  <!-- End of Panel  -->
+    </transition>
   </div> <!-- End of Col  -->
     <!--User Account Form End  -->
 
-    <div class="myTable px-4 py-3 my-5">
+    <div class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded">
       <!-- Adding Form Start  -->
       <b-row>
         <b-col lg="4" class="my-1 ">
@@ -177,24 +197,9 @@
           </b-button>
         </b-col>
       </b-row>
-      <!-- Alert Message -->
-      <b-alert variant="success"
-        :show="dismissSuccessCountDown"
-        @dismissed="dismissSuccessCountDown=0"
-        dismissible fade>
-          {{alertMessage}}
-      </b-alert>
-      <b-alert variant="danger"
-        :show="dismissErrorCountDown"
-        @dismissed="dismissErrorCountDown=0"
-        dismissible fade>
-          <p>{{alertMessage}}</p>
-          <ul>
-            <li v-for="error in errors">{{ error }}</li>
-          </ul>
-      </b-alert>
-      <!-- End of Alert Message -->
+
       <!-- Main table element -->
+      <b-overlay :show="isLoading" rounded="sm">
       <b-table
         class="my-0 table-striped"
         show-empty
@@ -225,6 +230,7 @@
 
         </template>
       </b-table>
+      </b-overlay>
 
       <hr/>
       <b-row>
@@ -472,6 +478,7 @@
           {value: 1, text: 'Active'}
         ],
 
+        isLoading: false,
         showForm: false,
         alertMessage: "",
         errors: [],
@@ -491,11 +498,13 @@
 
       // Get User Account Function
       getUserAccount: function(){
+        this.isLoading = true;
         Axios
           .get('http://localhost/api/v1/users', {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
+            this.isLoading = false;
             this.items = response.data;
             for(var j = 0; j < this.items.length; j++){
               if(this.items[j].active == 1){
@@ -508,6 +517,7 @@
             this.totalRows = this.items.length;
           })
           .catch(error => {
+            this.isLoading = false;
             this.alertMessage = error.response.data.message;
             this.dismissErrorCountDown = this.dismissSecs;
           })
@@ -1045,13 +1055,6 @@
 
         this.users = {
           id: item.id,
-          username: item.username,
-          password: item.password,
-          email: item.email,
-          first_name: item.first_name,
-          middle_name: item.middle_name,
-          last_name: item.last_name,
-          role: item.role,
           active: item.active == 1 ? item.active = 0 : item.active = 1
         };
         Axios

@@ -106,6 +106,8 @@
     </b-modal>
 
     <div class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded">
+
+    <b-overlay :show="isLoading" rounded="sm">
     <b-table
       class="my-3 table-striped MyTable"
       responsive
@@ -126,6 +128,7 @@
 
       </template>
     </b-table>
+    </b-overlay>
 
     <hr/>
     <b-row>
@@ -213,6 +216,7 @@
           {value: 'Saturday', text: 'Saturday'},
         ],
 
+        isLoading: false,
         academicYearOptions: [],
         semesterOptions: [],
         alertMessage: "",
@@ -245,11 +249,13 @@
       },
 
       getTimeAvailabilities: function(){
+        this.isLoading = true;
         Axios
           .get('http://localhost/api/v1/instructors/' + this.instructor.id + '/availabilities', {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
+            this.isLoading = false;
             //console.log(response.data);
             this.items = response.data;
             for(var j = 0; j < this.items.length; j++){
@@ -263,6 +269,7 @@
 
           })
           .catch(error => {
+            this.isLoading = false;
             console.log(error.response);
           })
       },

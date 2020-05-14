@@ -26,7 +26,7 @@
         <b-form-group class="roomnumber" label="Room No." label-for="RoomNo">
           <b-form-select id="RoomNo" v-model="selectedRoom" @change="getFilteredClassSchedule()">
             <option value="null" hidden>Select Room</option>
-            <option v-for="rooms in rowData" :value="rooms.id">{{rooms.room_number}}</option>
+            <option v-for="rooms in rowData" :value="{id: rooms.id, number: rooms.room_number}">{{rooms.room_number}}</option>
           </b-form-select>
         </b-form-group>
       </b-col>
@@ -90,43 +90,36 @@
 
   <!-- printing -->
 
-  <div class="d-none d-print-block mt-4 mb-4 px-4 pt-4 bg-white ">
-    <center>
-      <img src="../../assets/images/comteq_logo.png" alt="Comteq Logo" class="responsive d-none d-print-block" id="ComteqLogoPrint"/>
-    </center>
+  <!-- for printing only -->
+  <div id="to_print">
+    <div class="header d-none d-print-block">
+      <!-- <img src="../../assets/images/comteq_logo.png" alt="Comteq Logo" class="logo"/> -->
+      <img src="../../assets/images/header_logo.png" alt="Comteq Logo" class="logo"/>
+    </div>
+    <div class="content d-none d-print-block ">
 
-    <b-form-row class="d-none d-print-block">
-        <center>
-          <h5>COMTEQ Computer & Business College</h5>
-          <h6>1200 4th floor Savers Appliance Depot, Rizal Ave, East Tapinac Olongapo City Zambales. </h6>
-      </center>
-    </b-form-row>
-
-    <b-form-row class="d-none d-print-block">
-        <center><br/>
-          <h6>SY ({{selectedAcademicYear.academic_year}})</h6>
-          <h6>{{selectedSemester.semester}}</h6>
-          <h6 v-if="selectedRoom === null">" "</h6>
-          <h6 v-else>{{selectedRoom.room_id}}</h6>
-      </center>
-    </b-form-row>
-    <!-- Main table element -->
-    <b-table
-      class="my-3 table-striped"
-      show-empty
-      responsive
-      bordered
-      hover
-      :items="items"
-      :fields="fields"
-      :current-page="currentPage"
-      :per-page="perPage"
-      :filter="filter">
-
-    </b-table>
-
+      <!-- dark blue #002060 -->
+      <!-- red #ff0000 -->
+      <p  style="color: #002060" class="h2 font-weight-bold text-center mt-3">SY {{selectedAcademicYear.academic_year}}</p>
+      <p  style="color: #ff0000" class="h4 font-weight-bold text-center">{{selectedSemester.semester}}</p>
+      <p  class="h1 font-weight-bold text-center">Room #{{selectedRoom.number}}</p>
+      <b-table
+        id="print_table"
+        class=" table-striped "
+        show-empty
+        bordered
+        responsive
+        :items="items"
+        :fields="fields"
+        :current-page="currentPage"
+        :per-page="perPage"
+        :filter="filter">
+      </b-table>
+    </div>
+    <!-- <div class="footer  d-none d-print-block text-center">This is the Footer</div> -->
   </div>
-</div>
+  </div>
+
     <!-- end of table -->
 
   </div>
@@ -185,7 +178,7 @@ import Axios from "axios";
               Axios
                 .get('http://localhost/api/v1/class_schedules', {
                   params: {
-                    room_id: this.selectedRoom,
+                    room_id: this.selectedRoom.id,
                     academic_year_id: this.selectedAcademicYear.id,
                     semester_id: this.selectedSemester.id,
                     active: 1,
@@ -244,8 +237,73 @@ import Axios from "axios";
             }
           }
 </script>
-<style media="print">
-    @page{
-      size: landscape;
+<style>
+
+.reset{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+/* @page{
+  orientation: landscape;} */
+
+@media print {
+  body {
+    margin: 0 auto  ;
+    padding: 0;
+  }
+  body * {
+    /* border: 1px solid red; */
+    margin: 0;
+    padding: 0;
     }
+  @page {
+    size: landscape ;
+    margin-top: 1cm;
+  }
+  #to_print{
+    position: absolute;
+    font-family: "Bookman Old Style";
+    color: black;
+    left: 0;
+    top: 0;
+    margin: 0;
+  }
+  .header {
+    margin: 0px 0px 10px 0px;
+    width: 100%;
+    position: relative;
+    top: 0;
+    left: 0;
+  }
+  /* @page :left {
+  margin-right: 200mm;
+  }
+
+  @page :right {
+    margin-left: 200mm;
+  } */
+
+  .header .logo {
+    position: relative;
+    width: 100%;
+    height: auto ;
+    margin: 0 auto;
+  }
+  .content p{
+    /* margin-top: 30px; */
+  }
+  #print_table {
+    margin-top : 20px;
+    font-size: 14pt;
+  }
+  .footer {
+    position: absolute;
+    bottom: 0;
+  }
+}
+
+
+
+
 </style>
