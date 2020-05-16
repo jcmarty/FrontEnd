@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Manage Instructor Time Availability</h1>
+    <h1 class="font-weight-bold text-dark">Manage Instructor Time Availability</h1>
     <b-breadcrumb>
       <b-breadcrumb-item to="/manage/instructor">Instructors</b-breadcrumb-item>
       <b-breadcrumb-item :active="true">{{ instructor.name }}</b-breadcrumb-item>

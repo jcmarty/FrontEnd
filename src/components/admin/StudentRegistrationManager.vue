@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Manage Student Registration</h1>
+    <h1 class="font-weight-bold text-dark">Manage Student Registration</h1>
     <hr/>
 
     <!-- Alert Message -->

@@ -1,6 +1,6 @@
 <template>
 <div>
-  <h1>Manage {{curriculum_data.curriculum_title}} Subjects</h1>
+  <h1 class="font-weight-bold text-dark">Manage {{curriculum.curriculum_title}} Subjects</h1>
   <hr />
   <!-- <h2>Title: {{ curriculum.curriculum_title }}</h2>
     <p>Description: {{ curriculum.curriculum_desc }}</p>

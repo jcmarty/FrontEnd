@@ -1,6 +1,6 @@
 <template><!-- Start Template -->
   <div> <!-- Start of Main Div -->
-    <h1>Manage Strands</h1>
+    <h1 class="font-weight-bold text-dark">Manage Strands</h1>
     <hr/>
 
     <!-- Alert Message -->

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="d-print-none">Room Schedule Report</h1>
+    <h1 class="d-print-none font-weight-bold text-dark">Room Schedule Report</h1>
     <hr class="d-print-none"/>
     <div class="px-4">
     <b-form-row class="d-print-none">

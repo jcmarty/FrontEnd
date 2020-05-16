@@ -1,5 +1,7 @@
 <template>   <!-- Start Template -->
   <div> <!-- Start of Main Div -->
+    <h1 class="font-weight-bold text-dark">Manage Rooms</h1>
+    <hr/>
     <!-- Alert Message -->
     <b-alert variant="success"
       :show="dismissSuccessCountDown"
@@ -116,8 +118,6 @@
 
     <!-- <div class="myTable px-4 py-3 my-5"> -->
     <div class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded">
-      <h1 class="font-weight-bold text-dark">Manage Rooms</h1>
-      <hr/>
 
       <!-- Adding Form Start  -->
       <b-row>

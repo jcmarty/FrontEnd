@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- page title -->
-    <h1 class="d-print-none">Instructors Schedule Report</h1>
+    <h1 class="d-print-none font-weight-bold text-dark">Instructors Schedule Report</h1>
     <hr class="d-print-none"/>
     <div class="px-4">
     <!-- start of filters -->

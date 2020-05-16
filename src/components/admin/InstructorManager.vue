@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Manage Instructors</h1>
+    <h1 class="font-weight-bold text-dark">Manage Instructors</h1>
     <hr/>
     <!-- Alert Message -->
     <b-alert variant="success"

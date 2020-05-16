@@ -1,6 +1,6 @@
 <template> <!-- Start Template -->
   <div> <!-- Start of Main Div -->
-    <h1>Manage User Accounts</h1>
+    <h1 class="font-weight-bold text-dark">Manage User Accounts</h1>
     <hr/>
 
     <!-- Alert Message -->

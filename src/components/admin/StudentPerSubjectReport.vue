@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- page title -->
-    <h1>View Students</h1>
+    <h1 class="font-weight-bold text-dark">View Students</h1>
     <hr/>
 
     <!-- start of filters -->

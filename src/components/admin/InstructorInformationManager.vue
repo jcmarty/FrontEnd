@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1>Instructor Information</h1>
+    <h1 class="font-weight-bold text-dark">Instructor Information</h1>
     <hr/>
     <b-breadcrumb>
       <b-breadcrumb-item to="/manage/instructor">Instructors</b-breadcrumb-item>

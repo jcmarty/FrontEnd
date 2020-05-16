@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- page title -->
-    <h1>Manage Student Enrollment</h1>
+    <h1 class="font-weight-bold text-dark">Manage Student Enrollment</h1>
     <hr/>
 
     <!-- form container -->

@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1>Student Information</h1>
+    <h1 class="font-weight-bold text-dark">Student Information</h1>
     <hr/>
     <b-breadcrumb>
       <b-breadcrumb-item to="/manage/student/registration">Student Registration</b-breadcrumb-item>

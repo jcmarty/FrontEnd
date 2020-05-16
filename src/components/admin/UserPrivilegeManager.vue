@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1>User Priviledges</h1>
+    <h1 class="font-weight-bold text-dark">User Priviledges</h1>
     <hr/>
     <b-breadcrumb>
       <b-breadcrumb-item to="/manage/useraccount">User Account</b-breadcrumb-item>

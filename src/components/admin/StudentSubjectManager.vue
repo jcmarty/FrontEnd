@@ -1,7 +1,7 @@
 <template>  <!-- Start Template -->
   <div> <!-- Start of Main Div -->
 
-    <h1>Manage Student Subjects</h1>
+    <h1 class="font-weight-bold text-dark">Manage Student Subjects</h1>
     <hr/>
 
     <!-- Alert Message -->

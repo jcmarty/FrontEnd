@@ -1,7 +1,7 @@
 <template>
 <div>
   <div id="pageHeader">
-    <h1>College Class</h1>
+    <h1 class="font-weight-bold text-dark">College Class</h1>
 
       <b-col class="ml-3 mt-2"  cols="12" md="6" lg="2">
         <b-form-group class="academicyear" label="" label-for="academicYear">

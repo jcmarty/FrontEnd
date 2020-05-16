@@ -1,6 +1,6 @@
 <template> <!-- Start Template -->
   <div> <!-- Start of Main Div -->
-    <h1 class="d-print-none">Class Schedule Report</h1>
+    <h1 class="d-print-none font-weight-bold text-dark">Class Schedule Report</h1>
     <hr class="d-print-none"/>
 
     <b-form-row class="d-print-none">
