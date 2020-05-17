@@ -407,7 +407,7 @@ html, body, #app, #admin{
 }
 body .container.body .right_col {
     background: white;
-		min-height: 900px;
+		min-height: 127vh;
 }
 .nav-md .container.body .right_col {
     padding: 10px 20px 20px 20px;
