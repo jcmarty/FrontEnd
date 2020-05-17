@@ -109,7 +109,7 @@
                 console.log(response.data);
             });
           }, // end of function getSettings
-          
+
         },
     }
 </script>

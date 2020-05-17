@@ -86,6 +86,7 @@ html, body, #app, #admin{
     padding: 0;
     z-index: 9999;
     position: absolute
+
 }
 .nav-sm .container.body .col-md-3.left_col.menu_fixed {
     position: fixed;
@@ -135,7 +136,7 @@ html, body, #app, #admin{
 }
 .nav-sm .nav.child_menu li.active,
 .nav-sm .nav.side-menu li.active-sm {
-    border-right: 5px solid red;
+    border-right: 5px solid rgb(27,86,243);
 }
 .nav-sm ul.nav.child_menu ul,
 .nav-sm .nav.side-menu li.active-sm ul ul {
@@ -162,11 +163,17 @@ html, body, #app, #admin{
     top: 0;
     width: 210px;
     z-index: 4000;
-    background: #3E5367;
+    background: rgb(27,86,200);
 }
 .nav-sm .nav.child_menu li {
-    padding: 0 10px
+    padding: 0 10px;
+		width: 100%;
 }
+
+.nav-sm .nav.side-menu>li li.active{
+    background-color: white;
+}
+
 .nav-sm .nav.side-menu>li li a{
     text-align: left !important;
 		color: white !important;
@@ -381,8 +388,9 @@ html, body, #app, #admin{
 .col-md-3.left_col{
 	background: rgb(27, 86, 243);
 	height: 121%;
-
 }
+
+
 .nav-md .container.body .col-md-3.left_col {
 		/* background: rgb(27, 86, 243); */
 		/* background: red;
@@ -401,7 +409,7 @@ html, body, #app, #admin{
     position: fixed
 }
 body .container.body .right_col {
-    background: #F7F7F7;
+    background: white;
 }
 .nav-md .container.body .right_col {
     padding: 10px 20px 20px 20px;
@@ -541,16 +549,18 @@ body .container.body .right_col {
     background: #D9DEE4
 }
 body {
-    color: #73879C;
+    color: black;
 		/* background: white; */
-  	/* background: rgb(27, 86, 243); */
+		background-color: rgb(27, 86, 243);
 		/* background: green; */
     font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
     font-size: 13px;
     font-weight: 400;
     line-height: 1.471;
 }
-
+.main_container{
+		background-color: rgb(27, 86, 243);
+}
 
 .main_container .top_nav {
     display: block;
@@ -782,9 +792,13 @@ nav.side-menu>li>a:active {
 	background: white;
 	color: rgb(27,86,243);
 }
-.nav-sm .nav.child_menu li a:hover{
+.nav-sm .nav.child_menu li:hover{
 	background: white;
-	color: rgb(27,86,243) !important;
+	color: black !important;
+}
+
+.nav-sm .nav.child_menu li a:hover{
+	color: black !important;
 }
 .nav.child_menu li.active{
 	background: white;
