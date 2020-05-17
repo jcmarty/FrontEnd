@@ -73,9 +73,7 @@ html, body, #app, #admin{
 /*********************************
  *    Admin Panel / Dashboard    *
  *********************************/
-.nav-md{
-		background: white;
-}
+
 .nav-sm .container, .nav-md .container{
   min-width: 100%;
 }
@@ -100,9 +98,8 @@ html, body, #app, #admin{
     visibility: hidden
 }
 .nav-sm .container.body .right_col {
-    padding: 10px 20px;
+    padding: 10px 20px 30px 20px;
     margin-left: 70px;
-    z-index: 2
 }
 .nav-sm .navbar.nav_title {
     width: 70px
@@ -410,6 +407,7 @@ html, body, #app, #admin{
 }
 body .container.body .right_col {
     background: white;
+		min-height: 900px;
 }
 .nav-md .container.body .right_col {
     padding: 10px 20px 20px 20px;
@@ -433,7 +431,7 @@ body .container.body .right_col {
     }
     .nav-md .container.body .right_col {
         width: 100%;
-        padding-right: 0
+        padding-right: 0;
     }
     .right_col {
         padding: 10px !important
@@ -903,7 +901,7 @@ footer {
 		border-color: rgb(27, 86, 243);
  		border-width: 1px 0px 1px 0px;
     padding: 15px 20px;
-    display: block
+    display: block;
 }
 .nav-sm footer {
     margin-left: 70px
