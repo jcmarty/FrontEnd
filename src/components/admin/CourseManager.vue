@@ -312,6 +312,8 @@
 
 <script>
   import Axios from "axios";
+  const { validationMixin, default: Vuelidate } = require('vuelidate');
+  const { required, minLength } = require('vuelidate/lib/validators');
   export default{
     name: 'CoursesManager',
     data() {
@@ -356,7 +358,14 @@
       }
     }, // End of Data
 
-
+    validations: {
+      course: {
+        course_code: {required},
+        course_desc: {required},
+        course_major: {required},
+        year_duration: {required},
+      }
+    },
 
     mounted () {
       this.getCourses();

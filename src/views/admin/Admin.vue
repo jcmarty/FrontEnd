@@ -4,9 +4,8 @@
   </div>
 </template>
 <script>
-import Axios from 'axios'
-import axiosRetry from 'axios-retry';
-axiosRetry(Axios, { retries: 3 });
+import Axios from 'axios';
+
     export default {
         name: 'Admin',
         data() {
@@ -27,6 +26,7 @@ axiosRetry(Axios, { retries: 3 });
               this.$router.replace("/admin");
             }else{
               this.$router.replace("/admin/login");
+
             }
         },
         methods: {

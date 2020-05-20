@@ -417,12 +417,13 @@
         },
 
         roleOptions:[
+          {value: 'Administrative Assistant', text: 'Administrative Assistant'},
           {value: 'Assistant Registrar', text: 'Assistant Registrar'},
           {value: 'Coordinator', text: 'Coordinator'},
           {value: 'Registrar', text: 'Registrar'},
           {value: 'School Administrator', text: 'School Administrator'},
           {value: 'System Administrator', text: 'System Administrator'},
-          {value: 'Custom', text: 'Custom'}
+
         ],
 
         UserActivities:[],
@@ -461,6 +462,7 @@
           .then(response => {
             this.isLoading = false;
             this.items = response.data;
+            console.log(response.data)
             for(var j = 0; j < this.items.length; j++){
               if(this.items[j].active == 1){
                 this.items[j].status = true
@@ -519,71 +521,156 @@
         })
         .then(user_activities => {
           if (this.LastUserRole === 'System Administrator') {
-          // all activities will be added to this user..
-          for(var i = 0; i < user_activities.data.length; i++){
-              this.UserPriv.push({
-                user_id: this.LastUser,
-                activity_id: user_activities.data[i].id,
-                create_priv: 1,
-                read_priv: 1,
-                update_priv: 1,
-                delete_priv: 1,
-              });
+            console.log(user_activities.data);
+            this.UserPriv.push({
+              user_id: this.LastUser,
+              activity_id: user_activities.data[16].id,
+              create_priv: 1,
+              read_priv: 1,
+              update_priv: 1,
+              delete_priv: 1,
+            });
+
+            this.UserPriv.push({
+              user_id: this.LastUser,
+              activity_id: user_activities.data[15].id,
+              create_priv: 1,
+              read_priv: 1,
+              update_priv: 1,
+              delete_priv: 1,
+            });
+
+            this.UserPriv.push({
+              user_id: this.LastUser,
+              activity_id: user_activities.data[14].id,
+              create_priv: 1,
+              read_priv: 1,
+              update_priv: 1,
+              delete_priv: 1,
+            });
+
+            this.UserPriv.push({
+              user_id: this.LastUser,
+              activity_id: user_activities.data[13].id,
+              create_priv: 1,
+              read_priv: 1,
+              update_priv: 1,
+              delete_priv: 1,
+            });
+
+            this.UserPriv.push({
+              user_id: this.LastUser,
+              activity_id: user_activities.data[12].id,
+              create_priv: 1,
+              read_priv: 1,
+              update_priv: 1,
+              delete_priv: 1,
+            });
+
+            this.UserPriv.push({
+              user_id: this.LastUser,
+              activity_id: user_activities.data[11].id,
+              create_priv: 1,
+              read_priv: 1,
+              update_priv: 1,
+              delete_priv: 1,
+            });
+
+            this.UserPriv.push({
+              user_id: this.LastUser,
+              activity_id: user_activities.data[10].id,
+              create_priv: 1,
+              read_priv: 1,
+              update_priv: 1,
+              delete_priv: 1,
+            });
+
+            this.UserPriv.push({
+              user_id: this.LastUser,
+              activity_id: user_activities.data[9].id,
+              create_priv: 1,
+              read_priv: 1,
+              update_priv: 1,
+              delete_priv: 1,
+            });
+
+
+            this.UserPriv.push({
+              user_id: this.LastUser,
+              activity_id: user_activities.data[8].id,
+              create_priv: 1,
+              read_priv: 1,
+              update_priv: 1,
+              delete_priv: 1,
+            });
+
+            this.UserPriv.push({
+              user_id: this.LastUser,
+              activity_id: user_activities.data[7].id,
+              create_priv: 0,
+              read_priv: 1,
+              update_priv: 0,
+              delete_priv: 0,
+            });
+
           }
-        }
 
         else if (this.LastUserRole === 'School Administrator') {
-          for(var i = 0; i < user_activities.data.length; i++){
-              this.UserPriv.push({
-                user_id: this.LastUser,
-                activity_id: user_activities.data[i].id,
-                create_priv: 0,
-                read_priv: 1,
-                update_priv: 0,
-                delete_priv: 0,
-              });
-          }
+          console.log(user_activities.data);
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[8].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[7].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[3].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[2].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+
         }
             // preset privileges
 
         else if (this.LastUserRole === 'Registrar') {
-          // user management
+          console.log(user_activities.data);
+          // subject management
           this.UserPriv.push({
             user_id: this.LastUser,
-            activity_id: user_activities.data[1].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 1,
-            delete_priv: 0,
-          });
-          // academic year management
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[2].id,
+            activity_id: user_activities.data[10].id,
             create_priv: 0,
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
           });
-          // semester management
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[3].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-          // instructor management
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[5].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-          //course management
+
+          //assessment managemnt
           this.UserPriv.push({
             user_id: this.LastUser,
             activity_id: user_activities.data[6].id,
@@ -592,119 +679,62 @@
             update_priv: 0,
             delete_priv: 0,
           });
-          // subject management
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[7].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-          // curriculum management
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[8].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-          //assessment managemnt
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[11].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-          //strand management
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[12].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-          //track management
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[13].id,
-            create_priv: 1,
-            read_priv: 1,
-            update_priv: 1,
-            delete_priv: 1,
-          });
+
+
           //student management
           this.UserPriv.push({
             user_id: this.LastUser,
-            activity_id: user_activities.data[14].id,
-            create_priv: 1,
-            read_priv: 1,
-            update_priv: 1,
-            delete_priv: 1,
-          });
-          //enrollment management
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[15].id,
-            create_priv: 1,
-            read_priv: 1,
-            update_priv: 1,
-            delete_priv: 1,
-          });
-          //requirements management
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[16].id,
+            activity_id: user_activities.data[3].id,
             create_priv: 1,
             read_priv: 1,
             update_priv: 1,
             delete_priv: 1,
           });
 
+          //enrollment management
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[2].id,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
+          });
+
+          //requirements management
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[1].id,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
+          });
+
+          //student schedule management
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[0].id,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
+          });
         }
 
         else if (this.LastUserRole === 'Assistant Registrar') {
-          // user management
+          console.log(user_activities.data);
+          // subject management
           this.UserPriv.push({
             user_id: this.LastUser,
-            activity_id: user_activities.data[1].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 1,
-            delete_priv: 0,
-          });
-          // academic year management
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[2].id,
+            activity_id: user_activities.data[10].id,
             create_priv: 0,
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
           });
-          // semester management
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[3].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-          // instructor management
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[5].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-          //course management
+
+          //assessment managemnt
           this.UserPriv.push({
             user_id: this.LastUser,
             activity_id: user_activities.data[6].id,
@@ -713,73 +743,42 @@
             update_priv: 0,
             delete_priv: 0,
           });
-          // subject management
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[7].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-          // curriculum management
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[8].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-          //assessment managemnt
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[11].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-          //strand management
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[12].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-          //track management
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[13].id,
-            create_priv: 1,
-            read_priv: 1,
-            update_priv: 1,
-            delete_priv: 1,
-          });
+
+
           //student management
           this.UserPriv.push({
             user_id: this.LastUser,
-            activity_id: user_activities.data[14].id,
+            activity_id: user_activities.data[3].id,
             create_priv: 1,
             read_priv: 1,
             update_priv: 1,
             delete_priv: 1,
           });
+
           //enrollment management
           this.UserPriv.push({
             user_id: this.LastUser,
-            activity_id: user_activities.data[15].id,
+            activity_id: user_activities.data[2].id,
             create_priv: 1,
             read_priv: 1,
             update_priv: 1,
             delete_priv: 1,
           });
+
           //requirements management
           this.UserPriv.push({
             user_id: this.LastUser,
-            activity_id: user_activities.data[16].id,
+            activity_id: user_activities.data[1].id,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
+          });
+
+          //student schedule management
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[0].id,
             create_priv: 1,
             read_priv: 1,
             update_priv: 1,
@@ -789,28 +788,10 @@
         }
 
         else if (this.LastUserRole === 'Coordinator') {
-          // preset privileges
+          console.log(user_activities.data);
           this.UserPriv.push({
             user_id: this.LastUser,
-            activity_id: user_activities.data[1].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[2].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[3].id,
+            activity_id: user_activities.data[12].id,
             create_priv: 1,
             read_priv: 1,
             update_priv: 1,
@@ -819,7 +800,7 @@
 
           this.UserPriv.push({
             user_id: this.LastUser,
-            activity_id: user_activities.data[4].id,
+            activity_id: user_activities.data[10].id,
             create_priv: 1,
             read_priv: 1,
             update_priv: 1,
@@ -828,25 +809,7 @@
 
           this.UserPriv.push({
             user_id: this.LastUser,
-            activity_id: user_activities.data[5].id,
-            create_priv: 1,
-            read_priv: 1,
-            update_priv: 1,
-            delete_priv: 1,
-          });
-
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[6].id,
-            create_priv: 1,
-            read_priv: 1,
-            update_priv: 1,
-            delete_priv: 1,
-          });
-
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[7].id,
+            activity_id: user_activities.data[9].id,
             create_priv: 1,
             read_priv: 1,
             update_priv: 1,
@@ -864,25 +827,7 @@
 
           this.UserPriv.push({
             user_id: this.LastUser,
-            activity_id: user_activities.data[11].id,
-            create_priv: 1,
-            read_priv: 1,
-            update_priv: 1,
-            delete_priv: 1,
-          });
-
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[12].id,
-            create_priv: 1,
-            read_priv: 1,
-            update_priv: 1,
-            delete_priv: 1,
-          });
-
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[13].id,
+            activity_id: user_activities.data[0].id,
             create_priv: 1,
             read_priv: 1,
             update_priv: 1,
@@ -891,7 +836,8 @@
 
         }
 
-        else if (this.LastUserRole === 'Custom') {
+        else if (this.LastUserRole === 'Administrative Assistant') {
+          console.log(user_activities.data);
           for(var i = 0; i < user_activities.data.length; i++){
               this.UserPriv.push({
                 user_id: this.LastUser,

@@ -2,8 +2,6 @@ import Vue from "vue";
 import Vuex from "vuex";
 import router from "./router";
 import Axios from "axios";
-import axiosRetry from 'axios-retry';
-axiosRetry(Axios, { retries: 3 });
 
 const baseUrl = "http://localhost/api/v1/";
 Vue.use(Vuex);
