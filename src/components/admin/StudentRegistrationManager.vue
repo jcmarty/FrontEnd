@@ -68,6 +68,19 @@
 
           <b-col cols="12" md="6" lg="3">
             <b-form-group
+              class="suffixname"
+              label="Suffix Name"
+              label-for="suffixName">
+              <b-form-input
+                type="text"
+                v-model="Students.suffix_name"
+                id="suffixName">
+              </b-form-input>
+            </b-form-group>
+          </b-col>
+
+          <b-col cols="12" md="6" lg="3">
+            <b-form-group
               class="middlename"
               label="Middle Name"
               label-for="middleName">
@@ -79,18 +92,7 @@
             </b-form-group>
           </b-col>
 
-          <b-col cols="12" md="6" lg="3">
-            <b-form-group
-              class="suffixname"
-              label="Suffix Name"
-              label-for="suffixName">
-              <b-form-input
-                type="text"
-                v-model="Students.suffix_name"
-                id="suffixName">
-              </b-form-input>
-            </b-form-group>
-          </b-col>
+
         </b-form-row>
 
         <b-form-row>
@@ -690,7 +692,7 @@
 
         Students: {
           id: null,
-          student_number: null,
+          student_number: "1819-01-0001",
           first_name: null,
           middle_name: null,
           last_name: null,

@@ -81,7 +81,7 @@
                 <option value="null" hidden>Select Subject</option>
                 <option v-if="SubjectsRow === null" value="null" disabled>No Subjects</option>
                 <option v-else v-for="data in SubjectsRow" v-bind:value="{id: data.id, subject_code: data.subject.subject_code ,subject_id: data.subject_id, instructors: data.subject.instructors, lab:  data.subject.lab}">
-                  {{data.subject.subject_code}} - {{data.subject.subject_description}}
+                  {{data.subject.subject_code}} - {{data.subject.subject_title}}
                 </option>
               </b-form-select>
             </b-form-group>
@@ -209,7 +209,7 @@
           <b-col sm="4" md="6" lg="1" class="my-1">
             <b-form-group
             class="perpageselect"
-            label=""
+            label="Limit:"
             label-for="perPageSelect">
               <b-form-select
                 v-model="perPage"
@@ -337,11 +337,10 @@ thead tr th{
                     { key: 'time_start', label: 'Time Start', sortable: true, class: 'text-center' },
                     { key: 'time_end', label: 'Time End', sortable: true, class: 'text-center' },
                     { key: 'subject_code', label: 'Subject Code', sortable: true, class: 'text-center' },
-                    { key: 'subject.subject.subject_description', label: 'Description', sortable: true, class: 'text-center' },
+                    { key: 'subject.subject.subject_title', label: 'Description', sortable: true, class: 'text-center' },
                     { key: 'room.room_number', label: 'Room', sortable: true, class: 'text-center' },
                     { key: 'instructor.last_name', label: 'Instructor', sortable: true, class: 'text-center' },
-                    { key: 'block', label: 'Block', sortable: true, class: 'text-center' },
-                    { key: 'batch', label: 'Batch', sortable: true, class: 'text-center' },
+
                   ],
 
                   totalRows: 1,

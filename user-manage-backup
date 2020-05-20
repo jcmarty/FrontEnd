@@ -279,16 +279,30 @@
         </b-form-group>
       </b-col>
 
-      <!--  Email -->
-      <b-col cols="12" md="6" lg="8">
+      <!--  Password -->
+      <b-col cols="12" md="6" lg="4">
         <b-form-group
-          class="email"
-          label="Email"
-          label-for="Email">
+          class="password"
+          label="Password"
+          label-for="Password">
           <b-form-input
-            type="text"
-            v-model="users.email"
-            id="Email"
+            type="password"
+            v-model="users.password"
+            id="Password"
+            required></b-form-input>
+        </b-form-group>
+      </b-col>
+
+      <!--  Confirm Password -->
+      <b-col cols="12" md="6" lg="4">
+        <b-form-group
+          class="confirmpassword"
+          label="Confirm Password"
+          label-for="confirmPassword">
+          <b-form-input
+            type="password"
+            v-model="users.password_confirmation"
+            id="confirmPassword"
             required></b-form-input>
         </b-form-group>
       </b-col>
@@ -339,6 +353,38 @@
       </b-col>
     </b-form-row>
 
+    <b-form-row>
+
+      <!--  Email -->
+      <b-col cols="12" md="6" lg="8">
+        <b-form-group
+          class="email"
+          label="Email"
+          label-for="Email">
+          <b-form-input
+            type="text"
+            v-model="users.email"
+            id="Email"
+            required></b-form-input>
+        </b-form-group>
+      </b-col>
+
+      <!-- Role -->
+      <b-col cols="12" md="6" lg="4">
+        <b-form-group
+          class="role"
+          label="Role"
+          label-for="Role">
+          <b-form-select
+            type="text"
+            v-model="users.role"
+            :options="roleOptions"
+            required>
+          </b-form-select>
+        </b-form-group>
+      </b-col>
+
+      </b-form-row>
 
       <!-- Modal Footer Template -->
       <template v-slot:modal-footer="{ cancel, ok }">
@@ -422,7 +468,7 @@
           {value: 'Registrar', text: 'Registrar'},
           {value: 'School Administrator', text: 'School Administrator'},
           {value: 'System Administrator', text: 'System Administrator'},
-          {value: 'Custom', text: 'Custom'}
+          {value: 'Ojt', text: 'OJT'}
         ],
 
         UserActivities:[],
@@ -518,6 +564,7 @@
           headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
         })
         .then(user_activities => {
+          console.log(user_activities.data);
           if (this.LastUserRole === 'System Administrator') {
           // all activities will be added to this user..
           for(var i = 0; i < user_activities.data.length; i++){
@@ -533,16 +580,162 @@
         }
 
         else if (this.LastUserRole === 'School Administrator') {
-          for(var i = 0; i < user_activities.data.length; i++){
+              // all activities will be added to this user..
+
+            // user management
               this.UserPriv.push({
                 user_id: this.LastUser,
-                activity_id: user_activities.data[i].id,
+                activity_id: user_activities.data[1].id,
+                create_priv: 0,
+                read_priv: 1,
+                update_priv: 1,
+                delete_priv: 0,
+              });
+              // academic year management
+              this.UserPriv.push({
+                user_id: this.LastUser,
+                activity_id: user_activities.data[2].id,
                 create_priv: 0,
                 read_priv: 1,
                 update_priv: 0,
                 delete_priv: 0,
               });
-          }
+              // semester management
+              this.UserPriv.push({
+                user_id: this.LastUser,
+                activity_id: user_activities.data[3].id,
+                create_priv: 0,
+                read_priv: 1,
+                update_priv: 0,
+                delete_priv: 0,
+              });
+              // room management
+              this.UserPriv.push({
+                user_id: this.LastUser,
+                activity_id: user_activities.data[4].id,
+                create_priv: 0,
+                read_priv: 1,
+                update_priv: 0,
+                delete_priv: 0,
+              });
+              //instructor management
+              this.UserPriv.push({
+                user_id: this.LastUser,
+                activity_id: user_activities.data[5].id,
+                create_priv: 0,
+                read_priv: 1,
+                update_priv: 0,
+                delete_priv: 0,
+              });
+              // course management
+              this.UserPriv.push({
+                user_id: this.LastUser,
+                activity_id: user_activities.data[6].id,
+                create_priv: 0,
+                read_priv: 1,
+                update_priv: 0,
+                delete_priv: 0,
+              });
+              //subject management
+              this.UserPriv.push({
+                user_id: this.LastUser,
+                activity_id: user_activities.data[7].id,
+                create_priv: 0,
+                read_priv: 1,
+                update_priv: 0,
+                delete_priv: 0,
+              });
+              // curriculum management
+              this.UserPriv.push({
+                user_id: this.LastUser,
+                activity_id: user_activities.data[8].id,
+                create_priv: 0,
+                read_priv: 1,
+                update_priv: 0,
+                delete_priv: 0,
+              });
+              // schedule management
+              this.UserPriv.push({
+                user_id: this.LastUser,
+                activity_id: user_activities.data[9].id,
+                create_priv: 0,
+                read_priv: 1,
+                update_priv: 0,
+                delete_priv: 0,
+              });
+              //activity logs
+              this.UserPriv.push({
+                user_id: this.LastUser,
+                activity_id: user_activities.data[10].id,
+                create_priv: 0,
+                read_priv: 1,
+                update_priv: 0,
+                delete_priv: 0,
+              });
+              // assessment management
+              this.UserPriv.push({
+                user_id: this.LastUser,
+                activity_id: user_activities.data[11].id,
+                create_priv: 0,
+                read_priv: 1,
+                update_priv: 0,
+                delete_priv: 0,
+              });
+              //strand management
+              this.UserPriv.push({
+                user_id: this.LastUser,
+                activity_id: user_activities.data[12].id,
+                create_priv: 0,
+                read_priv: 1,
+                update_priv: 0,
+                delete_priv: 0,
+              });
+              //track management
+              this.UserPriv.push({
+                user_id: this.LastUser,
+                activity_id: user_activities.data[13].id,
+                create_priv: 0,
+                read_priv: 1,
+                update_priv: 0,
+                delete_priv: 0,
+              });
+              //student management
+              this.UserPriv.push({
+                user_id: this.LastUser,
+                activity_id: user_activities.data[14].id,
+                create_priv: 0,
+                read_priv: 1,
+                update_priv: 0,
+                delete_priv: 0,
+              });
+              //enroll management
+              this.UserPriv.push({
+                user_id: this.LastUser,
+                activity_id: user_activities.data[15].id,
+                create_priv: 0,
+                read_priv: 1,
+                update_priv: 0,
+                delete_priv: 0,
+              });
+              //requirements management
+              this.UserPriv.push({
+                user_id: this.LastUser,
+                activity_id: user_activities.data[16].id,
+                create_priv: 0,
+                read_priv: 1,
+                update_priv: 0,
+                delete_priv: 0,
+              });
+              //student schedule management
+              this.UserPriv.push({
+                user_id: this.LastUser,
+                activity_id: user_activities.data[17].id,
+                create_priv: 0,
+                read_priv: 1,
+                update_priv: 0,
+                delete_priv: 0,
+              });
+
         }
             // preset privileges
 
@@ -788,6 +981,7 @@
 
         }
 
+
         else if (this.LastUserRole === 'Coordinator') {
           // preset privileges
           this.UserPriv.push({
@@ -891,7 +1085,8 @@
 
         }
 
-        else if (this.LastUserRole === 'Custom') {
+        else if (this.LastUserRole === 'Ojt') {
+          // preset privileges
           for(var i = 0; i < user_activities.data.length; i++){
               this.UserPriv.push({
                 user_id: this.LastUser,
@@ -1009,10 +1204,13 @@
         this.users = {
           id: item.id,
           username: item.username,
+          password: item.password,
+          password: item.password,
           email: item.email,
           first_name: item.first_name,
           middle_name: item.middle_name,
           last_name: item.last_name,
+          role: item.role,
           active: item.active
         };
         this.$root.$emit('bv::show::modal', 'editUserAccountModal')
