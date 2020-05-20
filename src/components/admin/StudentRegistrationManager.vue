@@ -1001,7 +1001,7 @@
             this.guardianContactNumber_state = false;
             checker = true;
         } else {
-          this.guardianContactNumber_state = false;
+          this.guardianContactNumber_state = null;
         }
 
         if (checker) {
