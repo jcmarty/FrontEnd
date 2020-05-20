@@ -772,7 +772,7 @@
           .then(response => {
             //console.log(response.data);
             for(const subject of response.data){
-              this.subjectOptions.push({value: subject.id, text: subject.subject_description});
+              this.subjectOptions.push({value: subject.id, text: subject.subject_code});
             }
           })
           .catch(error => {

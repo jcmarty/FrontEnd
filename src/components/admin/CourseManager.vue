@@ -28,7 +28,7 @@
           <div class="panel-heading">Add a Course</div>
           <div class="panel-body"> -->
         <div id="" class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded" v-if="showForm">
-          <div class=" h5 font-weight-bold text-dark" >Add New Subject</div>
+          <div class=" h5 font-weight-bold text-dark" >Add New Course</div>
           <hr/>
             <b-form id="Add_Course_Form">
                 <b-form-row>
@@ -173,7 +173,7 @@
           </template>
 
           <template v-slot:cell(actions)="row">
-            <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" class="mr-1">
+            <b-button variant="warning" size="sm" v-b-tooltip.hover title="Edit Course"  @click="EditModal(row.item, row.index, $event.target)" class="mr-1">
               <b-icon-pencil/>
             </b-button>
           </template>

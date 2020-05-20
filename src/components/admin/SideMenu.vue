@@ -48,11 +48,11 @@
               <router-link tag="li" to="/manage/track" v-if="isAuthorized(this.$store.getters.getSettings.track_management, 0)"><a>Track</a></router-link>
               <router-link tag="li" to="/manage/instructor" v-if="isAuthorized(this.$store.getters.getSettings.instructor_management, 0)"><a>Instructor</a></router-link>
               <router-link tag="li" to="/manage/useraccount" v-if="isAuthorized(this.$store.getters.getSettings.user_management, 0)"><a>User Accounts</a></router-link>
-              <li v-b-toggle.student><a>Student<span class="fa fa-chevron-down"></span></a>
+              <li v-b-toggle.student v-if="isAuthorized(this.$store.getters.getSettings.curriculum_management, 0)" ><a>Student<span class="fa fa-chevron-down"></span></a>
               <b-collapse tag="ul" class="nav child_menu" id="student" accordion="sideMenuSubAccordion">
-                <router-link tag="li" to="/manage/student/registration"><a class="super_child_menu">Registration</a></router-link>
-                <router-link tag="li" to="/manage/student/enrollment"><a class="super_child_menu">Enrollment</a></router-link>
-                <router-link tag="li" to="/manage/student/grades"><a class="super_child_menu">Grades</a></router-link>
+                <router-link tag="li" to="/manage/student/registration" v-if="isAuthorized(this.$store.getters.getSettings.instructor_management, 0)" ><a class="super_child_menu">Registration</a></router-link>
+                <router-link tag="li" to="/manage/student/enrollment" v-if="isAuthorized(this.$store.getters.getSettings.instructor_management, 0)"><a class="super_child_menu">Enrollment</a></router-link>
+                <router-link tag="li" to="/manage/student/grades" v-if="isAuthorized(this.$store.getters.getSettings.instructor_management, 0)"><a class="super_child_menu">Grades</a></router-link>
               </b-collapse>
               </li>
               <!-- TODO:  Decide if we are really going to add these, and HOW -->
@@ -89,7 +89,7 @@
     name: "SideMenu",
     data(){
       return {
-        // user: this.$store.getters.getUser,
+      //  user: this.$store.getters.getUser,
         category: 'index'
       }
     },

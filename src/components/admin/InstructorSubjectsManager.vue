@@ -77,7 +77,7 @@
     </div>
 
     <b-modal id="deletePreferredSubjModal" ref="deletePreferredSubjModal" title="Delete Preferred Subject" size="lg">
-      <p>Are you sure you want to remove (){{ preferredSubject.subject_code }}) {{preferredSubject.subject_title}}?</p>
+      <p>Are you sure you want to remove{{ preferredSubject.subject_code }}) {{preferredSubject.subject_title}}?</p>
       <template v-slot:modal-footer="{ cancel, ok }">
         <!-- Emulate built in modal footer ok and cancel button actions -->
         <b-button size="sm" variant="danger" @click="hideModal('deletePreferredSubjModal')">
