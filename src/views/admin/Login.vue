@@ -105,10 +105,12 @@
         })
         .catch(error => {
           this.logginIn = false;
-          if(error.response.status==401){
-            this.hasError = true;
-            this.loginMessage = "Sorry, but the username or password you have entered is invalid.";
-          }
+          // if(error.response.status==401){
+          //   this.hasError = true;
+          //   this.loginMessage = "Invalid username or password. " + error.response.data.message;
+          // }
+          this.hasError = true;
+          this.loginMessage = error.response.data.message;
         });
       }
     }
