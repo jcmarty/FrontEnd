@@ -213,19 +213,26 @@
         :filter="filter">
 
         <template v-slot:cell(active)="row" >
-          <b-form-checkbox switch size="sm" :checked="row.item.status"  @change="StatusUpdate(row.item, $event.target)">
-            <b-badge variant="success" pill v-if="row.item.active">Active</b-badge>
-            <b-badge variant="danger"  pill v-else>Inactive</b-badge>
-          </b-form-checkbox>
+          <b-button v-if="row.item.active" variant="danger" size="sm" @click="StatusUpdate(row.item, $event.target)" v-b-tooltip.hover title=" Deactivate">
+            Deactivate
+          </b-button>
+
+          <b-button v-else="row.item.active" variant="success" size="sm" @click="StatusUpdate(row.item, $event.target)" v-b-tooltip.hover title="Activate">
+            Activate
+          </b-button>
         </template>
 
         <template v-slot:cell(actions)="row">
-          <b-button variant='info' size='sm' @click="PrivPage(row.item, $event.target)"v-b-tooltip.hover title="Privileges">
+          <b-button variant='info' size='sm' @click="PrivPage(row.item, $event.target)" v-b-tooltip.hover title="Privileges">
             <b-icon-clock/>
           </b-button>
 
-          <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" class="mr-1">
+          <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)"  v-b-tooltip.hover title="Edit User account">
             <b-icon-pencil/>
+          </b-button>
+
+          <b-button variant="danger" size="sm"  @click="DeleteModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Delete User account">
+            <b-icon-trash/>
           </b-button>
 
         </template>
@@ -262,6 +269,22 @@
     </div>
       <!-- end of table -->
 
+      <b-modal id="confirmUpdate" ref="confirmUpdate" size="md" no-close-on-backdrop>
+        <center><h6>Are you sure you want to update  <br/><b>{{this.users.username}} ?</b></h6></center>
+
+          <!-- Modal Footer Template -->
+          <template v-slot:modal-footer="{ cancel, ok }">
+            <!-- Emulate built in modal footer ok and cancel button actions -->
+            <b-col>
+              <b-button  class="float-left" variant="danger" @click="backModalUpdate">
+                No
+              </b-button>
+              <b-button class="float-right" variant="success" @click="updateUserAccount">
+                Yes
+              </b-button>
+            </b-col>
+          </template>
+      </b-modal>
     <!-- Start Of Edit Modal -->
     <b-modal id="editUserAccountModal" ref="editUserAccountModal" title="Edit User Account" size="lg" no-close-on-backdrop>
       <b-form-row>
@@ -347,7 +370,7 @@
         <b-button class="float-left"  variant="danger" @click="$bvModal.hide('editUserAccountModal')">
           Cancel
         </b-button>
-        <b-button class="float-right"  variant="success" @click="updateUserAccount()">
+        <b-button class="float-right"  variant="success" @click="confirmUpdateModal">
           Update
         </b-button>
       </b-col>
@@ -357,7 +380,7 @@
 
     <!-- Start of Delete Modal -->
     <b-modal id="deleteUserAccountModal" ref="deleteUserAccountModal" title="Delete User Account" size="md" no-close-on-backdrop>
-      <h6>Are you sure you want to delete <br/> <b>{{ this.users.username }}?</b></h6>
+        <center><h6>Are you sure you want to delete  <br/><b>{{this.users.username}} ?</b></h6></center>
       <template v-slot:modal-footer="{ cancel, ok }">
         <!-- Emulate built in modal footer ok and cancel button actions -->
       <b-col>
@@ -387,9 +410,7 @@
         fields: [
           { key: 'username', label: 'Username', class: 'text-center', sortable: true},
           { key: 'email', label: 'Email', sortable: true, class: 'text-center' },
-          { key: 'first_name', label: 'First Name', sortable: true, class: 'text-center' },
-          { key: 'middle_name', label: 'Middle Name', sortable: true, class: 'text-center' },
-          { key: 'last_name', label: 'Last Name', sortable: true, class: 'text-center' },
+          { key: 'full_name', label: 'Full Name', sortable: true, class: 'text-center' },
           { key: 'role', label: 'Role ', sortable: true, class: 'text-center' },
           { key: 'active', label: 'Status', sortable: true, class: 'text-center' },
           { key: 'actions', label: 'Actions' , class: 'text-center' }
@@ -464,6 +485,11 @@
             this.items = response.data;
             console.log(response.data)
             for(var j = 0; j < this.items.length; j++){
+              var sn, mn = null;
+              sn = this.items[j].suffix_name != null ? " " +this.items[j].suffix_name : '',
+              mn = this.items[j].middle_name != null ? this.items[j].middle_name : '',
+
+              this.items[j].full_name = this.items[j].last_name + sn + ", " + this.items[j].first_name + " " + mn;
               if(this.items[j].active == 1){
                 this.items[j].status = true
               }else{
@@ -902,7 +928,8 @@
           }
           this.dismissErrorCountDown = this.dismissSecs;
         });
-        this.$refs['editUserAccountModal'].hide();
+        this.$refs['editUserAccountModal'].hide
+        this.$refs['confirmUpdate'].hide();
       }, // End of Update User Account Function
 
       // Delete User Account Function
@@ -949,6 +976,17 @@
           active: 1
         };
       }, // End of Reset Form Function
+
+      backModalUpdate: function(){
+        this.$refs['confirmUpdate'].hide();
+        this.$refs['editUserAccountModal'].show();
+      },
+
+      confirmUpdateModal: function(){
+        this.$refs['confirmUpdate'].show();
+        this.$refs['editUserAccountModal'].hide();
+      },
+
 
       EditModal: function(item, index) {
         console.log(this.users)

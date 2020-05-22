@@ -4,27 +4,44 @@
     <hr/>
     <b-breadcrumb>
       <b-breadcrumb-item to="/manage/instructor">Instructors</b-breadcrumb-item>
-      <b-breadcrumb-item :active="true">{{ instructor.name }}</b-breadcrumb-item>
+      <b-breadcrumb-item :active="true">{{ this.instructor.first_name }} {{ this.instructor.last_name }}</b-breadcrumb-item>
     </b-breadcrumb>
 
+    <b-alert variant="success"
+      :show="dismissSuccessCountDown"
+      @dismissed="dismissSuccessCountDown=0"
+      dismissible fade>
+        {{alertMessage}}
+    </b-alert>
+    <b-alert variant="danger"
+      :show="dismissErrorCountDown"
+      @dismissed="dismissErrorCountDown=0"
+      dismissible fade>
+        <p>{{alertMessage}}</p>
+        <ul>
+          <li v-for="error in errors">{{ error }}</li>
+        </ul>
+    </b-alert>
 
     <div id="" class="mx-3 mb-4 p-4 bg-white shadow rounded">
 
-      <b-alert variant="success"
-        :show="dismissSuccessCountDown"
-        @dismissed="dismissSuccessCountDown=0"
-        dismissible fade>
-          {{alertMessage}}
-      </b-alert>
-      <b-alert variant="danger"
-        :show="dismissErrorCountDown"
-        @dismissed="dismissErrorCountDown=0"
-        dismissible fade>
-          <p>{{alertMessage}}</p>
-          <ul>
-            <li v-for="error in errors">{{ error }}</li>
-          </ul>
-      </b-alert>
+
+      <b-modal id="confirmUpdate" ref="confirmUpdate" size="md" no-close-on-backdrop>
+      <center><h6>Are you sure you want to update ?</b></h6></center>
+
+          <!-- Modal Footer Template -->
+          <template v-slot:modal-footer="{ cancel, ok }">
+            <!-- Emulate built in modal footer ok and cancel button actions -->
+            <b-col>
+              <b-button  class="float-left" variant="danger" @click="$bvModal.hide('confirmUpdate')">
+                No
+              </b-button>
+              <b-button class="float-right" variant="success" @click="updateInstructor">
+                Yes
+              </b-button>
+            </b-col>
+          </template>
+      </b-modal>
 
     <div class=" h5 font-weight-bold text-dark">Personal Information
 
@@ -50,7 +67,7 @@
             class="float-right"
             v-if="!information_disable"
             variant="success"
-            @click="updateInstructor"
+            @click="confirmUpdateModal"
             v-b-tooltip.hover title="Update">
             <i class="fa fa-save"/>
           </b-button>
@@ -333,6 +350,8 @@
           active: 1
         },
 
+        Ins:[],
+
         genderOptions: [
           {value: 'Male', text: 'Male'},
           {value: 'Female', text: 'Female'}
@@ -375,7 +394,7 @@
     },
 
     mounted: function(){
-
+      this.getInstructors();
     },
     created() {
         this.instructor = {
@@ -400,6 +419,15 @@
         }
     },
     methods:{
+      getInstructors: function(){
+        Axios
+          .get('http://localhost/api/v1/instructors/' + this.instructor.id, {
+            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+          })
+          .then(response => {
+            this.Ins = response.data;
+          })
+      },
 
       updateInstructor: function(){
         this.errors = [];
@@ -408,6 +436,7 @@
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
+            this.getInstructors();
             this.information_disable = true;
             this.alertMessage = response.data.message;
             this.dismissSuccessCountDown = this.dismissSecs;
@@ -422,28 +451,33 @@
             }
             this.updateErrorCountDown = this.dismissSecs;
           });
+          this.$refs['confirmUpdate'].hide();
+      },
+
+      confirmUpdateModal: function(){
+        this.$refs['confirmUpdate'].show();
       },
 
       cancelForm: function(){
         this.information_disable = true;
         this.instructor = {
           id: this.$route.params.id,
-          name: this.$route.params.first_name + " " + this.$route.params.last_name,
-          employee_id: this.$route.params.employee_id,
-          first_name: this.$route.params.first_name,
-          middle_name: this.$route.params.middle_name,
-          last_name: this.$route.params.last_name,
-          birth_date: this.$route.params.birth_date,
-          gender: this.$route.params.gender,
-          email: this.$route.params.email,
-          contact_no: this.$route.params.contact_no,
-          address: this.$route.params.address,
-          city: this.$route.params.city,
-          province: this.$route.params.province,
-          postal_code: this.$route.params.postal_code,
-          work_experience: this.$route.params.work_experience,
-          certifications: this.$route.params.certifications,
-          educational_attainment: this.$route.params.educational_attainment,
+          name: this.Ins.last_name+ " " + this.Ins.first_name,
+          employee_id: this.Ins.employee_id,
+          first_name: this.Ins.first_name,
+          middle_name: this.Ins.middle_name,
+          last_name: this.Ins.last_name,
+          birth_date: this.Ins.birth_date,
+          gender: this.Ins.gender,
+          email: this.Ins.email,
+          contact_no: this.Ins.contact_no,
+          address: this.Ins.address,
+          city: this.Ins.city,
+          province: this.Ins.province,
+          postal_code: this.Ins.postal_code,
+          work_experience: this.Ins.work_experience,
+          certifications: this.Ins.certifications,
+          educational_attainment: this.Ins.educational_attainment,
           active: 1
         }
       }

@@ -500,10 +500,13 @@
       :filter="filter">
 
       <template v-slot:cell(active)="row" >
-        <b-form-checkbox switch size="sm" :checked="row.item.status"  @change="StatusUpdate(row.item, $event.target)">
-          <b-badge variant="success" pill v-if="row.item.active">Active</b-badge>
-          <b-badge variant="danger"  pill v-else>Inactive</b-badge>
-        </b-form-checkbox>
+        <b-button v-if="row.item.active" variant="danger" size="sm" @click="StatusUpdate(row.item, $event.target)" v-b-tooltip.hover title=" Deactivate">
+          Deactivate
+        </b-button>
+
+        <b-button v-else="row.item.active" variant="success" size="sm" @click="StatusUpdate(row.item, $event.target)" v-b-tooltip.hover title="Activate">
+          Activate
+        </b-button>
       </template>
 
       <template v-slot:cell(actions)="row">
@@ -576,7 +579,7 @@
         items: [],
         fields: [
           { key: 'employee_id', label: 'Employee ID', class: 'text-center', sortable: true},
-          { key: 'first_name', label: 'Full Name', sortable: true, class: 'text-center' },
+          { key: 'full_name', label: 'Full Name', sortable: true, class: 'text-center' },
           { key: 'birth_date', label: 'Birthdate', sortable: true, class: 'text-center' },
           { key: 'gender', label: 'Gender', sortable: true, class: 'text-center' },
           { key: 'email', label: 'Email', sortable: true, class: 'text-center' },
@@ -821,6 +824,12 @@
             //console.log(response.data);
             this.items = response.data;
             for(var j = 0; j < this.items.length; j++){
+              var sn, mn = null;
+              sn = this.items[j].suffix_name != null ? " " +this.items[j].suffix_name : '',
+              mn = this.items[j].middle_name != null ? this.items[j].middle_name : '',
+
+              this.items[j].full_name = this.items[j].last_name + sn + ", " + this.items[j].first_name + " " + mn;
+
               if(this.items[j].active == 1){
                 this.items[j].status = true
               }else{

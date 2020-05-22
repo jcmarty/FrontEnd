@@ -76,16 +76,18 @@
       </div>
     </div>
 
-    <b-modal id="deletePreferredSubjModal" ref="deletePreferredSubjModal" title="Delete Preferred Subject" size="lg">
-      <p>Are you sure you want to remove{{ preferredSubject.subject_code }}) {{preferredSubject.subject_title}}?</p>
+    <b-modal id="deletePreferredSubjModal" ref="deletePreferredSubjModal" title="Delete Preferred Subject" size="md">
+      <center><h6>Are you sure you want to remove <br/><b>({{ preferredSubject.subject_code }}) {{preferredSubject.subject_title}}</b>?</h6></center>
       <template v-slot:modal-footer="{ cancel, ok }">
         <!-- Emulate built in modal footer ok and cancel button actions -->
-        <b-button size="sm" variant="danger" @click="hideModal('deletePreferredSubjModal')">
-          Cancel
-        </b-button>
-        <b-button size="sm" variant="success" @click="deletePreferredSubject">
-          Delete
-        </b-button>
+        <b-col>
+          <b-button size="sm" variant="danger" @click="hideModal('deletePreferredSubjModal')">
+            Cancel
+          </b-button>
+          <b-button class="float-right" size="sm" variant="success" @click="deletePreferredSubject">
+            Delete
+          </b-button>
+        </b-col>
       </template>
     </b-modal>
 

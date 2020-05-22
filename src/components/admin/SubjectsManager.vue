@@ -192,10 +192,13 @@
         :filter="filter">
 
         <template v-slot:cell(active)="row" >
-          <b-form-checkbox switch size="sm" :checked="row.item.status"  @change="StatusUpdate(row.item, $event.target)">
-            <b-badge variant="success" pill v-if="row.item.active">Active</b-badge>
-            <b-badge variant="danger"  pill v-else>Inactive</b-badge>
-          </b-form-checkbox>
+          <b-button v-if="row.item.active" variant="danger" size="sm" @click="StatusUpdate(row.item, $event.target)" v-b-tooltip.hover title=" Deactivate">
+            Deactivate
+          </b-button>
+
+          <b-button v-else="row.item.active" variant="success" size="sm" @click="StatusUpdate(row.item, $event.target)" v-b-tooltip.hover title="Activate">
+            Activate
+          </b-button>
         </template>
 
         <template v-slot:cell(actions)="row">
@@ -260,6 +263,22 @@
     </div>
       <!-- end of table -->
 
+      <b-modal id="confirmUpdate" ref="confirmUpdate" size="md" no-close-on-backdrop>
+      <center><h6>Are you sure you want to update  <br/><b>Subject {{ this.subject.subject_title}} ?</b></h6></center>
+
+          <!-- Modal Footer Template -->
+          <template v-slot:modal-footer="{ cancel, ok }">
+            <!-- Emulate built in modal footer ok and cancel button actions -->
+            <b-col>
+              <b-button  class="float-left" variant="danger" @click="backModalUpdate">
+                No
+              </b-button>
+              <b-button class="float-right" variant="success" @click="updateSubject">
+                Yes
+              </b-button>
+            </b-col>
+          </template>
+      </b-modal>
     <!-- Start Of Edit Modal -->
     <b-modal id="editSubjModal" ref="editSubjModal" title=" Edit Subject" size="lg" no-close-on-backdrop>
       <!-- First Row -->
@@ -361,7 +380,7 @@
             <b-button class="float-left" variant="danger" @click="$bvModal.hide('editSubjModal')">
               Cancel
             </b-button>
-            <b-button class="float-right" variant="success" @click="updateSubject()">
+            <b-button class="float-right" variant="success" @click="confirmUpdateModal">
               Update
             </b-button>
           </b-col>
@@ -371,7 +390,8 @@
 
     <!-- Start of Delete Modal -->
     <b-modal class="modal" id="deleteSubjModal" ref="deleteSubjModal" title="Delete Subject" size="md" no-close-on-backdrop>
-      <h6>Are you sure you want to delete this <br/> <b>{{this.subject.subject_code}} {{ this.subject.subject_description }}?</b></h6>
+  
+      <center><h6>Are you sure you want to delete this  <br/><b>{{this.subject.subject_code}} {{ this.subject.subject_description }} ?</b></h6></center>
       <template v-slot:modal-footer="{ cancel, ok }">
         <!-- Emulate built in modal footer ok and cancel button actions -->
         <b-col>
@@ -561,6 +581,7 @@
             this.dismissErrorCountDown = this.dismissSecs;
           });
         this.$refs['editSubjModal'].hide();
+        this.$refs['confirmUpdate'].hide();
       }, // End of Update Subject function
 
       // Delete Subject Function
@@ -583,6 +604,7 @@
             this.backToTop();
           });
         this.$refs['deleteSubjModal'].hide();
+
       }, // End of Delete Subject Function
 
       // Toggle Form Function
@@ -607,6 +629,16 @@
           active: 1
         };
       }, // End of Reset Form Function
+
+      backModalUpdate: function(){
+        this.$refs['confirmUpdate'].hide();
+        this.$refs['editSubjModal'].show();
+      },
+
+      confirmUpdateModal: function(){
+        this.$refs['confirmUpdate'].show();
+        this.$refs['editSubjModal'].hide();
+      },
 
       showDetails: function(item, index){
         this.subject = {

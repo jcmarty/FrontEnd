@@ -145,6 +145,22 @@
     </div>
       <!-- end of table -->
 
+      <b-modal id="confirmUpdate" ref="confirmUpdate" size="md" no-close-on-backdrop>
+        <center><h6>Are you sure you want to update  <br/><b> {{this.semesters.semester }} ?</b></h6></center>
+          <!-- Modal Footer Template -->
+          <template v-slot:modal-footer="{ cancel, ok }">
+            <!-- Emulate built in modal footer ok and cancel button actions -->
+            <b-col>
+              <b-button  class="float-left"  variant="danger" @click="backModalUpdate">
+                No
+              </b-button>
+              <b-button class="float-right"  variant="success" @click="updateSemester">
+                Yes
+              </b-button>
+            </b-col>
+          </template>
+      </b-modal>
+
     <!-- Start Of Edit Modal -->
     <b-modal id="editSemesterModal" ref="editSemesterModal" title="Edit Semester" size="md" no-close-on-backdrop>
       <b-form-row>
@@ -171,7 +187,7 @@
           <b-button class="float-left"  variant="danger" @click="$bvModal.hide('editSemesterModal')">
             Cancel
           </b-button>
-          <b-button class="float-right" variant="success" @click="updateSemester()">
+          <b-button class="float-right" variant="success" @click="confirmUpdateModal">
             Update
           </b-button>
         </b-col>
@@ -305,6 +321,7 @@
           this.dismissErrorCountDown = this.dismissSecs;
         });
         this.$refs['editSemesterModal'].hide();
+        this.$refs['confirmUpdate'].hide();
       }, // End of Update Semester Function
 
       //Delete Semester Function
@@ -343,6 +360,16 @@
           semester: null
         };
       }, // End of Reset Form Function
+
+      backModalUpdate: function(){
+        this.$refs['confirmUpdate'].hide();
+        this.$refs['editSemesterModal'].show();
+      },
+
+      confirmUpdateModal: function(){
+        this.$refs['confirmUpdate'].show();
+        this.$refs['editSemesterModal'].hide();
+      },
 
       EditModal: function(item, index) {
         this.semesters = {

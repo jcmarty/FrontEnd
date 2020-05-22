@@ -155,6 +155,7 @@
           responsive
           bordered
           hover
+          refreshed
           :items="items"
           :fields="fields"
           :current-page="currentPage"
@@ -166,15 +167,22 @@
           </template>
 
           <template v-slot:cell(active)="row" >
-            <b-form-checkbox switch size="sm" :checked="row.item.status"  @change="StatusUpdate(row.item, $event.target)">
-              <b-badge variant="success" pill v-if="row.item.active">Active</b-badge>
-              <b-badge variant="danger"  pill v-else>Inactive</b-badge>
-            </b-form-checkbox>
+            <b-button v-if="row.item.active" variant="danger" size="sm" @click="StatusUpdate(row.item, $event.target)" v-b-tooltip.hover title=" Deactivate">
+              Deactivate
+            </b-button>
+
+            <b-button v-else="row.item.active" variant="success" size="sm" @click="StatusUpdate(row.item, $event.target)" v-b-tooltip.hover title="Activate">
+              Activate
+            </b-button>
           </template>
 
           <template v-slot:cell(actions)="row">
             <b-button variant="warning" size="sm" v-b-tooltip.hover title="Edit Course"  @click="EditModal(row.item, row.index, $event.target)" class="mr-1">
               <b-icon-pencil/>
+            </b-button>
+
+            <b-button variant="danger" size="sm" v-b-tooltip.hover title="Delete Course"  @click="DeleteModal(row.item, row.index, $event.target)" class="mr-1">
+              <b-icon-trash/>
             </b-button>
           </template>
         </b-table>
@@ -209,6 +217,22 @@
       </b-row>
     </div>
       <!-- end of table -->
+
+      <b-modal id="confirmUpdate" ref="confirmUpdate" size="md" no-close-on-backdrop>
+      <center><h6>Are you sure you want to update  <br/><b>Course {{ this.course.course_code }} ?</b></h6></center>
+          <!-- Modal Footer Template -->
+          <template v-slot:modal-footer="{ cancel, ok }">
+            <!-- Emulate built in modal footer ok and cancel button actions -->
+            <b-col>
+              <b-button  class="float-left" variant="danger" @click="backModalUpdate">
+                No
+              </b-button>
+              <b-button class="float-right" variant="success" @click="updateCourse">
+                Yes
+              </b-button>
+            </b-col>
+          </template>
+      </b-modal>
 
 
       <b-modal id="editCourseModal" ref="editCourseModal" title="Edit Course" size="lg" no-close-on-backdrop>
@@ -284,7 +308,7 @@
             <b-button class="float-left"  variant="danger" @click="$bvModal.hide('editCourseModal')">
               Cancel
             </b-button>
-            <b-button class="float-right"  variant="success" @click="updateCourse()">
+            <b-button class="float-right"  variant="success" @click="confirmUpdateModal">
               Update
             </b-button>
           </b-col>
@@ -293,7 +317,7 @@
 
     <!-- Start of Delete Modal -->
     <b-modal id="deleteCourseModal" ref="deleteCourseModal" title="Delete Course" size="md" no-close-on-backdrop>
-      <h6>Are you sure you want to delete <br/><b> {{ this.course.course_code }} {{this.course.course_desc}}?</b></h6>
+      <center><h6>Are you sure you want to delete <br/><b> {{ this.course.course_code }}?</b></h6></center>
       <template v-slot:modal-footer="{ cancel, ok }">
         <!-- Emulate built in modal footer ok and cancel button actions -->
         <b-col>
@@ -322,11 +346,11 @@
         items: [],
         fields: [
           { key: 'course_code', label: 'Course Code', sortable: true, class: 'text-center'},
-          { key: 'course_desc', label: 'Course Description', sortable: true, class: 'text-center' },
-          { key: 'course_major', label: 'Course Major', sortable: true, class: 'text-center' },
+          { key: 'course_desc', label: 'Course Description', sortable: true, },
+          { key: 'course_major', label: 'Course Major', sortable: true,},
           { key: 'year_duration', label: 'Year Duration', sortable: true, class: 'text-center' },
-          { key: 'active', label: 'Active', sortable: true, class: 'text-center' },
-          { key: 'actions', label: 'Actions' , class: 'text-center' }
+          { key: 'active', label: 'Active', sortable: true,  },
+          { key: 'actions', label: 'Actions', class: 'text-center'   }
         ],
 
         totalRows: 1,
@@ -381,6 +405,7 @@
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
+            this.isLoading = false;
             this.items = response.data;
             for(var j = 0; j < this.items.length; j++){
               if(this.items[j].active == 1){
@@ -390,7 +415,7 @@
               }
             }
             this.totalRows = this.items.length;
-            this.isLoading = false;
+
             this.backToTop();
           })
           .catch(error => {
@@ -454,6 +479,7 @@
           this.backToTop();
         });
         this.$refs['editCourseModal'].hide();
+        this.$refs['confirmUpdate'].hide();
       },// End of Update Course Function
 
       // Delete Course Function
@@ -498,7 +524,19 @@
           year_duration: 0,
           active: 1
         };
+
       }, // End of Reset Form Function
+
+      backModalUpdate: function(){
+        this.$refs['confirmUpdate'].hide();
+        this.$refs['editCourseModal'].show();
+      },
+
+      confirmUpdateModal: function(){
+        this.$refs['confirmUpdate'].show();
+        this.$refs['editCourseModal'].hide();
+      },
+
       EditModal: function(item, index) {
         this.showForm = false;
         this.course = {

@@ -92,8 +92,101 @@
       </div>
     </div>
 
-    <b-modal id="deleteAvailabilityModal" ref="deleteAvailabilityModal" title="Delete Time Availability" size="lg">
-      <p>Are you sure you want to remove {{ timeAvailability.day }} {{ timeAvailability.time_start }} - {{ timeAvailability.time_end }}?</p>
+    <b-modal id="confirmUpdate" ref="confirmUpdate" size="md" no-close-on-backdrop>
+      <center>
+        <h6>Are you sure you want to update this Time Availability?</h6>
+      </center>
+
+        <!-- Modal Footer Template -->
+        <template v-slot:modal-footer="{ cancel, ok }">
+          <!-- Emulate built in modal footer ok and cancel button actions -->
+          <b-col>
+            <b-button  class="float-left" variant="danger" @click="backModalUpdate">
+              No
+            </b-button>
+            <b-button class="float-right" variant="success" @click="updateTimeAvailability">
+              Yes
+            </b-button>
+          </b-col>
+        </template>
+    </b-modal>
+
+    <b-modal size="lg" id="editAvailabilityModal" ref="editAvailabilityModal" title="Edit Time Availability" no-close-on-backdrop>
+      <b-form-row>
+        <b-col cols="12" md="6" lg="4">
+          <b-form-group
+            class="academic_year"
+            label="Academic Year"
+            label-for="academic_year">
+            <b-form-select
+              id="academic_year"
+              v-model="timeAvailability.academic_year_id"
+              :options="academicYearOptions">
+            </b-form-select>
+          </b-form-group>
+        </b-col>
+        <b-col cols="12" md="6" lg="4">
+          <b-form-group
+            class="semester"
+            label="Semester"
+            label-for="semester">
+            <b-form-select
+              id="semester"
+              v-model="timeAvailability.semester_id"
+              :options="semesterOptions">
+            </b-form-select>
+          </b-form-group>
+        </b-col>
+        <b-col cols="12" md="6" lg="4">
+          <b-form-group
+            class="day"
+            label="Day"
+            label-for="day">
+            <b-form-select
+              id="day"
+              v-model="timeAvailability.day"
+              :options="dayOptions">
+            </b-form-select>
+          </b-form-group>
+        </b-col>
+
+
+        <b-col cols="12" md="6" lg="4">
+          <b-form-group
+            class="time_start"
+            label="Time Start"
+            label-for="time_start">
+              <vue-timepicker v-model="timeAvailability.time_start" format="hh:mm A" close-on-complete></vue-timepicker>
+          </b-form-group>
+        </b-col>
+
+        <b-col cols="12" md="6" lg="4">
+          <b-form-group
+            class="time_end"
+            label="Time End"
+            label-for="time_end">
+              <vue-timepicker v-model="timeAvailability.time_end" format="hh:mm A" close-on-complete></vue-timepicker>
+          </b-form-group>
+        </b-col>
+
+      </b-form-row>
+
+      <template v-slot:modal-footer="{ cancel, ok }">
+          <!-- Emulate built in modal footer ok and cancel button actions -->
+        <b-col>
+          <b-button class="float-left"  variant="danger" @click="$bvModal.hide('editAvailabilityModal')">
+            Cancel
+          </b-button>
+          <b-button class="float-right" variant="success" @click="confirmUpdateModal">
+            Update
+          </b-button>
+       </b-col>
+     </template>
+  </b-modal>
+
+
+    <b-modal id="deleteAvailabilityModal" ref="deleteAvailabilityModal" title="Delete Time Availability" size="md">
+        <center><h6>Are you sure you want to delete  <br/><b> {{ timeAvailability.day }} {{ timeAvailability.time_start }} - {{ timeAvailability.time_end }} ?</b></h6></center>
       <template v-slot:modal-footer="{ cancel, ok }">
         <!-- Emulate built in modal footer ok and cancel button actions -->
         <b-button size="sm" variant="danger" @click="hideModal('deleteAvailabilityModal')">
@@ -121,6 +214,10 @@
       :filter="filter">
 
       <template v-slot:cell(actions)="row">
+
+        <b-button variant="warning" size="sm" @click="EditModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Edit">
+          <b-icon-pencil/>
+        </b-button>
 
         <b-button variant="danger" size="sm" @click="DeleteModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Delete">
           <b-icon-trash/>
@@ -251,7 +348,7 @@
       getTimeAvailabilities: function(){
         this.isLoading = true;
         Axios
-          .get('http://localhost/api/v1/instructors/' + this.instructor.id + '/availabilities', {
+          .get('http://localhost/api/v1/instructors/' + this.instructor.id + '/availabilities',  {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
@@ -273,6 +370,7 @@
             console.log(error.response);
           })
       },
+
       deleteTimeAvailability: function(){
         this.errors = [];
         Axios
@@ -292,6 +390,29 @@
           });
         this.$refs['deleteAvailabilityModal'].hide();
       },
+
+      updateTimeAvailability: function(){
+        this.errors = [];
+        Axios
+        .put('http://localhost/api/v1/instructors/' + this.instructor.id + '/availabilities/', this.timeAvailability, {
+          headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+        })
+          .then(response => {
+            this.alertMessage = response.data.message;
+            this.dismissSuccessCountDown = this.dismissSecs;
+            this.timeAvailability.time_start = {"HH":"","H":"","hh":"","h":"","a":"","A":"","kk":"","k":"","m":"","mm":"","s":"","ss":""};
+            this.timeAvailability.time_end = {"HH":"","H":"","hh":"","h":"","a":"","A":"","kk":"","k":"","m":"","mm":"","s":"","ss":""};
+            this.getTimeAvailabilities();
+          })
+          .catch(error => {
+            this.alertMessage = error.response.data.message;
+            this.dismissErrorCountDown = this.dismissSecs;
+          });
+        this.$refs['editAvailabilityModal'].hide();
+        this.$refs['confirmUpdate'].hide();
+      },
+
+
       addTimeAvailability: function(){
         this.errors = [];
         this.timeAvailability.time_start
@@ -368,6 +489,30 @@
           .catch(error => {
             console.log(error.response.data.message);
           })
+      },
+
+      backModalUpdate: function(){
+        this.$refs['confirmUpdate'].hide();
+        this.$refs['editAvailabilityModal'].show();
+      },
+
+      confirmUpdateModal: function(){
+        this.$refs['confirmUpdate'].show();
+        this.$refs['editAvailabilityModal'].hide();
+      },
+
+
+      EditModal: function(item, index) {
+        this.id = item.id,
+        this.timeAvailability = {
+          day: item.day,
+          time_start: item.time_start,
+          time_end: item.time_end,
+          academic_year_id: item.academic_year_id,
+          semester_id: item.semester_id,
+          active: item.active,
+        };
+        this.$root.$emit('bv::show::modal', 'editAvailabilityModal')
       },
 
       DeleteModal: function(item){
