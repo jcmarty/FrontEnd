@@ -406,7 +406,7 @@ html, body, #app, #admin{
     position: fixed
 }
 body .container.body .right_col {
-    background: white;
+    background: #F9F9F9;
 		min-height: 127vh;
 }
 .nav-md .container.body .right_col {

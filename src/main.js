@@ -10,12 +10,13 @@ import './assets/css/style.css';
 import './assets/css/font-awesome.min.css';
 import Vuelidate from 'vuelidate';
 
-
-Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
-Vue.use(vOutsideEvents);
 Vue.use(Vuelidate);
+Vue.use(vOutsideEvents);
+Vue.config.productionTip = false;
+
+
 
 
 new Vue({

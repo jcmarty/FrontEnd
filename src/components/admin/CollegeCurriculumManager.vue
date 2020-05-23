@@ -2,31 +2,104 @@
   <div>
     <h1 class="font-weight-bold text-dark">Manage College Curriculum</h1>
     <hr/>
-
-    <b-alert variant="success"
-      :show="dismissSuccessCountDown"
-      @dismissed="dismissSuccessCountDown=0"
-      dismissible fade>
-        {{alertMessage}}
-    </b-alert>
-    <b-alert variant="danger"
-      :show="dismissErrorCountDown"
-      @dismissed="dismissErrorCountDown=0"
-      dismissible fade>
-        <p>{{alertMessage}}</p>
-        <ul>
-          <li v-for="error in errors">{{ error }}</li>
-        </ul>
-    </b-alert>
+    <div id="alert_messages" class="mx-4">
+      <b-alert variant="success"
+        :show="dismissSuccessCountDown"
+        @dismissed="dismissSuccessCountDown=0"
+        dismissible fade>
+          {{alertMessage}}
+      </b-alert>
+      <b-alert variant="danger"
+        :show="dismissErrorCountDown"
+        @dismissed="dismissErrorCountDown=0"
+        dismissible fade>
+          <p>{{alertMessage}}</p>
+          <ul>
+            <li v-for="error in errors">{{ error }}</li>
+          </ul>
+      </b-alert>
+    </div>
 
     <div class="addPanelCollegecurriculum">
       <transition name="fade">
-        <!-- <div class="mx-3 mt-4 mb-4 px-4 py-2 bg-white shadow rounded"> -->
-      <div id="" class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded" v-if="showForm">
+      <div id="" class="px-4 pt-4 pb-3 mx-4 my-4 bg-white shadow rounded" v-if="showForm">
         <div class=" h5 font-weight-bold text-dark" >Add New Curriculum</div>
         <hr/>
-        <div class="panel-body">
-          <b-form id="Add_College_Subject_Form">
+
+
+      <b-form @submit.stop.prevent="onSubmit">
+
+        <b-form-row>
+
+          <!-- curriculum title -->
+          <b-col cols="12" md="6" lg="4">
+           <b-form-group :class="{'text-danger' : $v.form.curriculum_title.$error}" label="Curriculum Title *" label-for="curriculum_title">
+             <b-form-input
+               id="curriculum_title"
+               name="curriculum_title"
+               v-model="$v.form.curriculum_title.$model"
+               :state="validateState('curriculum_title')"
+               aria-describedby="curriculum_title_feedback"
+             ></b-form-input>
+             <b-form-invalid-feedback id="curriculum_title_feedback">This is a required field.</b-form-invalid-feedback>
+           </b-form-group>
+         </b-col>
+         <!-- curriculum title -->
+
+         <!-- curriculum description -->
+         <b-col cols="12" md="6" lg="4">
+           <b-form-group :class="{'text-danger' : $v.form.curriculum_desc.$error}" label="Description *" label-for="curriculum_desc">
+             <b-form-input
+               id="curriculum_desc"
+               name="curriculum_desc"
+               v-model="$v.form.curriculum_desc.$model"
+               :state="validateState('curriculum_desc')"
+               aria-describedby="curriculum_desc_feedback"
+             ></b-form-input>
+             <b-form-invalid-feedback id="curriculum_desc_feedback">This is a required field.</b-form-invalid-feedback>
+           </b-form-group>
+         </b-col>
+         <!-- curriculum description -->
+
+         <!-- course option -->
+         <b-col cols="12" md="6" lg="4">
+           <b-form-group
+             label="Course *"
+             label-for="course">
+             <b-form-select
+               id="course"
+               name="course"
+               v-model="$v.form.course_id.$model"
+               :state="validateState('course_id')"
+               aria-describedby="course_feedback">
+               <option value="null" hidden>Select Course</option>
+               <option v-for="course in courseOptions" :value="course.value.id">{{course.text}}</option>
+             </b-form-select>
+             <b-form-invalid-feedback id="course_feedback">This is a required field.</b-form-invalid-feedback>
+           </b-form-group>
+         </b-col>
+         <!-- course option -->
+
+       </b-form-row>
+       <hr/>
+       <b-form-row>
+         <b-col>
+           <b-button variant="danger" @click="resetForm()">Cancel</b-button>
+         </b-col>
+         <b-col class="d-flex justify-content-end">
+           <b-button type="submit" variant="primary">Add</b-button>
+         </b-col>
+       </b-form-row>
+
+       <!-- <b-button type="submit" variant="primary">Submit</b-button> -->
+       <!-- <b-button class="ml-2" @click="resetForm()">Reset</b-button> -->
+     </b-form>
+          <!-- <div class="form-group" :class="{ 'form-group--error': $v.age.$error }">
+            <label class="form__label">Age</label>
+            <b-form-input class="form__input" v-model.trim.lazy="$v.age.$model"/>
+          </div> -->
+
+          <!-- <b-form id="Add_College_Subject_Form">
             <b-form-row>
               <b-col cols="12" md="6" lg="4">
                 <b-form-group
@@ -79,14 +152,14 @@
                 </b-button>
               </b-col>
             </b-form-row>
-          </b-form>
+          </b-form> -->
           </div>
-        </div>  <!-- End of Panel Body  -->
+
       </transition>
     </div>
 
     <!--Form end  -->
-    <div class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded">
+    <div class="p-4 mx-4 my-4 bg-white shadow rounded">
       <!-- Adding Form Start  -->
       <b-row>
         <b-col lg="4" class="my-1 ">
@@ -107,7 +180,7 @@
 
         <b-col class="pt-4">
           <!-- Add New Room Button -->
-          <b-button variant="primary" size="sm" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
+          <b-button variant="primary" size="" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
             Add New Curriculum
           </b-button>
         </b-col>
@@ -243,6 +316,7 @@
 
 <script>
   import Axios from "axios";
+  import { required, minLength, between } from 'vuelidate/lib/validators'
   export default{
     name: 'CollegeCurriculumManager',
     data() {
@@ -271,37 +345,42 @@
           course_id: null
         },
 
-        courseOptions: [],
+        courseOptions: this.$store.getters.getCourses,
         showForm: false,
         alertMessage: "",
         errors: [],
         dismissSecs: 7,
         dismissSuccessCountDown: 0,
         dismissErrorCountDown: 0,
+
+        form: {
+          curriculum_title: null,
+          curriculum_desc: null,
+          course_id: null,
+          active: 1
+        }
+      }
+    },
+    validations: {
+      form: {
+        curriculum_title: {
+          required
+        },
+        curriculum_desc: {
+          required,
+        },
+        course_id: {
+          required,
+        }
       }
     },
 
     mounted () {
       this.getCurriculums();
-      this.getCourses();
+      this.$store.dispatch('loadCourses', this.$store.getters.getToken);
     },
 
     methods:{
-      getCourses: function(){
-        Axios
-          .get('http://localhost/api/v1/courses', {
-            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-          })
-          .then(response => {
-            for(const course of response.data){
-              this.courseOptions.push({value: course.id, text: course.course_desc});
-            }
-          })
-          .catch(error => {
-            console.log(error.response);
-          })
-      },
-
       getCurriculums: function(){
         this.isLoading = true;
         Axios
@@ -337,7 +416,7 @@
       addCurriculum: function(){
         this.errors = [];
         Axios
-          .post('http://localhost/api/v1/curriculums', this.curriculum, {
+          .post('http://localhost/api/v1/curriculums', this.form, {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
@@ -346,11 +425,13 @@
             this.alertMessage = response.data.message;
             this.dismissSuccessCountDown = this.dismissSecs;
             // clear curriculum data
-            this.curriculum = {
+            this.form = {
               curriculum_title: null,
               curriculum_desc: null,
-              course_id: null
+              course_id: null,
+              active: 1
             };
+            this.resetForm();
           })
           .catch(error => {
             this.alertMessage = error.response.data.message;
@@ -361,6 +442,7 @@
               }
             }
             this.dismissErrorCountDown = this.dismissSecs;
+            console.log(error.response.data)
             //console.log(error);
           })
       },
@@ -490,6 +572,38 @@
           this.dismissErrorCountDown = this.dismissSecs;
         });
       }, // end of Status Update Function
+
+      validateState(name) {
+        const { $dirty, $error } = this.$v.form[name];
+        return $dirty ? !$error : null;
+      },
+
+      resetForm() {
+        this.form = {
+          curriculum_title: null,
+          curriculum_desc: null,
+          course_id: null,
+          active: 1
+        };
+
+        if(this.showForm){
+          this.showForm = false;
+        } else {
+          this.showForm = true;
+        }
+
+        this.$nextTick(() => {
+          this.$v.$reset();
+        });
+      },
+      onSubmit() {
+        this.$v.form.$touch();
+        if (this.$v.form.$anyError) {
+          return;
+        }
+        this.addCurriculum()
+        // alert("Form submitted!");
+      }
     }
   }
 </script>
