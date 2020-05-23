@@ -34,7 +34,7 @@
             <!-- First Row -->
             <b-form-row>
                 <!-- Suject Code -->
-              <b-col cols="12" md="6" lg="3">
+              <!-- <b-col cols="12" md="6" lg="3">
                 <b-form-group
                 :class="{'text-danger' : $v.subject.subject_code.$error}"
                 label="Subject Code *"
@@ -53,6 +53,21 @@
                     <span v-if="!$v.subject.subject_code.required">Subject Code is required</span>
                   </div>
                 </b-form-group>
+              </b-col> -->
+              <b-col cols="12" md="6" lg="5">
+                <b-form-group
+                :class="{'text-danger' : $v.subject.subject_code.$error}"
+                label="Subject Code *"
+                label-for="subject_code">
+                  <b-form-input
+                    type="text"
+                    id="subject_code"
+                    v-model.trim="$v.subject.subject_code.$model"
+                    :state="validateState('subject_code')"
+                    aria-describedby="subject_code_feedback">
+                  </b-form-input>
+                  <b-form-invalid-feedback id="subject_code_feedback">This is a required field.</b-form-invalid-feedback>
+                </b-form-group>
               </b-col>
               <!-- Subject Code -->
 
@@ -65,12 +80,10 @@
                   <b-form-input
                     type="text"
                     id="subjTitle"
-                    autofocus
                     v-model.trim="$v.subject.subject_title.$model"
                     :state="validateState('subject_title')"
                     aria-describedby="subject_title_feedback">
                   </b-form-input>
-                  <b-form-valid-feedback id="subject_title_feedback">Subject Code is valid!</b-form-valid-feedback>
                   <b-form-invalid-feedback id="subject_title_feedback">This is a required field.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
@@ -659,6 +672,7 @@
       resetform: function(){
         this.subject = {
           subject_code: null,
+          subject_title: null,
           subject_description: null,
           lec: 0,
           lab: 0,
