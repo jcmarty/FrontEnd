@@ -30,20 +30,28 @@
         <div id="" class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded" v-if="showForm">
         <div class=" h5 font-weight-bold text-dark" >Add New Subject</div>
         <hr/>
-          <b-form id="Add_College_Subject_Form">
+          <b-form id="Add_College_Subject_Form" @submit.stop.prevent="onSubmit">
             <!-- First Row -->
             <b-form-row>
                 <!-- Suject Code -->
               <b-col cols="12" md="6" lg="3">
                 <b-form-group
-                  class="subjectcode"
-                  label="Subject Code"
-                  label-for="subjCode">
+                :class="{'text-danger' : $v.subject.subject_code.$error}"
+                label="Subject Code *"
+                label-for="subjCode">
                   <b-form-input
                     type="text"
-                    v-model="subject.subject_code"
                     id="subjCode"
-                    required></b-form-input>
+                    autofocus
+                    v-model.trim="$v.subject.subject_code.$model"
+                    :class="{
+                    'is-invalid' :$v.subject.subject_code.$error,
+                    'is-valid' :!$v.subject.subject_code.$invalid}">
+                  </b-form-input>
+                  <div class="valid-feedback">Subject Code is valid!</div>
+                  <div class="invalid-feedback">
+                    <span v-if="!$v.subject.subject_code.required">Subject Code is required</span>
+                  </div>
                 </b-form-group>
               </b-col>
               <!-- Subject Code -->
@@ -51,14 +59,19 @@
               <!--  Subject title -->
               <b-col cols="12" md="6" lg="5">
                 <b-form-group
-                  class="subject_title"
-                  label="Subject Title"
-                  label-for="subjectTitle">
+                :class="{'text-danger' : $v.subject.subject_title.$error}"
+                label="Subject Title *"
+                label-for="subjTitle">
                   <b-form-input
                     type="text"
-                    v-model="subject.subject_title"
-                    id="subjectTitle"
-                    required></b-form-input>
+                    id="subjTitle"
+                    autofocus
+                    v-model.trim="$v.subject.subject_title.$model"
+                    :state="validateState('subject_title')"
+                    aria-describedby="subject_title_feedback">
+                  </b-form-input>
+                  <b-form-valid-feedback id="subject_title_feedback">Subject Code is valid!</b-form-valid-feedback>
+                  <b-form-invalid-feedback id="subject_title_feedback">This is a required field.</b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
               <!-- Subject title -->
@@ -111,7 +124,16 @@
                     id="subjDesc"
                     rows="3"
                     max-rows="8"
-                    required></b-form-textarea>
+                    required
+                    v-model.trim="$v.subject.subject_description.$model"
+                    :class="{
+                    'is-invalid' :$v.subject.subject_description.$error,
+                    'is-valid' :!$v.subject.subject_description.$invalid}">
+                  </b-form-textarea>
+                  <div class="valid-feedback">Subject Description is valid!</div>
+                  <div class="invalid-feedback">
+                    <span v-if="!$v.subject.subject_description.required">Subject Description is required</span>
+                  </div>
                 </b-form-group>
               </b-col>
               <!-- Subject Description -->
@@ -390,7 +412,7 @@
 
     <!-- Start of Delete Modal -->
     <b-modal class="modal" id="deleteSubjModal" ref="deleteSubjModal" title="Delete Subject" size="md" no-close-on-backdrop>
-  
+
       <center><h6>Are you sure you want to delete this  <br/><b>{{this.subject.subject_code}} {{ this.subject.subject_description }} ?</b></h6></center>
       <template v-slot:modal-footer="{ cancel, ok }">
         <!-- Emulate built in modal footer ok and cancel button actions -->
@@ -447,6 +469,7 @@
 
 <script>
   import Axios from "axios";
+  import { required, minLength, between } from 'vuelidate/lib/validators';
   export default{
     name: 'SubjectsManager',
     data() {
@@ -492,12 +515,26 @@
       }
     }, // end of data
 
+    validations: {
+      subject: {
+       subject_code: {required},
+       subject_title: {required},
+       subject_description: {required},
+       lec: {required},
+
+     },
+    },
 
     mounted () {
       this.getSubjects();
     }, //end of mounted
 
     methods:{
+
+      validateState(name) {
+        const { $dirty, $error } = this.$v.subject[name];
+        return $dirty ? !$error : null;
+      },
       // get subject function
       getSubjects: function(){
         this.isLoading = true;
