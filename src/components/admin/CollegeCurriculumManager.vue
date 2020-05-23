@@ -20,148 +20,86 @@
       </b-alert>
     </div>
 
-    <div class="addPanelCollegecurriculum">
+    <!-- start of adding form  -->
+    <div class="adding_form">
       <transition name="fade">
-      <div id="" class="px-4 pt-4 pb-3 mx-4 my-4 bg-white shadow rounded" v-if="showForm">
-        <div class=" h5 font-weight-bold text-dark" >Add New Curriculum</div>
-        <hr/>
-
-
-      <b-form @submit.stop.prevent="onSubmit">
-
-        <b-form-row>
-
-          <!-- curriculum title -->
-          <b-col cols="12" md="6" lg="4">
-           <b-form-group :class="{'text-danger' : $v.form.curriculum_title.$error}" label="Curriculum Title *" label-for="curriculum_title">
-             <b-form-input
-               id="curriculum_title"
-               name="curriculum_title"
-               v-model="$v.form.curriculum_title.$model"
-               :state="validateState('curriculum_title')"
-               aria-describedby="curriculum_title_feedback"
-             ></b-form-input>
-             <b-form-invalid-feedback id="curriculum_title_feedback">This is a required field.</b-form-invalid-feedback>
-           </b-form-group>
-         </b-col>
-         <!-- curriculum title -->
-
-         <!-- curriculum description -->
-         <b-col cols="12" md="6" lg="4">
-           <b-form-group :class="{'text-danger' : $v.form.curriculum_desc.$error}" label="Description *" label-for="curriculum_desc">
-             <b-form-input
-               id="curriculum_desc"
-               name="curriculum_desc"
-               v-model="$v.form.curriculum_desc.$model"
-               :state="validateState('curriculum_desc')"
-               aria-describedby="curriculum_desc_feedback"
-             ></b-form-input>
-             <b-form-invalid-feedback id="curriculum_desc_feedback">This is a required field.</b-form-invalid-feedback>
-           </b-form-group>
-         </b-col>
-         <!-- curriculum description -->
-
-         <!-- course option -->
-         <b-col cols="12" md="6" lg="4">
-           <b-form-group
-             label="Course *"
-             label-for="course">
-             <b-form-select
-               id="course"
-               name="course"
-               v-model="$v.form.course_id.$model"
-               :state="validateState('course_id')"
-               aria-describedby="course_feedback">
-               <option value="null" hidden>Select Course</option>
-               <option v-for="course in courseOptions" :value="course.value.id">{{course.text}}</option>
-             </b-form-select>
-             <b-form-invalid-feedback id="course_feedback">This is a required field.</b-form-invalid-feedback>
-           </b-form-group>
-         </b-col>
-         <!-- course option -->
-
-       </b-form-row>
-       <hr/>
-       <b-form-row>
-         <b-col>
-           <b-button variant="danger" @click="resetForm()">Cancel</b-button>
-         </b-col>
-         <b-col class="d-flex justify-content-end">
-           <b-button type="submit" variant="primary">Add</b-button>
-         </b-col>
-       </b-form-row>
-
-       <!-- <b-button type="submit" variant="primary">Submit</b-button> -->
-       <!-- <b-button class="ml-2" @click="resetForm()">Reset</b-button> -->
-     </b-form>
-          <!-- <div class="form-group" :class="{ 'form-group--error': $v.age.$error }">
-            <label class="form__label">Age</label>
-            <b-form-input class="form__input" v-model.trim.lazy="$v.age.$model"/>
-          </div> -->
-
-          <!-- <b-form id="Add_College_Subject_Form">
+        <div id="" class="px-4 pt-4 pb-3 mx-4 my-4 bg-white shadow rounded" v-if="showForm">
+          <div class=" h5 font-weight-bold text-dark" >Add New Curriculum</div>
+          <hr/>
+          <b-form @submit.stop.prevent="onSubmit">
             <b-form-row>
+              <!-- curriculum title -->
               <b-col cols="12" md="6" lg="4">
-                <b-form-group
-                  class="curriculum_title"
-                  label="Curriculum Title"
-                  label-for="curriculumTitle">
-                  <b-form-input
-                    type="text"
-                    v-model="curriculum.curriculum_title"
-                    id="curriculumTitle"
-                    required></b-form-input>
-                </b-form-group>
-              </b-col>
+               <b-form-group :class="{'text-danger' : $v.form.curriculum_title.$error}" label="Curriculum Title *" label-for="curriculum_title">
+                 <b-form-input
+                   id="curriculum_title"
+                   name="curriculum_title"
+                   v-model="$v.form.curriculum_title.$model"
+                   :state="validateState('curriculum_title')"
+                   aria-describedby="curriculum_title_feedback"
+                 ></b-form-input>
+                 <b-form-invalid-feedback id="curriculum_title_feedback">This is a required field.</b-form-invalid-feedback>
+               </b-form-group>
+             </b-col>
+             <!-- curriculum title -->
 
-              <b-col cols="12" md="6" lg="4">
-                <b-form-group
-                  class="curriculum_description"
-                  label="Curriculum Description"
-                  label-for="curriculumDesc">
-                  <b-form-input
-                    type="text"
-                    v-model="curriculum.curriculum_desc"
-                    id="curriculumDesc"
-                    required></b-form-input>
-                </b-form-group>
-              </b-col>
+             <!-- curriculum description -->
+             <b-col cols="12" md="6" lg="4">
+               <b-form-group :class="{'text-danger' : $v.form.curriculum_desc.$error}" label="Description *" label-for="curriculum_desc">
+                 <b-form-input
+                   id="curriculum_desc"
+                   name="curriculum_desc"
+                   v-model="$v.form.curriculum_desc.$model"
+                   :state="validateState('curriculum_desc')"
+                   aria-describedby="curriculum_desc_feedback"
+                 ></b-form-input>
+                 <b-form-invalid-feedback id="curriculum_desc_feedback">This is a required field.</b-form-invalid-feedback>
+               </b-form-group>
+             </b-col>
+             <!-- curriculum description -->
 
-              <b-col cols="12" md="6" lg="4">
-                <b-form-group
-                  class="course"
-                  label="Course"
-                  label-for="course">
-                  <b-form-select
-                    v-model="curriculum.course_id"
-                    :options="courseOptions">
-                  </b-form-select>
-                </b-form-group>
-              </b-col>
-            </b-form-row>
+             <!-- course option -->
+             <b-col cols="12" md="6" lg="4">
+               <b-form-group
+                 label="Course *"
+                 label-for="course">
+                 <b-form-select
+                   id="course"
+                   name="course"
+                   v-model="$v.form.course_id.$model"
+                   :state="validateState('course_id')"
+                   aria-describedby="course_feedback">
+                   <option value="null" hidden>Select Course</option>
+                   <option v-for="course in courseOptions" :value="course.value.id">{{course.text}}</option>
+                 </b-form-select>
+                 <b-form-invalid-feedback id="course_feedback">This is a required field.</b-form-invalid-feedback>
+               </b-form-group>
+             </b-col>
+             <!-- course option -->
 
-            <b-form-row>
-              <b-col>
-                <b-button variant="danger" @click="toggleForm">
-                  Cancel
-                </b-button>
-              </b-col>
-              <b-col class="d-flex justify-content-end">
-                <b-button variant="primary" id="Add_College_Curriculum_Btn" @click="addCurriculum">
-                  Add
-                </b-button>
-              </b-col>
-            </b-form-row>
-          </b-form> -->
-          </div>
-
+           </b-form-row>
+           <hr/>
+           <!-- start form buttons -->
+           <b-form-row>
+             <b-col>
+               <b-button variant="danger" @click="resetForm()">Cancel</b-button>
+             </b-col>
+             <b-col class="d-flex justify-content-end">
+               <b-button type="submit" variant="primary">Add</b-button>
+             </b-col>
+           </b-form-row>
+           <!-- end form buttons -->
+         </b-form>
+        </div>
       </transition>
     </div>
+    <!-- end of adding form  -->
 
-    <!--Form end  -->
+    <!-- start of curriculum table -->
     <div class="p-4 mx-4 my-4 bg-white shadow rounded">
-      <!-- Adding Form Start  -->
       <b-row>
+
+        <!-- start of filter input box -->
         <b-col lg="4" class="my-1 ">
           <b-form-group
           class="filter"
@@ -177,16 +115,19 @@
             </b-input-group>
           </b-form-group>
         </b-col>
+        <!-- end of filter input box -->
 
+        <!-- Add Button -->
         <b-col class="pt-4">
-          <!-- Add New Room Button -->
           <b-button variant="primary" size="" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
             Add New Curriculum
           </b-button>
         </b-col>
+        <!-- Add Button -->
+
       </b-row>
 
-      <!-- Main table element -->
+      <!-- start of table element -->
       <b-overlay :show="isLoading" rounded="sm">
         <b-table
           class="my-3 table-striped"
@@ -215,10 +156,13 @@
               <b-icon-info/>
             </b-button>
           </template>
+
         </b-table>
       </b-overlay>
+      <!-- end of table element -->
 
       <hr/>
+
       <b-row>
         <b-col sm="4" md="6" lg="1" class="my-1">
           <b-form-group
@@ -234,7 +178,7 @@
           </b-form-group>
         </b-col>
 
-        <b-col offset-lg="6" sm="12" md="4" lg="5"class="my-1">
+        <b-col offset-lg="6" sm="12" md="4" lg="5" class="my-1">
           <b-pagination
             v-model="currentPage"
             :total-rows="totalRows"
@@ -246,7 +190,7 @@
         </b-col>
       </b-row>
     </div>
-      <!-- end of table -->
+    <!-- end of curriculum table -->
 
     <b-modal id="editCurriculumModal" ref="editCurriculumModal" title="Edit Curriculum" size="lg">
       <b-form-row>
