@@ -20,75 +20,73 @@
       <li v-for="error in errors">{{ error }}</li>
     </ul>
   </b-alert>
-  <!-- Adding Form Start  -->
-  <div >
-    <!-- <input type="checkbox" id="myCheck"> -->
 
     <input type="checkbox" id="currID" @click="onDeleteSubject" hidden>
     <input id="deleteID" hidden >
+    <!-- start of adding form  -->
+    <div class="adding_form">
+      <transition name="fade">
+        <div id="" class="px-4 pt-4 pb-3 mx-4 my-4 bg-white shadow rounded" v-if="showForm">
+          <div class=" h5 font-weight-bold text-dark" >Add Curriculum Subject</div>
+          <hr/>
+          <b-form id="Add_Room_Form">
+            <b-form-row>
+              <b-col cols="12" md="6" lg="3">
+                <b-form-group class="mb-4" label="Year Level" label-for="year_level">
+                  <b-form-select id="year_level" v-model="selectedYearLevel" :options="year_options" @change="onChangeYearLevel">
+                    <option value="null" hidden>Select Year level</option>
+                    <option value="All">All Year level</option>
+                  </b-form-select>
+                </b-form-group>
+              </b-col>
+              <!-- end year level select box -->
 
-    <div class="panel panel-primary recordMaintenanceForm" v-if="showForm">
-      <div class="panel-heading">Add a Room</div>
-      <div class="panel-body">
-        <b-form id="Add_Room_Form">
+              <!-- semester select box -->
+              <b-col cols="12" md="6" lg="3">
+                <b-form-group class="semester mb-4" label="Semester" label-for="Semester">
+                  <b-form-select id="Semester" v-model="selectedSemester" @change="onChangeSemester" :disabled="sem_status">
+                    <option :value="{id: null, semester:null}" hidden>Select Semester</option>
+                    <option v-for="sem in SemRow" v-bind:value="{id: sem.id, semester: sem.semester}">{{sem.semester}}</option>
+                  </b-form-select>
+                </b-form-group>
+              </b-col>
 
-        <b-form-row>
-          <b-col cols="12" md="6" lg="3">
-            <b-form-group class="mb-4" label="Year Level" label-for="year_level">
-              <b-form-select id="year_level" v-model="selectedYearLevel" :options="year_options" @change="onChangeYearLevel">
-                <option value="null" hidden>Select Year level</option>
-                <option value="All">All Year level</option>
-              </b-form-select>
-            </b-form-group>
-          </b-col>
-          <!-- end year level select box -->
+              <!-- semester select box -->
+              <b-col cols="12" md="12" lg="6">
+                <b-form-group class="semester mb-4" label="Subject" label-for="Subject">
+                  <b-form-select id="Subject" v-model="selectedSubject" @change="" :disabled="subject_status">
+                    <option :value="null" hidden>Select Subject</option>
+                    <option v-for="subject in SubjectRow" v-bind:value="subject.id">{{subject.subject_code}} - {{subject.subject_description}}</option>
+                  </b-form-select>
+                </b-form-group>
+              </b-col>
+            </b-form-row>
 
-          <!-- semester select box -->
-          <b-col cols="12" md="6" lg="3">
-            <b-form-group class="semester mb-4" label="Semester" label-for="Semester">
-              <b-form-select id="Semester" v-model="selectedSemester" @change="onChangeSemester" :disabled="sem_status">
-                <option :value="{id: null, semester:null}" hidden>Select Semester</option>
-                <option v-for="sem in SemRow" v-bind:value="{id: sem.id, semester: sem.semester}">{{sem.semester}}</option>
-              </b-form-select>
-            </b-form-group>
-          </b-col>
+              <!-- Form Buttons -->
+             <b-form-row>
+               <b-col>
+                 <b-button variant="danger" @click="toggleForm">
+                    Cancel
+                  </b-button>
+               </b-col>
+               <b-col class="d-flex justify-content-end">
+                  <b-button variant="success" id="Add_Curriculum_subject" @click="addSubject">
+                    Add
+                  </b-button>
+               </b-col>
+            </b-form-row>
+          </b-form> <!-- End of b-form  -->
+        <!-- start of adding form  -->
+        </div>
+      </transition>
+    </div>
 
-          <!-- semester select box -->
-          <b-col cols="12" md="12" lg="6">
-            <b-form-group class="semester mb-4" label="Subject" label-for="Subject">
-              <b-form-select id="Subject" v-model="selectedSubject" @change="" :disabled="subject_status">
-                <option :value="null" hidden>Select Subject</option>
-                <option v-for="subject in SubjectRow" v-bind:value="subject.id">{{subject.subject_code}} - {{subject.subject_description}}</option>
-              </b-form-select>
-            </b-form-group>
-          </b-col>
-        </b-form-row>
 
-          <!-- Form Buttons -->
-         <b-form-row>
-           <b-col>
-             <b-button variant="danger" @click="toggleForm">
-                Cancel
-              </b-button>
-           </b-col>
-           <b-col class="d-flex justify-content-end">
-              <b-button variant="success" id="Add_Curriculum_subject" @click="addSubject">
-                Add
-              </b-button>
-           </b-col>
-        </b-form-row>
-
-        </b-form> <!-- End of b-form  -->
-      </div>  <!-- End of Panel Body  -->
-    </div>  <!-- End of Panel  -->
-  </div> <!-- End of Col  -->
-
-  <h5>Subjects</h5>
+<div id="" class="px-4 pt-4 pb-3 mx-4 my-4 bg-white shadow rounded">
   <b-form-row>
     <b-col cols="12" md="6" lg="3" v-if="!showForm">
       <b-form-group class="mb-4" label="Year Level" label-for="year_level">
         <b-form-select id="year_level" v-model="selectedYearLevel" :options="year_options" @change="onChangeYearLevel" >
-          <option value="null" hidden>Select Year level</option>
           <option value="All">All Year level</option>
         </b-form-select>
       </b-form-group>
@@ -114,14 +112,12 @@
       </b-form-group>
     </b-col>
     <!-- curriculum subjects table -->
-      <table class="table table-bordered table-striped">
-        <tbody id="subjectsTable">
-
-        </tbody>
-      </table>
-    </b-col>
+    <table class="table table-bordered table-striped">
+      <tbody id="subjectsTable">
+      </tbody>
+    </table>
   </b-form-row>
-
+</div>
 
   <!--  TODO:  Display subjects per year and semester  -------
                  We might need a custom component here
@@ -131,13 +127,21 @@
 </template>
 <style>
 #subjectsTable tr td {
-  padding-top: 25px;
   margin: 0;
+}
+
+#subjectsTable tr th {
+  text-align: center;
 }
 
 #subjectsTable tr td:first-child {
   text-align: center;
 }
+#subjectsTable tr #table_head{
+  font-weight: 700;
+  text-align: left !important;
+}
+
 
 #subjectsTable tr td:nth-child(3),
 td:nth-child(4),
@@ -209,7 +213,7 @@ export default {
         id: null,
         semester: null
       },
-      selectedYearLevel: null,
+      selectedYearLevel: "All",
       sem_status: true,
       subject_status: true,
       deleteSubject: null,
@@ -228,10 +232,11 @@ export default {
   },
   created() {
     this.curriculum.id = this.$route.params.id;
-    this.curriculum_data = this.$route.params.data;
+    this.curriculum_data = this.$route.params;
     this.curriculum.curriculum_title = this.$route.params.curriculum_title
   },
   mounted() {
+    console.log(this.curriculum_data)
     this.getCurriculumSubjects();
     this.getSemester();
     this.getYearLevel();
@@ -419,12 +424,14 @@ export default {
         for (var j = 0 ; j < entries.length; j++){
           var tr = document.createElement('tr');
           var td = document.createElement('td');
-          var th = document.createElement('th');
+          var th = document.createElement('td');
           var tagClass = container[i][0].toUpperCase() + " - " + entries[j][0].toUpperCase();
           // console.log(container[i][0].toUpperCase() + " - " + keys[j].toUpperCase());
           th.appendChild(document.createTextNode(tagClass))
+          th.setAttribute("id", "table_head");
           // tr.appendChild(th).classList.add("title");
           tr.setAttribute("class", tagClass);
+
           tr.appendChild(th).colSpan = "7";
           tbl.appendChild(tr);
 
@@ -473,9 +480,10 @@ export default {
             var lab = document.createElement('td');
             var prerequisite = document.createElement('td');
             var action = document.createElement('td');
+            action.setAttribute('align', 'center')
 
             code.appendChild(document.createTextNode(subject.subject.subject_code))
-            desc.appendChild(document.createTextNode(subject.subject.subject_description))
+            desc.appendChild(document.createTextNode(subject.subject.subject_title))
             units.appendChild(document.createTextNode(subject.subject.units))
             lec.appendChild(document.createTextNode(subject.subject.lec))
             lab.appendChild(document.createTextNode(subject.subject.lab))
@@ -484,7 +492,7 @@ export default {
             var btn = document.createElement("button");
             btn.addEventListener('click', myFunction, true);
             btn.className += "btn btn-danger btn-sm";
-            btn.innerHTML = "Delete";
+            btn.innerHTML = '<i class="fa fa-trash"/>';
             btn.setAttribute('id', subject.id)
             action.appendChild(btn);
 
@@ -520,6 +528,8 @@ export default {
 
     // sets year level select box
     getYearLevel: function() {
+      console.log(this.$route.params)
+
       if (this.curriculum_data.course.year_duration == 4) {
         this.year_options = [{
             value: "1st Year",

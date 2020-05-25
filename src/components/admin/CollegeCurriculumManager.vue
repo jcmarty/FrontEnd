@@ -29,31 +29,43 @@
           <b-form @submit.stop.prevent="onSubmit">
             <b-form-row>
               <!-- curriculum title -->
-              <b-col cols="12" md="6" lg="4">
-               <b-form-group :class="{'text-danger' : $v.form.curriculum_title.$error}" label="Curriculum Title *" label-for="curriculum_title">
+             <b-col cols="12" md="6" lg="4">
+               <b-form-group
+               :class="{'text-danger' : $v.form.curriculum_title.$error}"
+               label="Curriculum Title *"
+               label-for="curriculum_title">
                  <b-form-input
+                   type="text"
+                   class="rounded"
                    id="curriculum_title"
-                   name="curriculum_title"
-                   v-model="$v.form.curriculum_title.$model"
-                   :state="validateState('curriculum_title')"
-                   aria-describedby="curriculum_title_feedback"
-                 ></b-form-input>
-                 <b-form-invalid-feedback id="curriculum_title_feedback">This is a required field.</b-form-invalid-feedback>
+                   v-model.trim="$v.form.curriculum_title.$model"
+                   :class="{
+                   'is-invalid' :$v.form.curriculum_title.$error}">
+                 </b-form-input>
+                 <div class="invalid-feedback">
+                   <span v-if="!$v.form.curriculum_title.required">This field is required.</span>
+                 </div>
                </b-form-group>
              </b-col>
              <!-- curriculum title -->
 
              <!-- curriculum description -->
              <b-col cols="12" md="6" lg="4">
-               <b-form-group :class="{'text-danger' : $v.form.curriculum_desc.$error}" label="Description *" label-for="curriculum_desc">
+               <b-form-group
+               :class="{'text-danger' : $v.form.curriculum_desc.$error}"
+               label="Description *"
+               label-for="curriculum_desc">
                  <b-form-input
+                   type="text"
+                   class="rounded"
                    id="curriculum_desc"
-                   name="curriculum_desc"
-                   v-model="$v.form.curriculum_desc.$model"
-                   :state="validateState('curriculum_desc')"
-                   aria-describedby="curriculum_desc_feedback"
-                 ></b-form-input>
-                 <b-form-invalid-feedback id="curriculum_desc_feedback">This is a required field.</b-form-invalid-feedback>
+                   v-model.trim="$v.form.curriculum_desc.$model"
+                   :class="{
+                   'is-invalid' :$v.form.curriculum_desc.$error}">
+                 </b-form-input>
+                 <div class="invalid-feedback">
+                   <span v-if="!$v.form.curriculum_desc.required">This field is required.</span>
+                 </div>
                </b-form-group>
              </b-col>
              <!-- curriculum description -->
@@ -61,28 +73,31 @@
              <!-- course option -->
              <b-col cols="12" md="6" lg="4">
                <b-form-group
-                 label="Course *"
-                 label-for="course">
+               :class="{'text-danger' : $v.form.course_id.$error}"
+               label="Course *"
+               label-for="course_id">
                  <b-form-select
-                   id="course"
-                   name="course"
-                   v-model="$v.form.course_id.$model"
-                   :state="validateState('course_id')"
-                   aria-describedby="course_feedback">
+                   type="text"
+                   class="rounded"
+                   id="course_id"
+                   v-model.trim="$v.form.course_id.$model"
+                   :class="{
+                   'is-invalid' :$v.form.course_id.$error}">
                    <option value="null" hidden>Select Course</option>
                    <option v-for="course in courseOptions" :value="course.value.id">{{course.text}}</option>
                  </b-form-select>
-                 <b-form-invalid-feedback id="course_feedback">This is a required field.</b-form-invalid-feedback>
+                 <div class="invalid-feedback">
+                   <span v-if="!$v.form.course_id.required">This field is required.</span>
+                 </div>
                </b-form-group>
              </b-col>
              <!-- course option -->
-
            </b-form-row>
            <hr/>
            <!-- start form buttons -->
            <b-form-row>
              <b-col>
-               <b-button variant="danger" @click="resetForm()">Cancel</b-button>
+               <b-button variant="danger" @click="toggleForm()">Cancel</b-button>
              </b-col>
              <b-col class="d-flex justify-content-end">
                <b-button type="submit" variant="primary">Add</b-button>
@@ -149,10 +164,10 @@
           </template>
 
           <template v-slot:cell(actions)="row">
-            <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Edit Room">
+            <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Edit Curriculum">
               <b-icon-pencil/>
             </b-button>
-            <b-button variant="info" size="sm"  @click="addSubject(row.item, row.index, $event.target)" v-b-tooltip.hover title="Subjects">
+            <b-button variant="info" size="sm"  @click="viewSubjects(row.item, row.index, $event.target)" v-b-tooltip.hover title="View Subjects">
               <b-icon-info/>
             </b-button>
           </template>
@@ -193,54 +208,88 @@
     <!-- end of curriculum table -->
 
     <b-modal id="editCurriculumModal" ref="editCurriculumModal" title="Edit Curriculum" size="lg">
-      <b-form-row>
-        <b-col cols="12" md="6" lg="4">
-          <b-form-group
-            class="curriculum_title"
-            label="Curriculum Title"
-            label-for="curriculumTitle">
-            <b-form-input
-              type="text"
-              v-model="curriculum.curriculum_title"
-              id="curriculumTitle"
-              required></b-form-input>
-          </b-form-group>
-        </b-col>
+      <div class="modal-body p-2">
+        <b-form @submit.stop.prevent="onUpdate">
+          <b-form-row>
+            <!-- curriculum title -->
+           <b-col cols="12" md="4" lg="4">
+             <b-form-group
+             :class="{'text-danger' : $v.form.curriculum_title.$error}"
+             label="Curriculum Title *"
+             label-for="curriculum_title">
+               <b-form-input
+                 type="text"
+                 class="rounded"
+                 id="curriculum_title"
+                 v-model.trim="$v.form.curriculum_title.$model"
+                 :class="{
+                 'is-invalid' :$v.form.curriculum_title.$error}">
+               </b-form-input>
+               <div class="invalid-feedback">
+                 <span v-if="!$v.form.curriculum_title.required">This field is required.</span>
+               </div>
+             </b-form-group>
+           </b-col>
+           <!-- curriculum title -->
 
-        <b-col cols="12" md="6" lg="4">
-          <b-form-group
-            class="curriculum_description"
-            label="Curriculum Description"
-            label-for="curriculumDesc">
-            <b-form-input
-              type="text"
-              v-model="curriculum.curriculum_desc"
-              id="curriculumDesc"
-              required></b-form-input>
-          </b-form-group>
-        </b-col>
+           <!-- course option -->
+           <b-col cols="12" md="8" lg="8">
+             <b-form-group
+             :class="{'text-danger' : $v.form.course_id.$error}"
+             label="Course *"
+             label-for="course_id">
+               <b-form-select
+                 type="text"
+                 class="rounded"
+                 id="course_id"
+                 v-model.trim="$v.form.course_id.$model"
+                 :class="{
+                 'is-invalid' :$v.form.course_id.$error}">
+                 <option value="null" hidden>Select Course</option>
+                 <option v-for="course in courseOptions" :value="course.value.id">{{course.text}}</option>
+               </b-form-select>
+               <div class="invalid-feedback">
+                 <span v-if="!$v.form.course_id.required">This field is required.</span>
+               </div>
+             </b-form-group>
+           </b-col>
+           <!-- course option -->
 
-        <b-col cols="12" md="6" lg="4">
-          <b-form-group
-            class="course"
-            label="Course"
-            label-for="course">
-            <b-form-select
-              v-model="curriculum.course_id"
-              :options="courseOptions">
-            </b-form-select>
-          </b-form-group>
-        </b-col>
-      </b-form-row>
-      <template v-slot:modal-footer="{ cancel, ok }">
-        <!-- Emulate built in modal footer ok and cancel button actions -->
-        <b-button size="sm" variant="danger" @click="$bvModal.hide('editCurriculumModal')">
-          Cancel
-        </b-button>
-        <b-button size="sm" variant="success" @click="updateCurriculum()">
-          Update
-        </b-button>
-      </template>
+           <!-- curriculum description -->
+           <b-col cols="12" md="12" lg="12">
+             <b-form-group
+             :class="{'text-danger' : $v.form.curriculum_desc.$error}"
+             label="Description *"
+             label-for="curriculum_desc">
+               <b-form-input
+                 type="text"
+                 class="rounded"
+                 id="curriculum_desc"
+                 v-model.trim="$v.form.curriculum_desc.$model"
+                 :class="{
+                 'is-invalid' :$v.form.curriculum_desc.$error}">
+               </b-form-input>
+               <div class="invalid-feedback">
+                 <span v-if="!$v.form.curriculum_desc.required">This field is required.</span>
+               </div>
+             </b-form-group>
+           </b-col>
+           <!-- curriculum description -->
+         </b-form-row>
+        </b-form>
+      </div>
+     <!-- Modal Footer Template -->
+     <template v-slot:modal-footer="{ cancel, ok }">
+       <!-- Emulate built in modal footer ok and cancel button actions -->
+       <b-col class="px-1">
+         <b-button class="float-left" variant="danger" @click="CloseModal()">
+           Cancel
+         </b-button>
+         <b-button class="float-right" variant="success" @click="onUpdate()">
+           Update
+         </b-button>
+       </b-col>
+     </template>
     </b-modal>
 
     <b-modal id="deleteCurriculumModal" ref="deleteCurriculumModal" title="Delete Curriculum" size="lg">
@@ -321,7 +370,11 @@
 
     mounted () {
       this.getCurriculums();
+
       this.$store.dispatch('loadCourses', this.$store.getters.getToken);
+      if (this.courseOptions.length == 0){
+        this.$store.dispatch('loadCourses', this.$store.getters.getToken);
+      }
     },
 
     methods:{
@@ -333,7 +386,7 @@
           })
           .then(response => {
             this.isLoading = false;
-            //console.log(response.data.data);
+            console.log(response.data);
             this.items = response.data;
             this.totalRows = this.items.length;
           })
@@ -394,19 +447,15 @@
       updateCurriculum: function(){
         this.errors = [];
         Axios
-          .put('http://localhost/api/v1/curriculums/' + this.curriculum.id, this.curriculum, {
+          .put('http://localhost/api/v1/curriculums/' + this.form.id, this.form, {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
+            this.CloseModal();
             this.getCurriculums();
             this.alertMessage = response.data.message;
             this.dismissSuccessCountDown = this.dismissSecs;
             // clear curriculum data
-            this.curriculum = {
-              curriculum_title: null,
-              curriculum_desc: null,
-              course_id: null
-            };
           })
           .catch(error => {
             this.alertMessage = error.response.data.message;
@@ -452,7 +501,7 @@
       },
 
       EditModal: function(item, index) {
-        this.curriculum = {
+        this.form = {
           id: item.id,
           curriculum_title: item.curriculum_title,
           curriculum_desc: item.curriculum_desc,
@@ -460,6 +509,10 @@
           active: item.active
         },
         this.$root.$emit('bv::show::modal', 'editCurriculumModal')
+      },
+      CloseModal: function(){
+        this.resetForm();
+        this.$root.$emit('bv::hide::modal', 'editCurriculumModal')
       },
       DeleteModal: function(item){
         this.curriculum = {
@@ -471,16 +524,10 @@
         },
         this.$root.$emit('bv::show::modal', 'deleteCurriculumModal')
       },
-      addSubject: function(item) {
+      viewSubjects: function(item) {
         this.$router.replace({
           name: 'manageCurriculumSubjects',
-          params: {
-            id: item.id,
-            curriculum_title: item.curriculum_title,
-            curriculum_desc: item.curriculum_desc,
-            course_id: item.course_id,
-            active: item.active
-          }
+          params: item
         })
       },
 
@@ -522,19 +569,13 @@
         return $dirty ? !$error : null;
       },
 
-      resetForm() {
+      resetForm: function() {
         this.form = {
           curriculum_title: null,
           curriculum_desc: null,
           course_id: null,
           active: 1
         };
-
-        if(this.showForm){
-          this.showForm = false;
-        } else {
-          this.showForm = true;
-        }
 
         this.$nextTick(() => {
           this.$v.$reset();
@@ -547,7 +588,25 @@
         }
         this.addCurriculum()
         // alert("Form submitted!");
-      }
+      },
+
+      onUpdate() {
+        this.$v.form.$touch();
+        if (this.$v.form.$anyError) {
+          return;
+        }
+        this.updateCurriculum();
+        // alert("Form submitted!");
+      },
+
+      toggleForm : function(){
+        if(this.showForm){
+          this.showForm = false;
+        }else{
+          this.showForm = true;
+        }
+        this.resetForm();
+      },
     }
   }
 </script>
