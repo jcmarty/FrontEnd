@@ -68,18 +68,13 @@
 
             <b-col cols="12" md="6" lg="3">
               <b-form-group
-                :class="{'text-danger' : $v.users.password_confirmation.$error}"
                 label="Confirm Password *"
                 label-for="confirmPassword">
                 <b-form-input
                   type="password"
                   id="confirmPassword"
-                  v-model.trim="$v.users.password_confirmation.$model"
-                  :class="{'is-invalid' :$v.users.password_confirmation.$error}">
+                  v-model="users.password_confirmation">
                 </b-form-input>
-                <div class="invalid-feedback">
-                  <span v-if="!$v.users.password_confirmation.required">Confirm Password is required!</span>
-                </div>
               </b-form-group>
             </b-col>
 

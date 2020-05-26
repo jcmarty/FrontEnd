@@ -58,8 +58,8 @@
                 </b-collapse>
               </li>
               <!-- TODO:  Decide if we are really going to add these, and HOW -->
-              <router-link tag="li" to="#"><a>Password Reset Requests</a></router-link>
-              <router-link tag="li" to="#"><a>Backup and Restore Database</a></router-link>
+              <router-link tag="li" to="#" v-if="isAuthorized(this.$store.getters.getSettings.user_management, 0)"><a>Password Reset Requests</a></router-link>
+              <!-- <router-link tag="li" to="#"><a>Backup and Restore Database</a></router-link> -->
               <!-- --------------------------------------------------- -->
               <router-link tag="li" to="/ActivityLogs" v-if="isAuthorized(this.$store.getters.getSettings.activity_log, 0)" ><a>Activity Logs</a></router-link>
             </b-collapse>

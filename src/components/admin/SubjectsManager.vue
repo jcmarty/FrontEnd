@@ -187,8 +187,8 @@
 
         <b-col class="py-4">
           <!-- Add New Subject Button -->
-          <b-button variant="primary" @click="toggleForm" class="toggleFormBtn" v-if="!showForm">
-            Add New Sbuject
+          <b-button variant="primary" @click="toggleForm" class="toggleFormBtn" v-if="!showForm && isAuthorized($store.getters.getSettings.subject_management, 1)">
+            Add New Subject
           </b-button>
         </b-col>
       </b-row>
@@ -207,7 +207,7 @@
         :per-page="perPage"
         :filter="filter">
 
-        <template v-slot:cell(active)="row" >
+        <template v-slot:cell(active)="row" v-if="!showForm && this.isAuthorized($store.getters.getSettings.subject_management, 3)">
           <b-button v-if="row.item.active" variant="danger" size="sm" @click="StatusUpdate(row.item, $event.target)" v-b-tooltip.hover title=" Deactivate">
             Deactivate
           </b-button>
@@ -222,11 +222,11 @@
             <i class="fa fa-eye text-light"/>
           </b-button>
 
-          <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Edit Subject">
+          <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Edit Subject" v-if="!showForm && isAuthorized($store.getters.getSettings.subject_management, 3)">
             <b-icon-pencil/>
           </b-button>
 
-          <b-button variant="danger" size="sm" @click="DeleteModal(row.item, $event.target)" v-b-tooltip.hover title="Delete Subject">
+          <b-button variant="danger" size="sm" @click="DeleteModal(row.item, $event.target)" v-b-tooltip.hover title="Delete Subject" v-if="!showForm && isAuthorized($store.getters.getSettings.subject_management, 4)">
             <b-icon-trash/>
           </b-button>
 
@@ -482,6 +482,7 @@
     name: 'SubjectsManager',
     data() {
       return {
+        user: this.$store.getters.getUser,
         isLoading: false,
         items: [],
         fields: [
@@ -521,6 +522,8 @@
         dismissSuccessCountDown: 0,
         dismissErrorCountDown: 0,
       }
+
+
     }, // end of data
 
     validations: {
@@ -538,6 +541,51 @@
     }, //end of mounted
 
     methods:{
+      isAuthorized (activity, priv) {
+      // activity level
+      if (priv == 0) {
+        // check if user has a privilege in this activity
+        if (this.user.activities.some(a => a.privileges.activity_id === activity)) {
+          return true
+        }
+        return false
+      }
+
+
+      // privilege level
+      else {
+        // check if user has the exact privilege (CRUD) to do this activity
+        for (var a of this.user.activities) {
+          if (a.privileges.activity_id === activity) {
+            switch (priv) {
+              // create
+              case 1:
+                if (a.privileges.create_priv == 1) {
+                  return true
+                }
+                return false
+              // read
+              case 2:
+                if (a.privileges.read_priv == 1) {
+                  return true
+                }
+                return false
+              // update
+              case 3:
+                if (a.privileges.update_priv == 1) {
+                  return true
+                }
+                return false
+              case 4:
+                if (a.privileges.delete_priv == 1) {
+                  return true
+                }
+                return false
+            } // end switch
+          } // end of if (a.activity_id === activity)
+        }
+      }
+    },
 
       onSubmit() {
         this.$v.subject.$touch();

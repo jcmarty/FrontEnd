@@ -20,6 +20,13 @@
     </b-alert>
     <!-- End of Alert Message -->
 
+    <ul class="progressbarInstructor" v-if="progress">
+        <li class="active">Personal Information</li>
+        <li id="EducationaInformation">Educational Attainment</li>
+        <li id="PreferredInformation" >Preferred Subject</li>
+        <li id="TimeInformation" >Time Availability</li>
+     </ul>
+
     <transition name="fade">
       <!-- start of academic form -->
       <div id="" class="mx-3 mb-4 p-4 bg-white shadow rounded" v-if="InsPersonalInfoForm">
@@ -699,7 +706,7 @@
           active: 1
         },
 
-
+        progress: false,
         InsPersonalInfoForm: false,
         InsEducAttainmentForm: false,
         InsPrefSubjectForm: false,
@@ -851,7 +858,7 @@
           .then(response => {
             //console.log(response.data);
             for(const subject of response.data){
-              this.subjectOptions.push({value: subject.id, text: subject.subject_code});
+              this.subjectOptions.push({value: subject.id, text: subject.subject_code +" "+ subject.subject_title});
             }
           })
           .catch(error => {
@@ -1008,9 +1015,12 @@
       toggleForm: function(){
         if(this.InsPersonalInfoForm){
           this.InsPersonalInfoForm = false;
+          this.progress = false;
           this.InsTableAddBtn = true;
+
         } else {
           this.InsPersonalInfoForm = true;
+          this.progress = true;
           this.InsTableAddBtn = false;
         }
       },
@@ -1018,6 +1028,7 @@
       CancelInsForm: function(){
         this.clearInstructorData()
         this.InsPersonalInfoForm = false;
+        this.progress = false
         this.InsTableAddBtn = true;
       },
 
@@ -1025,6 +1036,8 @@
         this.InsPersonalInfoForm = false;
         this.InsTableForm = false;
         this.InsEducAttainmentForm = true;
+        var element = document.getElementById("EducationaInformation");
+        element.classList.add("active");
       },
 
       BackPersonalForm: function(){
@@ -1037,6 +1050,8 @@
         this.AddInstructor();
         this.InsEducAttainmentForm = false;
         this.InsPrefSubjectForm = true;
+        var element = document.getElementById("PreferredInformation");
+        element.classList.add("active");
       },
 
       BackEducationalForm: function(){
@@ -1047,6 +1062,8 @@
       ShowTimeAvailForm: function(){
         this.InsPrefSubjectForm = false;
         this.InsTimeAvailabilityForm = true;
+        var element = document.getElementById("TimeInformation");
+        element.classList.add("active");
       },
 
       BackPrefferedSubjFrom: function(){
@@ -1059,6 +1076,13 @@
         this.clearInstructorData()
         this.InsTableForm = true;
         this.InsTableAddBtn = true;
+        this.progress = false;
+        var q = document.getElementById("EducationaInformation");
+        var w = document.getElementById("PreferredInformation");
+        var e = document.getElementById("TimeInformation");
+         q.classList.remove("active");
+         w.classList.remove("active");
+         e.classList.remove("active");
 
       },
 
@@ -1255,3 +1279,61 @@
     }
   }
 </script>
+
+<style>
+.progressbarInstructor {
+  counter-reset: step;
+  padding: 10px 0px 80px 40px;
+}
+.progressbarInstructor li {
+    list-style-type: none;
+    width: 25%;
+    float: left;
+    font-size: 12px;
+    position: relative;
+    text-align: center;
+    text-transform: uppercase;
+    color: #7d7d7d;
+}
+
+.progressbarInstructor li:before {
+    width: 30px;
+    height: 30px;
+    content: counter(step);
+    counter-increment: step;
+    line-height: 30px;
+    border: 2px solid #7d7d7d;
+    display: block;
+    text-align: center;
+    margin: 0 auto 10px auto;
+    border-radius: 50%;
+    background-color: white;
+}
+
+.progressbarInstructor li:after {
+    width: 100%;
+    height: 2px;
+    content: '';
+    position: absolute;
+    background-color: #7d7d7d;
+    top: 15px;
+    left: -50%;
+    z-index: -1;
+}
+
+.progressbarInstructor li:first-child:after {
+    content: none;
+}
+
+.progressbarInstructor li.active {
+    color: green;
+}
+
+.progressbarInstructor li.active:before {
+    border-color: #55b776;
+}
+
+.progressbarInstructor li.active + li:after {
+    background-color: #55b776;
+}
+</style>

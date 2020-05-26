@@ -21,6 +21,13 @@
     </b-alert>
     <!-- End of Alert Message -->
 
+      <ul class="progressbar" v-if="progress">
+          <li class="active">Student Information</li>
+          <li id="PersonalInformation">Personal Information</li>
+          <li id="ParentsInformation" >Parents Information</li>
+       </ul>
+
+
 
     <transition name="fade">
       <!-- start of academic form -->
@@ -672,7 +679,7 @@
 
         Students: {
           id: null,
-          student_number: "1819-01-0001",
+          student_number: null,
           first_name: null,
           middle_name: null,
           last_name: null,
@@ -742,6 +749,7 @@
 
         calendarIcon: "fa fa-calendar",
         birthDateFormat: "MMM dd, yyyy",
+        progress: false,
         StudentInfoshowForm: false,
         PersonalInfoshowForm: false,
         ParentsInfoshowForm: false,
@@ -807,6 +815,8 @@
       },
 
       showPersonalInfoForm: function(){
+        var element = document.getElementById("PersonalInformation");
+        element.classList.add("active");
         var checker;
 
         // last name
@@ -851,6 +861,8 @@
       },
 
       showParentsInfoForm: function(){
+        var element = document.getElementById("ParentsInformation");
+        element.classList.add("active");
         var checker;
 
         // Present Address
@@ -1001,13 +1013,19 @@
 
         } else {
           this.ParentsInfoshowForm = false;
+          this.progress = false;
           this.RegisterTableForm = true;
+          var q = document.getElementById("PersonalInformation");
+          var w = document.getElementById("ParentsInformation");
+           q.classList.remove("active");
+           w.classList.remove("active");
           Axios
             .post('http://localhost/api/v1/students', this.Students, {
               headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
             })
             .then(response => {
               console.log(response.message);
+
               this.alertMessage = "New student record successfully created.";
               this.getStudents();
               this.dismissSuccessCountDown = this.dismissSecs;
@@ -1201,6 +1219,7 @@
         this.secondTabDisabled = true;
         this.lastTabsDisabled = true;
         this.StudentInfoshowForm = false;
+        this.progress = false;
         this.RegisterTableForm = true;
       },
 
@@ -1210,8 +1229,12 @@
           this.RegisterTableForm = true;
         } else {
           this.StudentInfoshowForm = true;
+          this.progress = true;
           this.RegisterTableForm = false;
         }
+        this.$nextTick(() => {
+          this.$v.$reset();
+        });
       },
 
       enroll: function(item){
@@ -1363,3 +1386,61 @@
     },
   }
 </script>
+
+<style>
+.progressbar {
+  counter-reset: step;
+  padding: 10px 0px 80px 200px;
+}
+.progressbar li {
+    list-style-type: none;
+    width: 25%;
+    float: left;
+    font-size: 12px;
+    position: relative;
+    text-align: center;
+    text-transform: uppercase;
+    color: #7d7d7d;
+}
+
+.progressbar li:before {
+    width: 30px;
+    height: 30px;
+    content: counter(step);
+    counter-increment: step;
+    line-height: 30px;
+    border: 2px solid #7d7d7d;
+    display: block;
+    text-align: center;
+    margin: 0 auto 10px auto;
+    border-radius: 50%;
+    background-color: white;
+}
+
+.progressbar li:after {
+    width: 100%;
+    height: 2px;
+    content: '';
+    position: absolute;
+    background-color: #7d7d7d;
+    top: 15px;
+    left: -50%;
+    z-index: -1;
+}
+
+.progressbar li:first-child:after {
+    content: none;
+}
+
+.progressbar li.active {
+    color: green;
+}
+
+.progressbar li.active:before {
+    border-color: #55b776;
+}
+
+.progressbar li.active + li:after {
+    background-color: #55b776;
+}
+</style>
