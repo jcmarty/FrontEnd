@@ -27,42 +27,40 @@
       <div id="" class="mx-3 mb-4 p-4 bg-white shadow rounded" v-if="StudentInfoshowForm">
       <div class=" h5 font-weight-bold text-dark">Student Information</div>
       <hr/>
-      <div class="">
+      <b-form @submit.stop.prevent="onSubmit">
         <b-form-row>
 
           <b-col cols="12" md="6" lg="3">
             <b-form-group
-              class="lastname"
-              label="Last Name"
+              :class="{'text-danger' : $v.Students.last_name.$error}"
+              label="Last Name *"
               label-for="lastName">
               <b-form-input
                 type="text"
-                v-model="Students.last_name"
                 id="lastName"
-                :state="last_name_state"
-                aria-describedby="last_name-feedback">
+                v-model.trim="$v.Students.last_name.$model"
+                :class="{'is-invalid' :$v.Students.last_name.$error}">
               </b-form-input>
-              <b-form-invalid-feedback id="last_name-feedback">
-                Last name is required!
-              </b-form-invalid-feedback>
+              <div class="invalid-feedback">
+                <span v-if="!$v.Students.last_name.required">Last Name is required!</span>
+              </div>
             </b-form-group>
           </b-col>
 
           <b-col cols="12" md="6" lg="3">
             <b-form-group
-              class="firstname"
-              label="First Name"
+              :class="{'text-danger' : $v.Students.first_name.$error}"
+              label="First Name *"
               label-for="firstName">
               <b-form-input
                 type="text"
-                v-model="Students.first_name"
                 id="firstName"
-                :state="first_name_state"
-                aria-describedby="first_name-feedback">
+                v-model.trim="$v.Students.first_name.$model"
+                :class="{'is-invalid' :$v.Students.first_name.$error}">
               </b-form-input>
-              <b-form-invalid-feedback id="first_name-feedback">
-                First name is required!
-              </b-form-invalid-feedback>
+              <div class="invalid-feedback">
+                <span v-if="!$v.Students.first_name.required">First Name is required!</span>
+              </div>
             </b-form-group>
           </b-col>
 
@@ -99,37 +97,35 @@
 
           <b-col cols="12" md="6" lg="6">
             <b-form-group
-              class="schoollastattended"
-              label="School Last Attended"
+              :class="{'text-danger' : $v.Students.school_last_attended.$error}"
+              label="School Last Attended *"
               label-for="schoolLastAttended">
               <b-form-input
                 type="text"
-                v-model="Students.school_last_attended"
                 id="schoolLastAttended"
-                :state="school_last_attended_state"
-                aria-describedby="school_last_attended-feedback">
+                v-model.trim="$v.Students.school_last_attended.$model"
+                :class="{'is-invalid' :$v.Students.school_last_attended.$error}">
               </b-form-input>
-              <b-form-invalid-feedback id="school_last_attended-feedback">
-                School last attended is required!
-              </b-form-invalid-feedback>
+              <div class="invalid-feedback">
+                <span v-if="!$v.Students.school_last_attended.required">School Last Attended is required!</span>
+              </div>
             </b-form-group>
           </b-col>
 
             <b-col cols="12" md="6" lg="6">
               <b-form-group
-                class="schooladdress"
-                label="School Address"
+                :class="{'text-danger' : $v.Students.school_address.$error}"
+                label="School Address *"
                 label-for="schoolAddress">
                 <b-form-input
                   type="text"
-                  v-model="Students.school_address"
                   id="schoolAddress"
-                  :state="school_address_state"
-                  aria-describedby="school_address-feedback">
+                  v-model.trim="$v.Students.school_address.$model"
+                  :class="{'is-invalid' :$v.Students.school_address.$error}">
                 </b-form-input>
-                <b-form-invalid-feedback id="school_address-feedback">
-                  School Address is required!
-                </b-form-invalid-feedback>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.Students.school_last_attended.required">School Address is required!</span>
+                </div>
               </b-form-group>
             </b-col>
 
@@ -177,7 +173,7 @@
               </b-col>
             </b-form-row>
 
-          </div>
+          </b-form>
       </div>
       <!-- end of academic form -->
     </transition>
@@ -191,91 +187,86 @@
         <b-form-row>
           <b-col cols="12" md="6" lg="5">
             <b-form-group
-              class="presentaddress"
-              label="Present Address ( House No./Lot No./Bldg No./Street )"
+              :class="{'text-danger' : $v.Students.address.$error}"
+              label="Present Address ( House No./Lot No./Bldg No./Street ) *"
               label-for="presentAddress">
               <b-form-input
                 type="text"
-                v-model="Students.address"
                 id="presentAddress"
-                :state="present_address_state"
-                aria-describedby="present_address-feedback">
+                v-model.trim="$v.Students.address.$model"
+                :class="{'is-invalid' :$v.Students.address.$error}">
               </b-form-input>
-              <b-form-invalid-feedback id="present_address-feedback">
-                Present Address is required!
-              </b-form-invalid-feedback>
+              <div class="invalid-feedback">
+                <span v-if="!$v.Students.address.required">Present Address is required!</span>
+              </div>
             </b-form-group>
           </b-col>
 
           <b-col cols="12" md="6" lg="2">
             <b-form-group
-              class="barangay"
-              label="Barangay / Subdivision"
+              :class="{'text-danger' : $v.Students.barangay.$error}"
+              label="Barangay / Subdivision *"
               label-for="Barangay">
               <b-form-input
                 type="text"
-                v-model="Students.barangay"
                 id="Barangay"
-                :state="barangay_state"
-                aria-describedby="barangay-feedback">
+                v-model.trim="$v.Students.barangay.$model"
+                :class="{'is-invalid' :$v.Students.barangay.$error}">
               </b-form-input>
-              <b-form-invalid-feedback id="barangay-feedback">
-                Barangay is required!
-              </b-form-invalid-feedback>
+              <div class="invalid-feedback">
+                <span v-if="!$v.Students.barangay.required">Barangay / Subdivision is required!</span>
+              </div>
             </b-form-group>
           </b-col>
 
           <b-col cols="12" md="6" lg="2">
             <b-form-group
-              class="citymunicipality"
-              label="City / Municipality"
+              :class="{'text-danger' : $v.Students.city.$error}"
+              label="City / Municipality *"
               label-for="cityMunicipality">
               <b-form-input
                 type="text"
-                v-model="Students.city"
                 id="cityMunicipality"
-                :state="cityMunicipality_state"
-                aria-describedby="cityMunicipality-feedback">
+                v-model.trim="$v.Students.city.$model"
+                :class="{'is-invalid' :$v.Students.city.$error}">
               </b-form-input>
-              <b-form-invalid-feedback id="cityMunicipality-feedback">
-                City / Municipality is required!
-              </b-form-invalid-feedback>
+              <div class="invalid-feedback">
+                <span v-if="!$v.Students.city.required">City / Municipality is required!</span>
+              </div>
             </b-form-group>
           </b-col>
 
           <b-col cols="12" md="6" lg="2">
             <b-form-group
-              class="province"
-              label="Province"
+              :class="{'text-danger' : $v.Students.province.$error}"
+              label="Province *"
               label-for="Province">
               <b-form-input
                 type="text"
-                v-model="Students.province"
                 id="Province"
-                :state="province_state"
-                aria-describedby="province-feedback">
+                v-model.trim="$v.Students.province.$model"
+                :class="{'is-invalid' :$v.Students.province.$error}">
               </b-form-input>
-              <b-form-invalid-feedback id="province-feedback">
-                Province is required!
-              </b-form-invalid-feedback>
+              <div class="invalid-feedback">
+                <span v-if="!$v.Students.province.required">Province is required!</span>
+              </div>
             </b-form-group>
           </b-col>
 
           <b-col cols="12" md="6" lg="1">
             <b-form-group
-              class="postalcode"
+              :class="{'text-danger' : $v.Students.postal.$error}"
               label="Postal Code"
               label-for="postalCode">
               <b-form-input
                 type="text"
-                v-model="Students.postal"
                 id="postalCode"
-                :state="postalCode_state"
-                aria-describedby="postalCode-feedback">
+                v-model.trim="$v.Students.postal.$model"
+                :class="{'is-invalid' :$v.Students.postal.$error}">
               </b-form-input>
-              <b-form-invalid-feedback id="postalCode-feedback">
-                Postal code is required!
-              </b-form-invalid-feedback>
+              <div class="invalid-feedback">
+                <span v-if="!$v.Students.postal.required">Postal Code is required!</span>
+              </div>
             </b-form-group>
           </b-col>
         </b-form-row>
@@ -283,54 +274,55 @@
         <b-form-row>
           <b-col cols="12" md="6" lg="3">
             <b-form-group
-              class="birthdate"
-              label="Birth Date"
+              :class="{'text-danger' : $v.Students.birth_date.$error}"
+              label="Birth Date *"
               label-for="birthDate">
               <datepicker
-                v-model="Students.birth_date"
                 id="birthDate"
                 :clear-button="true"
                 :calendar-button="true"
                 :calendar-button-icon="calendarIcon"
                 :bootstrap-styling="true"
                 :format="birthDateFormat"
-                :state="birthDate_state"
-                aria-describedby="birthDate-feedback">
+                v-model.trim="$v.Students.birth_date.$model"
+                :class="{'is-invalid' :$v.Students.birth_date.$error}">
               </datepicker>
-              <b-form-invalid-feedback id="birthDate-feedback">
-                Birthdate is required!
-              </b-form-invalid-feedback>
+              <div class="invalid-feedback">
+                <span v-if="!$v.Students.birth_date.required">Birth Date is required!</span>
+              </div>
             </b-form-group>
           </b-col>
 
           <b-col cols="12" md="6" lg="2">
             <b-form-group
-              class="gender"
-              label="Gender"
+              :class="{'text-danger' : $v.Students.gender.$error}"
+              label="Gender *"
               label-for="Gender">
               <b-form-select
-                v-model="Students.gender"
                 :options="genderOptions"
-                :state="gender_state"
-                aria-describedby="gender-feedback">
+                v-model.trim="$v.Students.gender.$model"
+                :class="{'is-invalid' :$v.Students.gender.$error}">
               </b-form-select>
-              <b-form-invalid-feedback id="gender-feedback">
-                Gender is required!
-              </b-form-invalid-feedback>
+              <div class="invalid-feedback">
+                <span v-if="!$v.Students.gender.required">Gender is required!</span>
+              </div>
             </b-form-group>
           </b-col>
 
           <b-col cols="12" md="6" lg="4">
             <b-form-group
-              class="emailaddress"
-              label="Email Address"
+              :class="{'text-danger' : $v.Students.email.$error}"
+              label="Email Address *"
               label-for="emailAddress">
               <b-form-input
                 type="email"
-                v-model="Students.email"
                 id="emailAddress"
-                required>
+                v-model.trim="$v.Students.email.$model"
+                :class="{'is-invalid' :$v.Students.email.$error}">
               </b-form-input>
+              <div class="invalid-feedback">
+                <span v-if="!$v.Students.email.required">Email Address is required!</span>
+              </div>
             </b-form-group>
           </b-col>
 
@@ -338,73 +330,69 @@
 
           <b-col cols="12" md="6" lg="3">
             <b-form-group
-              class="cellphoneno"
-              label="Cellphone No."
+              :class="{'text-danger' : $v.Students.cellphone.$error}"
+              label="Cellphone No. *"
               label-for="cellphoneNo">
               <b-form-input
                 type="number"
-                v-model="Students.cellphone"
                 id="cellphoneNo"
-                :state="cellphone_state"
-                aria-describedby="cellphone-feedback">
+                v-model.trim="$v.Students.cellphone.$model"
+                :class="{'is-invalid' :$v.Students.cellphone.$error}">
               </b-form-input>
-              <b-form-invalid-feedback id="cellphone-feedback">
-                Cellphone number is required!
-              </b-form-invalid-feedback>
+              <div class="invalid-feedback">
+                <span v-if="!$v.Students.cellphone.required">Cellphone No. is required!</span>
+              </div>
             </b-form-group>
           </b-col>
 
           <b-col cols="12" md="6" lg="5">
             <b-form-group
-              class="placeofbirth"
-              label="Place of Birth"
+              :class="{'text-danger' : $v.Students.birth_place.$error}"
+              label="Place of Birth *"
               label-for="placeofBirth">
               <b-form-input
                 type="text"
-                v-model="Students.birth_place"
                 id="placeofBirth"
-                :state="placeofBirth_state"
-                aria-describedby="placeofBirth-feedback">
+                v-model.trim="$v.Students.birth_place.$model"
+                :class="{'is-invalid' :$v.Students.birth_place.$error}">
               </b-form-input>
-              <b-form-invalid-feedback id="placeofBirth-feedback">
-                Place of birth is required!
-              </b-form-invalid-feedback>
+              <div class="invalid-feedback">
+                <span v-if="!$v.Students.birth_place.required">Place of Birth is required!</span>
+              </div>
             </b-form-group>
           </b-col>
 
           <b-col cols="12" md="6" lg="2">
             <b-form-group
-              class="citizenship"
-              label="Citizenship"
+              :class="{'text-danger' : $v.Students.citizenship.$error}"
+              label="Citizenship *"
               label-for="citizenShip">
               <b-form-input
                 type="text"
-                v-model="Students.citizenship"
                 id="citizenShip"
-                :state="citizenShip_state"
-                aria-describedby="citizenShip-feedback">
+                v-model.trim="$v.Students.citizenship.$model"
+                :class="{'is-invalid' :$v.Students.citizenship.$error}">
               </b-form-input>
-              <b-form-invalid-feedback id="citizenShip-feedback">
-                Citizenship is required!
-              </b-form-invalid-feedback>
+              <div class="invalid-feedback">
+                <span v-if="!$v.Students.citizenship.required">Citizenship is required!</span>
+              </div>
             </b-form-group>
           </b-col>
 
           <b-col cols="12" md="6" lg="2">
             <b-form-group
-              class="civilstatus"
-              label="Civil Status"
+              :class="{'text-danger' : $v.Students.civil_status.$error}"
+              label="Civil status *"
               label-for="civilStatus">
               <b-form-input
                 type="text"
-                v-model="Students.civil_status"
                 id="civilStatus"
-                :state="civilStatus_state"
-                aria-describedby="civilStatus-feedback">
+                v-model.trim="$v.Students.civil_status.$model"
+                :class="{'is-invalid' :$v.Students.civil_status.$error}">
               </b-form-input>
-              <b-form-invalid-feedback id="civilStatus-feedback">
-                Civil status is required!
-              </b-form-invalid-feedback>
+              <div class="invalid-feedback">
+                <span v-if="!$v.Students.civil_status.required">Civil Status is required!</span>
+              </div>
             </b-form-group>
           </b-col>
 
@@ -423,7 +411,7 @@
           </b-col>
 
           </b-form-row>
-
+          <hr/>
           <b-form-row>
 
             <b-col>
@@ -453,37 +441,30 @@
         <b-form-row>
           <b-col cols="12" md="6" lg="6">
             <b-form-group
-              class="fathersname"
-              label="Father's Name:"
+              label="Father's Name"
               label-for="fathersName">
               <b-form-input
                 type="text"
                 v-model="Students.father_name"
-                id="fathersName"
-                :state="fathersName_state"
-                aria-describedby="father_name-feedback">
+                id="fathersName">
               </b-form-input>
-              <b-form-invalid-feedback id="father_name-feedback">
-                Father's name is required!
-              </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
 
           <b-col cols="12" md="6" lg="6">
             <b-form-group
-              class="mothersname"
-              label="Mother's Name:"
+              :class="{'text-danger' : $v.Students.mother_name.$error}"
+              label="Mother's Name *"
               label-for="mothersName">
               <b-form-input
                 type="text"
-                v-model="Students.mother_name"
                 id="mothersName"
-                :state="mothersName_state"
-                aria-describedby="mother_name-feedback">
+                v-model.trim="$v.Students.mother_name.$model"
+                :class="{'is-invalid' :$v.Students.mother_name.$error}">
               </b-form-input>
-              <b-form-invalid-feedback id="mother_name-feedback">
-                Mother's name is required!
-              </b-form-invalid-feedback>
+              <div class="invalid-feedback">
+                <span v-if="!$v.Students.mother_name.required">Mother's Name is required!</span>
+              </div>
             </b-form-group>
           </b-col>
         </b-form-row>
@@ -497,55 +478,52 @@
         <b-form-row>
           <b-col cols="12" md="6" lg="4">
             <b-form-group
-              class="guardianname"
-              label="Guardian's Name:"
+              :class="{'text-danger' : $v.Students.contact_person.$error}"
+              label="Guardian's Name *"
               label-for="guardianName">
               <b-form-input
                 type="text"
-                v-model="Students.contact_person"
                 id="guardianName"
-                :state="guardianName_state"
-                aria-describedby="guardianName-feedback">
+                v-model.trim="$v.Students.contact_person.$model"
+                :class="{'is-invalid' :$v.Students.contact_person.$error}">
               </b-form-input>
-              <b-form-invalid-feedback id="guardianName-feedback">
-                Guardian's name is required!
-              </b-form-invalid-feedback>
+              <div class="invalid-feedback">
+                <span v-if="!$v.Students.contact_person.required">Guardian's Name is required!</span>
+              </div>
             </b-form-group>
           </b-col>
 
           <b-col cols="12" md="6" lg="4">
             <b-form-group
-              class="contactaddress"
-              label="Contact Address:"
+              :class="{'text-danger' : $v.Students.contact_address.$error}"
+              label="Contact Address *"
               label-for="contactAddress">
               <b-form-input
                 type="text"
-                v-model="Students.contact_address"
                 id="contactAddress"
-                :state="guardianContactAddress_state"
-                aria-describedby="contact_address-feedback">
+                v-model.trim="$v.Students.contact_address.$model"
+                :class="{'is-invalid' :$v.Students.contact_address.$error}">
               </b-form-input>
-              <b-form-invalid-feedback id="contact_address-feedback">
-                Contact address is required!
-              </b-form-invalid-feedback>
+              <div class="invalid-feedback">
+                <span v-if="!$v.Students.contact_address.required">Contact Address is required!</span>
+              </div>
             </b-form-group>
           </b-col>
 
         <b-col cols="12" md="6" lg="4">
           <b-form-group
-            class="contactnumber"
-            label="Contact Number"
+            :class="{'text-danger' : $v.Students.contact_number.$error}"
+            label="Contact Number *"
             label-for="contactNumber">
             <b-form-input
               type="number"
-              v-model="Students.contact_number"
               id="contactNumber"
-              :state="guardianContactNumber_state"
-              aria-describedby="contact_number-feedback">
+              v-model.trim="$v.Students.contact_number.$model"
+              :class="{'is-invalid' :$v.Students.contact_number.$error}">
             </b-form-input>
-            <b-form-invalid-feedback id="contact_number-feedback">
-              Contact number is required!
-            </b-form-invalid-feedback>
+            <div class="invalid-feedback">
+              <span v-if="!$v.Students.contact_number.required">Contact Number is required!</span>
+            </div>
           </b-form-group>
         </b-col>
     </b-form-row>
@@ -608,10 +586,13 @@
         :filter="filter">
 
         <template v-slot:cell(active)="row" >
-          <b-form-checkbox switch size="sm" :checked="row.item.status"  @change="StatusUpdate(row.item, $event.target)">
-            <b-badge variant="success" pill v-if="row.item.active">Active</b-badge>
-            <b-badge variant="danger"  pill v-else>Inactive</b-badge>
-          </b-form-checkbox>
+          <b-button v-if="row.item.active" variant="danger" size="sm" @click="StatusUpdate(row.item, $event.target)" v-b-tooltip.hover title=" Deactivate">
+            Deactivate
+          </b-button>
+
+          <b-button v-else="row.item.active" variant="success" size="sm" @click="StatusUpdate(row.item, $event.target)" v-b-tooltip.hover title="Activate">
+            Activate
+          </b-button>
         </template>
 
         <template v-slot:cell(actions)="row">
@@ -660,8 +641,6 @@
   </transition>
       <!-- end of table -->
 
-
-
   </div>
 </template>
 <script>
@@ -669,6 +648,7 @@
   import moment from 'moment';
   import Datepicker from 'vuejs-datepicker';
   import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue';
+  import { required, minLength, between } from 'vuelidate/lib/validators';
   export default{
     name: 'StudentRegistrationManager',
     components: {
@@ -776,29 +756,32 @@
         studentsrowdata: null,
         registerOverlay: false,
 
-        last_name_state: null,
-        first_name_state: null,
-        school_last_attended_state: null,
-        school_address_state: null,
-        present_address_state: null,
-        barangay_state: null,
-        cityMunicipality_state: null,
-        province_state: null,
-        postalCode_state: null,
-        birthDate_state: null,
-        gender_state: null,
-        cellphone_state: null,
-        placeofBirth_state: null,
-        citizenShip_state: null,
-        civilStatus_state: null,
-        fathersName_state: null,
-        mothersName_state: null,
-        guardianName_state: null,
-        guardianContactAddress_state: null,
-        guardianContactNumber_state: null,
-
-
       }
+    },
+
+    validations: {
+     Students: {
+       first_name: {required},
+       last_name: {required},
+       gender: {required},
+       civil_status: {required},
+       citizenship:{required},
+       address: {required},
+       barangay: {required},
+       city: {required},
+       postal: {required},
+       province: {required},
+       cellphone: {required},
+       email: {required},
+       birth_date: {required},
+       birth_place: {required},
+       mother_name: {required},
+       contact_person: {required},
+       contact_address: {required},
+       contact_number: {required},
+       school_last_attended: {required},
+       school_address: {required},
+     },
     },
 
     mounted () {
@@ -809,6 +792,14 @@
     },
 
     methods:{
+
+      onSubmit() {
+        this.$v.Students.$touch();
+        if (this.$v.Students.$anyError) {
+          return;
+        }
+        this.RegStudents()
+      },
 
       backStudentInfoForm: function(){
         this.StudentInfoshowForm = true;

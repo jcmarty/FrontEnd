@@ -28,34 +28,42 @@
         <div class=" h5 font-weight-bold text-dark" >Add New Track</div>
         <hr/>
 
-          <b-form id="Add_Track_Form">
+          <b-form @submit.stop.prevent="onSubmit">
 
             <b-col cols="12" md="6" lg="12">
               <b-form-group
-                class="trackcode"
-                label="Track Code"
+                :class="{'text-danger' : $v.track.track_code.$error}"
+                label="Track Code *"
                 label-for="trackCode">
                 <b-form-input
                   type="text"
-                  v-model="track.track_code"
                   id="trackCode"
-                  required>
+                  v-model.trim="$v.track.track_code.$model"
+                  :class="{'is-invalid' :$v.track.track_code.$error}">
                 </b-form-input>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.track.track_code.required">Track Code is required!</span>
+                </div>
               </b-form-group>
             </b-col>
 
             <!--  Room Name -->
             <b-col cols="12" md="6" lg="12">
               <b-form-group
-                class="trackdesc"
-                label="Track Desc"
+                :class="{'text-danger' : $v.track.track_desc.$error}"
+                label="Track Description *"
                 label-for="trackDesc">
                 <b-form-textarea
                   type="text"
                   v-model="track.track_desc"
                   id="trackDesc"
-                  required>
+                  v-model.trim="$v.track.track_desc.$model"
+                  :class="{
+                  'is-invalid' :$v.track.track_desc.$error}">
                 </b-form-textarea>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.track.track_desc.required">Track Description is required!</span>
+                </div>
               </b-form-group>
             </b-col>
 
@@ -65,7 +73,7 @@
                 <b-button class="float-left" variant="danger" @click="toggleForm">
                   Cancel
                 </b-button>
-                <b-button class="float-right" variant="success" id="Add_track_Btn" @click="addTrack">
+                <b-button class="float-right" variant="success" id="Add_track_Btn" type="submit">
                   Add
                 </b-button>
               </b-col>
@@ -189,30 +197,39 @@
     <b-modal id="editTrackModal" ref="editTrackModal" title="Edit Track" size="sml"  no-close-on-backdrop>
       <b-form-row>
       <!-- Room Number -->
-        <b-col cols="12" md="6" lg="12">
-          <b-form-group
-            class="trackcode"
-            label="Track Code"
-            label-for="trackCode">
-            <b-form-input
-              type="text"
-              v-model="track.track_code"
-              id="trackCode"
-              required></b-form-input>
-          </b-form-group>
-        </b-col>
-      </b-form-row>
-      <b-form-row>
       <b-col cols="12" md="6" lg="12">
         <b-form-group
-          class="trackdesc"
-          label="Track Desc"
+          :class="{'text-danger' : $v.track.track_code.$error}"
+          label="Track Code *"
+          label-for="trackCode">
+          <b-form-input
+            type="text"
+            id="trackCode"
+            v-model.trim="$v.track.track_code.$model"
+            :class="{'is-invalid' :$v.track.track_code.$error}">
+          </b-form-input>
+          <div class="invalid-feedback">
+            <span v-if="!$v.track.track_code.required">Track Code is required!</span>
+          </div>
+        </b-form-group>
+      </b-col>
+
+      <!--  Room Name -->
+      <b-col cols="12" md="6" lg="12">
+        <b-form-group
+          :class="{'text-danger' : $v.track.track_desc.$error}"
+          label="Track Description *"
           label-for="trackDesc">
           <b-form-textarea
             type="text"
             v-model="track.track_desc"
             id="trackDesc"
-            required></b-form-textarea>
+            v-model.trim="$v.track.track_desc.$model"
+            :class="{'is-invalid' :$v.track.track_desc.$error}">
+          </b-form-textarea>
+          <div class="invalid-feedback">
+            <span v-if="!$v.track.track_desc.required">Track Description is required!</span>
+          </div>
         </b-form-group>
       </b-col>
       <!-- Room Capacity -->
@@ -250,6 +267,7 @@
 
 <script>
   import Axios from "axios";
+  import { required, minLength, between } from 'vuelidate/lib/validators';
   export default{
     name: 'TrackManager',
     data() {
@@ -290,11 +308,29 @@
       }
     },
 
+    validations: {
+      track: {
+       track_code: {required},
+       track_desc: {required},
+     }
+    },
+
     mounted () {
       this.getTracks();
     },
 
     methods:{
+
+      onSubmit() {
+        this.$v.track.$touch();
+        if (this.$v.track.$anyError) {
+          return;
+        }
+        this.addTrack()
+
+      },
+
+
       getTracks: function(){
         this.isLoading = true;
         Axios
@@ -331,6 +367,9 @@
         } else {
           this.showForm = true;
         }
+        this.$nextTick(() => {
+          this.$v.$reset();
+        });
       },
 
       addTrack: function(){

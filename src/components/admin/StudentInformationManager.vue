@@ -4,7 +4,7 @@
     <hr/>
     <b-breadcrumb>
       <b-breadcrumb-item to="/manage/student/registration">Student Registration</b-breadcrumb-item>
-      <b-breadcrumb-item :active="true">{{ Students.name }}</b-breadcrumb-item>
+      <b-breadcrumb-item :active="true">{{ this.Students.first_name }} {{ this.Students.last_name }}</b-breadcrumb-item>
     </b-breadcrumb>
 
 
@@ -24,6 +24,24 @@
             <li v-for="error in errors">{{ error }}</li>
           </ul>
       </b-alert>
+
+      <b-modal id="confirmUpdate" ref="confirmUpdate" size="md" no-close-on-backdrop>
+        <center><h6>Are you sure you want to update ?</b></h6></center>
+
+          <!-- Modal Footer Template -->
+          <template v-slot:modal-footer="{ cancel, ok }">
+            <!-- Emulate built in modal footer ok and cancel button actions -->
+            <b-col>
+              <b-button  class="float-left" variant="danger" @click="$bvModal.hide('confirmUpdate')">
+                No
+              </b-button>
+              <b-button class="float-right" variant="success" @click="StudInfoUpdate">
+                Yes
+              </b-button>
+            </b-col>
+          </template>
+      </b-modal>
+
     <div class=" h5 font-weight-bold text-dark">Student Information
 
           <b-button
@@ -48,7 +66,7 @@
             class="float-right"
             v-if="!information_disable"
             variant="success"
-            @click="StudInfoUpdate"
+            @click="confirmUpdateModal"
             v-b-tooltip.hover title="Update">
             <i class="fa fa-save"/>
           </b-button>
@@ -599,6 +617,8 @@
     data() {
       return {
 
+        student:[],
+
         Students: {
           id: null,
           student_number: null,
@@ -674,6 +694,9 @@
         guardianContactNumber_state: null,
       }
     },
+    mounted: function(){
+      this.getStudents();
+    },
 
     created() {
         this.Students = {
@@ -712,7 +735,21 @@
           active: 1,
         }
     },
+
+
     methods:{
+
+      getStudents: function(){
+
+        Axios
+          .get('http://localhost/api/v1/students/'+ this.Students.id, {
+            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+          })
+          .then(response => {
+            this.student = response.data;
+            console.log(this.student)
+          })
+      },
       // Update Room Function
       StudInfoUpdate: function(){
         this.errors = [];
@@ -721,6 +758,7 @@
           headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
         })
         .then(response => {
+          this.getStudents();
           this.information_disable = true;
           this.alertMessage = response.data.message;
           this.dismissSuccessCountDown = this.dismissSecs;
@@ -735,42 +773,47 @@
           }
           this.dismissErrorCountDown = this.dismissSecs;
         });
+        this.$refs['confirmUpdate'].hide();
       }, // End of Update Room Function
+
+      confirmUpdateModal: function(){
+        this.$refs['confirmUpdate'].show();
+      },
 
       cancelForm: function(){
         this.information_disable = true;
         this.Students = {
           id: this.$route.params.id,
           student_number: this.$route.params.student_number,
-          first_name: this.$route.params.first_name,
-          middle_name: this.$route.params.middle_name,
-          last_name: this.$route.params.last_name,
-          suffix_name: this.$route.params.suffix_name,
-          gender: this.$route.params.gender,
-          civil_status: this.$route.params.civil_status,
-          citizenship:this.$route.params.citizenship,
-          address: this.$route.params.address,
-          barangay: this.$route.params.barangay,
-          city: this.$route.params.city,
-          postal: this.$route.params.postal,
-          province: this.$route.params.province,
-          telephone: this.$route.params.telephone,
-          cellphone: this.$route.params.cellphone,
-          email: this.$route.params.email,
-          birth_date: this.$route.params.birth_date,
-          birth_place: this.$route.params.birth_place,
-          father_name: this.$route.params.father_name,
-          mother_name: this.$route.params.mother_name,
-          contact_person: this.$route.params.contact_person,
-          contact_address: this.$route.params.contact_address,
-          contact_number: this.$route.params.contact_number,
-          blood_type: this.$route.params.blood_type,
+          first_name: this.student.first_name,
+          middle_name: this.student.middle_name,
+          last_name: this.student.last_name,
+          suffix_name: this.student.suffix_name,
+          gender: this.student.gender,
+          civil_status: this.student.civil_status,
+          citizenship:this.student.citizenship,
+          address: this.student.address,
+          barangay: this.student.barangay,
+          city: this.student.city,
+          postal: this.student.postal,
+          province: this.student.province,
+          telephone: this.student.telephone,
+          cellphone: this.student.cellphone,
+          email: this.student.email,
+          birth_date: this.student.birth_date,
+          birth_place: this.student.birth_place,
+          father_name: this.student.father_name,
+          mother_name: this.student.mother_name,
+          contact_person: this.student.contact_person,
+          contact_address: this.student.contact_address,
+          contact_number: this.student.contact_number,
+          blood_type: this.student.blood_type,
           photo_url: "sample.jpg",
-          user_id: this.$route.params.user_id,
-          school_last_attended: this.$route.params.school_last_attended,
-          school_address: this.$route.params.school_address,
-          college_last_attended: this.$route.params.college_last_attended,
-          college_address: this.$route.params.college_address,
+          user_id: this.student.user_id,
+          school_last_attended: this.student.school_last_attended,
+          school_address: this.student.school_address,
+          college_last_attended: this.student.college_last_attended,
+          college_address: this.student.college_address,
           active: 1,
         }
       },

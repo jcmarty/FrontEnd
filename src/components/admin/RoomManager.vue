@@ -29,66 +29,84 @@
         <div id="" class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded" v-if="showForm">
           <div class=" h5 font-weight-bold text-dark" >Add New Room</div>
           <hr/>
-            <b-form id="Add_Room_Form">
-            <b-form-row>
-              <!-- Room Number -->
-              <b-col cols="12" md="6" lg="4">
-                <b-form-group
-                  class="roomnumber"
-                  label="Room Number"
-                  label-for="roomNumber">
-                  <b-form-input
-                    type="number"
-                    v-model="room.room_number"
-                    id="roomNumber"
-                    required></b-form-input>
-                </b-form-group>
-              </b-col>
+            <b-form @submit.stop.prevent="onSubmit">
+              <b-form-row>
+                <!-- Room Number -->
+                <b-col cols="12" md="6" lg="4">
+                  <b-form-group
+                    :class="{'text-danger' : $v.room.room_number.$error}"
+                    label="Room Number *"
+                    label-for="roomNumber">
+                    <b-form-input
+                      type="number"
+                      id="roomNumber"
+                      v-model.trim="$v.room.room_number.$model"
+                      :class="{'is-invalid' :$v.room.room_number.$error,}">
+                      </b-form-input>
+                      <div class="invalid-feedback">
+                        <span v-if="!$v.room.room_number.required">Room Number is required!</span>
+                      </div>
+                  </b-form-group>
+                </b-col>
 
-              <!--  Room Name -->
-              <b-col cols="12" md="6" lg="8">
-                <b-form-group
-                  class="roomname"
-                  label="Room Name"
-                  label-for="roomName">
-                  <b-form-input
-                    type="text"
-                    v-model="room.room_name"
-                    id="roomName"
-                    required></b-form-input>
-                </b-form-group>
-              </b-col>
-            </b-form-row>
+                <!--  Room Name -->
+                <b-col cols="12" md="6" lg="8">
+                  <b-form-group
+                    :class="{'text-danger' : $v.room.room_name.$error}"
+                    label="Room Name *"
+                    label-for="roomName">
+                    <b-form-input
+                      type="text"
+                      id="roomName"
 
-            <b-form-row>
-              <!-- Room Capacity -->
-              <b-col cols="12" md="6" lg="4">
-                <b-form-group
-                  class="roomcapacity"
-                  label="Room Capacity"
-                  label-for="roomCapacity">
-                  <b-form-input
-                    type="number"
-                    v-model="room.room_capacity"
-                    id="roomCapacity"
-                    required></b-form-input>
-                </b-form-group>
-              </b-col>
+                      v-model.trim="$v.room.room_name.$model"
+                      :class="{'is-invalid' :$v.room.room_name.$error}">
+                      </b-form-input>
+                      <div class="invalid-feedback">
+                        <span v-if="!$v.room.room_name.required">Room Name is required!</span>
+                      </div>
+                  </b-form-group>
+                </b-col>
+              </b-form-row>
 
-              <!--  Room Type -->
-              <b-col cols="12" md="6" lg="8">
-                <b-form-group
-                  class="roomtype"
-                  label="Room Type"
-                  label-for="roomType">
-                  <b-form-input
-                    type="text"
-                    v-model="room.room_type"
-                    id="roomType"
-                    required></b-form-input>
-                </b-form-group>
-              </b-col>
-           </b-form-row>
+              <b-form-row>
+                <!-- Room Capacity -->
+                <b-col cols="12" md="6" lg="4">
+                  <b-form-group
+                    :class="{'text-danger' : $v.room.room_capacity.$error}"
+                    label="Room Capacity *"
+                    label-for="roomCapacity">
+                    <b-form-input
+                      type="number"
+                      id="roomCapacity"
+
+                      v-model.trim="$v.room.room_capacity.$model"
+                      :class="{'is-invalid' :$v.room.room_capacity.$error}">
+                      </b-form-input>
+                      <div class="invalid-feedback">
+                        <span v-if="!$v.room.room_capacity.required">Room Capacity is required!</span>
+                      </div>
+                  </b-form-group>
+                </b-col>
+
+                <!--  Room Type -->
+                <b-col cols="12" md="6" lg="8">
+                  <b-form-group
+                    :class="{'text-danger' : $v.room.room_type.$error}"
+                    label="Room Type *"
+                    label-for="roomType">
+                    <b-form-input
+                      type="text"
+                      id="roomType"
+                      v-model.trim="$v.room.room_type.$model"
+                      :class="{'is-invalid' :$v.room.room_type.$error}">
+                      </b-form-input>
+                      <div class="invalid-feedback">
+                        <span v-if="!$v.room.room_type.required">Room Type is required!</span>
+                      </div>
+                  </b-form-group>
+                </b-col>
+             </b-form-row>
 
              <b-form-row>
                <b-col cols="12" md="12" lg="12">
@@ -104,7 +122,7 @@
                  </b-button>
                </b-col>
                <b-col class="d-flex justify-content-end">
-                 <b-button variant="success" id="Add_College_Subject_Btn" @click="addRoom">
+                 <b-button variant="success" id="Add_College_Subject_Btn" type="submit">
                    Add
                  </b-button>
                </b-col>
@@ -233,72 +251,78 @@
           <!-- Room Number -->
           <b-col cols="12" md="6" lg="4">
             <b-form-group
-              class="roomnumber"
-              label="Room Number"
+              :class="{'text-danger' : $v.room.room_number.$error}"
+              label="Room Number *"
               label-for="roomNumber">
               <b-form-input
-                type="text"
-                v-model="room.room_number"
+                type="number"
                 id="roomNumber"
-                required></b-form-input>
+                v-model.trim="$v.room.room_number.$model"
+                :class="{'is-invalid' :$v.room.room_number.$error,}">
+                </b-form-input>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.room.room_number.required">Room Number is required!</span>
+                </div>
             </b-form-group>
           </b-col>
 
           <!--  Room Name -->
           <b-col cols="12" md="6" lg="8">
             <b-form-group
-              class="roomname"
-              label="Room Name"
+              :class="{'text-danger' : $v.room.room_name.$error}"
+              label="Room Name *"
               label-for="roomName">
               <b-form-input
                 type="text"
-                v-model="room.room_name"
                 id="roomName"
-                required></b-form-input>
+                v-model.trim="$v.room.room_name.$model"
+                :class="{'is-invalid' :$v.room.room_name.$error}">
+                </b-form-input>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.room.room_name.required">Room Name is required!</span>
+                </div>
             </b-form-group>
           </b-col>
         </b-form-row>
 
         <b-form-row>
-          <!-- Room Status -->
-          <b-col cols="12" md="6" lg="2">
-            <b-form-group
-              label="Status">
-              <b-form-select
-              :options="options"
-              v-model="room.active">
-            </b-form-select>
-            </b-form-group>
-          </b-col>
-
           <!-- Room Capacity -->
-          <b-col cols="12" md="6" lg="2">
+          <b-col cols="12" md="6" lg="4">
             <b-form-group
-              class="roomcapacity"
-              label="Room Capacity"
+              :class="{'text-danger' : $v.room.room_capacity.$error}"
+              label="Room Capacity *"
               label-for="roomCapacity">
               <b-form-input
                 type="number"
                 id="roomCapacity"
-                v-model="room.room_capacity">
-              </b-form-input>
+                v-model.trim="$v.room.room_capacity.$model"
+                :class="{'is-invalid' :$v.room.room_capacity.$error}">
+                </b-form-input>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.room.room_capacity.required">Room Capacity is required!</span>
+                </div>
             </b-form-group>
           </b-col>
 
           <!--  Room Type -->
           <b-col cols="12" md="6" lg="8">
             <b-form-group
-              class="roomtype"
-              label="Room Type"
+              :class="{'text-danger' : $v.room.room_type.$error}"
+              label="Room Type *"
               label-for="roomType">
               <b-form-input
                 type="text"
                 id="roomType"
-                v-model="room.room_type">
-              </b-form-input>
+                v-model.trim="$v.room.room_type.$model"
+                :class="{'is-invalid' :$v.room.room_type.$error}">
+                </b-form-input>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.room.room_type.required">Room Type is required!</span>
+                </div>
             </b-form-group>
           </b-col>
-        </b-form-row>
+       </b-form-row>
+
 
         <template v-slot:modal-footer="{ cancel, ok }">
             <!-- Emulate built in modal footer ok and cancel button actions -->
@@ -335,6 +359,7 @@
 
 <script>
   import Axios from "axios";
+  import { required, minLength, between } from 'vuelidate/lib/validators';
   export default{
     name: 'RoomsManager',
     data() {
@@ -356,13 +381,13 @@
         pageOptions: [5, 10, 15, 20, 25],
         filter: null,
 
-        room: {
+         room: {
           id: null,
           room_number: null,
           room_name: null,
           room_type: null,
           room_capacity: null,
-          active: 0
+          active: 1
         },
 
         options: [
@@ -379,11 +404,29 @@
       }
     }, // End of Data
 
+    validations: {
+      room: {
+       room_number: {required},
+       room_name: {required},
+       room_type: {required},
+       room_capacity: {required}
+     }
+    },
+
     mounted () {
       this.getRooms();
     }, // End of mounted
 
     methods:{
+
+      onSubmit() {
+        this.$v.room.$touch();
+        if (this.$v.room.$anyError) {
+          return;
+        }
+        this.addRoom()
+
+      },
       // Get Room Function
       getRooms: function(){
         this.isLoading = true;
@@ -500,6 +543,9 @@
           this.showForm = true;
         }
         this.backToTop();
+        this.$nextTick(() => {
+          this.$v.$reset();
+        });
       }, // End of Toggle Form Function
 
       // Reset Form Function

@@ -29,27 +29,25 @@
         <div class=" h5 font-weight-bold text-dark" >Add New Strands</div>
         <hr/>
 
-          <b-form id="Add_Strands_Form">
+          <b-form @submit.stop.prevent="onSubmit">
             <b-form-row>
               <!-- Track -->
               <b-col cols="12" md="6" lg="12">
                 <b-form-group
-                  class="track"
-                  label="Track"
+                  :class="{'text-danger' : $v.strand.track_id.$error}"
+                  label="Track *"
                   label-for="Track">
                   <b-form-select
+                    autofocus
                     id="Track"
-                    @change=""
-                    v-model="strand.track_id" >
-                    <option
-                      value="null"
-                      hidden>Select Track
-                    </option>
-                    <option
-                      v-for="track in trackData"
-                      v-bind:value="track.id">{{track.track_code}}
-                    </option>
+                    v-model.trim="$v.strand.track_id.$model"
+                    :class="{'is-invalid' :$v.strand.track_id.$error}">
+                    <option value="null"hidden>Select Track</option>
+                    <option v-for="track in trackData" :value="track.id">{{track.track_code}}</option>
                   </b-form-select>
+                  <div class="invalid-feedback">
+                    <span v-if="!$v.strand.track_id.required">Track is required!</span>
+                  </div>
                 </b-form-group>
               </b-col>
             </b-form-row>
@@ -58,15 +56,18 @@
               <!-- Strand Code -->
               <b-col cols="12" md="6" lg="12">
                 <b-form-group
-                  class="strandcode"
+                  :class="{'text-danger' : $v.strand.strand_code.$error}"
                   label="Strand Code"
                   label-for="strandCode">
                   <b-form-input
                     type="text"
-                    v-model="strand.strand_code"
                     id="strandCode"
-                    required>
+                    v-model.trim="$v.strand.strand_code.$model"
+                    :class="{'is-invalid' :$v.strand.strand_code.$error}">
                   </b-form-input>
+                  <div class="invalid-feedback">
+                    <span v-if="!$v.strand.strand_code.required">Strand Code is required!</span>
+                  </div>
                 </b-form-group>
               </b-col>
             </b-form-row>
@@ -75,19 +76,22 @@
               <!--  Strand Description -->
               <b-col cols="12" md="6" lg="12">
                 <b-form-group
-                  class="stranddesc"
-                  label="Strand Desc"
+                  :class="{'text-danger' : $v.strand.strand_desc.$error}"
+                  label="Strand Description *"
                   label-for="strandDesc">
                   <b-form-input
                     type="text"
-                    v-model="strand.strand_desc"
                     id="strandDesc"
-                    required>
+                    v-model.trim="$v.strand.strand_desc.$model"
+                    :class="{'is-invalid' :$v.strand.strand_desc.$error}">
                   </b-form-input>
+                  <div class="invalid-feedback">
+                    <span v-if="!$v.strand.strand_desc.required">Strand Description is required!</span>
+                  </div>
                 </b-form-group>
               </b-col>
             </b-form-row>
-
+            <hr/>
             <!-- Form Buttons -->
             <b-form-row>
               <b-col>
@@ -96,7 +100,7 @@
                 </b-button>
               </b-col>
               <b-col class="d-flex justify-content-end">
-                <b-button variant="success" id="Add_Strands_Btn" @click="addStrand">
+                <b-button variant="success" id="Add_Strands_Btn" type="submit" >
                   Add
                 </b-button>
               </b-col>
@@ -228,61 +232,65 @@
         <!-- Track -->
         <b-col cols="12" md="6" lg="12">
           <b-form-group
-            class="track"
-            label="Track"
+            :class="{'text-danger' : $v.strand.track_id.$error}"
+            label="Track *"
             label-for="Track">
             <b-form-select
+              autofocus
               id="Track"
-              @change=""
-              v-model="strand.track_id" >
-              <option
-                value="null"
-                hidden>Select Track
-              </option>
-              <option
-                v-for="track in trackData"
-                v-bind:value="track.id">{{track.track_code}}
-              </option>
+              v-model.trim="$v.strand.track_id.$model"
+              :class="{
+              'is-invalid' :$v.strand.track_id.$error}">
+              <option value="null"hidden>Select Track</option>
+              <option v-for="track in trackData" :value="track.id">{{track.track_code}}</option>
             </b-form-select>
+            <div class="invalid-feedback">
+              <span v-if="!$v.strand.track_id.required">Track is required!</span>
+            </div>
           </b-form-group>
         </b-col>
       </b-form-row>
 
       <b-form-row>
-        <!--  Stracnd Code -->
+        <!-- Strand Code -->
         <b-col cols="12" md="6" lg="12">
           <b-form-group
-            class="strandcode"
+            :class="{'text-danger' : $v.strand.strand_code.$error}"
             label="Strand Code"
             label-for="strandCode">
             <b-form-input
               type="text"
-              v-model="strand.strand_code"
               id="strandCode"
-              required>
+              v-model.trim="$v.strand.strand_code.$model"
+              :class="{'is-invalid' :$v.strand.strand_code.$error}">
             </b-form-input>
+            <div class="invalid-feedback">
+              <span v-if="!$v.strand.strand_code.required">Strand Code is required!</span>
+            </div>
           </b-form-group>
         </b-col>
-
       </b-form-row>
 
       <b-form-row>
         <!--  Strand Description -->
         <b-col cols="12" md="6" lg="12">
           <b-form-group
-            class="stranddesc"
-            label="Strand Desc"
+            :class="{'text-danger' : $v.strand.strand_desc.$error}"
+            label="Strand Description *"
             label-for="strandDesc">
             <b-form-input
               type="text"
-              v-model="strand.strand_desc"
               id="strandDesc"
-              required>
+              v-model.trim="$v.strand.strand_desc.$model"
+              :class="{
+              'is-invalid' :$v.strand.strand_desc.$error}">
             </b-form-input>
+            <div class="invalid-feedback">
+              <span v-if="!$v.strand.strand_desc.required">Strand Description is required!</span>
+            </div>
           </b-form-group>
         </b-col>
       </b-form-row>
-
       <!-- Modal Footer Template -->
       <template v-slot:modal-footer="{ cancel, ok }">
         <!-- Emulate built in modal footer ok and cancel button actions -->
@@ -320,6 +328,7 @@
 
 <script>
   import Axios from "axios";
+  import { required, minLength, between } from 'vuelidate/lib/validators';
   export default{
     name: 'StrandsManager',
     data() {
@@ -365,12 +374,28 @@
       }
     }, // End of Data
 
+    validations: {
+     strand: {
+       track_id: {required},
+       strand_code: {required},
+       strand_desc: {required},
+     }
+    },
+
     mounted () {
       this.getStrands();
       this.getTracks();
     }, // end of Mounted
 
     methods:{
+      onSubmit() {
+        this.$v.strand.$touch();
+        if (this.$v.strand.$anyError) {
+          return;
+        }
+        this.addStrand()
+
+      },
       // Get Tracks Function
       getTracks: function(){
         Axios
@@ -509,6 +534,10 @@
           strand_desc: null,
           active: 1
         };
+
+        this.$nextTick(() => {
+          this.$v.$reset();
+        });
       }, // End of Reset Form Function
 
       EditModal: function(item, index) {

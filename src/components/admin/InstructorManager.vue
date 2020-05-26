@@ -25,30 +25,39 @@
       <div id="" class="mx-3 mb-4 p-4 bg-white shadow rounded" v-if="InsPersonalInfoForm">
       <div class=" h5 font-weight-bold text-dark">Personal Information</div>
       <hr/>
-        <div class="">
+        <b-form @submit.stop.prevent="onSubmit">
           <b-form-row>
             <b-col cols="12" md="6" lg="3">
               <b-form-group
-                class="employeeid"
-                label="Employee ID"
+                :class="{'text-danger' : $v.instructor.employee_id.$error}"
+                label="Employee ID *"
                 label-for="empID">
                 <b-form-input
                   type="text"
-                  v-model="instructor.employee_id"
-                  id="empID">
+                  id="empID"
+                  v-model.trim="$v.instructor.employee_id.$model"
+                  :class="{'is-invalid' :$v.instructor.employee_id.$error}">
                 </b-form-input>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.instructor.employee_id.required">Employee ID is required!</span>
+                </div>
               </b-form-group>
             </b-col>
             <b-col cols="12" md="6" lg="3">
               <b-form-group
-                class="firstname"
-                label="First Name"
+                :class="{'text-danger' : $v.instructor.first_name.$error}"
+                label="First Name *"
                 label-for="firstname">
                 <b-form-input
                   type="text"
-                  v-model="instructor.first_name"
-                  id="firstname">
+                  id="firstname"
+                  v-model.trim="$v.instructor.first_name.$model"
+                  :class="{
+                  'is-invalid' :$v.instructor.first_name.$error}">
                 </b-form-input>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.instructor.first_name.required">First Name is required!</span>
+                </div>
               </b-form-group>
             </b-col>
             <b-col cols="12" md="6" lg="3">
@@ -65,118 +74,156 @@
             </b-col>
             <b-col cols="12" md="6" lg="3">
               <b-form-group
-                class="lastname"
-                label="Last Name"
+                :class="{'text-danger' : $v.instructor.last_name.$error }"
+                label="Last Name *"
                 label-for="lastname">
                 <b-form-input
                   type="text"
-                  v-model="instructor.last_name"
-                  id="lastname">
+                  id="lastname"
+                  v-model.trim="$v.instructor.last_name.$model"
+                  :class="{'is-invalid' :$v.instructor.last_name.$error}">
                 </b-form-input>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.instructor.last_name.required">Last Name is required!</span>
+                </div>
               </b-form-group>
             </b-col>
           </b-form-row>
           <b-form-row>
             <b-col cols="12" md="6" lg="3">
               <b-form-group
-                class="birthdate"
-                label="Birth Date"
+                :class="{'text-danger' : $v.instructor.birth_date.$error}"
+                label="Birth Date *"
                 label-for="birthDate">
                 <datepicker
-                  v-model="instructor.birth_date"
                   id="birthDate"
                   :clear-button="true"
                   :calendar-button="true"
                   :calendar-button-icon="calendarIcon"
                   :bootstrap-styling="true"
-                  :format="birthDateFormat">
+                  :format="birthDateFormat"
+                  v-model.trim="$v.instructor.birth_date.$model"
+                  :class="{'is-invalid' :$v.instructor.birth_date.$error}">
                 </datepicker>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.instructor.birth_date.required">Birth Date is required!</span>
+                </div>
               </b-form-group>
             </b-col>
             <b-col cols="12" md="6" lg="3">
               <b-form-group
-                class="gender"
+                :class="{'text-danger' : $v.instructor.gender.$error}"
                 label="Gender"
                 label-for="gender">
                 <b-form-select
-                  v-model="instructor.gender"
+                  v-model.trim="$v.instructor.gender.$model"
+                  :class="{'is-invalid' :$v.instructor.gender.$error}"
                   :options="genderOptions">
                 </b-form-select>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.instructor.gender.required">Gender is required!</span>
+                </div>
               </b-form-group>
             </b-col>
             <b-col cols="12" md="6" lg="3">
               <b-form-group
-                class="email"
+                :class="{'text-danger' : $v.instructor.email.$error}"
                 label="Email"
                 label-for="email">
                 <b-form-input
                   type="email"
-                  v-model="instructor.email"
                   id="email"
-                  required>
+                  v-model.trim="$v.instructor.email.$model"
+                  :class="{'is-invalid' :$v.instructor.email.$error}">
                 </b-form-input>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.instructor.email.required">Email is required!</span>
+                </div>
               </b-form-group>
             </b-col>
+
             <b-col cols="12" md="6" lg="3">
               <b-form-group
-                class="contact_no"
-                label="Contact No"
+                :class="{'text-danger' : $v.instructor.contact_no.$error}"
+                label="Contact No *"
                 label-for="contact_no">
                 <b-form-input
                   type="number"
-                  v-model="instructor.contact_no"
-                  id="contact_no">
+                  id="contact_no"
+                  v-model.trim="$v.instructor.contact_no.$model"
+                  :class="{'is-invalid' :$v.instructor.contact_no.$error}">
                 </b-form-input>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.instructor.contact_no.required">Email is required!</span>
+                </div>
               </b-form-group>
             </b-col>
           </b-form-row>
+
           <b-form-row>
             <b-col cols="12" md="6" lg="3">
               <b-form-group
-                class="address"
-                label="Address"
+                :class="{'text-danger' : $v.instructor.address.$error}"
+                label="Address *"
                 label-for="address">
                 <b-form-input
                   type="text"
-                  v-model="instructor.address"
-                  id="address">
+                  id="address"
+                  v-model.trim="$v.instructor.address.$model"
+                  :class="{'is-invalid' :$v.instructor.address.$error}">
                 </b-form-input>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.instructor.address.required">Address is required!</span>
+                </div>
               </b-form-group>
             </b-col>
+
             <b-col cols="12" md="6" lg="3">
               <b-form-group
-                class="city"
-                label="City / Municipality"
+                :class="{'text-danger' : $v.instructor.city.$error}"
+                label="City / Municipality *"
                 label-for="city">
                 <b-form-input
                   type="text"
-                  v-model="instructor.city"
-                  id="city">
+                  id="city"
+                  v-model.trim="$v.instructor.city.$model"
+                  :class="{'is-invalid' :$v.instructor.city.$error}">
                 </b-form-input>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.instructor.city.required">City / Municipality is required!</span>
+                </div>
               </b-form-group>
             </b-col>
             <b-col cols="12" md="6" lg="3">
               <b-form-group
-                class="province"
-                label="Province"
+                :class="{'text-danger' : $v.instructor.province.$error}"
+                label="Province *"
                 label-for="province">
                 <b-form-input
                   type="text"
-                  v-model="instructor.province"
-                  id="province">
+                  id="province"
+                  v-model.trim="$v.instructor.province.$model"
+                  :class="{'is-invalid' :$v.instructor.province.$error}">
                 </b-form-input>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.instructor.province.required">Province is required!</span>
+                </div>
               </b-form-group>
             </b-col>
             <b-col cols="12" md="6" lg="3">
               <b-form-group
-                class="postal_code"
-                label="Postal Code"
+                :class="{'text-danger' : $v.instructor.postal_code.$error}"
+                label="Postal Code *"
                 label-for="postal_code">
                 <b-form-input
                   type="text"
-                  v-model="instructor.postal_code"
-                  id="postal_code">
+                  id="postal_code"
+                  v-model.trim="$v.instructor.postal_code.$model"
+                  :class="{'is-invalid' :$v.instructor.postal_code.$error}">
                 </b-form-input>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.instructor.postal_code.required">Postal Code is required!</span>
+                </div>
               </b-form-group>
             </b-col>
           </b-form-row>
@@ -187,13 +234,13 @@
               </b-button>
             </b-col>
             <b-col class="d-flex justify-content-end">
-              <b-button variant="primary" @click="ShowEducationalForm">
+              <b-button variant="primary"  @click="ShowEducationalForm">
                 Next
               </b-button>
             </b-col>
           </b-form-row>
 
-        </div>
+        </b-form>
       </div>
       <!-- end of academic form -->
     </transition>
@@ -203,19 +250,23 @@
       <div id="" class="mx-3 mb-4 p-4 bg-white shadow rounded" v-if="InsEducAttainmentForm">
       <div class=" h5 font-weight-bold text-dark">Educational Attainment</div>
       <hr/>
-        <div class="">
+        <form>
           <b-form-row>
             <b-col cols="12" md="6" lg="4">
               <b-form-group
-                class="educational_attainment"
-                label="Educational Attainment"
+                :class="{'text-danger' : $v.instructor.educational_attainment.$error}"
+                label="Educational Attainment *"
                 label-for="educational_attainment">
                 <b-form-textarea
                   id="educational_attainment"
-                  v-model="instructor.educational_attainment"
                   rows="3"
-                  max-rows="6">
+                  max-rows="6"
+                  v-model.trim="$v.instructor.educational_attainment.$model"
+                  :class="{'is-invalid' :$v.instructor.educational_attainment.$error}">
                 </b-form-textarea>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.instructor.educational_attainment.required">Educational Attainment is required!</span>
+                </div>
               </b-form-group>
             </b-col>
             <b-col cols="12" md="6" lg="4">
@@ -259,7 +310,7 @@
             </b-col>
           </b-form-row>
 
-        </div>
+        </form>
       </div>
       <!-- end of academic form -->
     </transition>
@@ -269,7 +320,7 @@
       <div id="" class="mx-3 mb-4 p-4 bg-white shadow rounded" v-if="InsPrefSubjectForm">
       <div class=" h5 font-weight-bold text-dark">Preferred Subjects</div>
       <hr/>
-      <div class="">
+      <form>
         <b-form-row>
           <b-col cols="12" md="6" lg="6">
             <b-form-group
@@ -350,7 +401,7 @@
           </b-col>
         </b-form-row>
 
-      </div>
+      </form>
     </div>
       <!-- end of academic form -->
     </transition>
@@ -567,7 +618,7 @@
   import moment from 'moment';
   import Datepicker from 'vuejs-datepicker';
   import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue';
-
+  import { required, minLength, between } from 'vuelidate/lib/validators';
   export default{
     name: 'InstructorManager',
     components: {
@@ -717,6 +768,23 @@
       }
     },
 
+    validations: {
+     instructor: {
+       employee_id: {required},
+       first_name: {required},
+       last_name: {required},
+       birth_date: {required},
+       gender: {required},
+       email: {required},
+       contact_no: {required},
+       address: {required},
+       city: {required},
+       province: {required},
+       postal_code: {required},
+       educational_attainment: {required},
+     }
+    },
+
     mounted () {
       this.getInstructors();
       this.getSubjects();
@@ -732,6 +800,14 @@
       this.newTimeAvailability.semester_id = this.settings.current_sem;
     },
     methods:{
+      onSubmit() {
+        this.$v.instructor.$touch();
+        if (this.$v.instructor.$anyError) {
+          return;
+        }
+        this.ShowEducationalForm()
+      },
+
       clearInstructorData: function(){
 
         this.instructor = {

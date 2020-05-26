@@ -30,31 +30,11 @@
         <div id="" class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded" v-if="showForm">
         <div class=" h5 font-weight-bold text-dark" >Add New Subject</div>
         <hr/>
-          <b-form id="Add_College_Subject_Form" @submit.stop.prevent="onSubmit">
+          <b-form @submit.stop.prevent="onSubmit">
             <!-- First Row -->
             <b-form-row>
                 <!-- Suject Code -->
-              <!-- <b-col cols="12" md="6" lg="3">
-                <b-form-group
-                :class="{'text-danger' : $v.subject.subject_code.$error}"
-                label="Subject Code *"
-                label-for="subjCode">
-                  <b-form-input
-                    type="text"
-                    id="subjCode"
-                    autofocus
-                    v-model.trim="$v.subject.subject_code.$model"
-                    :class="{
-                    'is-invalid' :$v.subject.subject_code.$error,
-                    'is-valid' :!$v.subject.subject_code.$invalid}">
-                  </b-form-input>
-                  <div class="valid-feedback">Subject Code is valid!</div>
-                  <div class="invalid-feedback">
-                    <span v-if="!$v.subject.subject_code.required">Subject Code is required</span>
-                  </div>
-                </b-form-group>
-              </b-col> -->
-              <b-col cols="12" md="6" lg="5">
+              <b-col cols="12" md="6" lg="3">
                 <b-form-group
                 :class="{'text-danger' : $v.subject.subject_code.$error}"
                 label="Subject Code *"
@@ -63,10 +43,11 @@
                     type="text"
                     id="subject_code"
                     v-model.trim="$v.subject.subject_code.$model"
-                    :state="validateState('subject_code')"
-                    aria-describedby="subject_code_feedback">
+                    :class="{'is-invalid' :$v.subject.subject_code.$error}">
                   </b-form-input>
-                  <b-form-invalid-feedback id="subject_code_feedback">This is a required field.</b-form-invalid-feedback>
+                  <div class="invalid-feedback">
+                    <span v-if="!$v.subject.subject_code.required">Subject Code is required!</span>
+                  </div>
                 </b-form-group>
               </b-col>
               <!-- Subject Code -->
@@ -81,10 +62,11 @@
                     type="text"
                     id="subjTitle"
                     v-model.trim="$v.subject.subject_title.$model"
-                    :state="validateState('subject_title')"
-                    aria-describedby="subject_title_feedback">
+                    :class="{'is-invalid' :$v.subject.subject_title.$error}">
                   </b-form-input>
-                  <b-form-invalid-feedback id="subject_title_feedback">This is a required field.</b-form-invalid-feedback>
+                  <div class="invalid-feedback">
+                    <span v-if="!$v.subject.subject_title.required">Subject Title is required!</span>
+                  </div>
                 </b-form-group>
               </b-col>
               <!-- Subject title -->
@@ -92,14 +74,18 @@
                 <!-- Lecture Units -->
                 <b-col cols="12" md="6" lg="2">
                   <b-form-group
-                    class="lecUnits"
-                    label="Lecture Units"
+                    :class="{'text-danger' : $v.subject.lec.$error}"
+                    label="Lecture Units *"
                     label-for="lec">
                     <b-form-input
                       type="number"
-                      v-model="subject.lec"
                       id="lec"
-                      required></b-form-input>
+                      v-model.trim="$v.subject.lec.$model"
+                      :class="{'is-invalid' :$v.subject.lec.$error}">
+                    </b-form-input>
+                    <div class="invalid-feedback">
+                      <span v-if="!$v.subject.lec.required">Lecture Unit is required!</span>
+                    </div>
                   </b-form-group>
                 </b-col>
                 <!-- Lecture Units -->
@@ -128,24 +114,19 @@
               <!--  Subject Description -->
               <b-col cols="12" md="6" lg="12">
                 <b-form-group
-                  class="subjectdesc"
-                  label="Subject Description"
+                  :class="{'text-danger' : $v.subject.subject_description.$error}"
+                  label="Subject Description *"
                   label-for="subjDesc">
                   <b-form-textarea
                     type="text"
-                    v-model="subject.subject_description"
                     id="subjDesc"
                     rows="3"
                     max-rows="8"
-                    required
                     v-model.trim="$v.subject.subject_description.$model"
-                    :class="{
-                    'is-invalid' :$v.subject.subject_description.$error,
-                    'is-valid' :!$v.subject.subject_description.$invalid}">
+                    :class="{'is-invalid' :$v.subject.subject_description.$error}">
                   </b-form-textarea>
-                  <div class="valid-feedback">Subject Description is valid!</div>
                   <div class="invalid-feedback">
-                    <span v-if="!$v.subject.subject_description.required">Subject Description is required</span>
+                    <span v-if="!$v.subject.subject_description.required">Subject Description is required!</span>
                   </div>
                 </b-form-group>
               </b-col>
@@ -169,7 +150,7 @@
                 </b-button>
               </b-col>
               <b-col class="d-flex justify-content-end">
-                <b-button variant="success" id="Add_College_Subject_Btn" @click="addSubject">
+                <b-button variant="success" id="Add_College_Subject_Btn" type="submit">
                   Add
                 </b-button>
               </b-col>
@@ -321,32 +302,77 @@
           <!-- Suject Code -->
         <b-col cols="12" md="6" lg="3">
           <b-form-group
-            class="subjectcode"
-            label="Subject Code"
-            label-for="subjCode">
+          :class="{'text-danger' : $v.subject.subject_code.$error}"
+          label="Subject Code *"
+          label-for="subject_code">
             <b-form-input
+              autofocus
               type="text"
-              v-model="subject.subject_code"
-              id="subjCode"
-              required></b-form-input>
+              id="subject_code"
+              v-model.trim="$v.subject.subject_code.$model"
+              :class="{'is-invalid' :$v.subject.subject_code.$error}">
+            </b-form-input>
+            <div class="invalid-feedback">
+              <span v-if="!$v.subject.subject_code.required">Subject Code is required!</span>
+            </div>
           </b-form-group>
         </b-col>
         <!-- Subject Code -->
 
         <!--  Subject title -->
-        <b-col cols="12" md="6" lg="9">
+        <b-col cols="12" md="6" lg="5">
           <b-form-group
-            class="subject_title"
-            label="Subject Title"
-            label-for="subjectTitle">
+          :class="{'text-danger' : $v.subject.subject_title.$error}"
+          label="Subject Title *"
+          label-for="subjTitle">
             <b-form-input
               type="text"
-              v-model="subject.subject_title"
-              id="subjectTitle"
-              required></b-form-input>
+              id="subjTitle"
+              v-model.trim="$v.subject.subject_title.$model"
+              :class="{'is-invalid' :$v.subject.subject_title.$error}">
+            </b-form-input>
+            <div class="invalid-feedback">
+              <span v-if="!$v.subject.subject_title.required">Subject Title is required!</span>
+            </div>
           </b-form-group>
         </b-col>
         <!-- Subject title -->
+
+          <!-- Lecture Units -->
+          <b-col cols="12" md="6" lg="2">
+            <b-form-group
+              :class="{'text-danger' : $v.subject.lec.$error}"
+              label="Lecture Units *"
+              label-for="lec">
+              <b-form-input
+                type="number"
+                id="lec"
+                v-model.trim="$v.subject.lec.$model"
+                :class="{'is-invalid' :$v.subject.lec.$error}">
+              </b-form-input>
+              <div class="invalid-feedback">
+                <span v-if="!$v.subject.lec.required">Lecture Unit is required!</span>
+              </div>
+            </b-form-group>
+          </b-col>
+          <!-- Lecture Units -->
+
+
+          <!-- Laboratory Units -->
+          <b-col cols="12" md="6" lg="2">
+            <b-form-group
+              class="labUnits"
+              label="Laboratory Units"
+              label-for="lab">
+              <b-form-input
+                type="number"
+                v-model="subject.lab"
+                id="lab"
+                required></b-form-input>
+            </b-form-group>
+          </b-col>
+          <!-- Laboratory Units -->
+
       </b-form-row>
       <!-- First Row -->
 
@@ -355,57 +381,26 @@
         <!--  Subject Description -->
         <b-col cols="12" md="6" lg="12">
           <b-form-group
-            class="subjectdesc"
-            label="Subject Description"
+            :class="{'text-danger' : $v.subject.subject_description.$error}"
+            label="Subject Description *"
             label-for="subjDesc">
             <b-form-textarea
               type="text"
-              v-model="subject.subject_description"
               id="subjDesc"
               rows="3"
               max-rows="8"
-              required></b-form-textarea>
+              v-model.trim="$v.subject.subject_description.$model"
+              :class="{'is-invalid' :$v.subject.subject_description.$error}">
+            </b-form-textarea>
+            <div class="invalid-feedback">
+              <span v-if="!$v.subject.subject_description.required">Subject Description is required!</span>
+            </div>
           </b-form-group>
         </b-col>
         <!-- Subject Description -->
       </b-form-row>
       <!-- Second Row -->
 
-      <!-- Third Row -->
-      <b-form-row>
-        <!-- Lecture Units -->
-        <b-col cols="12" md="6" lg="6">
-          <b-form-group
-            class="lecUnits"
-            label="Lecture Units"
-            label-for="lec">
-            <b-form-input
-              type="number"
-              v-model="subject.lec"
-              id="lec"
-              required></b-form-input>
-          </b-form-group>
-        </b-col>
-        <!-- Lecture Units -->
-
-
-        <!-- Laboratory Units -->
-        <b-col cols="12" md="6" lg="6">
-          <b-form-group
-            class="labUnits"
-            label="Laboratory Units"
-            label-for="lab">
-            <b-form-input
-              type="number"
-              v-model="subject.lab"
-              id="lab"
-              required></b-form-input>
-          </b-form-group>
-        </b-col>
-        <!-- Laboratory Units -->
-
-      </b-form-row>
-      <!-- Third Row -->
 
 
         <!-- Modal Footer Template -->
@@ -544,10 +539,15 @@
 
     methods:{
 
-      validateState(name) {
-        const { $dirty, $error } = this.$v.subject[name];
-        return $dirty ? !$error : null;
+      onSubmit() {
+        this.$v.subject.$touch();
+        if (this.$v.subject.$anyError) {
+          return;
+        }
+        this.addSubject()
+
       },
+
       // get subject function
       getSubjects: function(){
         this.isLoading = true;
@@ -666,6 +666,9 @@
           this.showForm = true;
         }
         this.backToTop();
+        this.$nextTick(() => {
+          this.$v.$reset();
+        });
       }, // End of Toggle Form Function
 
       // Reset Form Function

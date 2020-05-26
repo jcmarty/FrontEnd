@@ -29,19 +29,24 @@
         <div class="h5 font-weight-bold text-dark" >Add New Semester</div>
         <hr/>
 
-          <b-form id="Add_Semester_Form">
+          <b-form @submit.stop.prevent="onSubmit">
             <b-form-row>
               <!-- Semester -->
               <b-col cols="12" md="6" lg="12">
                 <b-form-group
-                  class="semester"
-                  label="Semester"
+                  :class="{'text-danger' : $v.semesters.semester.$error}"
+                  label="Semester *"
                   label-for="Semester">
                   <b-form-input
                     type="text"
-                    v-model="semesters.semester"
                     id="Semester"
-                    required></b-form-input>
+                    autofocus
+                    v-model.trim="$v.semesters.semester.$model"
+                    :class="{'is-invalid' :$v.semesters.semester.$error}">
+                  </b-form-input>
+                  <div class="invalid-feedback">
+                    <span v-if="!$v.semesters.semester.required">Semester is required!</span>
+                  </div>
                 </b-form-group>
               </b-col>
             </b-form-row>
@@ -54,7 +59,7 @@
                 </b-button>
               </b-col>
               <b-col class="d-flex justify-content-end">
-                <b-button variant="success" id="Add_Semester_Btn" @click="addSemeter">
+                <b-button variant="success" id="Add_Semester_Btn" type="submit">
                   Add
                 </b-button>
               </b-col>
@@ -164,18 +169,24 @@
     <!-- Start Of Edit Modal -->
     <b-modal id="editSemesterModal" ref="editSemesterModal" title="Edit Semester" size="md" no-close-on-backdrop>
       <b-form-row>
-      <!-- Semester  -->
+        <!-- Semester -->
         <b-col cols="12" md="6" lg="12">
           <b-form-group
-            class="semester"
-            label="Semester"
+            :class="{'text-danger' : $v.semesters.semester.$error, 'text-success' : !$v.semesters.semester.$invalid }"
+            label="Semester *"
             label-for="Semester">
             <b-form-input
               type="text"
               v-model="semesters.semester"
-              id="roomNumber"
-              required>
+              id="Semester"
+              required
+              autofocus
+              v-model.trim="$v.semesters.semester.$model"
+              :class="{'is-invalid' :$v.semesters.semester.$error}">
             </b-form-input>
+            <div class="invalid-feedback">
+              <span v-if="!$v.semesters.semester.required">Semester is required!</span>
+            </div>
           </b-form-group>
         </b-col>
       </b-form-row>
@@ -216,6 +227,7 @@
 
 <script>
   import Axios from "axios";
+  import { required, minLength, between } from 'vuelidate/lib/validators';
   export default{
     name: 'SemestersManager',
     data() {
@@ -247,11 +259,26 @@
       }
     }, // End of Data
 
+    validations: {
+      semesters: {
+       semester: {required}
+     },
+    },
+
     mounted () {
       this.getSemesters();
     }, // End of Mounted
 
     methods:{
+
+      onSubmit() {
+        this.$v.semesters.$touch();
+        if (this.$v.semesters.$anyError) {
+          return;
+        }
+        this.addSemester()
+
+      },
       // Get Semester Function
       getSemesters: function(){
         this.isLoading = true;
@@ -272,7 +299,7 @@
       }, // End of Get Semester Function
 
       //Add Semester Function
-      addSemeter: function(){
+      addSemester: function(){
         this.errors = [];
         Axios
           .post('http://localhost/api/v1/semesters', this.semesters, {
@@ -344,6 +371,8 @@
         this.$refs['deleteSemesterModal'].hide();
       }, //End of Delete Semester Function
 
+
+
       // Toggle Form Function
       toggleForm: function(){
         this.resetform();
@@ -352,6 +381,10 @@
         } else {
           this.showForm = true;
         }
+
+        this.$nextTick(() => {
+          this.$v.$reset();
+        });
       },// End of Toggle Form Function
 
       // Reset Form Function

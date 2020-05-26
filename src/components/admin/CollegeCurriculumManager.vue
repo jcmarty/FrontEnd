@@ -60,7 +60,7 @@
 
              <!-- course option -->
              <b-col cols="12" md="6" lg="4">
-               <b-form-group
+               <b-form-group :class="{'text-danger' : $v.form.course_id.$error, 'text-success' : !$v.form.course_id.$invalid }"
                  label="Course *"
                  label-for="course">
                  <b-form-select

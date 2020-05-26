@@ -30,35 +30,41 @@
         <div id="" class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded" v-if="showForm">
           <div class=" h5 font-weight-bold text-dark" >Add New Course</div>
           <hr/>
-            <b-form id="Add_Course_Form">
+            <b-form @submit.stop.prevent="onSubmit">
                 <b-form-row>
                   <!-- Course Code -->
                   <b-col cols="12" md="6" lg="4">
                   <b-form-group
-                    class="coursecode"
-                    label="Course Code"
+                    :class="{'text-danger' : $v.course.course_code.$error}"
+                    label="Course Code *"
                     label-for="courseCode">
                     <b-form-input
                       type="text"
-                      v-model="course.course_code"
                       id="courseCode"
-                      required>
-                    </b-form-input>
+                      v-model.trim="$v.course.course_code.$model"
+                      :class="{'is-invalid' :$v.course.course_code.$error}">
+                      </b-form-input>
+                      <div class="invalid-feedback">
+                        <span v-if="!$v.course.course_code.required">Course Code is required!</span>
+                      </div>
                   </b-form-group>
                 </b-col>
 
                 <!--  Course Description -->
                 <b-col cols="12" md="6" lg="8">
                   <b-form-group
-                    class="coursedesc"
-                    label="Description"
+                    :class="{'text-danger' : $v.course.course_desc.$error}"
+                    label="Course Description *"
                     label-for="courseDesc">
                     <b-form-input
                       type="text"
-                      v-model="course.course_desc"
                       id="courseDesc"
-                      required>
-                    </b-form-input>
+                      v-model.trim="$v.course.course_desc.$model"
+                      :class="{'is-invalid' :$v.course.course_desc.$error}">
+                      </b-form-input>
+                      <div class="invalid-feedback">
+                        <span v-if="!$v.course.course_desc.required">Course Description is required!</span>
+                      </div>
                   </b-form-group>
                 </b-col>
               </b-form-row>
@@ -67,39 +73,37 @@
                 <!-- Year Duration-->
                 <b-col cols="12" md="6" lg="4">
                   <b-form-group
-                    class="yearduration"
-                    label="Year Duration"
+                    :class="{'text-danger' : $v.course.year_duration.$error}"
+                    label="Year Duration *"
                     label-for="yearDuration">
                     <b-form-input
                       type="number"
-                      v-model="course.year_duration "
                       id="yearDuration"
-                      required>
-                    </b-form-input>
+                      v-model.trim="$v.course.year_duration.$model"
+                      :class="{'is-invalid' :$v.course.year_duration.$error}">
+                      </b-form-input>
+                      <div class="invalid-feedback">
+                        <span v-if="!$v.course.year_duration.required">Course Duration is required!</span>
+                      </div>
                   </b-form-group>
                 </b-col>
 
                 <!--  Course Manager -->
                 <b-col cols="12" md="6" lg="8">
                   <b-form-group
-                    class="coursemajor"
                     label="Course Major"
                     label-for="courseMajor">
                     <b-form-input
                       type="text"
-                      v-model="course.course_major"
                       id="courseMajor"
-                      required>
-                    </b-form-input>
+                      v-model="course.course_major">
+                      </b-form-input>
                   </b-form-group>
                 </b-col>
               </b-form-row>
 
-              <b-form-row>
-                <b-col cols="12" md="12" lg="12">
+
                   <hr/>
-                </b-col>
-              </b-form-row>
 
               <!-- Form Buttons -->
               <b-form-row>
@@ -109,7 +113,7 @@
                   </b-button>
                 </b-col>
                 <b-col class="d-flex justify-content-end">
-                  <b-button variant="success" id="Add_Course_Btn" @click="addCourse">
+                  <b-button variant="success" id="Add_Course_Btn" type="submit">
                     Add
                   </b-button>
                 </b-col>
@@ -237,70 +241,75 @@
 
       <b-modal id="editCourseModal" ref="editCourseModal" title="Edit Course" size="lg" no-close-on-backdrop>
         <b-form-row>
-        <!-- Course Code -->
-        <b-col cols="12" md="6" lg="3">
+          <!-- Course Code -->
+          <b-col cols="12" md="6" lg="4">
           <b-form-group
-            class="coursecode"
-            label="Course Code"
+            :class="{'text-danger' : $v.course.course_code.$error}"
+            label="Course Code *"
             label-for="courseCode">
             <b-form-input
               type="text"
-              v-model="course.course_code"
               id="courseCode"
-              required>
-            </b-form-input>
+              v-model.trim="$v.course.course_code.$model"
+              :class="{'is-invalid' :$v.course.course_code.$error}">
+              </b-form-input>
+              <div class="invalid-feedback">
+                <span v-if="!$v.course.course_code.required">Course Code is required!</span>
+              </div>
           </b-form-group>
         </b-col>
 
         <!--  Course Description -->
-        <b-col cols="12" md="6" lg="9">
+        <b-col cols="12" md="6" lg="8">
           <b-form-group
-            class="coursedesc"
-            label="Course Desc"
+            :class="{'text-danger' : $v.course.course_desc.$error}"
+            label="Course Description *"
             label-for="courseDesc">
             <b-form-input
               type="text"
-              v-model="course.course_desc"
               id="courseDesc"
-              required>
-            </b-form-input>
+              v-model.trim="$v.course.course_desc.$model"
+              :class="{'is-invalid' :$v.course.course_desc.$error}">
+              </b-form-input>
+              <div class="invalid-feedback">
+                <span v-if="!$v.course.course_desc.required">Course Description is required!</span>
+              </div>
           </b-form-group>
         </b-col>
       </b-form-row>
 
       <b-form-row>
-        <!-- Year Duration -->
-        <b-col cols="12" md="6" lg="3">
+        <!-- Year Duration-->
+        <b-col cols="12" md="6" lg="4">
           <b-form-group
-            class="yearduration"
-            label="Year Duration"
+            :class="{'text-danger' : $v.course.year_duration.$error}"
+            label="Year Duration *"
             label-for="yearDuration">
             <b-form-input
               type="number"
-              v-model="course.year_duration"
               id="yearDuration"
-              required>
-            </b-form-input>
+              v-model.trim="$v.course.year_duration.$model"
+              :class="{'is-invalid' :$v.course.year_duration.$error}">
+              </b-form-input>
+              <div class="invalid-feedback">
+                <span v-if="!$v.course.year_duration.required">Course Duration is required!</span>
+              </div>
           </b-form-group>
         </b-col>
 
-        <!-- Course Major -->
-        <b-col cols="12" md="6" lg="9">
+        <!--  Course Manager -->
+        <b-col cols="12" md="6" lg="8">
           <b-form-group
-            class="coursemajor"
             label="Course Major"
             label-for="courseMajor">
             <b-form-input
               type="text"
-              v-model="course.course_major"
               id="courseMajor"
-              required>
-            </b-form-input>
+              v-model="course.course_major">
+              </b-form-input>
           </b-form-group>
         </b-col>
-
       </b-form-row>
-
         <!-- Modal Footer Template -->
         <template v-slot:modal-footer="{ cancel, ok }">
             <!-- Emulate built in modal footer ok and cancel button actions -->
@@ -336,8 +345,7 @@
 
 <script>
   import Axios from "axios";
-  const { validationMixin, default: Vuelidate } = require('vuelidate');
-  const { required, minLength } = require('vuelidate/lib/validators');
+  import { required, minLength, between } from 'vuelidate/lib/validators';
   export default{
     name: 'CoursesManager',
     data() {
@@ -346,8 +354,8 @@
         items: [],
         fields: [
           { key: 'course_code', label: 'Course Code', sortable: true, class: 'text-center'},
-          { key: 'course_desc', label: 'Course Description', sortable: true, },
-          { key: 'course_major', label: 'Course Major', sortable: true,},
+          { key: 'course_desc', label: 'Course Description', sortable: true, class: 'text-center'},
+          { key: 'course_major', label: 'Course Major', sortable: true, class: 'text-center'},
           { key: 'year_duration', label: 'Year Duration', sortable: true, class: 'text-center' },
           { key: 'active', label: 'Active', sortable: true,  },
           { key: 'actions', label: 'Actions', class: 'text-center'   }
@@ -396,6 +404,14 @@
     }, // End of Mounted
 
     methods:{
+      onSubmit() {
+        this.$v.course.$touch();
+        if (this.$v.course.$anyError) {
+          return;
+        }
+        this.addCourse()
+
+      },
 
       // Get course Function
       getCourses: function(){

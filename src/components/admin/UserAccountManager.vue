@@ -22,70 +22,82 @@
     <!-- End of Alert Message -->
 
     <!-- Adding Form Start  -->
-    <div class="addPanel">
+
 
       <transition name="fade">
       <div class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded" v-if="showForm">
         <div class=" h5 font-weight-bold text-dark" >Add New User Account</div>
         <hr/>
-          <b-form id="Add_UserAccount_Form">
+          <b-form @submit.stop.prevent="onSubmit">
             <b-form-row>
               <!-- Username -->
               <b-col cols="12" md="6" lg="3">
                 <b-form-group
-                  class="username"
-                  label="Username"
+                  :class="{'text-danger' : $v.users.username.$error }"
+                  label="Username *"
                   label-for="Username">
                   <b-form-input
                     type="text"
-                    v-model="users.username"
                     id="Username"
-                    required>
+                    v-model.trim="$v.users.username.$model"
+                    :class="{'is-invalid' :$v.users.username.$error}">
                   </b-form-input>
+                  <div class="invalid-feedback">
+                    <span v-if="!$v.users.username.required">Username is required!</span>
+                  </div>
                 </b-form-group>
               </b-col>
 
             <!-- Password -->
             <b-col cols="12" md="6" lg="3">
               <b-form-group
-                class="password"
-                label="Password"
+                :class="{'text-danger' : $v.users.password.$error}"
+                label="Password *"
                 label-for="Password">
                 <b-form-input
                   type="password"
-                  v-model="users.password"
                   id="Password"
-                  required>
+                  v-model.trim="$v.users.password.$model"
+                  :class="{'is-invalid' :$v.users.password.$error}">
                 </b-form-input>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.users.password.required">Password is required!</span>
+                </div>
               </b-form-group>
             </b-col>
 
-            <!-- Confirm Password -->
             <b-col cols="12" md="6" lg="3">
               <b-form-group
-                class="confirmpassword"
-                label="Confirm Password"
+                :class="{'text-danger' : $v.users.password_confirmation.$error}"
+                label="Confirm Password *"
                 label-for="confirmPassword">
                 <b-form-input
                   type="password"
-                  v-model="users.password_confirmation"
                   id="confirmPassword"
-                  required></b-form-input>
+                  v-model.trim="$v.users.password_confirmation.$model"
+                  :class="{'is-invalid' :$v.users.password_confirmation.$error}">
+                </b-form-input>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.users.password_confirmation.required">Confirm Password is required!</span>
+                </div>
               </b-form-group>
             </b-col>
 
             <!-- Email -->
             <b-col cols="12" md="6" lg="3">
               <b-form-group
-                class="email"
-                label="Email"
+                :class="{'text-danger' : $v.users.email.$error}"
+                label="Email *"
                 label-for="Email">
                 <b-form-input
                   type="text"
-                  v-model="users.email"
                   id="Email"
-                  required>
+                  v-model.trim="$v.users.email.$model"
+                  :class="{'is-invalid' :$v.users.email.$error}">
                 </b-form-input>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.users.email.required">Email is required!</span>
+                </div>
               </b-form-group>
             </b-col>
           </b-form-row>
@@ -94,15 +106,18 @@
           <b-form-row>
             <b-col cols="12" md="6" lg="3">
               <b-form-group
-                class="firstname"
-                label="First Name"
+                :class="{'text-danger' : $v.users.first_name.$error}"
+                label="First Name *"
                 label-for="firstName">
                 <b-form-input
                   type="text"
-                  v-model="users.first_name"
                   id="firstName"
-                  required>
+                  v-model.trim="$v.users.first_name.$model"
+                  :class="{'is-invalid' :$v.users.first_name.$error}">
                 </b-form-input>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.users.first_name.required">First Name is required!</span>
+                </div>
               </b-form-group>
             </b-col>
 
@@ -115,8 +130,7 @@
                 <b-form-input
                   type="text"
                   v-model="users.middle_name"
-                  id="middleName"
-                  required>
+                  id="middleName">
                 </b-form-input>
               </b-form-group>
             </b-col>
@@ -124,30 +138,36 @@
             <!-- Last Name -->
             <b-col cols="12" md="6" lg="3">
               <b-form-group
-                class="lastname"
-                label="Last Name"
+                :class="{'text-danger' : $v.users.last_name.$error}"
+                label="Last Name *"
                 label-for="lastName">
                 <b-form-input
                   type="text"
-                  v-model="users.last_name"
                   id="lastName"
-                  required>
+                  v-model.trim="$v.users.last_name.$model"
+                  :class="{'is-invalid' :$v.users.last_name.$error}">
                 </b-form-input>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.users.last_name.required">Last Name is required!</span>
+                </div>
               </b-form-group>
             </b-col>
 
             <!-- Role -->
             <b-col cols="12" md="6" lg="3">
               <b-form-group
-                class="role"
-                label="Role"
+                :class="{'text-danger' : $v.users.role.$error}"
+                label="Role *"
                 label-for="Role">
                 <b-form-select
                   type="text"
-                  v-model="users.role"
                   :options="roleOptions"
-                  required>
+                  v-model.trim="$v.users.role.$model"
+                  :class="{'is-invalid' :$v.users.role.$error}">
                 </b-form-select>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.users.role.required">Role is required!</span>
+                </div>
               </b-form-group>
             </b-col>
           </b-form-row>
@@ -159,7 +179,7 @@
               </b-button>
             </b-col>
             <b-col class="d-flex justify-content-end">
-              <b-button variant="success" id="Add_UserAccount_Btn" @click="addUserAccount">
+              <b-button variant="success" id="Add_UserAccount_Btn" type="submit">
                 Add
               </b-button>
             </b-col>
@@ -168,7 +188,6 @@
         </b-form>
       </div>  <!-- End of Panel Body  -->
     </transition>
-  </div> <!-- End of Col  -->
     <!--User Account Form End  -->
 
     <div class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded">
@@ -288,48 +307,59 @@
     <!-- Start Of Edit Modal -->
     <b-modal id="editUserAccountModal" ref="editUserAccountModal" title="Edit User Account" size="lg" no-close-on-backdrop>
       <b-form-row>
-      <!-- Username -->
-      <b-col cols="12" md="6" lg="4">
-        <b-form-group
-          class="username"
-          label="Username"
-          label-for="Username">
-          <b-form-input
-            type="text"
-            v-model="users.username"
-            id="Username"
-            required></b-form-input>
-        </b-form-group>
-      </b-col>
+        <!-- Username -->
+        <b-col cols="12" md="6" lg="4">
+          <b-form-group
+            :class="{'text-danger' : $v.users.username.$error}"
+            label="Username *"
+            label-for="Username">
+            <b-form-input
+              type="text"
+              id="Username"
+              v-model.trim="$v.users.username.$model"
+              :class="{'is-invalid' :$v.users.username.$error}">
+            </b-form-input>
+            <div class="invalid-feedback">
+              <span v-if="!$v.users.username.required">Username is required!</span>
+            </div>
+          </b-form-group>
+        </b-col>
 
-      <!--  Email -->
+      <!-- Email -->
       <b-col cols="12" md="6" lg="8">
         <b-form-group
-          class="email"
-          label="Email"
+          :class="{'text-danger' : $v.users.email.$error}"
+          label="Email *"
           label-for="Email">
           <b-form-input
             type="text"
-            v-model="users.email"
             id="Email"
-            required></b-form-input>
+            v-model.trim="$v.users.email.$model"
+            :class="{'is-invalid' :$v.users.email.$error}">
+          </b-form-input>
+          <div class="invalid-feedback">
+            <span v-if="!$v.users.email.required">Email is required!</span>
+          </div>
         </b-form-group>
       </b-col>
     </b-form-row>
 
+    <!-- First Name -->
     <b-form-row>
-
-      <!-- First Name -->
       <b-col cols="12" md="6" lg="4">
         <b-form-group
-          class="firstname"
-          label="First Name"
+          :class="{'text-danger' : $v.users.first_name.$error}"
+          label="First Name *"
           label-for="firstName">
           <b-form-input
             type="text"
-            v-model="users.first_name"
             id="firstName"
-            required></b-form-input>
+            v-model.trim="$v.users.first_name.$model"
+            :class="{'is-invalid' :$v.users.first_name.$error}">
+          </b-form-input>
+          <div class="invalid-feedback">
+            <span v-if="!$v.users.first_name.required">First Name is required!</span>
+          </div>
         </b-form-group>
       </b-col>
 
@@ -342,26 +372,30 @@
           <b-form-input
             type="text"
             v-model="users.middle_name"
-            id="middleName"
-            required></b-form-input>
+            id="middleName">
+          </b-form-input>
         </b-form-group>
       </b-col>
 
       <!-- Last Name -->
       <b-col cols="12" md="6" lg="4">
         <b-form-group
-          class="lastname"
-          label="Last Name"
+          :class="{'text-danger' : $v.users.last_name.$error}"
+          label="Last Name *"
           label-for="lastName">
           <b-form-input
             type="text"
-            v-model="users.last_name"
             id="lastName"
-            required></b-form-input>
+            v-model.trim="$v.users.last_name.$model"
+            :class="{'is-invalid' :$v.users.last_name.$error}">
+          </b-form-input>
+          <div class="invalid-feedback">
+            <span v-if="!$v.users.last_name.required">Last Name is required!</span>
+          </div>
         </b-form-group>
       </b-col>
-    </b-form-row>
 
+    </b-form-row>
 
       <!-- Modal Footer Template -->
       <template v-slot:modal-footer="{ cancel, ok }">
@@ -402,6 +436,7 @@
 
 <script>
   import Axios from "axios";
+  import { required, minLength, between } from 'vuelidate/lib/validators';
   export default{
     name: 'UserAccountManager',
     data() {
@@ -429,6 +464,7 @@
           id: null,
           username: null,
           password: null,
+          password_confirmation: null,
           email: null,
           first_name: null,
           middle_name: null,
@@ -465,6 +501,17 @@
       }
     }, // End of Data
 
+    validations: {
+     users: {
+       username: {required},
+       password: {required},
+       password_confirmation: {required},
+       email: {required},
+       first_name: {required},
+       last_name: {required},
+       role: {required},
+     }
+    },
 
 
     mounted () {
@@ -472,7 +519,14 @@
     }, // End of Mounted
 
     methods:{
+      onSubmit() {
+        this.$v.users.$touch();
+        if (this.$v.users.$anyError) {
+          return;
+        }
+        this.addUserAccount()
 
+      },
       // Get User Account Function
       getUserAccount: function(){
         this.isLoading = true;
@@ -961,6 +1015,9 @@
         } else {
           this.showForm = true;
         }
+        this.$nextTick(() => {
+          this.$v.$reset();
+        });
       }, // End of Toggle Form Function
 
       // Reset Form Function
