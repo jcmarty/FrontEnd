@@ -898,10 +898,12 @@ export default {
               }
             }
             this.items = container;
+            this.totalRows = this.items.length;
           }else{
             this.items = subjects;
+            this.totalRows = this.items.length;
           }
-          this.totalRows = this.items.length;
+
             // if (this.filteredSubjects.indexOf({ subject_id: filter_this[i].id})!=-1) {
             // if(1 == 1){
             //   this.items.push(filter_this[i]);
@@ -959,9 +961,9 @@ export default {
         .then(response => {
           this.filteredSubjects = response.data;
           // console.log(this.filteredSubjects);
-          if(this.filteredSubjects.length > 0){
+          // if(this.filteredSubjects.length > 0){
             this.getSubjects();
-          }
+          // }
         })
     },
 
