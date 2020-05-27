@@ -13,6 +13,7 @@
       dismissible fade>
         {{alertMessage}}
     </b-alert>
+
     <b-alert variant="danger"
       :show="dismissErrorCountDown"
       @dismissed="dismissErrorCountDown=0"
@@ -27,7 +28,7 @@
 
 
       <b-modal id="confirmUpdate" ref="confirmUpdate" size="md" no-close-on-backdrop>
-      <center><h6>Are you sure you want to update ?</b></h6></center>
+      <center><h6>Are you sure you want to update this instructor?</b></h6></center>
 
           <!-- Modal Footer Template -->
           <template v-slot:modal-footer="{ cancel, ok }">
@@ -67,7 +68,7 @@
             class="float-right"
             v-if="!information_disable"
             variant="success"
-            @click="confirmUpdateModal"
+            @click="onSubmit"
             v-b-tooltip.hover title="Update">
             <i class="fa fa-save"/>
           </b-button>
@@ -77,34 +78,44 @@
     </div>
 
     <hr/>
-      <div class="">
+      <b-form @submit.stop.prevent="onSubmit">
         <b-form-row>
           <b-col cols="12" md="6" lg="3">
             <b-form-group
-              class="employeeid"
-              label="Employee ID"
+              :class="{'text-danger' : $v.instructor.employee_id.$error}"
+              label="Employee ID *"
               label-for="empID">
               <b-form-input
                 type="text"
-                v-model="instructor.employee_id"
                 id="empID"
-                :disabled="information_disable">
+                :disabled="information_disable"
+                v-model.trim="$v.instructor.employee_id.$model"
+                :class="{'is-invalid' :$v.instructor.employee_id.$error}">
               </b-form-input>
+              <div class="invalid-feedback">
+                <span v-if="!$v.instructor.employee_id.required">Employee ID is required!</span>
+              </div>
             </b-form-group>
           </b-col>
+
           <b-col cols="12" md="6" lg="3">
             <b-form-group
-              class="firstname"
-              label="First Name"
+              :class="{'text-danger' : $v.instructor.first_name.$error}"
+              label="First Name *"
               label-for="firstname">
               <b-form-input
                 type="text"
-                v-model="instructor.first_name"
                 id="firstname"
-                :disabled="information_disable">
+                :disabled="information_disable"
+                v-model.trim="$v.instructor.first_name.$model"
+                :class="{'is-invalid' :$v.instructor.first_name.$error}">
               </b-form-input>
+              <div class="invalid-feedback">
+                <span v-if="!$v.instructor.first_name.required">First Name is required!</span>
+              </div>
             </b-form-group>
           </b-col>
+
           <b-col cols="12" md="6" lg="3">
             <b-form-group
               class="middlename"
@@ -118,153 +129,210 @@
               </b-form-input>
             </b-form-group>
           </b-col>
+
           <b-col cols="12" md="6" lg="3">
             <b-form-group
-              class="lastname"
-              label="Last Name"
+              :class="{'text-danger' : $v.instructor.last_name.$error}"
+              label="Last Name *"
               label-for="lastname">
               <b-form-input
                 type="text"
                 v-model="instructor.last_name"
                 id="lastname"
-                :disabled="information_disable">
+                :disabled="information_disable"
+                v-model.trim="$v.instructor.last_name.$model"
+                :class="{'is-invalid' :$v.instructor.last_name.$error}">
               </b-form-input>
+              <div class="invalid-feedback">
+                <span v-if="!$v.instructor.last_name.required">Last Name is required!</span>
+              </div>
             </b-form-group>
           </b-col>
+
         </b-form-row>
+
         <b-form-row>
           <b-col cols="12" md="6" lg="3">
             <b-form-group
-              class="birthdate"
-              label="Birth Date"
+              :class="{'text-danger' : $v.instructor.birth_date.$error}"
+              label="Birth Date *"
               label-for="birthDate">
               <datepicker
-                v-model="instructor.birth_date"
                 id="birthDate"
                 :clear-button="true"
                 :calendar-button="true"
                 :calendar-button-icon="calendarIcon"
                 :bootstrap-styling="true"
                 :format="birthDateFormat"
-                :disabled="information_disable">
+                :disabled="information_disable"
+                v-model.trim="$v.instructor.birth_date.$model"
+                :class="{'is-invalid' :$v.instructor.birth_date.$error}">
               </datepicker>
+              <div class="invalid-feedback">
+                <span v-if="!$v.instructor.birth_date.required">Birth Date is required!</span>
+              </div>
             </b-form-group>
           </b-col>
+
           <b-col cols="12" md="6" lg="3">
             <b-form-group
-              class="gender"
-              label="Gender"
+              :class="{'text-danger' : $v.instructor.gender.$error}"
+              label="Gender *"
               label-for="gender">
               <b-form-select
-                v-model="instructor.gender"
                 :options="genderOptions"
-                :disabled="information_disable">
+                :disabled="information_disable"
+                v-model.trim="$v.instructor.gender.$model"
+                :class="{'is-invalid' :$v.instructor.gender.$error}">
               </b-form-select>
+              <div class="invalid-feedback">
+                <span v-if="!$v.instructor.gender.required">Gender is required!</span>
+              </div>
             </b-form-group>
           </b-col>
+
           <b-col cols="12" md="6" lg="3">
             <b-form-group
-              class="email"
-              label="Email"
+              :class="{'text-danger' : $v.instructor.email.$error}"
+              label="Email *"
               label-for="email">
               <b-form-input
                 type="email"
-                v-model="instructor.email"
                 id="email"
-                :disabled="information_disable">
+                :disabled="information_disable"
+                v-model.trim="$v.instructor.email.$model"
+                :class="{'is-invalid' :$v.instructor.email.$error}">
               </b-form-input>
+              <div class="invalid-feedback">
+                <span v-if="!$v.instructor.email.required">Email is required!</span>
+              </div>
             </b-form-group>
           </b-col>
+
           <b-col cols="12" md="6" lg="3">
             <b-form-group
-              class="contact_no"
-              label="Contact No"
+              :class="{'text-danger' : $v.instructor.contact_no.$error}"
+              label="Contact No *"
               label-for="contact_no">
               <b-form-input
                 type="text"
-                v-model="instructor.contact_no"
                 id="contact_no"
-                :disabled="information_disable">
+                :disabled="information_disable"
+                v-model.trim="$v.instructor.contact_no.$model"
+                :class="{'is-invalid' :$v.instructor.contact_no.$error}">
               </b-form-input>
+              <div class="invalid-feedback">
+                <span v-if="!$v.instructor.contact_no.required">Contact No is required!</span>
+                <span v-if="!$v.instructor.contact_no.maxLength">Maximum of 11 digits!</span>
+                <span v-if="!$v.instructor.contact_no.minLength">Minimum of 11 digits!</span>
+              </div>
+
             </b-form-group>
           </b-col>
+
         </b-form-row>
+
         <b-form-row>
           <b-col cols="12" md="6" lg="3">
             <b-form-group
-              class="address"
-              label="Address"
+              :class="{'text-danger' : $v.instructor.address.$error}"
+              label="Address *"
               label-for="address">
               <b-form-input
                 type="text"
-                v-model="instructor.address"
                 id="address"
-                :disabled="information_disable">
+                :disabled="information_disable"
+                v-model.trim="$v.instructor.address.$model"
+                :class="{'is-invalid' :$v.instructor.address.$error}">
               </b-form-input>
+              <div class="invalid-feedback">
+                <span v-if="!$v.instructor.address.required">Address is required!</span>
+              </div>
             </b-form-group>
           </b-col>
+
           <b-col cols="12" md="6" lg="3">
             <b-form-group
-              class="city"
-              label="City / Municipality"
+              :class="{'text-danger' : $v.instructor.city.$error}"
+              label="City / Municipality *"
               label-for="city">
               <b-form-input
                 type="text"
-                v-model="instructor.city"
                 id="city"
-                :disabled="information_disable">
+                :disabled="information_disable"
+                v-model.trim="$v.instructor.city.$model"
+                :class="{'is-invalid' :$v.instructor.city.$error}">
               </b-form-input>
+              <div class="invalid-feedback">
+                <span v-if="!$v.instructor.city.required">City / Municipality is required!</span>
+              </div>
             </b-form-group>
           </b-col>
+
           <b-col cols="12" md="6" lg="3">
             <b-form-group
-              class="province"
-              label="Province"
+              :class="{'text-danger' : $v.instructor.province.$error}"
+              label="Province *"
               label-for="province">
               <b-form-input
                 type="text"
-                v-model="instructor.province"
                 id="province"
-                :disabled="information_disable">
+                :disabled="information_disable"
+                v-model.trim="$v.instructor.province.$model"
+                :class="{'is-invalid' :$v.instructor.province.$error}">
               </b-form-input>
+              <div class="invalid-feedback">
+                <span v-if="!$v.instructor.province.required">Province is required!</span>
+              </div>
             </b-form-group>
           </b-col>
+
           <b-col cols="12" md="6" lg="3">
             <b-form-group
-              class="postal_code"
-              label="Postal Code"
+              :class="{'text-danger' : $v.instructor.postal_code.$error}"
+              label="Postal Code *"
               label-for="postal_code">
               <b-form-input
                 type="text"
-                v-model="instructor.postal_code"
                 id="postal_code"
-                :disabled="information_disable">
+                :disabled="information_disable"
+                v-model.trim="$v.instructor.postal_code.$model"
+                :class="{'is-invalid' :$v.instructor.postal_code.$error}">
               </b-form-input>
+              <div class="invalid-feedback">
+                <span v-if="!$v.instructor.postal_code.required">Postal Code is required!</span>
+              </div>
             </b-form-group>
           </b-col>
+
         </b-form-row>
-      </div>
 
     <hr/>
 
     <div class=" h5 font-weight-bold text-dark">Educational Attainment</div>
     <hr/>
-      <div class="">
+
         <b-form-row>
           <b-col cols="12" md="6" lg="4">
             <b-form-group
-              class="educational_attainment"
-              label="Educational Attainment"
+              :class="{'text-danger' : $v.instructor.educational_attainment.$error}"
+              label="Educational Attainment *"
               label-for="educational_attainment">
               <b-form-textarea
                 id="educational_attainment"
                 v-model="instructor.educational_attainment"
                 rows="3"
                 max-rows="6"
-                :disabled="information_disable">
+                :disabled="information_disable"
+                v-model.trim="$v.instructor.educational_attainment.$model"
+                :class="{'is-invalid' :$v.instructor.educational_attainment.$error}">
               </b-form-textarea>
+              <div class="invalid-feedback">
+                <span v-if="!$v.instructor.educational_attainment.required">Educational Attainment is required!</span>
+              </div>
             </b-form-group>
           </b-col>
+
           <b-col cols="12" md="6" lg="4">
             <b-form-group
               class="certifications"
@@ -279,6 +347,7 @@
               </b-form-textarea>
             </b-form-group>
           </b-col>
+
           <b-col cols="12" md="6" lg="4">
             <b-form-group
               class="work_experience"
@@ -293,9 +362,9 @@
               </b-form-textarea>
             </b-form-group>
           </b-col>
-        </b-form-row>
 
-      </div>
+        </b-form-row>
+      </b-form>
 
     </div>
   </div>
@@ -321,6 +390,7 @@
   import moment from 'moment';
   import Datepicker from 'vuejs-datepicker';
   import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue';
+  import { required, minLength, maxLength, between } from 'vuelidate/lib/validators';
   export default{
     name: 'InstructorInformationManager',
     components: {
@@ -369,28 +439,24 @@
         updateErrorCountDown: 0,
 
         information_disable: true,
-
-        last_name_state: null,
-        first_name_state: null,
-        school_last_attended_state: null,
-        school_address_state: null,
-        present_address_state: null,
-        barangay_state: null,
-        cityMunicipality_state: null,
-        province_state: null,
-        postalCode_state: null,
-        birthDate_state: null,
-        gender_state: null,
-        cellphone_state: null,
-        placeofBirth_state: null,
-        citizenShip_state: null,
-        civilStatus_state: null,
-        fathersName_state: null,
-        mothersName_state: null,
-        guardianName_state: null,
-        guardianContactAddress_state: null,
-        guardianContactNumber_state: null,
       }
+    },
+
+    validations: {
+     instructor: {
+       employee_id: {required},
+       first_name: {required},
+       last_name: {required},
+       birth_date: {required},
+       gender: {required},
+       email: {required},
+       contact_no: {required, minLength: minLength(11), maxLength: maxLength(11)},
+       address: {required},
+       city: {required},
+       province: {required},
+       postal_code: {required},
+       educational_attainment: {required}
+     },
     },
 
     mounted: function(){
@@ -419,6 +485,14 @@
         }
     },
     methods:{
+      onSubmit() {
+        this.$v.instructor.$touch();
+        if (this.$v.instructor.$anyError) {
+          return;
+        }
+        this.confirmUpdateModal()
+
+      },
       getInstructors: function(){
         Axios
           .get('http://localhost/api/v1/instructors/' + this.instructor.id, {
@@ -443,13 +517,7 @@
           })
           .catch(error => {
             this.alertMessage = error.response.data.message;
-            const values = Object.values(error.response.data.errors);
-            for(const val of values){
-              for(const err of val){
-                this.errors.push(err);
-              }
-            }
-            this.updateErrorCountDown = this.dismissSecs;
+            this.dismissErrorCountDown = this.dismissSecs;
           });
           this.$refs['confirmUpdate'].hide();
       },

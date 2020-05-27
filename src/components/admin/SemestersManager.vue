@@ -116,6 +116,10 @@
           <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Edit Semester">
             <b-icon-pencil/>
           </b-button>
+
+          <b-button variant="danger" size="sm"  @click="DeleteModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Edit Semester">
+            <b-icon-trash/>
+          </b-button>
         </template>
       </b-table>
       </b-overlay>
@@ -208,7 +212,7 @@
 
     <!-- Start of Delete Modal -->
     <b-modal id="deleteSemesterModal" ref="deleteSemesterModal" title="Delete Semester" size="md" no-close-on-backdrop>
-      <h6>Are you sure you want to delete <br/> <b> {{ this.semesters.semester }}?</b></h6>
+      <center><h6>Are you sure you want to delete <br/> <b> {{ this.semesters.semester }}?</b></h6></center>
       <template v-slot:modal-footer="{ cancel, ok }">
         <!-- Emulate built in modal footer ok and cancel button actions -->
         <b-col>

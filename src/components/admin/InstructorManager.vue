@@ -161,7 +161,9 @@
                   :class="{'is-invalid' :$v.instructor.contact_no.$error}">
                 </b-form-input>
                 <div class="invalid-feedback">
-                  <span v-if="!$v.instructor.contact_no.required">Email is required!</span>
+                  <span v-if="!$v.instructor.contact_no.required">Contact No is required!</span>
+                  <span v-if="!$v.instructor.contact_no.maxLength">Maximum of 11 digits!</span>
+                  <span v-if="!$v.instructor.contact_no.minLength">Minimum of 11 digits!</span>
                 </div>
               </b-form-group>
             </b-col>
@@ -373,26 +375,20 @@
         </b-form-row>
 
         <b-overlay :show="isLoading" rounded="sm">
-        <b-form-row>
-          <b-table
-            class="my-3 table-striped MyTable"
-            responsive
-            show-empty
-            bordered
-            hover
-            :items="PrefSubItems"
-            :fields="PrefSubFields"
-            :current-page="PrefSubcurrentPage"
-            :per-page="PrefSubperPage"
-            :filter="PrefSubfilter">
-
-            <template v-slot:cell(actions)="row">
-              <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Edit Room">
-                <b-icon-pencil/>
-              </b-button>
-            </template>
-          </b-table>
-        </b-form-row>
+          <b-form-row>
+            <b-table
+              class="my-3 table-striped MyTable"
+              responsive
+              show-empty
+              bordered
+              hover
+              :items="PrefSubItems"
+              :fields="PrefSubFields"
+              :current-page="PrefSubcurrentPage"
+              :per-page="PrefSubperPage"
+              :filter="PrefSubfilter">
+            </b-table>
+          </b-form-row>
         </b-overlay>
 
         <b-form-row>
@@ -480,26 +476,20 @@
         </b-form-row>
 
         <b-overlay :show="isLoading" rounded="sm">
-        <b-form-row>
-          <b-table
-            class="my-3 table-striped MyTable"
-            responsive
-            show-empty
-            bordered
-            hover
-            :items="TimeAvailItems"
-            :fields="TimeAvailFields"
-            :current-page="TimeAvailcurrentPage"
-            :per-page="TimeAvailperPage"
-            :filter="TimeAvailfilter">
-
-            <template v-slot:cell(actions)="row">
-              <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Edit Room">
-                <b-icon-pencil/>
-              </b-button>
-            </template>
-          </b-table>
-        </b-form-row>
+          <b-form-row>
+            <b-table
+              class="my-3 table-striped MyTable"
+              responsive
+              show-empty
+              bordered
+              hover
+              :items="TimeAvailItems"
+              :fields="TimeAvailFields"
+              :current-page="TimeAvailcurrentPage"
+              :per-page="TimeAvailperPage"
+              :filter="TimeAvailfilter">
+            </b-table>
+          </b-form-row>
         </b-overlay>
 
         <b-form-row>
@@ -581,6 +571,10 @@
           <b-icon-info/>
         </b-button>
 
+        <b-button variant="danger" size="sm" @click="deleteModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Delete Instructor">
+          <b-icon-trash/>
+        </b-button>
+
       </template>
     </b-table>
     </b-overlay>
@@ -612,6 +606,23 @@
         ></b-pagination>
       </b-col>
     </b-row>
+
+    <!-- Start of Delete Modal -->
+    <b-modal id="deleteInstructorModal" ref="deleteInstructorModal" title="Delete Instructor" size="md" no-close-on-backdrop>
+      <center><h6>Are you sure you want to delete  <br/><b>Instructor {{ this.instructor.first_name }} {{this.instructor.last_name}} ?</b></h6></center>
+      <template v-slot:modal-footer="{ cancel, ok }">
+        <!-- Emulate built in modal footer ok and cancel button actions -->
+        <b-col>
+          <b-button class="float-left" variant="danger" @click="$bvModal.hide('deleteInstructorModal')">
+            No
+          </b-button>
+          <b-button class="float-right" variant="success" @click="deleteInstructor()">
+            Yes
+          </b-button>
+        </b-col>
+      </template>
+    </b-modal> <!-- End of delete Modal -->
+
   </div>
 </div>
 <!-- end of academic form -->
@@ -625,7 +636,7 @@
   import moment from 'moment';
   import Datepicker from 'vuejs-datepicker';
   import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue';
-  import { required, minLength, between } from 'vuelidate/lib/validators';
+  import { required, minLength, maxLength, between } from 'vuelidate/lib/validators';
   export default{
     name: 'InstructorManager',
     components: {
@@ -678,11 +689,6 @@
         TimeAvailcurrentPage: 1,
         TimeAvailperPage: 5,
         TimeAvailpageOptions: [5, 10, 15, 20, 25],
-
-
-
-
-
 
         instructor: {
           id: null,
@@ -783,7 +789,7 @@
        birth_date: {required},
        gender: {required},
        email: {required},
-       contact_no: {required},
+       contact_no: {required, minLength: minLength(11), maxLength: maxLength(11)},
        address: {required},
        city: {required},
        province: {required},
@@ -1012,7 +1018,28 @@
           });
       },
 
+      // Delete Room Function
+      deleteInstructor: function(){
+        this.errors = [];
+        Axios
+          .delete('http://localhost/api/v1/instructors/' + this.instructor.id, {
+            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+          })
+          .then(response => {
+            this.getInstructors()
+            this.alertMessage = response.data.message;
+            this.dismissSuccessCountDown = this.dismissSecs;
+
+          })
+          .catch(error => {
+            this.alertMessage = error.response.data.message;
+            this.dismissErrorCountDown = this.dismissSecs;
+          });
+        this.$refs['deleteInstructorModal'].hide();
+      }, // End of Delete Room Function
+
       toggleForm: function(){
+        this.clearInstructorData();
         if(this.InsPersonalInfoForm){
           this.InsPersonalInfoForm = false;
           this.progress = false;
@@ -1084,6 +1111,31 @@
          w.classList.remove("active");
          e.classList.remove("active");
 
+      },
+
+      deleteModal: function(item){
+        this.instructor = {
+          id: item.id,
+          employee_id: item.employee_id,
+          first_name: item.first_name,
+          middle_name: item.middle_name,
+          last_name: item.last_name,
+          birth_date: item.birth_date,
+          gender: item.gender,
+          email: item.email,
+          contact_no: item.contact_no,
+          address: item.address,
+          city: item.city,
+          province: item.province,
+          postal_code: item.postal_code,
+          work_experience: item.work_experience,
+          certifications: item.certifications,
+          educational_attainment: item.educational_attainment,
+          availabilities: item.availabilities,
+          preferred_subjects: item.preferred_subjects,
+          active: item.active
+        },
+        this.$root.$emit('bv::show::modal', 'deleteInstructorModal')
       },
 
       getTimeAvailabilities: function(){
@@ -1196,6 +1248,7 @@
             this.dismissErrorCountDown = this.dismissSecs;
           })
       },
+
 
       ViewInstructorAvailabilities: function(item) {
         this.$router.replace({

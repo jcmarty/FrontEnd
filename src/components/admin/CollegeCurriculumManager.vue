@@ -164,12 +164,18 @@
           </template>
 
           <template v-slot:cell(actions)="row">
-            <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Edit Curriculum">
-              <b-icon-pencil/>
-            </b-button>
             <b-button variant="info" size="sm"  @click="viewSubjects(row.item, row.index, $event.target)" v-b-tooltip.hover title="View Subjects">
               <b-icon-info/>
             </b-button>
+
+            <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Edit Curriculum">
+              <b-icon-pencil/>
+            </b-button>
+
+            <b-button variant="danger" size="sm"  @click="DeleteModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Edit Curriculum">
+              <b-icon-trash/>
+            </b-button>
+
           </template>
 
         </b-table>
@@ -292,16 +298,18 @@
      </template>
     </b-modal>
 
-    <b-modal id="deleteCurriculumModal" ref="deleteCurriculumModal" title="Delete Curriculum" size="lg">
-      <p>Are you sure you want to delete {{ this.curriculum.curriculum_desc }}?</p>
+    <b-modal id="deleteCurriculumModal" ref="deleteCurriculumModal" title="Delete Curriculum" size="md">
+      <center><h6>Are you sure you want to delete <br/> <b> Curriculum {{ this.curriculum.curriculum_desc }}? </b></h6></center>
       <template v-slot:modal-footer="{ cancel, ok }">
         <!-- Emulate built in modal footer ok and cancel button actions -->
-        <b-button size="sm" variant="danger" @click="$bvModal.hide('deleteCurriculumModal')">
-          Cancel
-        </b-button>
-        <b-button size="sm" variant="success" @click="deleteCurriculum()">
-          Delete
-        </b-button>
+        <b-col>
+          <b-button size="sm" variant="danger" @click="$bvModal.hide('deleteCurriculumModal')">
+            Cancel
+          </b-button>
+          <b-button class="float-right" size="sm" variant="success" @click="deleteCurriculum()">
+            Delete
+          </b-button>
+        </b-col>
       </template>
     </b-modal>
   </div>
@@ -428,6 +436,7 @@
               course_id: null,
               active: 1
             };
+            this.toggleForm();
             this.resetForm();
           })
           .catch(error => {

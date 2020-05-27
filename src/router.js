@@ -39,6 +39,7 @@ import StudentInformationManager from "./components/admin/StudentInformationMana
 import InstructorInformationManager from "./components/admin/InstructorInformationManager.vue";
 import StudentPerSubjectReport from "./components/admin/StudentPerSubjectReport.vue";
 import StudentReport from "./components/admin/StudentReport.vue";
+import AlumniReport from "./components/admin/AlumniReports.vue";
 
 
 
@@ -317,6 +318,15 @@ export default new Router({
               path: '/reports/student',
               name: 'StudentReport',
               component: StudentReport,
+              beforeEnter(to, from, next){
+                setTimeout(() => next(), 2000);
+              },
+            },
+
+            {
+              path: '/reports/Graduates',
+              name: 'AlumniReport',
+              component: AlumniReport,
               beforeEnter(to, from, next){
                 setTimeout(() => next(), 2000);
               },

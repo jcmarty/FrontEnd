@@ -9,6 +9,7 @@
       dismissible fade>
         {{alertMessage}}
     </b-alert>
+
     <b-alert variant="danger"
       :show="dismissErrorCountDown"
       @dismissed="dismissErrorCountDown=0"
@@ -99,8 +100,12 @@
                       type="text"
                       id="roomType"
                       v-model.trim="$v.room.room_type.$model"
-                      :class="{'is-invalid' :$v.room.room_type.$error}">
+                      :class="{'is-invalid' :$v.room.room_type.$error}"
+                      list="roomTypes">
                       </b-form-input>
+                      <datalist id="roomTypes">
+                         <option v-for="type in roomTypesOption">{{ type }}</option>
+                    </datalist>
                       <div class="invalid-feedback">
                         <span v-if="!$v.room.room_type.required">Room Type is required!</span>
                       </div>
@@ -192,9 +197,10 @@
               <b-icon-pencil/>
             </b-button>
 
-            <b-button variant="danger" size="sm"  @click="DeleteModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Delete Room">
+            <b-button variant="danger" size="sm" @click="deleteModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Delete Instructor">
               <b-icon-trash/>
             </b-button>
+            
           </template>
         </b-table>
       </b-overlay>
@@ -314,8 +320,12 @@
                 type="text"
                 id="roomType"
                 v-model.trim="$v.room.room_type.$model"
-                :class="{'is-invalid' :$v.room.room_type.$error}">
+                :class="{'is-invalid' :$v.room.room_type.$error}"
+                list="roomTypes">
                 </b-form-input>
+                <datalist id="roomTypes">
+                   <option v-for="type in roomTypesOption">{{ type }}</option>
+              </datalist>
                 <div class="invalid-feedback">
                   <span v-if="!$v.room.room_type.required">Room Type is required!</span>
                 </div>
@@ -389,6 +399,8 @@
           room_capacity: null,
           active: 1
         },
+
+        roomTypesOption: ['Lecture', 'Laboratory',],
 
         options: [
           {value: 0, text: 'Inactive'},
@@ -519,17 +531,12 @@
             this.dismissSuccessCountDown = this.dismissSecs;
             this.resetform();
             this.backToTop();
+
           })
           .catch(error => {
             this.alertMessage = error.response.data.message;
-            const values = Object.values(error.response.data.errors);
-            for(const val of values){
-              for(const err of val){
-                this.errors.push(err);
-              }
-            }
-            this.backToTop();
             this.dismissErrorCountDown = this.dismissSecs;
+            this.backToTop();
           });
         this.$refs['deleteRoomModal'].hide();
       }, // End of Delete Room Function
