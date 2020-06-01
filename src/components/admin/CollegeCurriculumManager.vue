@@ -482,7 +482,7 @@
       deleteCurriculum: function(){
         this.errors = [];
         Axios
-          .delete('http://localhost/api/v1/curriculums/' + this.curriculum. id, {
+          .delete('http://localhost/api/v1/curriculums/' + this.curriculum.id, {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {

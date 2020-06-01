@@ -154,15 +154,12 @@
                 :class="{'text-danger' : $v.users.role.$error}"
                 label="Role *"
                 label-for="Role">
-                <b-form-input
+                <b-form-select
                   type="text"
-                  list="roleOptions"
+                  :options="roleOptions"
                   v-model.trim="$v.users.role.$model"
                   :class="{'is-invalid' :$v.users.role.$error}">
-                </b-form-input>
-                <datalist id="roleOptions">
-                   <option v-for="role in roleOptions">{{ role }}</option>
-              </datalist>
+                </b-form-select>
                 <div class="invalid-feedback">
                   <span v-if="!$v.users.role.required">Role is required!</span>
                 </div>
@@ -472,11 +469,13 @@
         },
 
         roleOptions:[
-          'Assistant Registrar',
-          'Coordinator',
-          'Registrar',
-          'School Administrator',
-          'System Administrator',
+          {value: 'Administrative Assistant', text: 'Administrative Assistant'},
+          {value: 'Assistant Registrar', text: 'Assistant Registrar'},
+          {value: 'Coordinator', text: 'Coordinator'},
+          {value: 'Registrar', text: 'Registrar'},
+          {value: 'School Administrator', text: 'School Administrator'},
+          {value: 'System Administrator', text: 'System Administrator'},
+
         ],
 
         UserActivities:[],
@@ -575,7 +574,9 @@
             // passing of data from created user record
             this.LastUser = response.data.id;
             this.LastUserRole = response.data.role;
-
+            console.log(this.LastUser);
+            console.log(response.data.last_insert_id);
+            console.log(response.data.id);
             this.getUserActivies();
           })
           .catch(error => {
@@ -689,73 +690,10 @@
               delete_priv: 0,
             });
 
-            this.UserPriv.push({
-              user_id: this.LastUser,
-              activity_id: user_activities.data[5].id,
-              create_priv: 1,
-              read_priv: 1,
-              update_priv: 1,
-              delete_priv: 1,
-            });
-
-            this.UserPriv.push({
-              user_id: this.LastUser,
-              activity_id: user_activities.data[4].id,
-              create_priv: 1,
-              read_priv: 1,
-              update_priv: 1,
-              delete_priv: 1,
-            });
-
           }
 
         else if (this.LastUserRole === 'School Administrator') {
           console.log(user_activities.data);
-
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[15].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[14].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[13].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[11].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[9].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
 
           this.UserPriv.push({
             user_id: this.LastUser,
@@ -802,49 +740,12 @@
           // subject management
           this.UserPriv.push({
             user_id: this.LastUser,
-            activity_id: user_activities.data[15].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[14].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[11].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-
-          this.UserPriv.push({
-            user_id: this.LastUser,
             activity_id: user_activities.data[10].id,
             create_priv: 0,
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
           });
-
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[9].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-
 
           //assessment managemnt
           this.UserPriv.push({
@@ -903,49 +804,12 @@
           // subject management
           this.UserPriv.push({
             user_id: this.LastUser,
-            activity_id: user_activities.data[15].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[14].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[11].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-
-          this.UserPriv.push({
-            user_id: this.LastUser,
             activity_id: user_activities.data[10].id,
             create_priv: 0,
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
           });
-
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[9].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-
 
           //assessment managemnt
           this.UserPriv.push({
@@ -997,38 +861,11 @@
             update_priv: 1,
             delete_priv: 1,
           });
+
         }
 
         else if (this.LastUserRole === 'Coordinator') {
           console.log(user_activities.data);
-
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[15].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[14].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[13].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
-          });
-
           this.UserPriv.push({
             user_id: this.LastUser,
             activity_id: user_activities.data[12].id,
@@ -1036,15 +873,6 @@
             read_priv: 1,
             update_priv: 1,
             delete_priv: 1,
-          });
-
-          this.UserPriv.push({
-            user_id: this.LastUser,
-            activity_id: user_activities.data[11].id,
-            create_priv: 0,
-            read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
           });
 
           this.UserPriv.push({
@@ -1067,28 +895,36 @@
 
           this.UserPriv.push({
             user_id: this.LastUser,
-            activity_id: user_activities.data[0].id,
-            create_priv: 0,
+            activity_id: user_activities.data[8].id,
+            create_priv: 1,
             read_priv: 1,
-            update_priv: 0,
-            delete_priv: 0,
+            update_priv: 1,
+            delete_priv: 1,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[0].id,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
           });
 
         }
-        else if (
-          this.LastUserRole != 'Coordinator' ||
-          this.LastUserRole != 'Registrar' ||
-          this.LastUserRole != 'Assistant Registrar' ||
-          this.LastUserRole != 'System Admin' ||
-          this.LastUserRole != 'School Admin') {
-            this.UserPriv.push({
-              user_id: null,
-              activity_id: null,
-              create_priv: null,
-              read_priv: null,
-              update_priv: null,
-              delete_priv: null,
-            });
+
+        else if (this.LastUserRole === 'Administrative Assistant') {
+          console.log(user_activities.data);
+          for(var i = 0; i < user_activities.data.length; i++){
+              this.UserPriv.push({
+                user_id: this.LastUser,
+                activity_id: user_activities.data[i].id,
+                create_priv: 0,
+                read_priv: 0,
+                update_priv: 0,
+                delete_priv: 0,
+              });
+          }
         }
 
 
