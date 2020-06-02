@@ -3,6 +3,8 @@
     <h1 class="font-weight-bold text-dark">Manage User Accounts</h1>
     <hr/>
 
+    <!-- COMMENT LANG PARA MA PUSH -->
+
     <!-- Alert Message -->
     <b-alert variant="success"
       :show="dismissSuccessCountDown"
@@ -68,19 +70,13 @@
 
             <b-col cols="12" md="6" lg="3">
               <b-form-group
-                :class="{'text-danger' : $v.users.password_confirmation.$error}"
                 label="Confirm Password *"
                 label-for="confirmPassword">
                 <b-form-input
                   type="password"
                   id="confirmPassword"
-                  v-model.trim="$v.users.password_confirmation.$model"
-                  :class="{'is-invalid' :$v.users.password_confirmation.$error}">
+                  v-model="users.password_confirmation">
                 </b-form-input>
-                <div class="invalid-feedback">
-                  <span v-if="!$v.users.password_confirmation.required">Confirm Password is required!</span>
-                  <span v-if="!$v.users.password_confirmation.sameAsPassword">Passwords must be identical.</span>
-                </div>
               </b-form-group>
             </b-col>
 
@@ -440,7 +436,7 @@
 
 <script>
   import Axios from "axios";
-  import { required, minLength, sameAs, between } from 'vuelidate/lib/validators';
+  import { required, minLength, between } from 'vuelidate/lib/validators';
   export default{
     name: 'UserAccountManager',
     data() {
@@ -507,7 +503,7 @@
      users: {
        username: {required},
        password: {required},
-       password_confirmation: {sameAsPassword: sameAs('password')},
+       password_confirmation: {required},
        email: {required},
        first_name: {required},
        last_name: {required},
