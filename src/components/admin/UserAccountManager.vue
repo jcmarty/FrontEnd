@@ -70,15 +70,37 @@
 
             <b-col cols="12" md="6" lg="3">
               <b-form-group
+                :class="{'text-danger' : $v.users.password_confirmation.$error}"
                 label="Confirm Password *"
                 label-for="confirmPassword">
                 <b-form-input
                   type="password"
                   id="confirmPassword"
-                  v-model="users.password_confirmation">
+                  v-model.trim="$v.users.password_confirmation.$model"
+                  :class="{'is-invalid' :$v.users.password_confirmation.$error}">
                 </b-form-input>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.users.password_confirmation.required">Confirm Password is required!</span>
+                </div>
               </b-form-group>
             </b-col>
+
+            <!-- <b-col cols="12" md="6" lg="3">
+              <b-form-group
+              :class="{'text-danger' : $v.users.password_confirmation.$error}"
+                label="Confirm Password *"
+                label-for="confirmPassword">
+                <b-form-input
+                  type="password"
+                  id="confirmPassword"
+                  v-model="$v.users.password_confirmation.$model"
+                  :class="{'is-invalid' :$v.users.password_confirmation.$error}">
+                </b-form-input>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.users.password_confirmation.required">Confirm Password is required!</span>
+                </div>
+              </b-form-group>
+            </b-col> -->
 
             <!-- Email -->
             <b-col cols="12" md="6" lg="3">
@@ -525,6 +547,7 @@
           return;
         }
         this.addUserAccount()
+        // console.log(this.users)
 
       },
       // Get User Account Function
@@ -580,7 +603,12 @@
             this.LastUser = response.data.id;
             this.LastUserRole = response.data.role;
 
-            this.getUserActivies();
+
+            if(this.roleOptions.indexOf(this.LastUserRole) !== -1){
+                  this.getUserActivies();
+            } else{
+
+            }
           })
           .catch(error => {
             this.alertMessage = error.response.data.message;
@@ -1190,11 +1218,14 @@
         this.users = {
           username: null,
           password: null,
+          password_confirmation: null,
           email: null,
           first_name: null,
           middle_name: null,
           last_name: null,
           role: null,
+          blocked: 0,
+          attempts: 0,
           active: 1
         };
       }, // End of Reset Form Function
