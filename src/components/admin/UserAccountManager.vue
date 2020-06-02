@@ -4,6 +4,8 @@
     <hr/>
 
     <!-- Alert Message -->
+
+    <!-- Alert Message -->
     <b-alert variant="success"
       :show="dismissSuccessCountDown"
       @dismissed="dismissSuccessCountDown=0"
@@ -468,6 +470,8 @@
           middle_name: null,
           last_name: null,
           role: null,
+          blocked: 0,
+          attempts: 0,
           active: 1
         },
 
