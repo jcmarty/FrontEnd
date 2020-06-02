@@ -74,8 +74,13 @@
                 <b-form-input
                   type="password"
                   id="confirmPassword"
-                  v-model="users.password_confirmation">
+                  v-model.trim="$v.users.password_confirmation.$model"
+                  :class="{'is-invalid' :$v.users.password_confirmation.$error}">
                 </b-form-input>
+                <div class="invalid-feedback">
+                  <span v-if="!$v.users.password_confirmation.required">Confirm Password is required!</span>
+                  <span v-if="!$v.users.password_confirmation.sameAsPassword">Passwords must be identical.</span>
+                </div>
               </b-form-group>
             </b-col>
 
