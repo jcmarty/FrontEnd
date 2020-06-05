@@ -52,6 +52,7 @@
 
               <li v-b-toggle.student v-if="isAuthorized(this.$store.getters.getSettings.student_management, 0)" ><a>Student<span class="fa fa-chevron-down"></span></a>
                 <b-collapse tag="ul" class="nav child_menu" id="student" accordion="sideMenuSubAccordion">
+                  <router-link tag="li" to="/manage/student/preregistration" ><a class="super_child_menu">Pre registration</a></router-link>
                   <router-link tag="li" to="/manage/student/registration" ><a class="super_child_menu">Registration</a></router-link>
                   <router-link tag="li" to="/manage/student/enrollment"><a class="super_child_menu">Enrollment</a></router-link>
                   <router-link tag="li" to="/manage/student/grades"><a class="super_child_menu">Grades</a></router-link>

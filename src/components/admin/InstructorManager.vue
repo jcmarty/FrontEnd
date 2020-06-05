@@ -457,7 +457,7 @@
               class="time_start"
               label="Time Start"
               label-for="time_start">
-                <vue-timepicker v-model="newTimeAvailability.time_start" format="hh:mm A" close-on-complete></vue-timepicker>
+              <vue-timepicker v-model="newTimeAvailability.time_start" format="hh:mm A" close-on-complete></vue-timepicker>
             </b-form-group>
           </b-col>
           <b-col cols="12" md="6" lg="2">
@@ -465,7 +465,7 @@
               class="time_end"
               label="Time End"
               label-for="time_end">
-                <vue-timepicker v-model="newTimeAvailability.time_end" format="hh:mm A" close-on-complete></vue-timepicker>
+              <vue-timepicker v-model="newTimeAvailability.time_end" format="hh:mm A" close-on-complete></vue-timepicker>
             </b-form-group>
           </b-col>
           <b-col cols="12" md="6" lg="2" class="d-flex justify-content-end align-items-end mb-1">
@@ -679,7 +679,15 @@
         TimeAvailItems: [],
         TimeAvailFields: [
           { key: 'day', label: 'Day', class: 'text-center', sortable: true},
-          { key: 'time_start', label: 'Time Start', sortable: true, class: 'text-center' },
+          { key: 'time_start', label: 'Time Start', sortable: true, class: 'text-center' ,
+          formatter: (value, key, item) => {
+            // item.time_start
+            //   = moment(item.time_start.hh + ":"
+            //     + item.time_start.mm + " "
+            //     + item.time_start.A, ["hh:mm A"]).format("HH:mm");
+              return item.time_start.hh 
+            },
+          },
           { key: 'time_end', label: 'Time End', sortable: true, class: 'text-center' },
           { key: 'academic_year.academic_year', label: 'Academic Year', sortable: true, class: 'text-center' },
           { key: 'semester.semester', label: 'Semester', sortable: true, class: 'text-center' },

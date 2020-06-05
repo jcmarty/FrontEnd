@@ -29,6 +29,7 @@ import TrackManager from "./components/admin/TrackManager.vue";
 import AcademicYearManager from "./components/admin/AcademicYearManager.vue";
 import UserAccountManager from "./components/admin/UserAccountManager.vue";
 import StudentRegistrationManager from "./components/admin/StudentRegistrationManager.vue";
+import StudentPreRegistrationManager from "./components/admin/StudentPreRegistrationManager.vue";
 import StudentEnrollmentManager from "./components/admin/StudentEnrollmentManager.vue";
 import StudentGradesManager from "./components/admin/StudentGradesManager.vue";
 import UserPrivilegeManager from "./components/admin/UserPrivilegeManager.vue";
@@ -294,6 +295,14 @@ export default new Router({
               path: '/manage/student/registration',
               name: 'StudentRegistrationManager',
               component: StudentRegistrationManager,
+              beforeEnter(to, from, next){
+                setTimeout(() => next(), 2000);
+              },
+            },
+            {
+              path: '/manage/student/preregistration',
+              name: 'StudentPreRegistrationManager',
+              component: StudentPreRegistrationManager,
               beforeEnter(to, from, next){
                 setTimeout(() => next(), 2000);
               },

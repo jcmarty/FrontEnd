@@ -197,10 +197,10 @@
               <b-icon-pencil/>
             </b-button>
 
-            <b-button variant="danger" size="sm" @click="deleteModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Delete Instructor">
+            <b-button variant="danger" size="sm" @click="DeleteModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Delete Room">
               <b-icon-trash/>
             </b-button>
-            
+
           </template>
         </b-table>
       </b-overlay>
@@ -597,6 +597,7 @@
           active: item.active
         },
         this.$root.$emit('bv::show::modal', 'deleteRoomModal')
+
       },
 
       StatusUpdate: function(item){

@@ -272,7 +272,15 @@
         items: [],
         fields: [
           { key: 'day', label: 'Day', class: 'text-center', sortable: true},
-          { key: 'time_start', label: 'Time Start', sortable: true, class: 'text-center' },
+          { key: 'time_start', label: 'Time Start', sortable: true, class: 'text-center',
+          formatter: (value, key, item) => {
+              // item.time_start
+              //   = moment(item.time_start.hh + ":"
+              //     + item.time_start.mm + " "
+              //     + item.time_start.A, ["hh:mm A"]).format("HH:mm");
+                return item.time_start
+              },
+          },
           { key: 'time_end', label: 'Time End', sortable: true, class: 'text-center' },
           { key: 'academic_year.academic_year', label: 'Academic Year', sortable: true, class: 'text-center' },
           { key: 'semester.semester', label: 'Semseter', sortable: true, class: 'text-center' },

@@ -64,6 +64,7 @@
                 </b-form-input>
                 <div class="invalid-feedback">
                   <span v-if="!$v.users.password.required">Password is required!</span>
+                  <span v-if="!$v.users.password_confirmation.minLength">Password must have at least 6 characters.</span>
                 </div>
               </b-form-group>
             </b-col>
@@ -81,6 +82,7 @@
                 </b-form-input>
                 <div class="invalid-feedback">
                   <span v-if="!$v.users.password_confirmation.required">Confirm Password is required!</span>
+                  <span v-if="!$v.users.password_confirmation.sameAsPassword">Passwords must be identical.</span>
                 </div>
               </b-form-group>
             </b-col>
@@ -458,7 +460,7 @@
 
 <script>
   import Axios from "axios";
-  import { required, minLength, between } from 'vuelidate/lib/validators';
+  import { required, minLength, between, sameAs } from 'vuelidate/lib/validators';
   export default{
     name: 'UserAccountManager',
     data() {
@@ -526,8 +528,8 @@
     validations: {
      users: {
        username: {required},
-       password: {required},
-       password_confirmation: {required},
+       password: {required, minLength: minLength(6)},
+       password_confirmation: {sameAsPassword: sameAs('password'), required},
        email: {required},
        first_name: {required},
        last_name: {required},

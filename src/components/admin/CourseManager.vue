@@ -372,7 +372,7 @@
           course_code: null,
           course_desc: null,
           course_major: null,
-          year_duration: 0,
+          year_duration: null,
           active: 1
         },
 
@@ -394,7 +394,6 @@
       course: {
         course_code: {required},
         course_desc: {required},
-        course_major: {required},
         year_duration: {required},
       }
     },
@@ -537,9 +536,12 @@
           course_code: null,
           course_desc: null,
           course_major: null,
-          year_duration: 0,
+          year_duration: null,
           active: 1
         };
+        this.$nextTick(() => {
+          this.$v.$reset();
+        });
 
       }, // End of Reset Form Function
 
@@ -566,6 +568,7 @@
         this.$root.$emit('bv::show::modal', 'editCourseModal')
       },
       DeleteModal: function(item){
+        this.showForm = false;
         this.course = {
           id: item.id,
           course_code: item.course_code,
