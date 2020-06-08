@@ -1,9 +1,7 @@
+// Start of Admin Routes
 import Vue from "vue";
 import Router from "vue-router";
 import App from "./App.vue";
-import Home from "./views/student/Home.vue";
-import Frontpage from "./views/student/Frontpage.vue";
-import Register from "./views/student/Register.vue";
 import AdminLogin from "./views/admin/Login.vue";
 import Admin from "./views/admin/Admin.vue";
 import AdminPanel from "./views/admin/AdminPanel.vue";
@@ -41,11 +39,16 @@ import InstructorInformationManager from "./components/admin/InstructorInformati
 import StudentPerSubjectReport from "./components/admin/StudentPerSubjectReport.vue";
 import StudentReport from "./components/admin/StudentReport.vue";
 import AlumniReport from "./components/admin/AlumniReports.vue";
-
-
-
 // for testing only
 import RequirementsTesting from "./components/admin/RequirementsTesting.vue";
+// End of Admin Routes
+
+// Start of  Student routes
+import Home from "./views/student/Home.vue";
+import Frontpage from "./views/student/Frontpage.vue";
+import Register from "./views/student/Register.vue";
+import OnlineRegHome from "./components/onlineRegistration/OnlineRegHome.vue";
+// End Of Student routes
 
 Vue.use(Router);
 
@@ -65,8 +68,8 @@ export default new Router({
       children: [
         {
           path: "",
-          name: "frontpage",
-          component: Frontpage,
+          name: "OnlineRegHome",
+          component: OnlineRegHome,
           meta: {
             guest: true
           }
@@ -81,6 +84,9 @@ export default new Router({
         }
       ]
     },
+    // End of Student Routes
+
+    // Start of Admin routes
     {
       path: "/admin",
       component: Admin,
