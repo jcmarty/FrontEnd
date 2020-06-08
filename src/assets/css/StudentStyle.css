@@ -9,6 +9,8 @@
   top: 0;
   background-color: white;
   z-index: 50;
+  flex-direction: row;
+  direction: rtl;
 }
 
 
@@ -92,7 +94,7 @@
    border-bottom: 1px solid #D9DEE4;
    margin-bottom: 10px;
    width: 100%;
-   position: relative
+   position: relative;
 }
 
 .Stud_loginbtn{
