@@ -678,7 +678,6 @@
 
         Students: {
           id: null,
-          student_number: null,
           first_name: null,
           middle_name: null,
           last_name: null,
@@ -1169,7 +1168,6 @@
 
       ClearStudentFields: function(){
         this.Students = {
-          student_number: null,
           first_name: null,
           middle_name: null,
           last_name: null,
@@ -1250,7 +1248,6 @@
       enroll: function(item){
         this.Students = {
           id: item.id,
-          student_number: item.student_number,
           first_name: item.first_name,
           middle_name: item.middle_name,
           last_name: item.last_name,
@@ -1294,7 +1291,6 @@
           name: 'StudentInformationManager',
           params: {
             id: item.id,
-            student_number: item.student_number,
             first_name: item.first_name,
             middle_name: item.middle_name,
             last_name: item.last_name,
@@ -1334,7 +1330,6 @@
 
         this.Students = {
           id: item.id,
-          student_number: item.student_number,
           first_name: item.first_name,
           middle_name: item.middle_name,
           last_name: item.last_name,
