@@ -666,7 +666,6 @@
       return{
         items: [],
         fields: [
-          { key: 'student_number', label: 'Student Number', class: 'text-center'},
           { key: 'full_name', label: 'Full Name', class: 'text-center'},
           { key: 'birth_date', label: 'Birthdate', class: 'text-center'},
           { key: 'gender', label: 'Gender', class: 'text-center'},
