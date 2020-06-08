@@ -10,6 +10,10 @@
   export default{
     name: 'studentDashboard',
 
+    components: {
+      SideMenu,
+    },
+
     data() {
       return {
 

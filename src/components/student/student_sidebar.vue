@@ -34,12 +34,12 @@
 
 <style scoped>
   .dash_sidebar{
-    background: blue;
+    background: rgb(27, 86, 243);
     margin-top: 70px;
     padding-top: 30px;
     position: fixed;
     left: 0;
-    width: 250px;
+    width: 230px;
     height: 100%;
   }
 
@@ -49,14 +49,15 @@
     width: 100%;
     line-height: 60px;
     text-decoration: none;
-    padding-left 40px;
+    padding-left: 40px;
     box-sizing: border-box;
     transition:  0.5s;
     transition-property: background;
   }
 
   .dash_sidebar a:hover{
-    background: green;
+    background: white;
+    color: rgb(27, 86, 243);;
   }
 
 

@@ -50,6 +50,12 @@ import Register from "./views/student/Register.vue";
 import OnlineRegHome from "./components/onlineRegistration/OnlineRegHome.vue";
 // End Of Student routes
 
+//  Start of Student Dashboard
+import StudentDashboard from "./views/student/StudentPanel.vue";
+import SideMenu from './components/student/student_sidebar.vue';
+//  End of Student Dashboard
+
+
 Vue.use(Router);
 
 /*NOTE: the meta inside each route is useless for now.
@@ -80,7 +86,13 @@ export default new Router({
           meta: {
             guest: true
           }
-
+        },
+        {
+          path: "student/dashboard",
+          component: StudentDashboard,
+          meta: {
+            guest: true
+          }
         }
       ]
     },
