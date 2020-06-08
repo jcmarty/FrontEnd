@@ -1,0 +1,99 @@
+/* Header Start*/
+.Stud_nav{
+  box-shadow: 0 .25rem .25rem rgba(0,0,0,.25),inset 0 -1px 5px rgba(0,0,0,.25);
+  text-align: center;
+  /* padding: 10px 20px 20px 20px; */
+  color: white;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  background-color: white;
+  z-index: 50;
+}
+
+
+.nav-link{
+  font-weight: 700;
+  font-style: normal;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-size: 17px;
+  /* color:rgb(27, 86, 243) !important; */
+  color: black !important;
+}
+
+
+.Stud_nav_item{
+  /* color: black !important; */
+  font-size: 16px;
+  cursor: pointer;
+  padding: 5px 5px 10px 5px;
+}
+
+/* Header Dropdown */
+.Stud_dropdown{
+ border: none;
+ outline: none;
+ background-color: inherit;
+ font-family: inherit;
+ margin: 0;
+ z-index: 1;
+}
+
+.Stud_dropdown:hover .Stud_dropdown-content{
+ margin-top: 18px;
+ display: block;
+}
+
+.Stud_dropdown:hover .nav-link{
+ color: #b3b3b3 !important;
+}
+
+.Stud_dropdown-content{
+ display: none;
+ text-align: left;
+ padding: 15px;
+ position: absolute;
+ background-color: #0275d8 ;
+ min-width: 190px;
+ box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+ z-index: 1;
+}
+
+.Stud_dropdown-content a {
+ /* color: black; */
+ color: white !important;
+ text-decoration: none;
+}
+
+.Stud_dropdown-content a:hover {
+ /* color: black; */
+ color: #b3b3b3 !important;
+ text-decoration: none;
+}
+
+.Stud_top-nav{
+ width: 100%;
+
+}
+.ComteqLogo {
+ height: 50px;
+ width: 70%;
+
+}
+.comteqlogo{
+ height: 100px;
+ width: 50px;
+}
+
+.Stud_nav_menu {
+   float: right;
+   background: #EDEDED;
+   border-bottom: 1px solid #D9DEE4;
+   margin-bottom: 10px;
+   width: 100%;
+   position: relative
+}
+
+
+/* Header End*/

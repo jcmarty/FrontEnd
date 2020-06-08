@@ -1,38 +1,38 @@
 <template>
   <div>
-    <b-navbar class="nav" toggleable="lg" type="dark" >
+    <b-navbar class="Stud_nav" toggleable="lg" type="dark" >
       <!-- <b-navbar-brand href="#">COMTEQ</b-navbar-brand> -->
       <!-- <div class="logo_container">
         <b-img src="../../public/logo.jfif" fluid alt="Responsive image"></b-img>
       </div> -->
 
-      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+      <b-navbar-toggle target="Stud_nav-collapse"></b-navbar-toggle>
 
-      <b-collapse id="nav-collapse" is-nav>
-        <b-navbar-nav class="navbar_nav">
-          <b-nav-item class="nav_item" href="#" to="/Home">Home</b-nav-item>
+      <b-collapse class="Stud_nav-collapse" is-nav>
+        <b-navbar-nav class="navbar_Stud_nav">
+          <b-nav-item class="Stud_nav_item" href="#" to="/Home">Home</b-nav-item>
 
-          <b-nav-item class="nav_item dropdown" href="#">
+          <b-nav-item class="Stud_nav_item dropdown" href="#">
             Programs
-            <div class="dropdown-content">
+            <div class="Stud_dropdown-content">
               <router-link to="/ProgramCollege"><a href="#" >College</a></router-link>
               <b-dropdown-divider></b-dropdown-divider>
               <router-link to="/ProgramSHS"><a href="#" >Senior High</a></router-link>
             </div>
           </b-nav-item>
 
-          <b-nav-item class="nav_item dropdown" href="#" >
+          <b-nav-item class="Stud_nav_item dropdown" href="#" >
             Admissions
-            <div class="dropdown-content">
+            <div class="Stud_dropdown-content">
               <router-link to="/AdmissionCollege"><a href="#" >College</a></router-link>
               <b-dropdown-divider></b-dropdown-divider>
               <router-link to="/AdmissionSHS"><a href="#" >Senior High</a></router-link>
             </div>
           </b-nav-item>
 
-          <b-nav-item class="nav_item" href="#" to="/Register">Register</b-nav-item>
-          <b-nav-item class="nav_item" href="#" to="/">Login</b-nav-item>
-          <b-nav-item class="nav_item" href="#" to="/About">About</b-nav-item>
+          <b-nav-item class="Stud_nav_item" href="#" to="/Register">Register</b-nav-item>
+          <b-nav-item class="Stud_nav_item" href="#" to="/">Login</b-nav-item>
+          <b-nav-item class="Stud_nav_item" href="#" to="/About">About</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
