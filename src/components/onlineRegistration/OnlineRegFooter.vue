@@ -1,6 +1,6 @@
 <template>
 
-  <footer id="footer-top">
+  <footer id="Stud_footer-top">
     <div class="container">
       <div class="row">
 
@@ -17,7 +17,7 @@
             <h3>About Us!</h3>
             <hr>
             <img src="../../assets/images/address_icon.png" img-alt="Image" id="SO-icon" img-top />
-              <p class="address">1200 4th floor Savers Appliance, Rizal Ave, East Tapinac, Olongapo City, Zambales</P>
+              <p class="Stud_address">1200 4th floor Savers Appliance, Rizal Ave, East Tapinac, Olongapo City, Zambales</P>
             <img src="../../assets/images/contact_icon.jpg" img-alt="Image" id="SO-icon" img-top />
               <p>Tel: +63(47)252-3335</p>
           </div>

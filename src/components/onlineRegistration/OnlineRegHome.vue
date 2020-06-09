@@ -1,7 +1,7 @@
 <template>
-    <div class="main_container">
+    <div class="Stud_main_container">
       <Header />
-      <div class="body_container">
+      <div class="Stud_body_container">
           <!-- start of carousel -->
           <div class="carousel_container">
             <b-carousel

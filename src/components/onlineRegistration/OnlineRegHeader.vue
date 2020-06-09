@@ -31,11 +31,9 @@
 
           <b-nav-item class="Stud_nav_item" href="#" to="/Register">Register</b-nav-item>
           <b-nav-item class="Stud_nav_item" href="#" to="/About">About</b-nav-item>
+          <b-nav-item class="Stud_nav_item" href="#" to="/Login">Login</b-nav-item>
         </b-navbar-nav>
 
-        <div id="Stud_loginbtn">
-          <b-nav-item href="#" to="/Login">Login</b-nav-item>
-        </div>
 
 
 
