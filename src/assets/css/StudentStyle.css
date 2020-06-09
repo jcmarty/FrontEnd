@@ -1,3 +1,7 @@
+/*Global*/
+
+
+
 /* Header Start*/
 .Stud_nav{
   box-shadow: 0 .25rem .25rem rgba(0,0,0,.25),inset 0 -1px 5px rgba(0,0,0,.25);
@@ -5,16 +9,15 @@
   /* padding: 10px 20px 20px 20px; */
   color: white;
   width: 100%;
-  position: fixed;
+  position:fixed;
   top: 0;
   background-color: white;
   z-index: 50;
-  flex-direction: row;
-  direction: rtl;
+  
 }
 
 
-.nav-link{
+.Stud_nav-link{
   font-weight: 700;
   font-style: normal;
   text-transform: uppercase;
@@ -89,7 +92,7 @@
 }
 
 .Stud_nav_menu {
-   float: right;
+   float: left;
    background: #EDEDED;
    border-bottom: 1px solid #D9DEE4;
    margin-bottom: 10px;
