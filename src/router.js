@@ -30,6 +30,7 @@ import StudentRegistrationManager from "./components/admin/StudentRegistrationMa
 import StudentPreRegistrationManager from "./components/admin/StudentPreRegistrationManager.vue";
 import StudentEnrollmentManager from "./components/admin/StudentEnrollmentManager.vue";
 import StudentGradesManager from "./components/admin/StudentGradesManager.vue";
+import PreRegisterStudentInfoManager from "./components/admin/PreRegisteredInformationManager.vue";
 import UserPrivilegeManager from "./components/admin/UserPrivilegeManager.vue";
 import ActivityLogs from "./components/admin/ActivityLogs.vue";
 import ResetPassword from "./components/admin/ResetPassword.vue";
@@ -390,6 +391,15 @@ export default new Router({
               path: '/StudentInformationManager',
               name: 'StudentInformationManager',
               component: StudentInformationManager,
+              beforeEnter(to, from, next){
+                setTimeout(() => next(), 2000);
+              },
+            },
+
+            {
+              path: '/PreRegisterStudentInfoManager',
+              name: 'PreRegisterStudentInfoManager',
+              component: PreRegisterStudentInfoManager,
               beforeEnter(to, from, next){
                 setTimeout(() => next(), 2000);
               },

@@ -7,6 +7,7 @@ import vOutsideEvents from 'vue-outside-events';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import './assets/css/style.css';
+import './assets/css/StudentStyle.css';
 import './assets/css/font-awesome.min.css';
 import Vuelidate from 'vuelidate';
 
