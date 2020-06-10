@@ -65,7 +65,8 @@ import OnlineRegVisionMission from "./components/onlineRegistration/OnlineRegVis
 
 //  Start of Student Dashboard
 import StudentDashboard from "./views/student/StudentPanel.vue";
-import SideMenu from './components/student/student_sidebar.vue';
+import StudentProfile from './components/student/student_profile.vue';
+import StudentAccountSetting from './components/student/student_account_setting.vue';
 //  End of Student Dashboard
 
 
@@ -77,6 +78,34 @@ or used a middleware*/
 export default new Router({
   mode: 'history',
   routes: [
+    {
+      path: "/dashboard",
+      name: "StudentDashboard",
+      component: StudentDashboard,
+      meta: {
+        guest: true
+      },
+      children: [
+        {
+          path: "/dashboard/student/profile",
+          name: "StudentProfile",
+          component: StudentProfile,
+          meta: {
+            guest: true
+          }
+        },
+        {
+          path: "/dashboard/student/account_setting",
+          name: "StudentAccountSetting",
+          component: StudentAccountSetting,
+          meta: {
+            guest: true
+          }
+        },
+
+      ]
+    },
+
     {
       path: "/",
       name: "Home",

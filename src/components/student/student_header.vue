@@ -38,12 +38,12 @@
 <style scoped>
 
   .dash_header {
-    background: white;
+    background: #EDEDED;
     position: fixed;
     left: 0;
     margin-left: 220px;
     padding-left: 10px;
-    width: 100%;
+    width: calc(100vw - 220px);
     height: 55px;
   }
 
@@ -53,7 +53,10 @@
   }
 
   .dash_header .dash_logout .dash_logout_btn{
-    float: right;
+    position: fixed;
+    right: 0;
+    top: 10px;
+    margin-right: 15px;
   }
 
 </style>

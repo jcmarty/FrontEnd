@@ -1,19 +1,25 @@
 <template>
-  <div class="">
-    <DashboardHeader />
-    <SideMenu />
+  <div class="dash_content">
+    <DashboardHeader class="dash_header"/>
+    <DashboardSideBar class="dash_sidebar"/>
+    <DashboardFooter class="dash_footer"/>
+    <div class="dash_body_content">
+      <router-view />
+      <!-- asdljaslkdj -->
+    </div>
   </div>
 </template>
 
 <script>
   import Axios from "axios";
-  import SideMenu from '../../components/student/student_sidebar.vue';
+  import DashboardSideBar from '../../components/student/student_sidebar.vue';
   import DashboardHeader from '../../components/student/student_header.vue';
+  import DashboardFooter from '../../components/student/student_footer.vue';
   export default{
-    name: 'studentDashboard',
+    name: 'StudentDashboard',
 
     components: {
-      SideMenu, DashboardHeader
+      DashboardSideBar, DashboardHeader, DashboardFooter
     },
 
     data() {
@@ -32,3 +38,15 @@
 
   } //End of Export Default
 </script>
+
+<style scoped>
+  .dash_body_content{
+    position: fixed;
+    margin-left: 220px;
+    background: #fff;
+    margin-top: 55px;
+    width: calc(100vw - 220px);
+    height: calc(100vh - 55px - 45px);
+    padding: 20px;
+  }
+</style>
