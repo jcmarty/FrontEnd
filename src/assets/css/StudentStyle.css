@@ -260,3 +260,48 @@ float: left;
       background-color: #55b776;
   }
 /*End of Registrar*/
+
+/*About of start*/
+.cover_img{
+  width: 100%;
+}
+
+#medal{
+  width: 100%;
+}
+
+.about_banner{
+  position: absolute;
+}
+.card-group deck{
+  margin: 100px;
+}
+
+#about_carousel{
+  margin: 10px;
+  margin-top: 30px;
+}
+
+#about_cards{
+  margin-top:80px;
+  margin-bottom: 80px;
+}
+
+#about_card{
+  text-align: center;
+}
+
+.Ach_title{
+  text-align: center;
+  color: blue;
+  font-size: 50px;
+  font-style: oblique;
+  font-family:-webkit-pictograph;
+}
+.Stud_about{
+  font-size: 25px;
+  font-weight: bold;
+  color:blue;
+  padding-left:80px;
+}
+/*end of about*/

@@ -1,6 +1,7 @@
 <template>
-  <div class="main_container">
+  <div class="Stud_main_container">
     <Header />
+    <div class="Stud_body_container">
       <div id="about_carousel">
         <b-card
           overlay
@@ -17,7 +18,7 @@
 
                   <b-card id="about_card p-3" style=" box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);" >
                     <img src="../../assets/images/vision_mission.png" img-alt="Image" id="medal"  />
-                      <b-link to="/VisionMission">
+                      <b-link class="Stud_about" to="/VisionMission">
                         Mission And Vision
                       </b-link>
                   </b-card>
@@ -25,7 +26,7 @@
                 <b-card id="about_card p-3" style=" box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);" >
                   <img src="../../assets/images/achievement.png" img-alt="Image" id="medal" img-top />
                   <b-card-text>
-                    <b-link to="/Achievements">
+                    <b-link class="Stud_about" to="/Achievements">
                       School Achievements
                     </b-link>
                   </b-card-text>
@@ -33,7 +34,7 @@
 
                 <b-card id="about_card p-3" style=" box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);" >
                   <img src="../../assets/images/event.png" img-alt="Image" id="medal" img-top />
-                  <b-link to="/Events">
+                  <b-link class="Stud_about" to="/Events">
                     School Events
                   </b-link>
                 </b-card>
@@ -41,6 +42,7 @@
           </div>
 
         </div>
+      </div>
       <Footer />
     </div>
 </template>
