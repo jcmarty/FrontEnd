@@ -102,7 +102,7 @@ export default new Router({
           }
         },
         {
-          path: "",
+          path: "Achievements",
           name: "OnlineRegAchievements",
           component: OnlineRegAchievements,
           meta: {
@@ -150,7 +150,7 @@ export default new Router({
           }
         },
         {
-          path: "CollegeProgram",
+          path: "ProgramCollege",
           name: "OnlineRegProgramCollege",
           component: OnlineRegProgramCollege,
           meta: {
@@ -158,7 +158,7 @@ export default new Router({
           }
         },
         {
-          path: "SHSProgram",
+          path: "ProgramSHS",
           name: "OnlineRegProgramSHS",
           component: OnlineRegProgramSHS,
           meta: {
