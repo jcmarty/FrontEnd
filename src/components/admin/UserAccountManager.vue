@@ -87,23 +87,6 @@
               </b-form-group>
             </b-col>
 
-            <!-- <b-col cols="12" md="6" lg="3">
-              <b-form-group
-              :class="{'text-danger' : $v.users.password_confirmation.$error}"
-                label="Confirm Password *"
-                label-for="confirmPassword">
-                <b-form-input
-                  type="password"
-                  id="confirmPassword"
-                  v-model="$v.users.password_confirmation.$model"
-                  :class="{'is-invalid' :$v.users.password_confirmation.$error}">
-                </b-form-input>
-                <div class="invalid-feedback">
-                  <span v-if="!$v.users.password_confirmation.required">Confirm Password is required!</span>
-                </div>
-              </b-form-group>
-            </b-col> -->
-
             <!-- Email -->
             <b-col cols="12" md="6" lg="3">
               <b-form-group
@@ -832,7 +815,6 @@
             // preset privileges
 
         else if (this.LastUserRole === 'Registrar') {
-          console.log(user_activities.data);
           // subject management
           this.UserPriv.push({
             user_id: this.LastUser,
@@ -846,6 +828,15 @@
           this.UserPriv.push({
             user_id: this.LastUser,
             activity_id: user_activities.data[14].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[12].id,
             create_priv: 0,
             read_priv: 1,
             update_priv: 0,
@@ -873,6 +864,15 @@
           this.UserPriv.push({
             user_id: this.LastUser,
             activity_id: user_activities.data[9].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[8].id,
             create_priv: 0,
             read_priv: 1,
             update_priv: 0,
@@ -933,7 +933,6 @@
         }
 
         else if (this.LastUserRole === 'Assistant Registrar') {
-          console.log(user_activities.data);
           // subject management
           this.UserPriv.push({
             user_id: this.LastUser,
@@ -947,6 +946,15 @@
           this.UserPriv.push({
             user_id: this.LastUser,
             activity_id: user_activities.data[14].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[12].id,
             create_priv: 0,
             read_priv: 1,
             update_priv: 0,
@@ -974,6 +982,15 @@
           this.UserPriv.push({
             user_id: this.LastUser,
             activity_id: user_activities.data[9].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[8].id,
             create_priv: 0,
             read_priv: 1,
             update_priv: 0,
@@ -1101,6 +1118,15 @@
 
           this.UserPriv.push({
             user_id: this.LastUser,
+            activity_id: user_activities.data[8].id,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
             activity_id: user_activities.data[0].id,
             create_priv: 0,
             read_priv: 1,
@@ -1109,22 +1135,6 @@
           });
 
         }
-        else if (
-          this.LastUserRole != 'Coordinator' ||
-          this.LastUserRole != 'Registrar' ||
-          this.LastUserRole != 'Assistant Registrar' ||
-          this.LastUserRole != 'System Admin' ||
-          this.LastUserRole != 'School Admin') {
-            this.UserPriv.push({
-              user_id: null,
-              activity_id: null,
-              create_priv: null,
-              read_priv: null,
-              update_priv: null,
-              delete_priv: null,
-            });
-        }
-
 
           this.GrantLastUser();
           this.UserPriv = []

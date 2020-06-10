@@ -26,8 +26,8 @@ import Axios from 'axios';
               this.$router.replace("/admin");
             }else{
               this.$router.replace("/admin/login");
-
             }
+
         },
         methods: {
             logout(){

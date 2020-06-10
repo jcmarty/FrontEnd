@@ -99,7 +99,7 @@ float: left;
   text-align: right;
   padding: 5px;
   color: white;
-  height: 20%;
+  height: 10%;
   display: block;
   background-color: rgb(27, 86, 243);
   margin:30px;
@@ -119,7 +119,7 @@ float: left;
 
 #Stud_footer-top p{
   text-align: left;
-  margin-top: 20px;
+  margin-top: 5px;
   margin-left: 10px;
 }
 
@@ -130,6 +130,7 @@ float: left;
 #Stud_footer-top strong{
   position: absolute;
   margin-top: 300px;
+  margin-right: 30px;
 
 }
 
@@ -146,18 +147,20 @@ float: left;
   font-size: 18px;
   font-weight: 400px;
   line-height: 1.471;
+
 }
 
 .Stud_body_container{
   padding: 80px;
-  padding-top: 100px;
+  padding-top: 30px;
   padding-bottom: 50px;
   position: relative;
   min-height: 100vh;
   margin: 0px;
   background: #fff !important;
   border: 5px solid #fff !important;
-  color: #73879C;
+  color: black;
+  font-style: normal;
 }
 
 .carousel_container{
@@ -191,3 +194,164 @@ float: left;
 }
 /* End of body */
 /*Home page end*/
+
+
+/*Registration*/
+#Stud_container{
+  margin: 80px;
+
+}
+.reg_text{
+  text-align: center center;
+}
+
+  .Stud_progressbar {
+    counter-reset: step;
+    margin: 100px 0px 50px 250px;
+  }
+  .Stud_progressbar li {
+      list-style-type: none;
+      width: 25%;
+      float: left;
+      font-size: 12px;
+      position: relative;
+      text-align: center;
+      text-transform: uppercase;
+      color: #7d7d7d;
+  }
+
+  .Stud_progressbar li:before {
+      width: 30px;
+      height: 30px;
+      content: counter(step);
+      counter-increment: step;
+      line-height: 30px;
+      border: 2px solid #7d7d7d;
+      display: block;
+      text-align: center;
+      margin: 0 auto 10px auto;
+      border-radius: 50%;
+      background-color: white;
+  }
+
+  .Stud_progressbar li:after {
+      width: 100%;
+      height: 2px;
+      content: '';
+      position: absolute;
+      background-color: #7d7d7d;
+      top: 15px;
+      left: -50%;
+      z-index: -1;
+  }
+
+  .Stud_progressbar li:first-child:after {
+      content: none;
+  }
+
+  .Stud_progressbar li.active {
+      color: blue;
+  }
+
+  .Stud_progressbar li.active:before {
+      border-color: #55b776;
+  }
+
+  .Stud_progressbar li.active + li:after {
+      background-color: #55b776;
+  }
+/*End of Registrar*/
+
+/*About of start*/
+.cover_img{
+  width: 100%;
+}
+
+#medal{
+  width: 100%;
+}
+
+.about_banner{
+  position: absolute;
+}
+.card-group deck{
+  margin: 100px;
+}
+
+#about_carousel{
+  margin: 10px;
+  margin-top: 30px;
+}
+
+#about_cards{
+  margin-top:80px;
+  margin-bottom: 80px;
+}
+
+#about_card{
+  text-align: center;
+}
+
+.Ach_title{
+  text-align: center;
+  color: blue;
+  font-size: 50px;
+  font-style: oblique;
+  font-family:-webkit-pictograph;
+  margin-top: 40px;
+}
+.Stud_about{
+  font-size: 25px;
+  font-weight: bold;
+  color:blue;
+  padding-left:80px;
+}
+/*end of about*/
+
+/* start vission and mission */
+.vm_title{
+  padding: 0px 30px;
+}
+
+#vm_body{
+  padding: 20px 70px;
+  margin-bottom: 10px;
+}
+
+.vm_card{
+  margin-bottom: 20px;
+}
+
+h1,h2{
+  font-weight: 700;
+  font-style: normal;
+  text-transform: uppercase;
+}
+h3,h4,h5,h6{
+  font-weight: 700;
+  font-style: normal;
+}
+/*end vission and mission*/
+
+/* Start Achievements */
+.carousel_body{
+  padding: 10px 70px;
+  margin-bottom: 10px;
+}
+/* end Achievements */
+
+
+/*Start Events*/
+#event_img{
+  width: 300px;
+  height:300px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 8px;
+  margin: 10px 1px;
+}
+
+#gallery_cointainer{
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+/*end Events*/
