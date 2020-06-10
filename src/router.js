@@ -30,6 +30,7 @@ import StudentRegistrationManager from "./components/admin/StudentRegistrationMa
 import StudentPreRegistrationManager from "./components/admin/StudentPreRegistrationManager.vue";
 import StudentEnrollmentManager from "./components/admin/StudentEnrollmentManager.vue";
 import StudentGradesManager from "./components/admin/StudentGradesManager.vue";
+import PreRegisterStudentInfoManager from "./components/admin/PreRegisteredInformationManager.vue";
 import UserPrivilegeManager from "./components/admin/UserPrivilegeManager.vue";
 import ActivityLogs from "./components/admin/ActivityLogs.vue";
 import ResetPassword from "./components/admin/ResetPassword.vue";
@@ -45,9 +46,21 @@ import RequirementsTesting from "./components/admin/RequirementsTesting.vue";
 
 // Start of  Student routes
 import Home from "./views/student/Home.vue";
-import Frontpage from "./views/student/Frontpage.vue";
 import Register from "./views/student/Register.vue";
 import OnlineRegHome from "./components/onlineRegistration/OnlineRegHome.vue";
+import OnlineRegAbout from "./components/onlineRegistration/OnlineRegAbout.vue";
+import OnlineRegAchievements from "./components/onlineRegistration/OnlineRegAchievements.vue";
+import OnlineRegAdmissionCollege from "./components/onlineRegistration/OnlineRegAdmissionCollege.vue";
+import OnlineRegAdmissionSHS from "./components/onlineRegistration/OnlineRegAdmissionCollege.vue";
+import OnlineRegCollegeEnrollment from "./components/onlineRegistration/OnlineRegCollegeEnrollment.vue";
+import OnlineRegCourse from "./components/onlineRegistration/OnlineRegCourse.vue";
+import OnlineRegEvents from "./components/onlineRegistration/OnlineRegEvents.vue";
+import OnlineRegProgramCollege from "./components/onlineRegistration/OnlineRegProgramCollege.vue";
+import OnlineRegProgramSHS from "./components/onlineRegistration/OnlineRegProgramSHS.vue";
+import OnlineRegRegister from "./components/onlineRegistration/OnlineRegRegister.vue";
+import OnlineRegRequirement from "./components/onlineRegistration/OnlineRegRequirement.vue";
+import OnlineRegVisionMission from "./components/onlineRegistration/OnlineRegVisionMission.vue";
+
 // End Of Student routes
 
 //  Start of Student Dashboard
@@ -81,8 +94,97 @@ export default new Router({
           }
         },
         {
-          path: "register",
-          component: Register,
+          path: "About",
+          name: "OnlineRegAbout",
+          component: OnlineRegAbout,
+          meta: {
+            guest: true
+          }
+        },
+        {
+          path: "Achievements",
+          name: "OnlineRegAchievements",
+          component: OnlineRegAchievements,
+          meta: {
+            guest: true
+          }
+        },
+        {
+          path: "AdmissionCollege",
+          name: "OnlineRegAdmissionCollege",
+          component: OnlineRegAdmissionCollege,
+          meta: {
+            guest: true
+          }
+        },
+        {
+          path: "AdmissionSHS",
+          name: "OnlineRegAdmissionSHS",
+          component: OnlineRegAdmissionSHS,
+          meta: {
+            guest: true
+          }
+        },
+        {
+          path: "CollegeEnrollment",
+          name: "OnlineRegCollegeEnrollment",
+          component: OnlineRegCollegeEnrollment,
+          meta: {
+            guest: true
+          }
+        },
+        {
+          path: "Course",
+          name: "OnlineRegCourse",
+          component: OnlineRegCourse,
+          meta: {
+            guest: true
+          }
+        },
+        {
+          path: "Events",
+          name: "OnlineRegEvents",
+          component: OnlineRegEvents,
+          meta: {
+            guest: true
+          }
+        },
+        {
+          path: "ProgramCollege",
+          name: "OnlineRegProgramCollege",
+          component: OnlineRegProgramCollege,
+          meta: {
+            guest: true
+          }
+        },
+        {
+          path: "ProgramSHS",
+          name: "OnlineRegProgramSHS",
+          component: OnlineRegProgramSHS,
+          meta: {
+            guest: true
+          }
+        },
+        {
+          path: "Register",
+          name: "OnlineRegRegister",
+          component: OnlineRegRegister,
+          meta: {
+            guest: true
+          }
+        },
+        {
+          path: "Requirements",
+          name: "OnlineRegRequirement",
+          component: OnlineRegRequirement,
+          meta: {
+            guest: true
+          }
+        },
+        {
+          path: "VisionMission",
+          name: "OnlineRegVisionMission",
+          component: OnlineRegVisionMission,
           meta: {
             guest: true
           }
@@ -390,6 +492,15 @@ export default new Router({
               path: '/StudentInformationManager',
               name: 'StudentInformationManager',
               component: StudentInformationManager,
+              beforeEnter(to, from, next){
+                setTimeout(() => next(), 2000);
+              },
+            },
+
+            {
+              path: '/PreRegisterStudentInfoManager',
+              name: 'PreRegisterStudentInfoManager',
+              component: PreRegisterStudentInfoManager,
               beforeEnter(to, from, next){
                 setTimeout(() => next(), 2000);
               },

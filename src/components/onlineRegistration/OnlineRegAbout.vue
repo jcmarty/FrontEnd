@@ -5,7 +5,7 @@
         <b-card
           overlay
           style=" box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);"
-          :img-src="require('../assets/images/AboutBanner.jpg') "
+          :img-src="require('../../assets/images/AboutBanner.jpg') "
           img-alt="Card Image"
           text-variant="white"
             >
@@ -16,14 +16,14 @@
                 <b-card-group deck>
 
                   <b-card id="about_card p-3" style=" box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);" >
-                    <img src="../assets/images/vision_mission.png" img-alt="Image" id="medal"  />
+                    <img src="../../assets/images/vision_mission.png" img-alt="Image" id="medal"  />
                       <b-link to="/VisionMission">
                         Mission And Vision
                       </b-link>
                   </b-card>
 
                 <b-card id="about_card p-3" style=" box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);" >
-                  <img src="../assets/images/achievement.png" img-alt="Image" id="medal" img-top />
+                  <img src="../../assets/images/achievement.png" img-alt="Image" id="medal" img-top />
                   <b-card-text>
                     <b-link to="/Achievements">
                       School Achievements
@@ -32,7 +32,7 @@
                 </b-card>
 
                 <b-card id="about_card p-3" style=" box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);" >
-                  <img src="../assets/images/event.png" img-alt="Image" id="medal" img-top />
+                  <img src="../../assets/images/event.png" img-alt="Image" id="medal" img-top />
                   <b-link to="/Events">
                     School Events
                   </b-link>

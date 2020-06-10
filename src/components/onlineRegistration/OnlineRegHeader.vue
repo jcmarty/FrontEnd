@@ -10,7 +10,7 @@
 
       <b-collapse class="Stud_nav-collapse" is-nav>
         <b-navbar-nav class="Stud_navbar_nav">
-          <b-nav-item class="Stud_nav_item" href="#" to="/Home">Home</b-nav-item>
+          <b-nav-item class="Stud_nav_item" href="#" to="/">Home</b-nav-item>
           <b-nav-item class="Stud_nav_item dropdown" href="#">
             Programs
             <div class="Stud_dropdown-content">
