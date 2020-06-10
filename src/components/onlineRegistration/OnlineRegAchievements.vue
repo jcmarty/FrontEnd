@@ -26,7 +26,7 @@
                 @sliding-end="onSlideEnd"
               >
                 <!-- Text slides with image -->
-                <b-carousel-slide :img-src="require('../assets/images/Banner1.jpg') ">
+                <b-carousel-slide :img-src="require('../../assets/images/Banner1.jpg') ">
                 </b-carousel-slide>
 
               </b-carousel>
@@ -53,7 +53,7 @@
                   >
                     <!-- Text slides with image -->
 
-                    <b-carousel-slide img-height="480" :img-src="require('../assets/images/Banner3.jpg') ">
+                    <b-carousel-slide img-height="480" :img-src="require('../../assets/images/Banner3.jpg') ">
                     </b-carousel-slide>
 
                   </b-carousel>
@@ -80,7 +80,7 @@
                         @sliding-end="onSlideEnd"
                       >
                         <!-- Text slides with image -->
-                        <b-carousel-slide img-height="480" :img-src="require('../assets/images/Banner2.jpg') ">
+                        <b-carousel-slide img-height="480" :img-src="require('../../assets/images/Banner2.jpg') ">
                           <h1>Basketball Tournament 2018</h1>
                         </b-carousel-slide>
 

@@ -14,7 +14,7 @@
               align="center"
             >
             <b-col md="6">
-              <img src="../assets/images/pic3.jpg" img-left class="rounded-0" />
+              <img src="../../assets/images/pic3.jpg" img-left class="rounded-0" />
             </b-col>
             <b-card-text>
               <ul>
@@ -39,7 +39,7 @@
               align="center"
             >
             <b-col md="6">
-              <img src="../assets/images/pic3.jpg" img-left class="rounded-0" />
+              <img src="../../assets/images/pic3.jpg" img-left class="rounded-0" />
             </b-col>
             <b-card-text>
               <ul>
@@ -64,7 +64,7 @@
               align="center"
             >
             <b-col md="6">
-              <img src="../assets/images/pic3.jpg" img-left class="rounded-0" />
+              <img src="../../assets/images/pic3.jpg" img-left class="rounded-0" />
             </b-col>
             <b-card-text>
               <ul>
