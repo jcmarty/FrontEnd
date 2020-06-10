@@ -146,6 +146,7 @@ float: left;
   font-size: 18px;
   font-weight: 400px;
   line-height: 1.471;
+
 }
 
 .Stud_body_container{
@@ -191,3 +192,70 @@ float: left;
 }
 /* End of body */
 /*Home page end*/
+
+
+/*Registration*/
+#Stud_container{
+  margin: 100px;
+
+}
+.reg_text{
+  text-align: center center;
+}
+
+  .Stud_progressbar {
+    counter-reset: step;
+    margin: 100px 0px 50px 250px;
+  }
+  .Stud_progressbar li {
+      list-style-type: none;
+      width: 25%;
+      float: left;
+      font-size: 12px;
+      position: relative;
+      text-align: center;
+      text-transform: uppercase;
+      color: #7d7d7d;
+  }
+
+  .Stud_progressbar li:before {
+      width: 30px;
+      height: 30px;
+      content: counter(step);
+      counter-increment: step;
+      line-height: 30px;
+      border: 2px solid #7d7d7d;
+      display: block;
+      text-align: center;
+      margin: 0 auto 10px auto;
+      border-radius: 50%;
+      background-color: white;
+  }
+
+  .Stud_progressbar li:after {
+      width: 100%;
+      height: 2px;
+      content: '';
+      position: absolute;
+      background-color: #7d7d7d;
+      top: 15px;
+      left: -50%;
+      z-index: -1;
+  }
+
+  .Stud_progressbar li:first-child:after {
+      content: none;
+  }
+
+  .Stud_progressbar li.active {
+      color: blue;
+  }
+
+  .Stud_progressbar li.active:before {
+      border-color: #55b776;
+  }
+
+  .Stud_progressbar li.active + li:after {
+      background-color: #55b776;
+  }
+/*End of Registrar*/

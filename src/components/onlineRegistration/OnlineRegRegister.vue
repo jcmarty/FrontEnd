@@ -1,8 +1,9 @@
 <template>
-  <div class="main_container">
+  <div class="Stud_main_container">
     <Header />
+    <div class="Stud_body_container">
 
-        <ul class="progressbar d-print-none">
+        <ul class="Stud_progressbar d-print-none">
             <li class="active">Student Information</li>
             <li id="PersonalInformation">Personal Information</li>
             <li id="ParentsInformation" >Parents Information</li>
@@ -13,7 +14,7 @@
 
 
       <!-- Student Information -->
-      <div id="container">
+      <div id="Stud_container">
         <transition name="fade">
           <div id="" class="mx-3 mb-4 p-4 bg-white shadow rounded" v-if="StudentInfoshowForm">
             <b-alert variant="success"
@@ -187,7 +188,7 @@
       <!-- Student Information -->
 
       <!-- personal Information -->
-      <div id="container">
+      <div id="Stud_container">
         <transition name="fade">
         <div id="" class="mx-3 mb-4 p-4 bg-white shadow rounded"  v-if="PersonalInfoshowForm">
         <div class=" h5 font-weight-bold text-dark text-center">Personal Information</div>
@@ -450,7 +451,7 @@
 
 
             <!-- Parents Information -->
-          <div id="container">
+          <div id="Stud_container">
             <transition name="fade">
               <div id="" class="mx-3 mb-4 p-4 bg-white shadow rounded" v-if="ParentsInfoshowForm">
               <div class=" h5 font-weight-bold text-dark text-center">Parents Information</div>
@@ -571,7 +572,7 @@
           </transition>
         </div>
         <!-- Parents Information -->
-      <div id="container" >
+      <div id="Stud_container" >
         <transition name="fade">
           <div id="" class="mx-3 mb-4 p-4 bg-white shadow rounded" v-if="ShowAllInfoshowForm">
             <!-- <center>
@@ -1107,7 +1108,7 @@
             </div>
         </transition>
       </div>
-
+    </div>
       <Footer class="d-print-none" />
     </div>
 </template>
