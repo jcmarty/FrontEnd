@@ -87,23 +87,6 @@
               </b-form-group>
             </b-col>
 
-            <!-- <b-col cols="12" md="6" lg="3">
-              <b-form-group
-              :class="{'text-danger' : $v.users.password_confirmation.$error}"
-                label="Confirm Password *"
-                label-for="confirmPassword">
-                <b-form-input
-                  type="password"
-                  id="confirmPassword"
-                  v-model="$v.users.password_confirmation.$model"
-                  :class="{'is-invalid' :$v.users.password_confirmation.$error}">
-                </b-form-input>
-                <div class="invalid-feedback">
-                  <span v-if="!$v.users.password_confirmation.required">Confirm Password is required!</span>
-                </div>
-              </b-form-group>
-            </b-col> -->
-
             <!-- Email -->
             <b-col cols="12" md="6" lg="3">
               <b-form-group
@@ -1093,6 +1076,15 @@
           this.UserPriv.push({
             user_id: this.LastUser,
             activity_id: user_activities.data[9].id,
+            create_priv: 1,
+            read_priv: 1,
+            update_priv: 1,
+            delete_priv: 1,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[8].id,
             create_priv: 1,
             read_priv: 1,
             update_priv: 1,
