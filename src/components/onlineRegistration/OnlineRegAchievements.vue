@@ -1,8 +1,8 @@
 <template>
-  <div class="main_container">
+  <div class="Stud_main_container">
     <Header />
-      <div class="body_container">
-        <div class="page_title">
+      <div class="Stud_body_container">
+        <div class="Stud_page_title">
           <h2 class="Ach_title">Comteq Computer and Business College</h2>
         </div>
           <hr>

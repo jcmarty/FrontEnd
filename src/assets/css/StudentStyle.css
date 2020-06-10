@@ -159,7 +159,8 @@ float: left;
   margin: 0px;
   background: #fff !important;
   border: 5px solid #fff !important;
-  color: #73879C;
+  color: black;
+  font-style: normal;
 }
 
 .carousel_container{
@@ -297,6 +298,7 @@ float: left;
   font-size: 50px;
   font-style: oblique;
   font-family:-webkit-pictograph;
+  margin-top: 40px;
 }
 .Stud_about{
   font-size: 25px;
@@ -305,3 +307,51 @@ float: left;
   padding-left:80px;
 }
 /*end of about*/
+
+/* start vission and mission */
+.vm_title{
+  padding: 0px 30px;
+}
+
+#vm_body{
+  padding: 20px 70px;
+  margin-bottom: 10px;
+}
+
+.vm_card{
+  margin-bottom: 20px;
+}
+
+h1,h2{
+  font-weight: 700;
+  font-style: normal;
+  text-transform: uppercase;
+}
+h3,h4,h5,h6{
+  font-weight: 700;
+  font-style: normal;
+}
+/*end vission and mission*/
+
+/* Start Achievements */
+.carousel_body{
+  padding: 10px 70px;
+  margin-bottom: 10px;
+}
+/* end Achievements */
+
+
+/*Start Events*/
+#event_img{
+  width: 300px;
+  height:300px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 8px;
+  margin: 10px 1px;
+}
+
+#gallery_cointainer{
+  border-radius: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+/*end Events*/
