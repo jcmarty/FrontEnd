@@ -1,3 +1,6 @@
+/*Global*/
+
+
 /* Header Start*/
 .Stud_nav{
   box-shadow: 0 .25rem .25rem rgba(0,0,0,.25),inset 0 -1px 5px rgba(0,0,0,.25);
@@ -5,23 +8,22 @@
   /* padding: 10px 20px 20px 20px; */
   color: white;
   width: 100%;
-  position: fixed;
+  position:fixed;
   top: 0;
   background-color: white;
   z-index: 50;
+  display: inline-flex;
 }
 
-
 .nav-link{
-  font-weight: 700;
-  font-style: normal;
+  font-weight:100;
+  font-style:normal;
   text-transform: uppercase;
-  text-decoration: none;
-  font-size: 17px;
+  text-decoration:none;
+  font-size: 18px;
   /* color:rgb(27, 86, 243) !important; */
   color: black !important;
 }
-
 
 .Stud_nav_item{
   /* color: black !important; */
@@ -76,24 +78,114 @@
  width: 100%;
 
 }
-.ComteqLogo {
- height: 50px;
- width: 70%;
-
-}
-.comteqlogo{
- height: 100px;
- width: 50px;
-}
 
 .Stud_nav_menu {
-   float: right;
+   float: left;
    background: #EDEDED;
    border-bottom: 1px solid #D9DEE4;
    margin-bottom: 10px;
    width: 100%;
-   position: relative
+   position: relative;
+}
+
+.Stud_loginbtn{
+float: left;
+}
+
+/* Header End*/
+
+/*Footer Start*/
+#Stud_footer-top{
+  text-align: right;
+  padding: 5px;
+  color: white;
+  height: 20%;
+  display: block;
+  background-color: rgb(27, 86, 243);
+  margin:30px;
 }
 
 
-/* Header End*/
+#Stud_footer-top div{
+  margin-left: 5px;
+  margin-right: 20px;
+  margin-top: 20px;
+}
+
+#Stud_footer-top h3{
+  text-align: left;
+  margin-bottom: 30px;
+}
+
+#Stud_footer-top p{
+  text-align: left;
+  margin-top: 20px;
+  margin-left: 10px;
+}
+
+#Stud_footer-top img{
+  display: -webkit-box;
+}
+
+#Stud_footer-top strong{
+  position: absolute;
+  margin-top: 300px;
+
+}
+
+#SO-icon{
+  width: 30px;
+  height: 30px;
+}
+/*footer End*/
+
+/* Home page start*/
+/* Start of Body */
+.Stud_main_container{
+  font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
+  font-size: 18px;
+  font-weight: 400px;
+  line-height: 1.471;
+}
+
+.Stud_body_container{
+  padding: 80px;
+  padding-top: 100px;
+  padding-bottom: 50px;
+  position: relative;
+  min-height: 100vh;
+  margin: 0px;
+  background: #fff !important;
+  border: 5px solid #fff !important;
+  color: #73879C;
+}
+
+.carousel_container{
+  margin-bottom: 40px;
+}
+
+.vertical_cards_container{
+  margin-bottom: 40px;
+}
+
+.horizontal_cards_container{
+  margin-bottom: 40px;
+}
+
+.accordion_container{
+  padding: 20px 50px 20px 50px;
+}
+
+.accordion_container .accordion_cards{
+  margin-bottom: 30px;
+}
+
+.card_text{
+  text-align: right;
+}
+
+.card-img-top{
+  height: 200px;
+}
+/* End of body */
+/*Home page end*/
