@@ -18,7 +18,7 @@
       <div class="menu_section">
         <ul class="nav side-menu" v-click-outside="onClickOutside">
           <router-link tag="li" to="/admin"><a><i class="fa fa-home"></i> Home </a></router-link>
-          <li v-bind:class="{current : currentCategory=='manage'}" v-if="hasActivity()"><a v-b-toggle.manageOptions><i class="fa fa-edit"></i> Manage <span class="fa fa-chevron-down"></span></a>
+          <li v-bind:class="{current : currentCategory=='manage'}" v-if="hasCreateActivity()"><a v-b-toggle.manageOptions><i class="fa fa-edit"></i> Manage <span class="fa fa-chevron-down"></span></a>
             <b-collapse tag="ul" class="nav child_menu" id="manageOptions" accordion="sideMenuAccordion">
 
 
@@ -29,42 +29,35 @@
                 </b-collapse>
               </li>
 
-              <router-link tag="li" to="/manage/subject" v-if="isAuthorized(this.$store.getters.getSettings.subject_management, 1)"><a>Subject</a></router-link>
-
               <li v-b-toggle.curriculum v-if="isAuthorized(this.$store.getters.getSettings.curriculum_management, 1)"><a>Curriculum<span class="fa fa-chevron-down"></span></a>
                 <b-collapse tag="ul" class="nav child_menu" id="curriculum" accordion="sideMenuSubAccordion">
                   <router-link tag="li" to="/manage/curriculum/college"><a class="super_child_menu">College</a></router-link>
                   <router-link tag="li" to="/manage/curriculum/shs"><a class="super_child_menu">Senior High</a></router-link>
                 </b-collapse>
               </li>
-
+              <router-link tag="li" to="/manage/instructor" v-if="isAuthorized(this.$store.getters.getSettings.instructor_management, 1)"><a>Instructor</a></router-link>
+              <router-link tag="li" to="/manage/useraccount" v-if="isAuthorized(this.$store.getters.getSettings.user_management, 1)"><a>User Accounts</a></router-link>
+              <router-link tag="li" to="/manage/subject" v-if="isAuthorized(this.$store.getters.getSettings.subject_management, 1)"><a>Subject</a></router-link>
               <router-link tag="li" to="/manage/room" v-if="isAuthorized(this.$store.getters.getSettings.room_management, 1)"><a>Room</a></router-link>
-              <router-link tag="li" to="/manage/academicyear" v-if="isAuthorized(this.$store.getters.getSettings.academic_year_management, 1)"><a>Academic Years</a></router-link>
-              <router-link tag="li" to="/manage/semesters" v-if="isAuthorized(this.$store.getters.getSettings.semester_management, 1)"><a>Semester</a></router-link>
               <router-link tag="li" to="/manage/course" v-if="isAuthorized(this.$store.getters.getSettings.course_management, 1)"><a>Course</a></router-link>
               <router-link tag="li" to="/manage/strand" v-if="isAuthorized(this.$store.getters.getSettings.strand_management, 1)"><a>Strand</a></router-link>
               <router-link tag="li" to="/manage/track" v-if="isAuthorized(this.$store.getters.getSettings.track_management, 1)"><a>Track</a></router-link>
-              <router-link tag="li" to="/manage/instructor" v-if="isAuthorized(this.$store.getters.getSettings.instructor_management, 1)"><a>Instructor</a></router-link>
-              <router-link tag="li" to="/manage/useraccount" v-if="isAuthorized(this.$store.getters.getSettings.user_management, 1)"><a>User Accounts</a></router-link>
+              <router-link tag="li" to="/manage/academicyear" v-if="isAuthorized(this.$store.getters.getSettings.academic_year_management, 1)"><a>Academic Years</a></router-link>
+              <router-link tag="li" to="/manage/semesters" v-if="isAuthorized(this.$store.getters.getSettings.semester_management, 1)"><a>Semester</a></router-link>
+              <router-link tag="li" to="/manage/student/preregistration" v-if="isAuthorized(this.$store.getters.getSettings.student_management, 1)"><a class="super_child_menu">Pre registration</a></router-link>
+              <router-link tag="li" to="/manage/student/registration" ><a class="super_child_menu" v-if="isAuthorized(this.$store.getters.getSettings.student_management, 1)">Registration</a></router-link>
+              <router-link tag="li" to="/manage/student/enrollment"><a class="super_child_menu" v-if="isAuthorized(this.$store.getters.getSettings.enrollment_management, 1)">Enrollment</a></router-link>
+              <router-link tag="li" v-b-toggle.classSchedules v-if="isAuthorized(this.$store.getters.getSettings.requirements_management, 1)" to="/manage/student/requirements"><a>Requirements</a></router-link>
+              <router-link tag="li" to="/manage/student/grades"><a class="super_child_menu" v-if="isAuthorized(this.$store.getters.getSettings.student_schedule_management, 1)">Grades</a></router-link>
 
-              <li v-b-toggle.student v-if="isAuthorized(this.$store.getters.getSettings.student_management, 1)" ><a>Student<span class="fa fa-chevron-down"></span></a>
-                <b-collapse tag="ul" class="nav child_menu" id="student" accordion="sideMenuSubAccordion">
-                  <router-link tag="li" to="/manage/student/preregistration" ><a class="super_child_menu">Pre registration</a></router-link>
-                  <router-link tag="li" to="/manage/student/registration" ><a class="super_child_menu">Registration</a></router-link>
-                  <router-link tag="li" to="/manage/student/enrollment"><a class="super_child_menu">Enrollment</a></router-link>
-                  <router-link tag="li" v-b-toggle.classSchedules v-if="isAuthorized(this.$store.getters.getSettings.requirements_management, 1)" to="/manage/student/requirements"><a>Requirements</a></router-link>
-                  <router-link tag="li" to="/manage/student/grades"><a class="super_child_menu">Grades</a></router-link>
-                </b-collapse>
-              </li>
-              <!-- TODO:  Decide if we are really going to add these, and HOW -->
-              <router-link tag="li" to="#" v-if="isAuthorized(this.$store.getters.getSettings.user_management, 1)"><a>Password Reset Requests</a></router-link>
+
               <!-- <router-link tag="li" to="#"><a>Backup and Restore Database</a></router-link> -->
               <!-- --------------------------------------------------- -->
-              <router-link tag="li" to="/ActivityLogs" v-if="isAuthorized(this.$store.getters.getSettings.activity_log, 1)" ><a>Activity Logs</a></router-link>
+
             </b-collapse>
           </li>
 
-          <li v-bind:class="{active : currentCategory=='reports'}"><a v-b-toggle.reports><i class="fa fa-desktop"></i>View Report<span class="fa fa-chevron-down"></span></a>
+          <li v-bind:class="{active : currentCategory=='reports'}" v-if="hasReadActivity()"><a v-b-toggle.reports><i class="fa fa-desktop"></i>View Report<span class="fa fa-chevron-down"></span></a>
             <b-collapse tag="ul" class="nav child_menu" id="reports" accordion="sideMenuAccordion">
               <li v-b-toggle.classSchedules v-if="isAuthorized(this.$store.getters.getSettings.schedule_management, 2)"><a> Class Schedule<span class="fa fa-chevron-down"></span></a>
                 <b-collapse tag="ul" class="nav child_menu" id="classSchedules" accordion="sideMenuSubAccordion">
@@ -77,6 +70,7 @@
               <router-link tag="li" to="/reports/schedule/instructor" v-if="isAuthorized(this.$store.getters.getSettings.instructor_management, 2)"><a>Instructor Schedule</a></router-link>
               <router-link tag="li" to="#" v-if="isAuthorized(this.$store.getters.getSettings.instructor_management, 2)"><a>Instructors List</a></router-link>
               <router-link tag="li" to="/reports/Graduates" v-if="isAuthorized(this.$store.getters.getSettings.student_management, 2)"><a>Alumni Members / Graduates</a></router-link>
+              <router-link tag="li" to="/ActivityLogs" v-if="isAuthorized(this.$store.getters.getSettings.activity_log, 2)" ><a>Activity Logs</a></router-link>
             </b-collapse>
           </li>
         </ul>
@@ -185,10 +179,19 @@
       }
     },
 
-    hasActivity: function(){
+    hasCreateActivity: function(){
       var activities = this.user.activities;
       for (var i = 0; i < activities.length; i++) {
         if (activities[i].privileges.create_priv == 1) {
+          return true;
+          break
+        }
+      }
+    },
+    hasReadActivity: function(){
+      var activities = this.user.activities;
+      for (var i = 0; i < activities.length; i++) {
+        if (activities[i].privileges.read_priv == 1) {
           return true;
           break
         }

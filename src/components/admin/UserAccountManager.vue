@@ -815,7 +815,6 @@
             // preset privileges
 
         else if (this.LastUserRole === 'Registrar') {
-          console.log(user_activities.data);
           // subject management
           this.UserPriv.push({
             user_id: this.LastUser,
@@ -829,6 +828,15 @@
           this.UserPriv.push({
             user_id: this.LastUser,
             activity_id: user_activities.data[14].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[12].id,
             create_priv: 0,
             read_priv: 1,
             update_priv: 0,
@@ -856,6 +864,15 @@
           this.UserPriv.push({
             user_id: this.LastUser,
             activity_id: user_activities.data[9].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[8].id,
             create_priv: 0,
             read_priv: 1,
             update_priv: 0,
@@ -916,7 +933,6 @@
         }
 
         else if (this.LastUserRole === 'Assistant Registrar') {
-          console.log(user_activities.data);
           // subject management
           this.UserPriv.push({
             user_id: this.LastUser,
@@ -930,6 +946,15 @@
           this.UserPriv.push({
             user_id: this.LastUser,
             activity_id: user_activities.data[14].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[12].id,
             create_priv: 0,
             read_priv: 1,
             update_priv: 0,
@@ -957,6 +982,15 @@
           this.UserPriv.push({
             user_id: this.LastUser,
             activity_id: user_activities.data[9].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[8].id,
             create_priv: 0,
             read_priv: 1,
             update_priv: 0,
@@ -1101,22 +1135,6 @@
           });
 
         }
-        else if (
-          this.LastUserRole != 'Coordinator' ||
-          this.LastUserRole != 'Registrar' ||
-          this.LastUserRole != 'Assistant Registrar' ||
-          this.LastUserRole != 'System Admin' ||
-          this.LastUserRole != 'School Admin') {
-            this.UserPriv.push({
-              user_id: null,
-              activity_id: null,
-              create_priv: null,
-              read_priv: null,
-              update_priv: null,
-              delete_priv: null,
-            });
-        }
-
 
           this.GrantLastUser();
           this.UserPriv = []

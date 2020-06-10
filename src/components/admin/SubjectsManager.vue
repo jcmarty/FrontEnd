@@ -252,17 +252,6 @@
           </b-form-group>
         </b-col>
 
-        <!--
-        <b-col sm="4" md="3" class="my-1 col-md-3 offset-md-8">
-          <b-pagination
-            v-model="currentPage"
-            :total-rows="totalRows"
-            :per-page="perPage"
-            align="fill"
-            size="sm"
-            class="my-0"
-          ></b-pagination>
-        </b-col> -->
 
         <b-col offset-lg="6" sm="12" md="4" lg="5"class="my-1">
           <b-pagination
@@ -488,7 +477,19 @@
         fields: [
 
           { key: 'subject_code', label: 'Subject Code', sortable: true, class: 'text-center' },
-          { key: 'subject_title', label: 'Subject Title', sortable: true, class: 'text-center' },
+          { key: 'subject_title', label: 'Subject Title', sortable: true, class: 'text-center',
+            formatter: (value, key, item) => {
+              if (item.lab == 1) {
+                return item.subject_title + " - LAB"
+              }
+              else if (item.lab == 0 && item.lec == 2) {
+                  return item.subject_title + " - LEC"
+              }
+              else {
+                return item.subject_title
+              }
+            },
+          },
           { key: 'active', label: 'Active', sortable: true, class: 'text-center' },
           { key: 'actions', label: 'Actions' , class: 'text-center' }
         ],
@@ -604,7 +605,9 @@
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
+
             this.items = response.data;
+            console.log(this.items)
             for(var j = 0; j < this.items.length; j++){
               if(this.items[j].active == 1){
                 this.items[j].status = true
