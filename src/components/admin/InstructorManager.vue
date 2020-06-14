@@ -32,7 +32,7 @@
       <div id="" class="mx-3 mb-4 p-4 bg-white shadow rounded" v-if="InsPersonalInfoForm">
       <div class=" h5 font-weight-bold text-dark">Personal Information</div>
       <hr/>
-        <b-form @submit.stop.prevent="onSubmit">
+        <b-form>
           <b-form-row>
             <b-col cols="12" md="6" lg="3">
               <b-form-group
@@ -263,18 +263,18 @@
           <b-form-row>
             <b-col cols="12" md="6" lg="4">
               <b-form-group
-                :class="{'text-danger' : $v.instructor.educational_attainment.$error}"
+                :class="{'text-danger' : $v.educational_attainment.$error}"
                 label="Educational Attainment *"
                 label-for="educational_attainment">
                 <b-form-textarea
                   id="educational_attainment"
                   rows="3"
                   max-rows="6"
-                  v-model.trim="$v.instructor.educational_attainment.$model"
-                  :class="{'is-invalid' :$v.instructor.educational_attainment.$error}">
+                  v-model.trim="$v.educational_attainment.$model"
+                  :class="{'is-invalid' :$v.educational_attainment.$error}">
                 </b-form-textarea>
                 <div class="invalid-feedback">
-                  <span v-if="!$v.instructor.educational_attainment.required">Educational Attainment is required!</span>
+                  <span v-if="!$v.educational_attainment.required">Educational Attainment is required!</span>
                 </div>
               </b-form-group>
             </b-col>
@@ -685,7 +685,7 @@
             //   = moment(item.time_start.hh + ":"
             //     + item.time_start.mm + " "
             //     + item.time_start.A, ["hh:mm A"]).format("HH:mm");
-              return item.time_start.hh 
+              return item.time_start.hh
             },
           },
           { key: 'time_end', label: 'Time End', sortable: true, class: 'text-center' },
@@ -802,8 +802,8 @@
        city: {required},
        province: {required},
        postal_code: {required},
+     },
        educational_attainment: {required},
-     }
     },
 
     mounted () {
@@ -1068,11 +1068,18 @@
       },
 
       ShowEducationalForm: function(){
-        this.InsPersonalInfoForm = false;
-        this.InsTableForm = false;
-        this.InsEducAttainmentForm = true;
-        var element = document.getElementById("EducationaInformation");
-        element.classList.add("active");
+        this.$v.instructor.$touch();
+        if (this.$v.instructor.$anyError) {
+          return;
+        }
+        else {
+          this.InsPersonalInfoForm = false;
+          this.InsTableForm = false;
+          this.InsEducAttainmentForm = true;
+          var element = document.getElementById("EducationaInformation");
+          element.classList.add("active");
+        }
+
       },
 
       BackPersonalForm: function(){
@@ -1082,11 +1089,18 @@
       },
 
       ShowPreferredSubjForm: function(){
-        this.AddInstructor();
-        this.InsEducAttainmentForm = false;
-        this.InsPrefSubjectForm = true;
-        var element = document.getElementById("PreferredInformation");
-        element.classList.add("active");
+        this.$v.educational_attainment.$touch();
+        if (this.$v.educational_attainment.$anyError) {
+          return;
+        }
+        else {
+          this.AddInstructor();
+          this.InsEducAttainmentForm = false;
+          this.InsPrefSubjectForm = true;
+          var element = document.getElementById("PreferredInformation");
+          element.classList.add("active");
+        }
+
       },
 
       BackEducationalForm: function(){

@@ -758,6 +758,15 @@
 
           this.UserPriv.push({
             user_id: this.LastUser,
+            activity_id: user_activities.data[12].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
             activity_id: user_activities.data[11].id,
             create_priv: 0,
             read_priv: 1,
@@ -1248,8 +1257,15 @@
       },
 
       confirmUpdateModal: function(){
-        this.$refs['confirmUpdate'].show();
-        this.$refs['editUserAccountModal'].hide();
+        this.$v.users.$touch();
+        if (this.$v.users.$anyError) {
+          return;
+        }
+        else {
+          this.$refs['confirmUpdate'].show();
+          this.$refs['editUserAccountModal'].hide();
+        }
+
       },
 
 

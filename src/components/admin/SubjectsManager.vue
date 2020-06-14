@@ -741,8 +741,15 @@
       },
 
       confirmUpdateModal: function(){
-        this.$refs['confirmUpdate'].show();
-        this.$refs['editSubjModal'].hide();
+        this.$v.subject.$touch();
+        if (this.$v.subject.$anyError) {
+          return;
+        }
+        else{
+          this.$refs['confirmUpdate'].show();
+          this.$refs['editSubjModal'].hide();
+        }
+
       },
 
       showDetails: function(item, index){
