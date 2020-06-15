@@ -2,11 +2,12 @@
   <div class="dash_content">
     <DashboardHeader class="dash_header"/>
     <DashboardSideBar class="dash_sidebar"/>
-    <DashboardFooter class="dash_footer"/>
+
     <div class="dash_body_content">
       <router-view />
       <!-- asdljaslkdj -->
     </div>
+    <DashboardFooter class="dash_footer"/>
   </div>
 </template>
 
@@ -41,12 +42,10 @@
 
 <style scoped>
   .dash_body_content{
-    position: fixed;
-    margin-left: 220px;
     background: #fff;
+    margin-left: 220px;
     margin-top: 55px;
-    width: calc(100vw - 220px);
-    height: calc(100vh - 55px - 45px);
-    padding: 20px;
+    height: 100vh;
+    padding: 20px 30px;
   }
 </style>

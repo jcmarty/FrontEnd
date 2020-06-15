@@ -30,16 +30,17 @@
 </script>
 <style scoped>
   .dash_footer{
-    background: white;
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    margin-left: 220px;
-    padding: 10px;
     width: calc(100vw - 220px);
     height: 45px;
     text-align: center;
     border-top: 2px solid #1b56f3;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    margin-left: 220px;
+    text-align: center;
+    padding: 15px;
+    background: #EDEDED;
   }
 
   .dash_footer span{

@@ -41,6 +41,7 @@
     background: #EDEDED;
     position: fixed;
     left: 0;
+    top: 0;
     margin-left: 220px;
     padding-left: 10px;
     width: calc(100vw - 220px);

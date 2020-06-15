@@ -1,10 +1,13 @@
 <template>
   <div>
     <div class="dash_sidebar" id="dashboard_sidebar">
-      <!-- add image here -->
       <center>
-        <img class="profile_image" src="https://pluspng.com/img-png/user-png-icon-male-user-icon-512.png" alt="">
-        <h5>John Christopher L. Marty</h5>
+        <!-- add image here -->
+        <!-- <img class="profile_image" src="https://pluspng.com/img-png/user-png-icon-male-user-icon-512.png" alt="">
+        <h5>John Christopher L. Marty</h5> -->
+        <span>Student <br/>
+           Dashboard
+         </span>
       </center>
       <!-- <router-link tag="li" to="/dashboard/student/account_setting"><a>Requirements Testing</a></router-link> -->
       <a class="dash_navs active" @click="$router.replace({name: 'StudentProfile'})" to="/dashboard/student/profile" href="#"><i class="fa fa-user" aria-hidden="true"/><span>Profile</span></a>
@@ -57,9 +60,10 @@
 
   .dash_sidebar{
     background: #1b56f3;
-    padding-top: 10px;
+    padding-top: 30px;
     position: fixed;
     left: 0;
+    top: 0;
     width: 220px;
     height: 100vh;
     /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
@@ -71,6 +75,17 @@
     border-radius: 100px;
     margin-bottom: 20px;
     margin-top: 10px;
+  }
+
+  .dash_sidebar center span{
+    color: white;
+    font-size: 14pt;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .dash_sidebar center {
+    margin-bottom: 30px;
   }
 
   .dash_sidebar h5{
@@ -102,7 +117,7 @@
   }
 
   .dash_sidebar .active{
-    padding-left: 50px;
+    /* padding-left: 50px;*/
     font-weight: bold;
     border-right: 4px solid #1b56f3;
     background: white;
