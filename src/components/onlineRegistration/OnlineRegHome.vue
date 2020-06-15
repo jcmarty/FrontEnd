@@ -71,8 +71,10 @@
 
           <!-- start of Horizontal Cards -->
           <div class="mt-4 horizontal_cards_container">
-            <h2>SCHOLARSHIPS:</h2>
+            <div class="Stud_title">
+            <h1>SCHOLARSHIPS:</h1>
             <hr>
+            </div>
             <div class="accordion_container">
               <div role="tablist">
 
@@ -105,14 +107,15 @@
                   </b-card>
                 </div>
 
+
                 <div class="accordion_cards">
-                  <b-card no-body class="mb-1">
+                  <b-card no-body class="mb-2">
                     <b-card-header header-tag="header" class="p-0" role="tab">
                       <b-button class="text-left" squared block href="#" v-b-toggle.accordion-2 variant="outline-dark">
                         <h4>Athletic Scholars</h4>
                       </b-button>
                     </b-card-header>
-                    <b-collapse class="accordion-2" accordion="my-accordion" role="tabpanel">
+                    <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
                       <b-card-body>
                         <b-card-text>
                           Add instruction on how to avail the Atletics scholarship of the school. The steps and procedure hon how to became a  varcity player.
@@ -129,7 +132,7 @@
                         <h4>Other Discounts</h4>
                       </b-button>
                     </b-card-header>
-                    <b-collapse class="accordion-3" accordion="my-accordion" role="tabpanel">
+                    <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
                       <b-card-body>
                         <b-card-text>
                           <ul>
