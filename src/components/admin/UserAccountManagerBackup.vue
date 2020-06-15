@@ -979,7 +979,6 @@
           }
           this.dismissErrorCountDown = this.dismissSecs;
         });
-        this.$refs['editUserAccountModal'].hide
         this.$refs['confirmUpdate'].hide();
       }, // End of Update User Account Function
 
