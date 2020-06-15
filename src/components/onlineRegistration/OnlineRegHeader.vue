@@ -6,7 +6,7 @@
         <b-img src="../../public/logo.jfif" fluclass alt="Responsive image"></b-img>
       </div> -->
 
-      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+      <b-navbar-toggle class="text-body" target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse class="Stud_nav-collapse" is-nav>
         <b-navbar-nav class="Stud_navbar_nav">
@@ -31,7 +31,7 @@
 
           <b-nav-item class="Stud_nav_item" href="#" to="/Register">Register</b-nav-item>
           <b-nav-item class="Stud_nav_item" href="#" to="/About">About</b-nav-item>
-          <b-nav-item class="Stud_nav_item" href="#" to="/Login">Login</b-nav-item>
+          <b-nav-item id="Stud_login" class="Stud_nav_item" href="#" to="/Login">Login</b-nav-item>
         </b-navbar-nav>
 
 
