@@ -20,7 +20,7 @@
               </b-card-text>
             </b-card>
           </div>
-
+<!--june 16, 2020-->
           <div class="vm_card">
             <b-card>
               <b-card-text>

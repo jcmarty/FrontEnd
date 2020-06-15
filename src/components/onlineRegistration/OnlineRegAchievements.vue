@@ -5,7 +5,7 @@
           <h1 class="Stud_title">Comteq Computer and Business College</h1>
           <hr>
 
-
+<!--june 16, 2020-->
               <div class="course_title">
                 <h3>School Achievements</h3>
               </div>

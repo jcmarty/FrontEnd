@@ -6,7 +6,7 @@
         <hr>
         <div class="accordion_container">
           <div role="tablist">
-<!--june 16, 2020>
+<!--june 16, 2020-->
             <!-- Acquaintance Accordion -->
             <div class="accordion_cards">
               <b-card no-body class="mb-1">

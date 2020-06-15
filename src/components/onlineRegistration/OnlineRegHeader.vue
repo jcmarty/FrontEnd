@@ -6,6 +6,7 @@
         <b-img src="../../public/logo.jfif" fluclass alt="Responsive image"></b-img>
       </div> -->
 
+<!--june 16, 2020-->
       <b-navbar-toggle class="text-body" target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse class="Stud_nav-collapse" is-nav>

@@ -5,7 +5,7 @@
       <div class="Stud_title">
         <h1>College Courses Offered</h1>
       </div>
-
+<!--june 16, 2020-->
       <hr>
 
       <!-- Courses container -->
