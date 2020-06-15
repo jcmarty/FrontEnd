@@ -2,16 +2,15 @@
   <div class="Stud_main_container">
     <Header />
       <div class="Stud_body_container">
-        <div class="Stud_page_title">
-          <h2 class="Ach_title">Comteq Computer and Business College</h2>
-        </div>
+          <h1 class="Stud_title">Comteq Computer and Business College</h1>
           <hr>
 
-            <div class="carousel_container">
+
               <div class="course_title">
                 <h3>School Achievements</h3>
               </div>
               <hr>
+              <div class="carousel_container">
               <b-carousel
                 id="carousel-1"
                 v-model="slide"

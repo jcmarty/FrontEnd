@@ -1,9 +1,9 @@
 <template>
-  <div class="main_container">
+  <div class="Stud_main_container">
     <Header />
-    <div class="body_container">
-      <div class="page_title">
-        <h2>College Courses Offered</h2>
+    <div class="Stud_body_container">
+      <div class="Stud_title">
+        <h1>College Courses Offered</h1>
       </div>
 
       <hr>

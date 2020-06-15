@@ -9,12 +9,8 @@
             <li id="ParentsInformation" >Parents Information</li>
          </ul>
 
-
-      <br/>
-
-
       <!-- Student Information -->
-      <div id="Stud_container">
+      <div class="Stud_container">
         <transition name="fade">
           <div id="" class="mx-3 mb-4 p-4 bg-white shadow rounded" v-if="StudentInfoshowForm">
             <b-alert variant="success"
@@ -32,9 +28,9 @@
                     <li v-for="error in errors">{{ error }}</li>
                   </ul>
               </b-alert>
-          <div class=" h5 font-weight-bold text-dark text-center">Student Information</div>
+          <div class="h5 font-weight-bold text-dark text-center">Student Information</div>
           <hr/>
-          <div class="">
+          <div class="Stud_form_text">
             <b-form-row>
 
               <b-col cols="12" md="6" lg="3">
@@ -171,7 +167,7 @@
                 <b-form-row>
                   <b-col>
                     <b-button variant="danger" @click="ClearStudentFields">
-                      cancel
+                      Cancel
                     </b-button>
                   </b-col>
                   <b-col class="d-flex justify-content-end">
@@ -180,7 +176,6 @@
                     </b-button>
                   </b-col>
                 </b-form-row>
-
               </div>
           </div>
         </transition>
