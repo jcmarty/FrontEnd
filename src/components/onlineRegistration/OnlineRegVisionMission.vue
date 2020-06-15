@@ -3,7 +3,7 @@
     <Header />
     <div class="Stud_body_container">
       <div class="Stud_page_title">
-        <h2 class="Ach_title">About Us!</h2>
+        <h2 class="Stud_title">About Us!</h2>
       </div>
       <hr>
         <div class="course_title">
@@ -20,7 +20,7 @@
               </b-card-text>
             </b-card>
           </div>
-
+<!--june 16, 2020-->
           <div class="vm_card">
             <b-card>
               <b-card-text>

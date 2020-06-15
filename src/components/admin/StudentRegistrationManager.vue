@@ -771,6 +771,8 @@
      Students: {
        first_name: {required},
        last_name: {required},
+       school_last_attended: {required},
+       school_address: {required},
        gender: {required},
        civil_status: {required},
        citizenship:{required},
@@ -787,8 +789,7 @@
        contact_person: {required},
        contact_address: {required},
        contact_number: {required},
-       school_last_attended: {required},
-       school_address: {required},
+
      },
     },
 
@@ -815,48 +816,18 @@
       },
 
       showPersonalInfoForm: function(){
-        var element = document.getElementById("PersonalInformation");
-        element.classList.add("active");
-        var checker;
-
-        // last name
-        if (this.Students.last_name == null || this.Students.last_name == "" ) {
-            this.last_name_state = false;
-            checker = true;
-        } else {
-          this.last_name_state = null;
+        this.$v.Students.$touch();
+        if (this.$v.Students.$anyError) {
+          return;
         }
-
-        // first Name
-        if (this.Students.first_name == null || this.Students.first_name == "") {
-            this.first_name_state = false,
-            checker = true;
-        } else {
-          this.first_name_state = null;
-        }
-
-        // school last Attended
-        if (this.Students.school_last_attended == null || this.Students.school_last_attended == "") {
-            this.school_last_attended_state = false;
-            checker = true;
-        } else {
-          this.school_last_attended_state = null
-        }
-
-        // school Address
-        if (this.Students.school_address == null || this.Students.school_address =="") {
-            this.school_address_state = false;
-            checker = true;
-        } else {
-          this.school_address_state = null;
-        }
-
-        if (checker) {
-
-        } else {
+        else {
+          var element = document.getElementById("PersonalInformation");
+          element.classList.add("active");
+          var checker;
           this.StudentInfoshowForm = false;
           this.PersonalInfoshowForm = true;
         }
+
 
       },
 

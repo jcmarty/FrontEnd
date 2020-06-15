@@ -545,7 +545,6 @@
           .then(response => {
             this.isLoading = false;
             this.items = response.data;
-            console.log(response.data)
             for(var j = 0; j < this.items.length; j++){
               var sn, mn = null;
               sn = this.items[j].suffix_name != null ? " " +this.items[j].suffix_name : '',
@@ -614,7 +613,6 @@
         })
         .then(user_activities => {
           if (this.LastUserRole === 'System Administrator') {
-            console.log(user_activities.data);
             this.UserPriv.push({
               user_id: this.LastUser,
               activity_id: user_activities.data[16].id,
@@ -727,7 +725,7 @@
           }
 
         else if (this.LastUserRole === 'School Administrator') {
-          console.log(user_activities.data);
+
 
           this.UserPriv.push({
             user_id: this.LastUser,
@@ -750,6 +748,15 @@
           this.UserPriv.push({
             user_id: this.LastUser,
             activity_id: user_activities.data[13].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[12].id,
             create_priv: 0,
             read_priv: 1,
             update_priv: 0,
@@ -828,6 +835,15 @@
           this.UserPriv.push({
             user_id: this.LastUser,
             activity_id: user_activities.data[14].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
+            activity_id: user_activities.data[13].id,
             create_priv: 0,
             read_priv: 1,
             update_priv: 0,
@@ -954,6 +970,15 @@
 
           this.UserPriv.push({
             user_id: this.LastUser,
+            activity_id: user_activities.data[13].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
             activity_id: user_activities.data[12].id,
             create_priv: 0,
             read_priv: 1,
@@ -1051,7 +1076,7 @@
         }
 
         else if (this.LastUserRole === 'Coordinator') {
-          console.log(user_activities.data);
+
 
           this.UserPriv.push({
             user_id: this.LastUser,
@@ -1153,7 +1178,7 @@
               headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
             })
             .then(respone => {
-              console.log(respone.data);
+
               // console.log(this.UserPriv[j])
             })
             .catch(error => {
@@ -1172,10 +1197,12 @@
           headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
         })
         .then(response => {
+          console.log(this.users)
           this.getUserAccount();
           this.alertMessage = response.data.message;
           this.dismissSuccessCountDown = this.dismissSecs;
           this.resetform();
+
         })
         .catch(error => {
           this.alertMessage = error.response.data.message;
@@ -1248,13 +1275,12 @@
       },
 
       confirmUpdateModal: function(){
-        this.$refs['confirmUpdate'].show();
-        this.$refs['editUserAccountModal'].hide();
+          this.$refs['confirmUpdate'].show();
+          this.$refs['editUserAccountModal'].hide();
       },
 
 
       EditModal: function(item, index) {
-        console.log(this.users)
         this.users = {
           id: item.id,
           username: item.username,

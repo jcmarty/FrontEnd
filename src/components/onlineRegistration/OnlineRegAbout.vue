@@ -11,7 +11,7 @@
           text-variant="white"
             >
           </b-card>
-
+<!--june 16, 2020-->
               <!-- b-card for icons -->
             <div id="about_cards" >
                 <b-card-group deck>

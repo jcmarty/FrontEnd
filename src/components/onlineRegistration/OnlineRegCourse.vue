@@ -4,7 +4,7 @@
     <div class="body_container">
       <h2>Courses Offered</h2>
       <hr>
-
+<!--june 16, 2020-->
       <div class="horizontal_cards_container">
         <b-card no-body class="overflow-hidden" style="max-width: 540px;">
           <b-row no-gutters>

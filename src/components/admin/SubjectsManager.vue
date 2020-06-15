@@ -328,7 +328,7 @@
         <!-- Subject title -->
 
           <!-- Lecture Units -->
-          <b-col cols="12" md="6" lg="2">
+          <b-col cols="12" md="6" lg="2" v-if="subject.lec > 0">
             <b-form-group
               :class="{'text-danger' : $v.subject.lec.$error}"
               label="Lecture Units *"
@@ -337,7 +337,8 @@
                 type="number"
                 id="lec"
                 v-model.trim="$v.subject.lec.$model"
-                :class="{'is-invalid' :$v.subject.lec.$error}">
+                :class="{'is-invalid' :$v.subject.lec.$error}"
+                >
               </b-form-input>
               <div class="invalid-feedback">
                 <span v-if="!$v.subject.lec.required">Lecture Unit is required!</span>
@@ -348,7 +349,7 @@
 
 
           <!-- Laboratory Units -->
-          <b-col cols="12" md="6" lg="2">
+          <b-col cols="12" md="6" lg="2" v-if="subject.lab > 0">
             <b-form-group
               class="labUnits"
               label="Laboratory Units"
@@ -741,8 +742,15 @@
       },
 
       confirmUpdateModal: function(){
-        this.$refs['confirmUpdate'].show();
-        this.$refs['editSubjModal'].hide();
+        this.$v.subject.$touch();
+        if (this.$v.subject.$anyError) {
+          return;
+        }
+        else{
+          this.$refs['confirmUpdate'].show();
+          this.$refs['editSubjModal'].hide();
+        }
+
       },
 
       showDetails: function(item, index){

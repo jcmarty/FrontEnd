@@ -2,13 +2,11 @@
   <div class="Stud_main_container">
     <Header />
     <div class="Stud_body_container">
-      <div class="Stud_page_title">
-        <h2 class="Ach_title">Comteq Events</h2>
-      </div>
+        <h1 class="Stud_title">Comteq Events</h1>
         <hr>
         <div class="accordion_container">
           <div role="tablist">
-
+<!--june 16, 2020-->
             <!-- Acquaintance Accordion -->
             <div class="accordion_cards">
               <b-card no-body class="mb-1">
@@ -32,6 +30,9 @@
                             <b-col>
                               <img id="event_img" thumbnail fluid src="../../assets/images/Events/Acquaintance/3ACQ2019.jpg" alt="Image 3"></img>
                             </b-col>
+                          </b-row>
+
+                          <b-row>
                             <b-col>
                               <img id="event_img" thumbnail fluid src="../../assets/images/Events/Acquaintance/4ACQ2019.jpg" alt="Image 4"></img>
                             </b-col>
@@ -41,6 +42,9 @@
                             <b-col>
                               <img id="event_img" thumbnail fluid src="../../assets/images/Events/Acquaintance/6ACQ2019.jpg" alt="Image 6"></img>
                             </b-col>
+                          </b-row>
+
+                          <b-row>
                             <b-col>
                               <img id="event_img" thumbnail fluid src="../../assets/images/Events/Acquaintance/7ACQ2019.jpg" alt="Image 7"></img>
                             </b-col>
@@ -50,6 +54,9 @@
                             <b-col>
                               <img id="event_img" thumbnail fluid src="../../assets/images/Events/Acquaintance/9ACQ2019.jpg" alt="Image 9"></img>
                             </b-col>
+                          </b-row>
+
+                          <b-row>
                             <b-col>
                               <img id="event_img" thumbnail fluid src="../../assets/images/Events/Acquaintance/10ACQ2019.jpg" alt="Image 10"></img>
                             </b-col>
@@ -91,6 +98,9 @@
                             <b-col>
                               <img id="event_img" thumbnail fluid src="../../assets/images/Events/BNW/3BNW2019.jpg" alt="Image 3"></img>
                             </b-col>
+                          </b-row>
+
+                          <b-row>
                             <b-col>
                               <img id="event_img" thumbnail fluid src="../../assets/images/Events/BNW/4BNW2019.jpg" alt="Image 4"></img>
                             </b-col>
@@ -100,6 +110,9 @@
                             <b-col>
                               <img id="event_img" thumbnail fluid src="../../assets/images/Events/BNW/6BNW2019.jpg" alt="Image 6"></img>
                             </b-col>
+                          </b-row>
+
+                          <b-row>
                             <b-col>
                               <img id="event_img" thumbnail fluid src="../../assets/images/Events/BNW/7BNW2019.jpg" alt="Image 7"></img>
                             </b-col>
@@ -109,6 +122,9 @@
                             <b-col>
                               <img id="event_img" thumbnail fluid src="../../assets/images/Events/BNW/9BNW2019.jpg" alt="Image 9"></img>
                             </b-col>
+                          </b-row>
+
+                          <b-row>
                             <b-col>
                               <img id="event_img" thumbnail fluid src="../../assets/images/Events/BNW/10BNW2019.jpg" alt="Image 10"></img>
                             </b-col>
@@ -150,6 +166,9 @@
                             <b-col>
                               <img id="event_img" thumbnail fluid src="../../assets/images/Events/Sportsfest/3SF2019.jpg" alt="Image 3"></img>
                             </b-col>
+                          </b-row>
+
+                          <b-row>
                             <b-col>
                               <img id="event_img" thumbnail fluid src="../../assets/images/Events/Sportsfest/4SF2019.jpg" alt="Image 4"></img>
                             </b-col>
@@ -159,6 +178,9 @@
                             <b-col>
                               <img id="event_img" thumbnail fluid src="../../assets/images/Events/Sportsfest/6SF2019.jpg" alt="Image 6"></img>
                             </b-col>
+                          </b-row>
+
+                          <b-row>
                             <b-col>
                               <img id="event_img" thumbnail fluid src="../../assets/images/Events/Sportsfest/7SF2019.jpg" alt="Image 7"></img>
                             </b-col>
@@ -168,6 +190,9 @@
                             <b-col>
                               <img id="event_img" thumbnail fluid src="../../assets/images/Events/Sportsfest/9SF2019.jpg" alt="Image 9"></img>
                             </b-col>
+                          </b-row>
+
+                          <b-row>
                             <b-col>
                               <img id="event_img" thumbnail fluid src="../../assets/images/Events/Sportsfest/10SF2019.jpg" alt="Image 10"></img>
                             </b-col>
@@ -209,6 +234,9 @@
                             <b-col>
                               <img id="event_img" thumbnail fluid src="../../assets/images/Events/IT&Business fair/3ITBF2019.jpg" alt="Image 3"></img>
                             </b-col>
+                          </b-row>
+
+                          <b-row>
                             <b-col>
                               <img id="event_img" thumbnail fluid src="../../assets/images/Events/IT&Business fair/4ITBF2019.jpg" alt="Image 4"></img>
                             </b-col>

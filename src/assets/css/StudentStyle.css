@@ -1,33 +1,20 @@
-/*Global*/
-
-
 /* Header Start*/
 .Stud_nav{
   box-shadow: 0 .25rem .25rem rgba(0,0,0,.25),inset 0 -1px 5px rgba(0,0,0,.25);
   text-align: center;
-  /* padding: 10px 20px 20px 20px; */
-  color: white;
   width: 100%;
   position:fixed;
   top: 0;
   background-color: white;
   z-index: 50;
   display: inline-flex;
+  height: 80px;
 }
 
-.nav-link{
-  font-weight:100;
-  font-style:normal;
-  text-transform: uppercase;
-  text-decoration:none;
-  font-size: 18px;
-  /* color:rgb(27, 86, 243) !important; */
-  color: black !important;
-}
 
 .Stud_nav_item{
   /* color: black !important; */
-  font-size: 16px;
+  font-size: 20px;
   cursor: pointer;
   padding: 5px 5px 10px 5px;
 }
@@ -74,10 +61,6 @@
  text-decoration: none;
 }
 
-.Stud_top-nav{
- width: 100%;
-
-}
 
 .Stud_nav_menu {
    float: left;
@@ -147,12 +130,12 @@ float: left;
   font-size: 18px;
   font-weight: 400px;
   line-height: 1.471;
-
 }
 
 .Stud_body_container{
+  font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
   padding: 80px;
-  padding-top: 30px;
+  padding-top: 90px;
   padding-bottom: 50px;
   position: relative;
   min-height: 100vh;
@@ -165,7 +148,8 @@ float: left;
 
 .carousel_container{
   margin-bottom: 40px;
-
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .vertical_cards_container{
@@ -192,24 +176,50 @@ float: left;
 .card-img-top{
   height: 200px;
 }
+
+.Stud_title{
+  text-align: center;
+  color: blue;
+  font-size: 50px;
+  font-style: oblique;
+  font-family:-webkit-pictograph;
+  margin-top: 40px;
+}
 /* End of body */
 /*Home page end*/
 
+/* start Programs */
+.course_body{
+  padding: 10px 70px;
+  margin-bottom: 10px;
+}
+
+.course_card{
+  margin-bottom: 20px;
+}
+/*end programs*/
 
 /*Registration*/
-#Stud_container{
-  margin: 80px;
-
+.Stud_container{
+  margin-left:20px;
+  margin-right:20px;
+  margin-top: 100px;
 }
+
+.Stud_form_text label{
+  font-size: x-small;
+}
+
 .reg_text{
-  text-align: center center;
+  text-align: center;
 }
 
-  .Stud_progressbar {
+.Stud_progressbar{
     counter-reset: step;
-    margin: 100px 0px 50px 250px;
+    margin: 10px 0px 10px 250px;
   }
-  .Stud_progressbar li {
+
+.Stud_progressbar li {
       list-style-type: none;
       width: 25%;
       float: left;
@@ -250,7 +260,7 @@ float: left;
   }
 
   .Stud_progressbar li.active {
-      color: blue;
+      color: green;
   }
 
   .Stud_progressbar li.active:before {
@@ -263,6 +273,7 @@ float: left;
 /*End of Registrar*/
 
 /*About of start*/
+
 .cover_img{
   width: 100%;
 }
@@ -273,33 +284,24 @@ float: left;
 
 .about_banner{
   position: absolute;
+  padding-top: 20px;
 }
 .card-group deck{
-  margin: 100px;
+  margin: 200px;
 }
 
 #about_carousel{
-  margin: 10px;
-  margin-top: 30px;
+  margin-top: 0px;
 }
 
 #about_cards{
-  margin-top:80px;
-  margin-bottom: 80px;
+margin-top:40px;
 }
 
 #about_card{
   text-align: center;
 }
 
-.Ach_title{
-  text-align: center;
-  color: blue;
-  font-size: 50px;
-  font-style: oblique;
-  font-family:-webkit-pictograph;
-  margin-top: 40px;
-}
 .Stud_about{
   font-size: 25px;
   font-weight: bold;
@@ -321,17 +323,8 @@ float: left;
 .vm_card{
   margin-bottom: 20px;
 }
-
-h1,h2{
-  font-weight: 700;
-  font-style: normal;
-  text-transform: uppercase;
-}
-h3,h4,h5,h6{
-  font-weight: 700;
-  font-style: normal;
-}
 /*end vission and mission*/
+
 
 /* Start Achievements */
 .carousel_body{
@@ -344,14 +337,16 @@ h3,h4,h5,h6{
 /*Start Events*/
 #event_img{
   width: 300px;
-  height:300px;
+  height:200px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border-radius: 8px;
-  margin: 10px 1px;
+  margin: 10px 10px;
+
 }
 
 #gallery_cointainer{
   border-radius: 5px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
+
 /*end Events*/

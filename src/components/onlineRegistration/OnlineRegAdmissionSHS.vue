@@ -2,27 +2,29 @@
   <div class="main_container">
     <Header />
     <div class="body_container">
+      <div class="Stud_title">
       <h2>Senior High Admission Info</h2>
       <hr>
+      </div>
       <div class="accordion_container">
         <div role="tablist">
           <b-card no-body class="mb-1">
             <b-card-header header-tag="header" class="p-1" role="tab">
               <b-button  block href="#" v-b-toggle.accordion-1 variant="info">Accordion 1</b-button>
             </b-card-header>
-            <b-collapse class="accordion-1" accordion="my-accordion" role="tabpanel">
+            <b-collapse id="accordion-1" accordion="my-accordion" role="tabpanel">
               <b-card-body>
                 <b-card-text>I start opened because <code>visible</code> is <code>true</code></b-card-text>
                 <b-card-text>{{ text }}</b-card-text>
               </b-card-body>
             </b-collapse>
           </b-card>
-
+<!--june 16, 2020-->
           <b-card no-body class="mb-1">
             <b-card-header header-tag="header" class="p-1" role="tab">
               <b-button block href="#" v-b-toggle.accordion-2 variant="info">Accordion 2</b-button>
             </b-card-header>
-            <b-collapse class="accordion-2" accordion="my-accordion" role="tabpanel">
+            <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
               <b-card-body>
                 <b-card-text>{{ text }}</b-card-text>
               </b-card-body>
