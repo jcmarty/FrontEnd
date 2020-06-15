@@ -263,18 +263,18 @@
           <b-form-row>
             <b-col cols="12" md="6" lg="4">
               <b-form-group
-                :class="{'text-danger' : $v.educational_attainment.$error}"
+                :class="{'text-danger' : $v.ins.educational_attainment.$error}"
                 label="Educational Attainment *"
                 label-for="educational_attainment">
                 <b-form-textarea
                   id="educational_attainment"
                   rows="3"
                   max-rows="6"
-                  v-model.trim="$v.educational_attainment.$model"
-                  :class="{'is-invalid' :$v.educational_attainment.$error}">
+                  v-model.trim="$v.instructor.educational_attainment.$model"
+                  :class="{'is-invalid' :$v.ins.educational_attainment.$error}">
                 </b-form-textarea>
                 <div class="invalid-feedback">
-                  <span v-if="!$v.educational_attainment.required">Educational Attainment is required!</span>
+                  <span v-if="!$v.ins.educational_attainment.required">Educational Attainment is required!</span>
                 </div>
               </b-form-group>
             </b-col>
@@ -803,7 +803,10 @@
        province: {required},
        postal_code: {required},
      },
+     ins: {
        educational_attainment: {required},
+     }
+
     },
 
     mounted () {
@@ -1089,8 +1092,8 @@
       },
 
       ShowPreferredSubjForm: function(){
-        this.$v.educational_attainment.$touch();
-        if (this.$v.educational_attainment.$anyError) {
+        this.$v.ins.educational_attainment.$touch();
+        if (this.$v.ins.educational_attainment.$anyError) {
           return;
         }
         else {
