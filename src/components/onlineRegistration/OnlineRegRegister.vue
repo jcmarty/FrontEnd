@@ -3,10 +3,21 @@
     <Header />
     <div class="Stud_body_container">
 
-        <ul class="Stud_progressbar d-print-none">
+      <!-- Student Information -->
+      <div class="Stud_container">
+        <transition name="fade">
+          <div id="" class="mx-3 mb-4 p-4 bg-white shadow rounded" v-if="GuidesForm">
+            <!-- Make Instruction after successfully pre-register -->
+          </div>
+        </transition>
+      </div>
+      <!-- Student Information -->
+
+        <ul class="Stud_progressbar" v-if="progressBar">
             <li class="active">Student Information</li>
             <li id="PersonalInformation">Personal Information</li>
             <li id="ParentsInformation" >Parents Information</li>
+            <li id="Preview" >Preview</li>
          </ul>
 
       <!-- Student Information -->
@@ -558,7 +569,7 @@
                     </b-col>
                     <b-col class="d-flex justify-content-end">
                       <b-button variant="primary" @click="ShowAllInfoForm">
-                        Finish
+                        Next
                       </b-button>
                     </b-col>
                     </b-form-row>
@@ -570,28 +581,13 @@
       <div id="Stud_container" >
         <transition name="fade">
           <div id="" class="mx-3 mb-4 p-4 bg-white shadow rounded" v-if="ShowAllInfoshowForm">
-            <!-- <center>
-              <img src="../assets/comteq_logo.png" alt="Comteq Logo" class="responsive d-none d-print-block" id="ComteqLogoPrint"/>
-            </center> -->
-            <b-form-row class="d-none d-print-block">
-                <center>
-                  <h4>COMTEQ Computer & Business College</h4>
-                  <h5>1200 4th floor Savers Appliance Depot, Rizal Ave, East Tapinac Olongapo City Zambales. </h5>
-              </center>
-            </b-form-row>
-            <b-form-row class="d-print-none">
-              <b-col class="py-4">
-                <!-- Add New Room Button -->
-                <b-button variant="primary" onclick="window.print()">
-                  Print
-                </b-button>
-              </b-col>
-            </b-form-row>
+
           <div class=" h5 font-weight-bold text-dark text-center">Student Information</div>
           <hr/>
           <div class="">
-            <b-form-row>
+            <b>NOTE:</b> <p> Please review your information below, make sure you input all required fields.</p>
 
+            <b-form-row>
               <b-col cols="12" md="6" lg="3">
                 <b-form-group
                   class="lastname"
@@ -1191,6 +1187,8 @@ data() {
       calendarIcon: "fa fa-calendar",
       birthDateFormat: "MMM dd, yyyy",
 
+      progressBar: true,
+      GuidesForm: false,
       StudentInfoshowForm: true,
       PersonalInfoshowForm: false,
       ParentsInfoshowForm: false,
@@ -1236,7 +1234,7 @@ methods: {
 
   backParentInfoForm: function(){
     this.ShowAllInfoshowForm = false;
-    this.showParentsInfoForm = true;
+    this.ParentsInfoshowForm = true;
   },
 
   showPersonalInfoForm: function(){
@@ -1441,9 +1439,10 @@ methods: {
             .then(response => {
               console.log(response.data);
               this.alertMessage = "New student record successfully created.";
-              this.ParentsInfoshowForm = false;
+              this.ShowAllInfoshowForm = false;
               this.ClearStudentFields();
-              this.StudentInfoshowForm = true;
+              this.progressBar = false;
+              this.GuidesForm = true;
               this.dismissSuccessCountDown = this.dismissSecs;
             })
             .catch(error => {
@@ -1520,13 +1519,10 @@ methods: {
       ShowAllInfoForm: function(){
         this.ShowAllInfoshowForm = true;
         this.ParentsInfoshowForm = false;
+        var element = document.getElementById("Preview");
+        element.classList.add("active");
       }
 
     }
   }
 </script>
-<style media="Print">
-  @page{
-    size: landscape;
-  }
-</style>
