@@ -19,23 +19,21 @@
                   <b-card id="about_card p-3" style=" box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);" >
                     <img src="../../assets/images/vision_mission.png" img-alt="Image" id="medal"  />
                       <b-link class="Stud_about" to="/VisionMission">
-                        Mission And Vision
+                        <center>Mission And Vision</center>
                       </b-link>
                   </b-card>
 
                 <b-card id="about_card p-3" style=" box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);" >
-                  <img src="../../assets/images/achievement.png" img-alt="Image" id="medal" img-top />
-                  <b-card-text>
-                    <b-link class="Stud_about" to="/Achievements">
-                      School Achievements
+                  <img src="../../assets/images/achievement.png" img-alt="Image" id="medal" img-top to="/Achievements" />
+                    <b-link class="Stud_about">
+                      <center>School Achievements</center>
                     </b-link>
-                  </b-card-text>
                 </b-card>
 
                 <b-card id="about_card p-3" style=" box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);" >
                   <img src="../../assets/images/event.png" img-alt="Image" id="medal" img-top />
                   <b-link class="Stud_about" to="/Events">
-                    School Events
+                    <center>School Events</center>
                   </b-link>
                 </b-card>
               </b-card-group>
