@@ -479,17 +479,17 @@
 
           { key: 'subject_code', label: 'Subject Code', sortable: true, class: 'text-center' },
           { key: 'subject_title', label: 'Subject Title', sortable: true, class: 'text-center',
-            formatter: (value, key, item) => {
-              if (item.lab == 1) {
-                return item.subject_title + " - LAB"
-              }
-              else if (item.lab == 0 && item.lec == 2) {
-                  return item.subject_title + " - LEC"
-              }
-              else {
-                return item.subject_title
-              }
-            },
+            // formatter: (value, key, item) => {
+            //   if (item.lab == 1) {
+            //     return item.subject_title + " - LAB"
+            //   }
+            //   else if (item.lab == 0 && item.lec == 2) {
+            //       return item.subject_title + " - LEC"
+            //   }
+            //   else {
+            //     return item.subject_title
+            //   }
+            // },
           },
           { key: 'active', label: 'Active', sortable: true, class: 'text-center' },
           { key: 'actions', label: 'Actions' , class: 'text-center' }
