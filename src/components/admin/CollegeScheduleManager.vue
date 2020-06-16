@@ -48,10 +48,10 @@
         <b-form-row>
           <b-col cols="12" md="6" lg="2">
             <b-form-group class="course" label="Course" label-for="Course">
-              <b-form-select id="Course" v-model="selectedCourse" @change="getCurriculum()" :options="course_options">
+              <b-form-select id="Course" v-model="selectedCourse" @change="getCurriculum()">
                 <option value="null" hidden>Select Course</option>
-                <!-- <option v-for="course in CourseRow"
-                  v-bind:value="{id:course.id , year:course.year_duration}">{{course.course_code}}</option> -->
+                <option v-for="course in CourseRow"
+                  v-bind:value="{id:course.id , year:course.year_duration, curriculum: course.curriculum}">{{course.course_code}}</option>
               </b-form-select>
             </b-form-group>
           </b-col>
@@ -89,26 +89,46 @@
 
           <b-col cols="12" md="6" lg="1">
             <b-form-group class="block" label="Block" label-for="Block">
-              <b-form-select id="block" @change="getFilteredClassSchedule" v-bind:value="blockData" v-model="selectedBlock" :disabled="blockStatus">
+              <!-- <b-form-select id="block" @change="getFilteredClassSchedule" v-bind:value="blockData" v-model="selectedBlock" :disabled="blockStatus">
                 <option value="null" hidden>Block</option>
                 <option value="1" >1</option>
                 <option value="2" >2</option>
                 <option value="3" >3</option>
                 <option value="4" >4</option>
-              </b-form-select>
+              </b-form-select> -->
+              <b-form-input type="text" list="blockList" id="block" @change="getFilteredClassSchedule" v-bind:value="blockData" v-model="selectedBlock" :disabled="blockStatus">
+
+              </b-form-input>
+              <datalist id="blockList">
+                <option value="1" >1</option>
+                <option value="2" >2</option>
+                <option value="3" >3</option>
+                <option value="4" >4</option>
+                <option value="5" >5</option>
+              </datalist>
             </b-form-group>
           </b-col>
 
           <b-col cols="12" md="6" lg="1">
             <b-form-group class="batch" label="Batch" label-for="Batch">
-              <b-form-select id="batch" @change="" v-bind:value="batchData" v-model="selectedBatch" :disabled="batchStatus">
+              <!-- <b-form-select id="batch" @change="" v-bind:value="batchData" v-model="selectedBatch" :disabled="batchStatus">
                 <option value="null" hidden>Batch</option>
                 <option value="0" v-if="selectedBatch == 0" hidden>0</option>
                 <option value="1" >1</option>
                 <option value="2" >2</option>
                 <option value="3" >3</option>
                 <option value="4" >4</option>
-              </b-form-select>
+              </b-form-select> -->
+              <b-form-input type="text" list="batchList" id="batch" @change="" v-bind:value="batchData" v-model="selectedBatch" :disabled="batchStatus">
+
+              </b-form-input>
+              <datalist id="batchList">
+                <option value="1" >1</option>
+                <option value="2" >2</option>
+                <option value="3" >3</option>
+                <option value="4" >4</option>
+                <option value="5" >5</option>
+              </datalist>
             </b-form-group>
           </b-col>
 
@@ -233,7 +253,7 @@
         </b-row>
       </div>
     </div>
-</div>
+  </div>
 </template>
 <style>
 tbody tr td{
@@ -303,7 +323,7 @@ thead tr th{
                   academicYearOptions: this.$store.getters.getAcademicYears,
                   semesterOptions: this.$store.getters.getSemesters,
                   year_options: [],
-                  course_options: this.$store.getters.getCourses,
+                  // course_options: this.$store.getters.getCourses,
                   day_options: [],
                   time_start_options: [],
                   time_end_options: [],
@@ -359,6 +379,7 @@ thead tr th{
               },
 
               mounted () {
+                this.getCourses();
               },
 
               methods: {
@@ -742,6 +763,7 @@ thead tr th{
 
                 // gets all created schedule
                 getFilteredClassSchedule: function(){
+                  alert("test")
                   Axios
                     .get('http://localhost/api/v1/class_schedules', {
                       params: {
@@ -870,16 +892,16 @@ thead tr th{
 
                   var lab = this.selectedSubject.lab
                   // check if subject has laboratory
-                  if(lab == 1){
+                  if(lab > 0){
                     this.blockStatus = false;
                     this.batchStatus = false;
-                    this.selectedBlock = 1;
-                    this.selectedBatch = 1;
+                    // this.selectedBlock = 1;
+                    // this.selectedBatch = 1;
                   } else{
                     this.blockStatus = false;
                     this.batchStatus = false;
-                    this.selectedBlock = 1;
-                    this.selectedBatch = 0;
+                    // this.selectedBlock = 1;
+                    // this.selectedBatch = 0;
                   }
 
                   this.getFilteredClassSchedule();
@@ -1019,6 +1041,31 @@ thead tr th{
                       this.selectedRoom = null;
                       this.selectedDay = null;
                       this.selectedTimeStart = null;
+                },
+
+                // Get course Function
+                getCourses: function(){
+                  this.isLoading = true;
+                  Axios
+                    .get('http://localhost/api/v1/courses', {
+                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+                    })
+                    .then(response => {
+                      this.isLoading = false;
+                      this.CourseRow = response.data;
+                      console.log(this.CourseRow)
+                      this.backToTop();
+                    })
+                    .catch(error => {
+                      this.alertMessage = error.response.data.message;
+                      this.dismissErrorCountDown = this.dismissSecs;
+                      this.backToTop();
+                    })
+                }, // End of Get Course function
+
+                backToTop: function(){
+                  document.body.scrollTop = 0;
+                  document.documentElement.scrollTop = 0;
                 },
 
                 // for clearing forms
