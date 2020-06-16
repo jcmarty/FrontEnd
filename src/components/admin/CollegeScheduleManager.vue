@@ -763,7 +763,6 @@ thead tr th{
 
                 // gets all created schedule
                 getFilteredClassSchedule: function(){
-                  alert("test")
                   Axios
                     .get('http://localhost/api/v1/class_schedules', {
                       params: {
