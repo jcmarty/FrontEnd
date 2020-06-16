@@ -205,6 +205,7 @@
               </b-form-input>
               <div class="invalid-feedback">
                 <span v-if="!$v.instructor.email.required">Email is required!</span>
+                <span v-if="!$v.instructor.email.email">You have entered an invalid email address!</span>
               </div>
             </b-form-group>
           </b-col>
@@ -390,7 +391,7 @@
   import moment from 'moment';
   import Datepicker from 'vuejs-datepicker';
   import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue';
-  import { required, minLength, maxLength, between } from 'vuelidate/lib/validators';
+  import { required, minLength, maxLength, between, email } from 'vuelidate/lib/validators';
   export default{
     name: 'InstructorInformationManager',
     components: {
@@ -449,7 +450,7 @@
        last_name: {required},
        birth_date: {required},
        gender: {required},
-       email: {required},
+       email: {required, email},
        contact_no: {required, minLength: minLength(11), maxLength: maxLength(11)},
        address: {required},
        city: {required},

@@ -551,8 +551,13 @@
       },
 
       confirmUpdateModal: function(){
-        this.$refs['confirmUpdate'].show();
-        this.$refs['editCourseModal'].hide();
+        this.$v.course.$touch();
+        if (this.$v.course.$anyError) {
+          return;
+        }else {
+          this.$refs['confirmUpdate'].show();
+          this.$refs['editCourseModal'].hide();
+        }
       },
 
       EditModal: function(item, index) {

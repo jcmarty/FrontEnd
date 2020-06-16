@@ -194,85 +194,85 @@
         <b-form-row>
           <b-col cols="12" md="6" lg="5">
             <b-form-group
-              :class="{'text-danger' : $v.Students.address.$error}"
+              :class="{'text-danger' : $v.StudPersonal.address.$error}"
               label="Present Address ( House No./Lot No./Bldg No./Street ) *"
               label-for="presentAddress">
               <b-form-input
                 type="text"
                 id="presentAddress"
-                v-model.trim="$v.Students.address.$model"
-                :class="{'is-invalid' :$v.Students.address.$error}">
+                v-model.trim="$v.StudPersonal.address.$model"
+                :class="{'is-invalid' :$v.StudPersonal.address.$error}">
               </b-form-input>
               <div class="invalid-feedback">
-                <span v-if="!$v.Students.address.required">Present Address is required!</span>
+                <span v-if="!$v.StudPersonal.address.required">Present Address is required!</span>
               </div>
             </b-form-group>
           </b-col>
 
           <b-col cols="12" md="6" lg="2">
             <b-form-group
-              :class="{'text-danger' : $v.Students.barangay.$error}"
+              :class="{'text-danger' : $v.StudPersonal.barangay.$error}"
               label="Barangay / Subdivision *"
               label-for="Barangay">
               <b-form-input
                 type="text"
                 id="Barangay"
-                v-model.trim="$v.Students.barangay.$model"
-                :class="{'is-invalid' :$v.Students.barangay.$error}">
+                v-model.trim="$v.StudPersonal.barangay.$model"
+                :class="{'is-invalid' :$v.StudPersonal.barangay.$error}">
               </b-form-input>
               <div class="invalid-feedback">
-                <span v-if="!$v.Students.barangay.required">Barangay / Subdivision is required!</span>
+                <span v-if="!$v.StudPersonal.barangay.required">Barangay / Subdivision is required!</span>
               </div>
             </b-form-group>
           </b-col>
 
           <b-col cols="12" md="6" lg="2">
             <b-form-group
-              :class="{'text-danger' : $v.Students.city.$error}"
+              :class="{'text-danger' : $v.StudPersonal.city.$error}"
               label="City / Municipality *"
               label-for="cityMunicipality">
               <b-form-input
                 type="text"
                 id="cityMunicipality"
-                v-model.trim="$v.Students.city.$model"
-                :class="{'is-invalid' :$v.Students.city.$error}">
+                v-model.trim="$v.StudPersonal.city.$model"
+                :class="{'is-invalid' :$v.StudPersonal.city.$error}">
               </b-form-input>
               <div class="invalid-feedback">
-                <span v-if="!$v.Students.city.required">City / Municipality is required!</span>
+                <span v-if="!$v.StudPersonal.city.required">City / Municipality is required!</span>
               </div>
             </b-form-group>
           </b-col>
 
           <b-col cols="12" md="6" lg="2">
             <b-form-group
-              :class="{'text-danger' : $v.Students.province.$error}"
+              :class="{'text-danger' : $v.StudPersonal.province.$error}"
               label="Province *"
               label-for="Province">
               <b-form-input
                 type="text"
                 id="Province"
-                v-model.trim="$v.Students.province.$model"
-                :class="{'is-invalid' :$v.Students.province.$error}">
+                v-model.trim="$v.StudPersonal.province.$model"
+                :class="{'is-invalid' :$v.StudPersonal.province.$error}">
               </b-form-input>
               <div class="invalid-feedback">
-                <span v-if="!$v.Students.province.required">Province is required!</span>
+                <span v-if="!$v.StudPersonal.province.required">Province is required!</span>
               </div>
             </b-form-group>
           </b-col>
 
           <b-col cols="12" md="6" lg="1">
             <b-form-group
-              :class="{'text-danger' : $v.Students.postal.$error}"
+              :class="{'text-danger' : $v.StudPersonal.postal.$error}"
               label="Postal Code"
               label-for="postalCode">
               <b-form-input
                 type="text"
                 id="postalCode"
-                v-model.trim="$v.Students.postal.$model"
-                :class="{'is-invalid' :$v.Students.postal.$error}">
+                v-model.trim="$v.StudPersonal.postal.$model"
+                :class="{'is-invalid' :$v.StudPersonal.postal.$error}">
               </b-form-input>
               <div class="invalid-feedback">
-                <span v-if="!$v.Students.postal.required">Postal Code is required!</span>
+                <span v-if="!$v.StudPersonal.postal.required">Postal Code is required!</span>
               </div>
             </b-form-group>
           </b-col>
@@ -281,7 +281,7 @@
         <b-form-row>
           <b-col cols="12" md="6" lg="3">
             <b-form-group
-              :class="{'text-danger' : $v.Students.birth_date.$error}"
+              :class="{'text-danger' : $v.StudPersonal.birth_date.$error}"
               label="Birth Date *"
               label-for="birthDate">
               <datepicker
@@ -291,44 +291,44 @@
                 :calendar-button-icon="calendarIcon"
                 :bootstrap-styling="true"
                 :format="birthDateFormat"
-                v-model.trim="$v.Students.birth_date.$model"
-                :class="{'is-invalid' :$v.Students.birth_date.$error}">
+                v-model.trim="$v.StudPersonal.birth_date.$model"
+                :class="{'is-invalid' :$v.StudPersonal.birth_date.$error}">
               </datepicker>
               <div class="invalid-feedback">
-                <span v-if="!$v.Students.birth_date.required">Birth Date is required!</span>
+                <span v-if="!$v.StudPersonal.birth_date.required">Birth Date is required!</span>
               </div>
             </b-form-group>
           </b-col>
 
           <b-col cols="12" md="6" lg="2">
             <b-form-group
-              :class="{'text-danger' : $v.Students.gender.$error}"
+              :class="{'text-danger' : $v.StudPersonal.gender.$error}"
               label="Gender *"
               label-for="Gender">
               <b-form-select
                 :options="genderOptions"
-                v-model.trim="$v.Students.gender.$model"
-                :class="{'is-invalid' :$v.Students.gender.$error}">
+                v-model.trim="$v.StudPersonal.gender.$model"
+                :class="{'is-invalid' :$v.StudPersonal.gender.$error}">
               </b-form-select>
               <div class="invalid-feedback">
-                <span v-if="!$v.Students.gender.required">Gender is required!</span>
+                <span v-if="!$v.StudPersonal.gender.required">Gender is required!</span>
               </div>
             </b-form-group>
           </b-col>
 
           <b-col cols="12" md="6" lg="4">
             <b-form-group
-              :class="{'text-danger' : $v.Students.email.$error}"
+              :class="{'text-danger' : $v.StudPersonal.email.$error}"
               label="Email Address *"
               label-for="emailAddress">
               <b-form-input
                 type="email"
                 id="emailAddress"
-                v-model.trim="$v.Students.email.$model"
-                :class="{'is-invalid' :$v.Students.email.$error}">
+                v-model.trim="$v.StudPersonal.email.$model"
+                :class="{'is-invalid' :$v.StudPersonal.email.$error}">
               </b-form-input>
               <div class="invalid-feedback">
-                <span v-if="!$v.Students.email.required">Email Address is required!</span>
+                <span v-if="!$v.StudPersonal.email.required">Email Address is required!</span>
               </div>
             </b-form-group>
           </b-col>
@@ -337,68 +337,68 @@
 
           <b-col cols="12" md="6" lg="3">
             <b-form-group
-              :class="{'text-danger' : $v.Students.cellphone.$error}"
+              :class="{'text-danger' : $v.StudPersonal.cellphone.$error}"
               label="Cellphone No. *"
               label-for="cellphoneNo">
               <b-form-input
                 type="number"
                 id="cellphoneNo"
-                v-model.trim="$v.Students.cellphone.$model"
-                :class="{'is-invalid' :$v.Students.cellphone.$error}">
+                v-model.trim="$v.StudPersonal.cellphone.$model"
+                :class="{'is-invalid' :$v.StudPersonal.cellphone.$error}">
               </b-form-input>
               <div class="invalid-feedback">
-                <span v-if="!$v.Students.cellphone.required">Cellphone No. is required!</span>
+                <span v-if="!$v.StudPersonal.cellphone.required">Cellphone No. is required!</span>
               </div>
             </b-form-group>
           </b-col>
 
           <b-col cols="12" md="6" lg="5">
             <b-form-group
-              :class="{'text-danger' : $v.Students.birth_place.$error}"
+              :class="{'text-danger' : $v.StudPersonal.birth_place.$error}"
               label="Place of Birth *"
               label-for="placeofBirth">
               <b-form-input
                 type="text"
                 id="placeofBirth"
-                v-model.trim="$v.Students.birth_place.$model"
-                :class="{'is-invalid' :$v.Students.birth_place.$error}">
+                v-model.trim="$v.StudPersonal.birth_place.$model"
+                :class="{'is-invalid' :$v.StudPersonal.birth_place.$error}">
               </b-form-input>
               <div class="invalid-feedback">
-                <span v-if="!$v.Students.birth_place.required">Place of Birth is required!</span>
+                <span v-if="!$v.StudPersonal.birth_place.required">Place of Birth is required!</span>
               </div>
             </b-form-group>
           </b-col>
 
           <b-col cols="12" md="6" lg="2">
             <b-form-group
-              :class="{'text-danger' : $v.Students.citizenship.$error}"
+              :class="{'text-danger' : $v.StudPersonal.citizenship.$error}"
               label="Citizenship *"
               label-for="citizenShip">
               <b-form-input
                 type="text"
                 id="citizenShip"
-                v-model.trim="$v.Students.citizenship.$model"
-                :class="{'is-invalid' :$v.Students.citizenship.$error}">
+                v-model.trim="$v.StudPersonal.citizenship.$model"
+                :class="{'is-invalid' :$v.StudPersonal.citizenship.$error}">
               </b-form-input>
               <div class="invalid-feedback">
-                <span v-if="!$v.Students.citizenship.required">Citizenship is required!</span>
+                <span v-if="!$v.StudPersonal.citizenship.required">Citizenship is required!</span>
               </div>
             </b-form-group>
           </b-col>
 
           <b-col cols="12" md="6" lg="2">
             <b-form-group
-              :class="{'text-danger' : $v.Students.civil_status.$error}"
+              :class="{'text-danger' : $v.StudPersonal.civil_status.$error}"
               label="Civil status *"
               label-for="civilStatus">
               <b-form-input
                 type="text"
                 id="civilStatus"
-                v-model.trim="$v.Students.civil_status.$model"
-                :class="{'is-invalid' :$v.Students.civil_status.$error}">
+                v-model.trim="$v.StudPersonal.civil_status.$model"
+                :class="{'is-invalid' :$v.StudPersonal.civil_status.$error}">
               </b-form-input>
               <div class="invalid-feedback">
-                <span v-if="!$v.Students.civil_status.required">Civil Status is required!</span>
+                <span v-if="!$v.StudPersonal.civil_status.required">Civil Status is required!</span>
               </div>
             </b-form-group>
           </b-col>
@@ -460,17 +460,17 @@
 
           <b-col cols="12" md="6" lg="6">
             <b-form-group
-              :class="{'text-danger' : $v.Students.mother_name.$error}"
+              :class="{'text-danger' : $v.StudParents.mother_name.$error}"
               label="Mother's Name *"
               label-for="mothersName">
               <b-form-input
                 type="text"
                 id="mothersName"
-                v-model.trim="$v.Students.mother_name.$model"
-                :class="{'is-invalid' :$v.Students.mother_name.$error}">
+                v-model.trim="$v.StudParents.mother_name.$model"
+                :class="{'is-invalid' :$v.StudParents.mother_name.$error}">
               </b-form-input>
               <div class="invalid-feedback">
-                <span v-if="!$v.Students.mother_name.required">Mother's Name is required!</span>
+                <span v-if="!$v.StudParents.mother_name.required">Mother's Name is required!</span>
               </div>
             </b-form-group>
           </b-col>
@@ -485,51 +485,51 @@
         <b-form-row>
           <b-col cols="12" md="6" lg="4">
             <b-form-group
-              :class="{'text-danger' : $v.Students.contact_person.$error}"
+              :class="{'text-danger' : $v.StudParents.contact_person.$error}"
               label="Guardian's Name *"
               label-for="guardianName">
               <b-form-input
                 type="text"
                 id="guardianName"
-                v-model.trim="$v.Students.contact_person.$model"
-                :class="{'is-invalid' :$v.Students.contact_person.$error}">
+                v-model.trim="$v.StudParents.contact_person.$model"
+                :class="{'is-invalid' :$v.StudParents.contact_person.$error}">
               </b-form-input>
               <div class="invalid-feedback">
-                <span v-if="!$v.Students.contact_person.required">Guardian's Name is required!</span>
+                <span v-if="!$v.StudParents.contact_person.required">Guardian's Name is required!</span>
               </div>
             </b-form-group>
           </b-col>
 
           <b-col cols="12" md="6" lg="4">
             <b-form-group
-              :class="{'text-danger' : $v.Students.contact_address.$error}"
+              :class="{'text-danger' : $v.StudParents.contact_address.$error}"
               label="Contact Address *"
               label-for="contactAddress">
               <b-form-input
                 type="text"
                 id="contactAddress"
-                v-model.trim="$v.Students.contact_address.$model"
-                :class="{'is-invalid' :$v.Students.contact_address.$error}">
+                v-model.trim="$v.StudParents.contact_address.$model"
+                :class="{'is-invalid' :$v.StudParents.contact_address.$error}">
               </b-form-input>
               <div class="invalid-feedback">
-                <span v-if="!$v.Students.contact_address.required">Contact Address is required!</span>
+                <span v-if="!$v.StudParents.contact_address.required">Contact Address is required!</span>
               </div>
             </b-form-group>
           </b-col>
 
         <b-col cols="12" md="6" lg="4">
           <b-form-group
-            :class="{'text-danger' : $v.Students.contact_number.$error}"
+            :class="{'text-danger' : $v.StudParents.contact_number.$error}"
             label="Contact Number *"
             label-for="contactNumber">
             <b-form-input
               type="number"
               id="contactNumber"
-              v-model.trim="$v.Students.contact_number.$model"
-              :class="{'is-invalid' :$v.Students.contact_number.$error}">
+              v-model.trim="$v.StudParents.contact_number.$model"
+              :class="{'is-invalid' :$v.StudParents.contact_number.$error}">
             </b-form-input>
             <div class="invalid-feedback">
-              <span v-if="!$v.Students.contact_number.required">Contact Number is required!</span>
+              <span v-if="!$v.StudParents.contact_number.required">Contact Number is required!</span>
             </div>
           </b-form-group>
         </b-col>
@@ -684,6 +684,10 @@
           middle_name: null,
           last_name: null,
           suffix_name: null,
+          school_last_attended: null,
+          school_address: null,
+          college_last_attended: null,
+          college_address: null,
           gender: null,
           civil_status: null,
           citizenship:null,
@@ -705,11 +709,31 @@
           blood_type: null,
           photo_url: null,
           user_id: null,
-          school_last_attended: null,
-          school_address: null,
-          college_last_attended: null,
-          college_address: null,
           active: 1,
+        },
+
+        StudPersonal: {
+          gender: null,
+          civil_status: null,
+          citizenship:null,
+          address: null,
+          barangay: null,
+          city: null,
+          postal: null,
+          province: null,
+          telephone: null,
+          cellphone: 0,
+          email: null,
+          birth_date: null,
+          birth_place: null,
+        },
+
+        StudParents: {
+          father_name: null,
+          mother_name: null,
+          contact_person: null,
+          contact_address: null,
+          contact_number: 0,
         },
 
         totalRows: 1,
@@ -773,6 +797,9 @@
        last_name: {required},
        school_last_attended: {required},
        school_address: {required},
+     },
+
+     StudPersonal: {
        gender: {required},
        civil_status: {required},
        citizenship:{required},
@@ -785,11 +812,13 @@
        email: {required},
        birth_date: {required},
        birth_place: {required},
+     },
+
+     StudParents: {
        mother_name: {required},
        contact_person: {required},
        contact_address: {required},
        contact_number: {required},
-
      },
     },
 
@@ -832,101 +861,14 @@
       },
 
       showParentsInfoForm: function(){
-        var element = document.getElementById("ParentsInformation");
-        element.classList.add("active");
-        var checker;
-
-        // Present Address
-        if (this.Students.address == null || this.Students.address == "") {
-            this.present_address_state = false;
-            checker = true;
-        } else {
-          this.present_address_state = null;
+        this.$v.StudPersonal.$touch();
+        if (this.$v.StudPersonal.$anyError) {
+          return;
         }
-
-        // Barangay
-        if (this.Students.barangay == null || this.Students.barangay == "") {
-            this.barangay_state = false,
-            checker = true;
-        } else {
-          this.barangay_state = null;
-        }
-
-        // City / Municipality
-        if (this.Students.city == null || this.Students.city == "") {
-            this.cityMunicipality_state = false;
-            checker = true;
-        } else {
-          this.cityMunicipality_state = null
-        }
-
-        // Province
-        if (this.Students.province == null || this.Students.province == "") {
-            this.province_state = false;
-            checker = true;
-        } else {
-          this.province_state = null;
-        }
-
-        // Postal
-        if (this.Students.postal == null || this.Students.postal == "") {
-            this.postalCode_state = false;
-            checker = true;
-        } else {
-          this.postalCode_state = null;
-        }
-
-        // Birthdate
-        if (this.Students.birth_date == null || this.Students.birth_date == "") {
-            this.birthDate_state = false;
-            checker = true;
-        } else {
-          this.birthDate_state = null;
-        }
-
-        // Gender
-        if (this.Students.gender == null || this.Students.gender == "") {
-            this.gender_state = false;
-            checker = true;
-        } else {
-          this.gender_state = null;
-        }
-
-        // Cellphone Number
-        if (this.Students.cellphone == null || this.Students.cellphone == "") {
-            this.cellphone_state = false;
-            checker = true;
-        } else {
-          this.cellphone_state = null;
-        }
-
-        // Place of Birth
-        if (this.Students.birth_place == null || this.Students.birth_place == "") {
-            this.placeofBirth_state = false;
-            checker = true;
-        } else {
-          this.placeofBirth_state = null;
-        }
-
-        // Citizenship
-        if (this.Students.citizenship == null || this.Students.citizenship == "") {
-            this.citizenShip_state = false;
-            checker = true;
-        } else {
-          this.citizenShip_state = null;
-        }
-
-        // Civilstatus
-        if (this.Students.civil_status == null || this.Students.civil_status == "") {
-            this.civilStatus_state = false;
-            checker = true;
-        } else {
-          this.civilStatus_state = null;
-        }
-
-        if (checker) {
-
-        } else {
+        else {
+          var element = document.getElementById("ParentsInformation");
+          element.classList.add("active");
+          var checker;
           this.ParentsInfoshowForm = true;
           this.PersonalInfoshowForm = false;
         }
@@ -939,50 +881,28 @@
       },
 
       RegStudents: function(){
-        var checker;
-        // father's name
-        if (this.Students.father_name == null || this.Students.father_name == "") {
-            this.fathersName_state = false;
-            checker = true;
-        } else {
-          this.fathersName_state = null;
+        this.$v.StudParents.$touch();
+        if (this.$v.StudParents.$anyError) {
+          return;
         }
+        else {
+          this.Students.address = this.StudPersonal.address;
+          this.Students.barangay = this.StudPersonal.barangay;
+          this.Students.city = this.StudPersonal.city;
+          this.Students.province = this.StudPersonal.province;
+          this.Students.postal = this.StudPersonal.postal;
+          this.Students.birth_date = this.StudPersonal.birth_date;
+          this.Students.birth_place = this.StudPersonal.birth_place;
+          this.Students.gender = this.StudPersonal.gender;
+          this.Students.cellphone = this.StudPersonal.cellphone;
+          this.Students.citizenship = this.StudPersonal.citizenship;
+          this.Students.civil_status = this.StudPersonal.civil_status;
 
-        // mother's Name
-        if (this.Students.mother_name == null || this.Students.mother_name == "") {
-          this.mothersName_state = false;
-          checker = true;
-        } else {
-          this.mothersName_state = null;
-        }
+          this.Students.mother_name = this.StudParents.mother_name;
+          this.Students.contact_person = this.StudParents.contact_person;
+          this.Students.contact_address = this.StudParents.contact_address;
+          this.Students.contact_number = this.StudParents.contact_number;
 
-        // Guardian Name
-        if (this.Students.contact_person == null || this.Students.contact_person == "") {
-            this.guardianName_state = false;
-            checker = true
-        } else {
-          this.guardianName_state = null;
-        }
-
-        // Guardian address
-        if (this.Students.contact_address == null || this.Students.contact_address == "") {
-            this.guardianContactAddress_state = false;
-            checker = true;
-        } else {
-          this.guardianContactAddress_state = null;
-        }
-
-        // Guardian Name
-        if (this.Students.contact_number == 0 || this.Students.contact_number == "") {
-            this.guardianContactNumber_state = false;
-            checker = true;
-        } else {
-          this.guardianContactNumber_state = null;
-        }
-
-        if (checker) {
-
-        } else {
           this.ParentsInfoshowForm = false;
           this.progress = false;
           this.RegisterTableForm = true;

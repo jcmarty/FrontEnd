@@ -90,7 +90,7 @@
         this.logginIn = true;
         Axios.post(baseUrl + "login", {username: this.input.username, password: this.input.password})
         .then(response => {
-            // console.log(response.data.user)
+            console.log(response.data.user)
             //save user details in localStorage
             localStorage.setItem('ccbc_token', JSON.stringify({ user: response.data.user, token: response.data.token}));
             //save token in store

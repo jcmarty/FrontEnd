@@ -395,8 +395,14 @@
       },
 
       confirmUpdateModal: function(){
-        this.$refs['confirmUpdate'].show();
-        this.$refs['editAYModal'].hide();
+        this.$v.AcademicYears.$touch();
+        if (this.$v.AcademicYears.$anyError) {
+          return;
+        }else {
+          this.$refs['confirmUpdate'].show();
+          this.$refs['editAYModal'].hide();
+        }
+
       },
       // Reset Form Function
       resetform: function(){

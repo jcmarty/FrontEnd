@@ -176,7 +176,7 @@
         <!-- Semester -->
         <b-col cols="12" md="6" lg="12">
           <b-form-group
-            :class="{'text-danger' : $v.semesters.semester.$error, 'text-success' : !$v.semesters.semester.$invalid }"
+            :class="{'text-danger' : $v.semesters.semester.$error}"
             label="Semester *"
             label-for="Semester">
             <b-form-input
@@ -404,8 +404,14 @@
       },
 
       confirmUpdateModal: function(){
-        this.$refs['confirmUpdate'].show();
-        this.$refs['editSemesterModal'].hide();
+        this.$v.semesters.$touch();
+        if (this.$v.semesters.$anyError) {
+          return;
+        }else {
+          this.$refs['confirmUpdate'].show();
+          this.$refs['editSemesterModal'].hide();
+        }
+
       },
 
       EditModal: function(item, index) {

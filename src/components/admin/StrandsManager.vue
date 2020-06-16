@@ -523,8 +523,14 @@
       },
 
       confirmUpdateModal: function(){
-        this.$refs['confirmUpdate'].show();
-        this.$refs['editStrandsModal'].hide();
+        this.$v.strand.$touch();
+        if (this.$v.strand.$anyError) {
+          return;
+        }else {
+          this.$refs['confirmUpdate'].show();
+          this.$refs['editStrandsModal'].hide();
+        }
+
       },
       // Reset Form Function
       resetform: function(){

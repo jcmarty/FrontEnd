@@ -572,8 +572,15 @@
       },
 
       confirmUpdateModal: function(){
-        this.$refs['confirmUpdate'].show();
-        this.$refs['editRoomModal'].hide();
+        this.$v.room.$touch();
+        if (this.$v.room.$anyError) {
+          return;
+        }
+        else {
+          this.$refs['confirmUpdate'].show();
+          this.$refs['editRoomModal'].hide();
+        }
+
       },
 
       EditModal: function(item, index) {

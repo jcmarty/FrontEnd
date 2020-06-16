@@ -64,7 +64,7 @@
                 </b-form-input>
                 <div class="invalid-feedback">
                   <span v-if="!$v.users.password.required">Password is required!</span>
-                  <span v-if="!$v.users.password_confirmation.minLength">Password must have at least 6 characters.</span>
+                  <span v-if="!$v.users.password.minLength">Password must have at least 6 characters.</span>
                 </div>
               </b-form-group>
             </b-col>
@@ -101,6 +101,7 @@
                 </b-form-input>
                 <div class="invalid-feedback">
                   <span v-if="!$v.users.email.required">Email is required!</span>
+                  <span v-if="!$v.users.email.email">You have entered an invalid email address!</span>
                 </div>
               </b-form-group>
             </b-col>
@@ -296,7 +297,7 @@
       <!-- end of table -->
 
       <b-modal id="confirmUpdate" ref="confirmUpdate" size="md" no-close-on-backdrop>
-        <center><h6>Are you sure you want to update  <br/><b>{{this.users.username}} ?</b></h6></center>
+        <center><h6>Are you sure you want to update  <br/><b>{{this.users_update.username}} ?</b></h6></center>
 
           <!-- Modal Footer Template -->
           <template v-slot:modal-footer="{ cancel, ok }">
@@ -317,17 +318,17 @@
         <!-- Username -->
         <b-col cols="12" md="6" lg="4">
           <b-form-group
-            :class="{'text-danger' : $v.users.username.$error}"
+            :class="{'text-danger' : $v.users_update.username.$error}"
             label="Username *"
             label-for="Username">
             <b-form-input
               type="text"
               id="Username"
-              v-model.trim="$v.users.username.$model"
-              :class="{'is-invalid' :$v.users.username.$error}">
+              v-model.trim="$v.users_update.username.$model"
+              :class="{'is-invalid' :$v.users_update.username.$error}">
             </b-form-input>
             <div class="invalid-feedback">
-              <span v-if="!$v.users.username.required">Username is required!</span>
+              <span v-if="!$v.users_update.username.required">Username is required!</span>
             </div>
           </b-form-group>
         </b-col>
@@ -335,17 +336,18 @@
       <!-- Email -->
       <b-col cols="12" md="6" lg="8">
         <b-form-group
-          :class="{'text-danger' : $v.users.email.$error}"
+          :class="{'text-danger' : $v.users_update.email.$error}"
           label="Email *"
           label-for="Email">
           <b-form-input
             type="text"
             id="Email"
-            v-model.trim="$v.users.email.$model"
-            :class="{'is-invalid' :$v.users.email.$error}">
+            v-model.trim="$v.users_update.email.$model"
+            :class="{'is-invalid' :$v.users_update.email.$error}">
           </b-form-input>
           <div class="invalid-feedback">
-            <span v-if="!$v.users.email.required">Email is required!</span>
+            <span v-if="!$v.users_update.email.required">Email is required!</span>
+            <span v-if="!$v.users_update.email.email">You have entered an invalid email address!</span>
           </div>
         </b-form-group>
       </b-col>
@@ -355,17 +357,17 @@
     <b-form-row>
       <b-col cols="12" md="6" lg="4">
         <b-form-group
-          :class="{'text-danger' : $v.users.first_name.$error}"
+          :class="{'text-danger' : $v.users_update.first_name.$error}"
           label="First Name *"
           label-for="firstName">
           <b-form-input
             type="text"
             id="firstName"
-            v-model.trim="$v.users.first_name.$model"
-            :class="{'is-invalid' :$v.users.first_name.$error}">
+            v-model.trim="$v.users_update.first_name.$model"
+            :class="{'is-invalid' :$v.users_update.first_name.$error}">
           </b-form-input>
           <div class="invalid-feedback">
-            <span v-if="!$v.users.first_name.required">First Name is required!</span>
+            <span v-if="!$v.users_update.first_name.required">First Name is required!</span>
           </div>
         </b-form-group>
       </b-col>
@@ -387,17 +389,17 @@
       <!-- Last Name -->
       <b-col cols="12" md="6" lg="4">
         <b-form-group
-          :class="{'text-danger' : $v.users.last_name.$error}"
+          :class="{'text-danger' : $v.users_update.last_name.$error}"
           label="Last Name *"
           label-for="lastName">
           <b-form-input
             type="text"
             id="lastName"
-            v-model.trim="$v.users.last_name.$model"
-            :class="{'is-invalid' :$v.users.last_name.$error}">
+            v-model.trim="$v.users_update.last_name.$model"
+            :class="{'is-invalid' :$v.users_update.last_name.$error}">
           </b-form-input>
           <div class="invalid-feedback">
-            <span v-if="!$v.users.last_name.required">Last Name is required!</span>
+            <span v-if="!$v.users_update.last_name.required">Last Name is required!</span>
           </div>
         </b-form-group>
       </b-col>
@@ -443,7 +445,7 @@
 
 <script>
   import Axios from "axios";
-  import { required, minLength, between, sameAs } from 'vuelidate/lib/validators';
+  import { required, minLength, between, sameAs, email } from 'vuelidate/lib/validators';
   export default{
     name: 'UserAccountManager',
     data() {
@@ -482,6 +484,16 @@
           active: 1
         },
 
+        users_update: {
+          id: null,
+          username: null,
+          email: null,
+          first_name: null,
+          middle_name: null,
+          last_name: null,
+          active: 1
+        },
+
         roleOptions:[
           'Assistant Registrar',
           'Coordinator',
@@ -513,11 +525,18 @@
        username: {required},
        password: {required, minLength: minLength(6)},
        password_confirmation: {sameAsPassword: sameAs('password'), required},
-       email: {required},
+       email: {required, email},
        first_name: {required},
        last_name: {required},
        role: {required},
-     }
+     },
+
+     users_update: {
+       username: {required},
+       email: {required, email},
+       first_name: {required},
+       last_name: {required},
+     },
     },
 
 
@@ -1193,7 +1212,7 @@
       updateUserAccount: function(){
         this.errors = [];
         Axios
-        .put('http://localhost/api/v1/users/' + this.users.id, this.users, {
+        .put('http://localhost/api/v1/users/' + this.users_update.id, this.users_update, {
           headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
         })
         .then(response => {
@@ -1214,7 +1233,6 @@
           }
           this.dismissErrorCountDown = this.dismissSecs;
         });
-        this.$refs['editUserAccountModal'].hide
         this.$refs['confirmUpdate'].hide();
       }, // End of Update User Account Function
 
@@ -1275,13 +1293,20 @@
       },
 
       confirmUpdateModal: function(){
+        this.$v.users_update.$touch();
+        if (this.$v.users_update.$anyError) {
+          return;
+        }
+        else{
           this.$refs['confirmUpdate'].show();
           this.$refs['editUserAccountModal'].hide();
+        }
+
       },
 
 
       EditModal: function(item, index) {
-        this.users = {
+        this.users_update = {
           id: item.id,
           username: item.username,
           email: item.email,

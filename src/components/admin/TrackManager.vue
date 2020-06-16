@@ -462,8 +462,14 @@
       },
 
       confirmUpdateModal: function(){
-        this.$refs['confirmUpdate'].show();
-        this.$refs['editTrackModal'].hide();
+        this.$v.track.$touch();
+        if (this.$v.track.$anyError) {
+          return;
+        }else {
+          this.$refs['confirmUpdate'].show();
+          this.$refs['editTrackModal'].hide();
+        }
+
       },
 
       EditModal: function(item, index) {

@@ -145,6 +145,7 @@
                 </b-form-input>
                 <div class="invalid-feedback">
                   <span v-if="!$v.instructor.email.required">Email is required!</span>
+                  <span v-if="!$v.instructor.email.email">You have entered an invalid email address!</span>
                 </div>
               </b-form-group>
             </b-col>
@@ -270,7 +271,7 @@
                   id="educational_attainment"
                   rows="3"
                   max-rows="6"
-                  v-model.trim="$v.instructor.educational_attainment.$model"
+                  v-model.trim="$v.ins.educational_attainment.$model"
                   :class="{'is-invalid' :$v.ins.educational_attainment.$error}">
                 </b-form-textarea>
                 <div class="invalid-feedback">
@@ -385,8 +386,7 @@
               :items="PrefSubItems"
               :fields="PrefSubFields"
               :current-page="PrefSubcurrentPage"
-              :per-page="PrefSubperPage"
-              :filter="PrefSubfilter">
+              :per-page="PrefSubperPage">
             </b-table>
           </b-form-row>
         </b-overlay>
@@ -636,7 +636,7 @@
   import moment from 'moment';
   import Datepicker from 'vuejs-datepicker';
   import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue';
-  import { required, minLength, maxLength, between } from 'vuelidate/lib/validators';
+  import { required, minLength, maxLength, between, email } from 'vuelidate/lib/validators';
   export default{
     name: 'InstructorManager',
     components: {
@@ -720,6 +720,10 @@
           active: 1
         },
 
+        ins: {
+          educational_attainment: null,
+        },
+
         progress: false,
         InsPersonalInfoForm: false,
         InsEducAttainmentForm: false,
@@ -796,12 +800,13 @@
        last_name: {required},
        birth_date: {required},
        gender: {required},
-       email: {required},
+       email: {required, email},
        contact_no: {required, minLength: minLength(11), maxLength: maxLength(11)},
        address: {required},
        city: {required},
        province: {required},
-       postal_code: {required},
+       postal_code: {
+       },
      },
      ins: {
        educational_attainment: {required},
@@ -946,6 +951,7 @@
       },
 
       AddInstructor: function(){
+        this.instructor.educational_attainment = this.ins.educational_attainment;
         this.errors = [];
         // Datepicker returns a date format that is different from what is required by the api/db
         // Use moment to format the date
@@ -1092,8 +1098,8 @@
       },
 
       ShowPreferredSubjForm: function(){
-        this.$v.ins.educational_attainment.$touch();
-        if (this.$v.ins.educational_attainment.$anyError) {
+        this.$v.ins.$touch();
+        if (this.$v.ins.$anyError) {
           return;
         }
         else {

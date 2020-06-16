@@ -3,7 +3,14 @@
     <Header />
     <div class="Stud_body_container">
 
-      <!-- Student Information -->
+      <ul class="Stud_progressbar" v-if="progressBar">
+          <li class="active">Student Information</li>
+          <li id="PersonalInformation">Personal Information</li>
+          <li id="ParentsInformation" >Parents Information</li>
+          <li id="Preview" >Preview</li>
+       </ul>
+
+
       <div class="Stud_container">
         <transition name="fade">
           <div id="" class="mx-3 mb-4 p-4 bg-white shadow rounded" v-if="GuidesForm">
@@ -11,14 +18,7 @@
           </div>
         </transition>
       </div>
-      <!-- Student Information -->
 
-        <ul class="Stud_progressbar" v-if="progressBar">
-            <li class="active">Student Information</li>
-            <li id="PersonalInformation">Personal Information</li>
-            <li id="ParentsInformation" >Parents Information</li>
-            <li id="Preview" >Preview</li>
-         </ul>
 
       <!-- Student Information -->
       <div class="Stud_container">
