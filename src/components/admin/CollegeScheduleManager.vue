@@ -305,8 +305,8 @@ thead tr th{
                   availabilities : [],
                   time_conflicts: [],
 
-                  selectedAcademicYear: this.$store.getters.getSettings.current_ay,
-                  selectedSemester: this.$store.getters.getSettings.current_sem,
+                  selectedAcademicYear: this.$store.getters.getCurrentAcademicYear.id,
+                  selectedSemester: this.$store.getters.getCurrentSemester.id,
                   selectedCourse: null,
                   selectedCurriculum: null,
                   selectedSubject: null,

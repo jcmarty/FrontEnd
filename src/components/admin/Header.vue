@@ -11,6 +11,11 @@
           <img src="../../assets/images/comteq_logo.png" alt="Comteq Logo" class="responsive"/>
         </b-navbar-brand>
 
+        <b-button class="text-nowrap" variant="info" @click="showUpdateSettingModal" id="UpdateSettingBtn">
+          <i class="fa fa-pencil mr-2 " aria-hidden="true"/>
+          Settings
+        </b-button>
+
         <b-navbar-nav>
           <!--  TODO:  Replace firstname with full name or role? -->
 
@@ -26,23 +31,79 @@
 
   <b-toast id="message" ref="message"  static no-auto-hide>
    {{alertMessage}}
- </b-toast>
+  </b-toast>
+
+  <!-- Start of Edit settings -->
+  <b-modal id="UpdateSettingModal" ref="UpdateSettingModal" title="Update Settings" size="sm" no-close-on-backdrop>
+
+  <!-- First Name -->
+  <b-form-row>
+    <b-col cols="12" md="6" lg="12">
+      <b-form-group
+        label="Academic Year"
+        label-for="academic_year">
+        <b-form-select id="academic_year" v-model="selectedAcademicYear">
+          <option v-for="ay in this.$store.getters.getAcademicYears" :value="{id : ay.id, academic_year : ay.academic_year}">{{ay.academic_year}}</option>
+        </b-form-select>
+      </b-form-group>
+    </b-col>
+
+    <b-col cols="12" md="6" lg="12">
+      <b-form-group
+        label="Semester"
+        label-for="semester">
+        <b-form-select id="semester" v-model="selectedSemester">
+          <option v-for="sem in this.$store.getters.getSemesters" :value="{id : sem.id, semester : sem.semester}">{{sem.semester}}</option>
+        </b-form-select>
+      </b-form-group>
+    </b-col>
+  </b-form-row>
+
+    <!-- Modal Footer Template -->
+    <template v-slot:modal-footer="{ cancel, ok }">
+      <!-- Emulate built in modal footer ok and cancel button actions -->
+    <b-col>
+      <b-button class="float-left"  variant="danger" @click="hideUpdateSettingModal">
+        Cancel
+      </b-button>
+      <b-button class="float-right"  variant="success" @click="confirmUpdateSetting">
+        Update
+      </b-button>
+    </b-col>
+    </template>
+
+  </b-modal> <!-- End of Edit settings -->
+
+  <b-modal id="confirmUpdateSettingModal" ref="confirmUpdateSettingModal" size="md" no-close-on-backdrop>
+    <center><h6>Are you sure you want to update database settings ?</b></h6></center>
+      <!-- Modal Footer Template -->
+    <template v-slot:modal-footer="{ cancel, ok }">
+        <!-- Emulate built in modal footer ok and cancel button actions -->
+      <b-col>
+        <b-button  class="float-left" variant="danger" @click="backModalUpdateSettings">
+          No
+        </b-button>
+        <b-button class="float-right" variant="success" @click="updateSettings">
+          Yes
+        </b-button>
+      </b-col>
+    </template>
+  </b-modal>
 
   <b-modal id="confirmUpdateModal" ref="confirmUpdateModal" size="md" no-close-on-backdrop>
     <center><h6>Are you sure you want to update  <br/><b>{{this.profile_data.username}} ?</b></h6></center>
-
       <!-- Modal Footer Template -->
-      <template v-slot:modal-footer="{ cancel, ok }">
+    <template v-slot:modal-footer="{ cancel, ok }">
         <!-- Emulate built in modal footer ok and cancel button actions -->
-        <b-col>
-          <b-button  class="float-left" variant="danger" @click="backModalUpdate">
-            No
-          </b-button>
-          <b-button class="float-right" variant="success" @click="updateUserAccount">
-            Yes
-          </b-button>
-        </b-col>
-      </template>
+      <b-col>
+        <b-button  class="float-left" variant="danger" @click="backModalUpdate">
+          No
+        </b-button>
+        <b-button class="float-right" variant="success" @click="updateUserAccount">
+          Yes
+        </b-button>
+      </b-col>
+    </template>
   </b-modal>
 
   <!-- Start of Modal -->
@@ -259,6 +320,8 @@
         data() {
             return {
               user_data: this.$store.getters.getUser,
+              selectedAcademicYear : "",
+              selectedSemester : "",
               profile_data :{
                 id: null,
                 username: null,
@@ -299,6 +362,7 @@
         mounted() {
         },
         methods: {
+
           makeToast(append = false) {
             this.$nextTick(() => {
               this.$v.$reset();
@@ -310,6 +374,63 @@
               variant: (this.alertMessage === "User profile successfully updated." || this.alertMessage === "Password successfully updated.")? 'success' : 'danger',
               toaster: "b-toaster-top-center",
             })
+          },
+
+          showUpdateSettingModal : function(){
+            this.$refs['UpdateSettingModal'].show();
+            this.selectedAcademicYear = {id : this.$store.getters.getCurrentAcademicYear.id, academic_year : this.$store.getters.getCurrentAcademicYear.academic_year};
+            this.selectedSemester = {id : this.$store.getters.getCurrentSemester.id, semester : this.$store.getters.getCurrentSemester.semester};
+          },
+
+          hideUpdateSettingModal : function(){
+            this.$refs['UpdateSettingModal'].hide();
+            this.selectedAcademicYear = this.$store.getters.getCurrentAcademicYear;
+            this.selectedSemester = this.$store.getters.getCurrentSemester.id;
+          },
+
+          updateSettings: function(){
+            this.errors = [];
+
+            var settings = {
+              current_academic_year : this.selectedAcademicYear.id,
+              current_semester : this.selectedSemester.id
+            }
+
+            // console.log(settings);
+            Axios
+            .put('http://localhost/api/v1/system_settings', settings, {
+              headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+            })
+            .then(response => {
+              // this.$store.dispatch('loadAcademicYears', this.$store.getters.getToken);
+              // this.$store.dispatch('loadSemesters', this.$store.getters.getToken);
+              var academic_year = {id : response.data.settings.current_ay, academic_year : this.selectedAcademicYear.academic_year}
+              var semester = {id : response.data.settings.current_sem, semester : this.selectedSemester.semester}
+              this.$store.dispatch('loadCurrentAcademicYear', academic_year);
+              this.$store.dispatch('loadCurrentSemester', semester);
+              // console.log(response.data.settings)
+
+              // alert("Success")
+
+              // setTimeout(() => {
+                // this.selectedAcademicYear = response.data.settings.current_ay;
+                // this.selectedSemester = response.data.settings.current_sem;
+                // this.current_ay = this.$store.getters.getCurrentAcademicYear.academic_year;
+                // this.current_sem = this.$store.getters.getCurrentSemester.semester;
+              // }, 4000);
+              console.log(this.selectedAcademicYear)
+              console.log(this.selectedSemester)
+            })
+            .catch(error => {
+              console.log(error.response.data)
+              const values = Object.values(error.response.data.errors);
+              for(const val of values){
+                for(const err of val){
+                  this.errors.push(err);
+                }
+              }
+            });
+            this.$refs['confirmUpdateSettingModal'].hide();
           },
 
           updateUserAccount: function(){
@@ -391,8 +512,11 @@
               this.$refs['confirmPassUpdate'].show();
               this.$refs['ChangePasswordModal'].hide();
             }
+          },
 
-
+          confirmUpdateSetting: function(){
+              this.$refs['confirmUpdateSettingModal'].show();
+              this.$refs['UpdateSettingModal'].hide();
           },
 
           cancelChangePass: function(){
@@ -401,6 +525,11 @@
             });
 
             this.$refs['ChangePasswordModal'].hide();
+          },
+
+          backModalUpdateSettings: function(){
+            this.$refs['confirmUpdateSettingModal'].hide();
+            this.$refs['UpdateSettingModal'].show();
           },
 
           backModalUpdatePass: function(){

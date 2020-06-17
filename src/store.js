@@ -39,6 +39,14 @@ export default new Vuex.Store({
       state.token = payload;
     },
 
+    setCurrentAcademicYear(state, payload){
+      state.current_academic_year = payload;
+    },
+
+    setCurrentSemester(state, payload){
+      state.current_semester = payload;
+    },
+
     setAcademicYears(state, payload){
       state.academic_years = payload;
       // searchs the current academic year and pass it to current ay variable
@@ -114,6 +122,14 @@ export default new Vuex.Store({
     },
     setAppSettings(context, payload){
       context.commit('setAppSettings', payload);
+    },
+
+    loadCurrentAcademicYear(context, payload){
+      context.commit('setCurrentAcademicYear', payload);
+    },
+
+    loadCurrentSemester(context, payload){
+      context.commit('setCurrentSemester', payload);
     },
 
     // get all academic year
