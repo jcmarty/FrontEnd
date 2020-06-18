@@ -1,26 +1,8 @@
 <template>
 <div>
   <div id="pageHeader">
-    <h1 class="font-weight-bold text-dark">College Class</h1>
-
-      <b-col class="ml-3 mt-2"  cols="12" md="6" lg="2">
-        <b-form-group class="academicyear" label="" label-for="academicYear">
-          <b-form-select id="academicYear" v-model="selectedAcademicYear" @change="">
-            <option value="null" hidden>Select Academic Year</option>
-            <option  :value="ay.id" v-for="ay in academicYearOptions" >{{ay.academic_year}}</option>
-          </b-form-select>
-        </b-form-group>
-      </b-col>
-
-      <b-col class="ml-3 mt-2" cols="12" md="6" lg="2">
-        <b-form-group class="semester" label="" label-for="Semester">
-          <b-form-select id="Semester" v-model="selectedSemester" @change="changeSemester">
-            <option value="null" hidden>Select Semester</option>
-            <option  :value="sem.id" v-for="sem in semesterOptions" >{{sem.semester}}</option>
-          </b-form-select>
-        </b-form-group>
-      </b-col>
-    </div>
+    <h1 class="font-weight-bold text-dark">Class Schedule Manager</h1>
+  </div>
   <hr />
 
 
@@ -44,6 +26,34 @@
   <!-- <div class="panel panel-primary recordMaintenanceForm" v-if="showForm">
     <div class="panel-heading">Add a Class Schedule</div>
     <div class="panel-body"> -->
+
+    <div id="" class="mx-3 mt-4 mb-4 px-4 pt-3 pb-3 bg-white shadow rounded">
+      <div class="" >
+        <b-form-row>
+        <b-col class="mt-2  h5 font-weight-bold text-dark"  cols="12" md="6" lg="3">
+          Add New Schedule
+        </b-col>
+
+        <b-col class=""  cols="12" md="6" lg="2">
+          <b-form-group class="academicyear" label="" label-for="academicYear">
+            <b-form-select id="academicYear" v-model="selectedAcademicYear" @change="">
+              <option value="null" hidden>Select Academic Year</option>
+              <option  :value="ay.id" v-for="ay in academicYearOptions" >{{ay.academic_year}}</option>
+            </b-form-select>
+          </b-form-group>
+        </b-col>
+
+        <b-col class="" cols="12" md="6" lg="2">
+          <b-form-group class="semester" label="" label-for="Semester">
+            <b-form-select id="Semester" v-model="selectedSemester" @change="changeSemester">
+              <option value="null" hidden>Select Semester</option>
+              <option  :value="sem.id" v-for="sem in semesterOptions" >{{sem.semester}}</option>
+            </b-form-select>
+          </b-form-group>
+        </b-col>
+      </b-form-row>
+      </div>
+      <hr class="mt-1"/>
       <b-form id="">
         <b-form-row>
           <b-col cols="12" md="6" lg="2">
@@ -51,7 +61,7 @@
               <b-form-select id="Course" v-model="selectedCourse" @change="getCurriculum()">
                 <option value="null" hidden>Select Course</option>
                 <option v-for="course in CourseRow"
-                  v-bind:value="{id:course.id , year:course.year_duration, curriculum: course.curriculum}">{{course.course_code}}</option>
+                  v-bind:value="{id:course.id, course_code:course.course_code, year:course.year_duration, curriculum: course.curriculum}">{{course.course_code}}</option>
               </b-form-select>
             </b-form-group>
           </b-col>
@@ -89,15 +99,7 @@
 
           <b-col cols="12" md="6" lg="1">
             <b-form-group class="block" label="Block" label-for="Block">
-              <!-- <b-form-select id="block" @change="getFilteredClassSchedule" v-bind:value="blockData" v-model="selectedBlock" :disabled="blockStatus">
-                <option value="null" hidden>Block</option>
-                <option value="1" >1</option>
-                <option value="2" >2</option>
-                <option value="3" >3</option>
-                <option value="4" >4</option>
-              </b-form-select> -->
               <b-form-input type="text" list="blockList" id="block" @change="getFilteredClassSchedule" v-bind:value="blockData" v-model="selectedBlock" :disabled="blockStatus">
-
               </b-form-input>
               <datalist id="blockList">
                 <option value="1" >1</option>
@@ -111,16 +113,7 @@
 
           <b-col cols="12" md="6" lg="1">
             <b-form-group class="batch" label="Batch" label-for="Batch">
-              <!-- <b-form-select id="batch" @change="" v-bind:value="batchData" v-model="selectedBatch" :disabled="batchStatus">
-                <option value="null" hidden>Batch</option>
-                <option value="0" v-if="selectedBatch == 0" hidden>0</option>
-                <option value="1" >1</option>
-                <option value="2" >2</option>
-                <option value="3" >3</option>
-                <option value="4" >4</option>
-              </b-form-select> -->
               <b-form-input type="text" list="batchList" id="batch" @change="" v-bind:value="batchData" v-model="selectedBatch" :disabled="batchStatus">
-
               </b-form-input>
               <datalist id="batchList">
                 <option value="1" >1</option>
@@ -134,14 +127,8 @@
 
         </b-form-row>
 
-      </b-form>
-
-      <div class="centerContent">
-      <!-- horizontal select boxes -->
-      <div class="Add_ClassSchedule_Form">
-        <hr/>
         <b-form-row>
-          <b-col cols="12" md="6" lg="12">
+          <b-col cols="12" md="4" lg="2">
             <b-form-group class="instructor" label="Instructor" label-for="Instructor">
               <b-form-select id="Instructor" @change="setRooms" v-model="selectedInstructor">
                 <option value="null" hidden>Select Instructor</option>
@@ -150,10 +137,8 @@
               </b-form-select>
             </b-form-group>
           </b-col>
-        </b-form-row>
 
-        <b-form-row>
-          <b-col cols="12" md="6" lg="12">
+          <b-col cols="12" md="4" lg="2">
             <b-form-group class="room" label="Room" label-for="Room">
               <b-form-select id="Room" @change="getDays" v-model="selectedRoom">
                 <option value="null" hidden>Select Room</option>
@@ -162,10 +147,8 @@
               </b-form-select>
             </b-form-group>
           </b-col>
-        </b-form-row>
 
-        <b-form-row>
-          <b-col cols="12" md="6" lg="12">
+          <b-col cols="12" md="4" lg="2">
             <b-form-group class="day" label="Day" label-for="Day">
               <b-form-select id="Day" @change="getTimes" v-model="selectedDay" :options="day_options">
                 <option value="null" hidden>Select Day</option>
@@ -174,10 +157,8 @@
               </b-form-select>
             </b-form-group>
           </b-col>
-        </b-form-row>
 
-        <b-form-row>
-          <b-col cols="12" md="6" lg="12">
+          <b-col cols="12" md="4" lg="2">
             <b-form-group class="time_start" label="Time Start" label-for="time_start">
               <b-form-select id="time_start" @change="getTimeEnd" v-model="selectedTimeStart" :options="availabilities">
                 <option value="null" hidden>Select Time Start</option>
@@ -185,30 +166,28 @@
               </b-form-select>
             </b-form-group>
           </b-col>
-        </b-form-row>
 
-        <b-form-row>
-          <b-col cols="12" md="6" lg="12">
+          <b-col cols="12" md="4" lg="2">
             <b-form-group class="time_end" label="Time End" label-for="time_end">
-              <b-form-select id="time_end" @change="" v-model="selectedTimeEnd" :options="availabilities">
+              <b-form-select id="time_end" @change="onChangeTimeEnd" v-model="selectedTimeEnd" :options="availabilities">
                 <option value="null" hidden>Select Time End</option>
                 <option v-if="selectedTimeStart == null" value="null" disabled>No Time End</option>
               </b-form-select>
             </b-form-group>
           </b-col>
-        </b-form-row>
-        <b-form-row>
+
           <b-col class="">
-            <b-button class="mt-3" @click="createSchedule" variant="primary" block id="Add_Semester_Btn">
+            <b-button class="mt-4" @click="createSchedule" variant="primary" block :disabled="disableAddBtn" id="Add_Semester_Btn">
               Add
             </b-button>
           </b-col>
         </b-form-row>
-      </div>
-      <!-- horizontal select boxes -->
+
+      </b-form>
+    </div>
 
       <!-- SCHEDULES TABLE -->
-      <div class="scheduleTable  px-3 pt-2 my-2 ml-2" style="overflow-x:scroll;">
+      <div class="scheduleTable  px-3 pt-2 my-2 ml-2" >
         <!-- Main table element -->
         <div class="" >
           <b-table
@@ -252,7 +231,6 @@
           </b-col>
         </b-row>
       </div>
-    </div>
   </div>
 </template>
 <style>
@@ -262,7 +240,7 @@ tbody tr td{
 thead tr th{
   /* white-space: nowrap; */
 }
-#pageHeader{
+/* #pageHeader{
   display: flex;
 }
 .centerContent{
@@ -272,7 +250,7 @@ thead tr th{
 .Add_ClassSchedule_Form{
   width: 230px;
   display: inline-block;
-}
+} */
 </style>
 <script>
     import Axios from "axios";
@@ -293,6 +271,7 @@ thead tr th{
                   batchData: null,
 
                   showForm: false,
+                  disableAddBtn : true,
                   alertMessage: "",
                   errors: [],
                   dismissSecs: 7,
@@ -354,12 +333,22 @@ thead tr th{
                   items: [],
                   fields: [
                     { key: 'day', label: 'Day', class: 'text-center', sortable: true},
-                    { key: 'time_start', label: 'Time Start', sortable: true, class: 'text-center' },
-                    { key: 'time_end', label: 'Time End', sortable: true, class: 'text-center' },
+                    { key: 'time', label: 'Time', sortable: true, class: 'text-center',
+                      formatter: (value, key, item) => {
+                        return this.timeFormatter(item.time_start) + " - " + this.timeFormatter(item.time_end);
+                      // return item.time_start  + "-" + item.time_end;
+                      }
+                    },
+                    // { key: 'time_end', label: 'Time End', sortable: true, class: 'text-center' },
                     { key: 'subject_code', label: 'Subject Code', sortable: true, class: 'text-center' },
                     { key: 'subject.subject.subject_title', label: 'Description', sortable: true, class: 'text-center' },
                     { key: 'room.room_number', label: 'Room', sortable: true, class: 'text-center' },
-                    { key: 'instructor.last_name', label: 'Instructor', sortable: true, class: 'text-center' },
+                    { key: 'instructor', label: 'Instructor', sortable: true, class: 'text-center',
+                      formatter: (value, key, item) => {
+                        return item.instructor.first_name + " " + item.instructor.last_name;
+                      // return item.time_start  + "-" + item.time_end;
+                      }
+                    },
 
                   ],
 
@@ -786,13 +775,13 @@ thead tr th{
                 createSchedule: function(){
                   this.errors = [];
                   var newSchedule = {
-                              day : this.selectedDay.day,
-                              time_start : this.selectedTimeStart,
-                              time_end : this.selectedTimeEnd,
+                              day : this.selectedDay? this.selectedDay.day : "",
+                              time_start : this.selectedTimeStart? this.selectedTimeStart : "",
+                              time_end : this.selectedTimeEnd? this.selectedTimeEnd : "",
                               subject_id : this.selectedSubject.id,
                               subject_code : this.selectedSubject.subject_code,
                               room_id : this.selectedRoom,
-                              instructor_id : this.selectedInstructor,
+                              instructor_id : this.selectedInstructor? this.selectedInstructor : "",
                               block : this.selectedBlock,
                               batch : this.selectedBatch,
                               academic_year_id : this.selectedAcademicYear,
@@ -811,11 +800,13 @@ thead tr th{
                       this.alertMessage = response.data.message;
                       this.dismissSuccessCountDown = this.dismissSecs;
                       this.getFilteredClassSchedule();
+                      this.backToTop();
                     })
                     .catch(error => {
                       this.alertMessage = error.response.data.message;
                       this.errors = error.response.data.conflicts;
                       this.dismissWarningCountDown = this.dismissSecs;
+                      console.log(error.response.data)
                     })
                   // console.log(newSchedule)
                 },
@@ -834,6 +825,10 @@ thead tr th{
                     .catch(function (error) {
                       console.log(error.response.status); console.log(error);
                     })
+                },
+
+                onChangeTimeEnd : function(){
+                  this.disableAddBtn = false;
                 },
 
                 // get days of availability of an instructor
@@ -879,6 +874,7 @@ thead tr th{
 
                 // gets all instructor that prefers the selected subject
                 getInstructors: function(){
+                  this.disableAddBtn = false;
                   this.instructorRow = null
                   // console.log(this.selectedSubject.instructors);
                   var instructors = this.selectedSubject.instructors;
@@ -894,13 +890,13 @@ thead tr th{
                   if(lab > 0){
                     this.blockStatus = false;
                     this.batchStatus = false;
-                    // this.selectedBlock = 1;
-                    // this.selectedBatch = 1;
+                    this.selectedBlock = 1;
+                    this.selectedBatch = 1;
                   } else{
                     this.blockStatus = false;
-                    this.batchStatus = false;
-                    // this.selectedBlock = 1;
-                    // this.selectedBatch = 0;
+                    this.batchStatus = true;
+                    this.selectedBlock = 1;
+                    this.selectedBatch = 0;
                   }
 
                   this.getFilteredClassSchedule();
@@ -920,6 +916,7 @@ thead tr th{
 
                 // pass fetched rooms into roomRow vairable
                 setRooms: function(){
+                  this.disableAddBtn = true
                   this.day_options = [];
                   this.selectedDay = null;
                   this.selectedRoom = null;
@@ -1065,6 +1062,17 @@ thead tr th{
                 backToTop: function(){
                   document.body.scrollTop = 0;
                   document.documentElement.scrollTop = 0;
+                },
+
+                timeFormatter : function(time){
+
+                  var split = time.split(":");
+                  var hour = split[0];
+                  var min = split[1];
+
+                  var h = hour % 12 || 12;
+                  var ampm = (hour < 12 || hour == 24) ? "AM" : "PM";
+                  return h + ":" + min + ampm;
                 },
 
                 // for clearing forms
