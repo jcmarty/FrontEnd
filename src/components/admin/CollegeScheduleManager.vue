@@ -153,14 +153,14 @@
               <b-form-select id="Day" @change="getTimes" v-model="selectedDay" :options="day_options">
                 <option value="null" hidden>Select Day</option>
                 <option v-if="selectedRoom == null" value="null" disabled>No Days</option>
-                <option v-else-if="day_options == []" value="null" disabled>No Days</option>
+                <option v-if="day_options == []" value="null" disabled>No Days</option>
               </b-form-select>
             </b-form-group>
           </b-col>
 
           <b-col cols="12" md="4" lg="2">
             <b-form-group class="time_start" label="Time Start" label-for="time_start">
-              <b-form-select id="time_start" @change="getTimeEnd" v-model="selectedTimeStart" :options="availabilities">
+              <b-form-select id="time_start" @change="onChangeTimeStart" v-model="selectedTimeStart" :options="available_time_start">
                 <option value="null" hidden>Select Time Start</option>
                 <option v-if="selectedDay == null" value="null" disabled>No Time Start</option>
               </b-form-select>
@@ -169,7 +169,7 @@
 
           <b-col cols="12" md="4" lg="2">
             <b-form-group class="time_end" label="Time End" label-for="time_end">
-              <b-form-select id="time_end" @change="onChangeTimeEnd" v-model="selectedTimeEnd" :options="availabilities">
+              <b-form-select id="time_end" @change="onChangeTimeEnd" v-model="selectedTimeEnd" :options="available_time_end">
                 <option value="null" hidden>Select Time End</option>
                 <option v-if="selectedTimeStart == null" value="null" disabled>No Time End</option>
               </b-form-select>
@@ -281,6 +281,9 @@ thead tr th{
 
                   current_ay: [],
                   current_sem: [],
+                  available_time_start : [],
+                  filter_available_time_start : [],
+                  available_time_end : [],
                   availabilities : [],
                   time_conflicts: [],
 
@@ -335,7 +338,9 @@ thead tr th{
                     { key: 'day', label: 'Day', class: 'text-center', sortable: true},
                     { key: 'time', label: 'Time', sortable: true, class: 'text-center',
                       formatter: (value, key, item) => {
-                        return this.timeFormatter(item.time_start) + " - " + this.timeFormatter(item.time_end);
+                        var start = item.time_start != null || "" ? this.timeFormatter(item.time_start) + " - " : "-- : ";
+                        var end = item.time_end != null || "" ? this.timeFormatter(item.time_end) : "--";
+                        return  start + end;
                       // return item.time_start  + "-" + item.time_end;
                       }
                     },
@@ -345,7 +350,9 @@ thead tr th{
                     { key: 'room.room_number', label: 'Room', sortable: true, class: 'text-center' },
                     { key: 'instructor', label: 'Instructor', sortable: true, class: 'text-center',
                       formatter: (value, key, item) => {
-                        return item.instructor.first_name + " " + item.instructor.last_name;
+                        var first_name = item.instructor != null || "" ? item.instructor.first_name + " " : "";
+                        var last_name = item.instructor != null || "" ? item.instructor.last_name + " " : "";
+                        return first_name + last_name;
                       // return item.time_start  + "-" + item.time_end;
                       }
                     },
@@ -369,6 +376,7 @@ thead tr th{
 
               mounted () {
                 this.getCourses();
+
               },
 
               methods: {
@@ -474,30 +482,34 @@ thead tr th{
                   // this.getTimeConflicts();
                   // this.selectedTimeStart = null;
                   // this.time_start_options = [];
-                  this.availabilities = [];
+                  this.available_time_start = [];
                   // console.log(this.selectedDay)
                   var time_start = this.selectedDay.time_start;
                   var split_start = time_start.split(":");
-                  var hour_start = split_start[0];
+                  var hour_start = parseInt(split_start[0]);
                   var h = "";
 
                   var time_end = this.selectedDay.time_end;
                   var split_end = time_end.split(":");
-                  var hour_end = split_end[0];
+                  var hour_end = parseInt(split_end[0]);
 
                   var ampm = "";
                   var converted = "";
 
+
+                  console.log(hour_start)
+
                   for (var i = hour_start; i <= hour_end; i++) {
+                    // console.log(i)
                     for (var j = 0; j < 2; j++) {
                       // this.timeConverter(j,i);
                       if (j == 0){
                         var minutes_start = "00";
                         h = i % 12 || 12;
-                        ampm = (i < 12 || i == 24) ? "AM" : "PM";
+                        ampm = (i < 12 || i == 24) ? " AM" : " PM";
                         converted = h + ":" +  minutes_start + ampm;
 
-                        this.availabilities.push(converted)
+                        this.available_time_start.push(converted)
                       }
                       else if(j == 1){
                         if(i == hour_end){
@@ -505,14 +517,19 @@ thead tr th{
                         }else{
                           var minutes_start = "30";
                           h = i % 12 || 12;
-                          ampm = (i < 12 || i == 24) ? "AM" : "PM";
+                          ampm = (i < 12 || i == 24) ? " AM" : " PM";
                           converted = h + ":" +  minutes_start + ampm;
 
-                          this.availabilities.push(converted)
+                          this.available_time_start.push(converted)
                         }
                       }
                     }
                   }
+
+                  this.filter_available_time_start = this.available_time_start;
+                  // this.available_time_end = this.available_time_start;
+
+                  // console.log(this.selectedDay)
 
                   // console.log(this.availabilities)
                   // this.getAvailabilities();
@@ -642,8 +659,42 @@ thead tr th{
                 },
 
 
-                getTimeEnd: function(){
+                onChangeTimeStart: function(){
 
+
+
+                  this.getTimes();
+                  // var start = this.filter_available_time_start;
+                  // this.available_time_end = this.filter_available_time_start;
+                  // var end = this.available_time_end;
+                  // var selected_time_start = this.selectedTimeStart
+                  // console.log(this.available_time_start)
+                  this.available_time_end = [];
+                  var index = this.available_time_start.indexOf(this.selectedTimeStart)
+
+                  // console.log(index)
+                  for (var i = index; i < this.available_time_start.length-1; i++) {
+                    var time = this.available_time_start[i+1];
+                    this.available_time_end.push(time)
+                  }
+                  // this.available_time_end.splice(0, index);
+
+
+                  // var reserv = new Date(selected_time_start)
+                  //
+                  // console.log(reserv)
+
+                  // var array = end;
+                  // var filtered = end.filter(function(value, index, arr){
+                  //   // var reserv = new Date(year,month,day,hour,min)
+                  //   // var reserv = new Date(year,month,day,hour,min)
+                  //   return value > selected_time_start;
+                  // });//filtered => [6, 7, 8, 9]//array => [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+                  // console.log(filtered)
+                },
+
+                onChangeTimeEnd : function(){
+                  this.disableAddBtn = false;
                 },
 
 
@@ -827,46 +878,49 @@ thead tr th{
                     })
                 },
 
-                onChangeTimeEnd : function(){
-                  this.disableAddBtn = false;
-                },
+
 
                 // get days of availability of an instructor
                 getDays: function(){
-                  this.selectedDay = null;
-                  this.day_options = [];
-                  Axios
-                    .get('http://localhost/api/v1/instructors/' + this.selectedInstructor
-                          + '/availabilities',{
-                      params: {
-                        academic_year_id: this.selectedAcademicYear,
-                        semester_id: this.selectedSemester,
-                        active: 1,
-                      },
-                      headers: {
-                        'Authorization': 'Bearer ' + this.$store.getters.getToken
-                      }
-                    })
-                    .then(response => {
-                      var availabilities = response.data;
-                      if(availabilities.length > 0){
-                        for(var i = 0; i < availabilities.length; i++){
-                          this.day_options.push({
-                            value: {
-                              day: availabilities[i].day,
-                              time_start: availabilities[i].time_start,
-                              time_end: availabilities[i].time_end,
-                            },
-                            text: availabilities[i].day
-                          });
-                        }
+                  if (this.selectedInstructor != null || "") {
+                    this.selectedDay = null;
+                    this.day_options = [];
 
-                      }else{
-                        alert("No Time Availability set for the selected instructor")
-                        this.day_options = [];
-                        this.selectedDay = null;
-                      }
-                    })
+                    Axios
+                      .get('http://localhost/api/v1/instructors/' + this.selectedInstructor
+                            + '/availabilities',{
+                        params: {
+                          academic_year_id: this.selectedAcademicYear,
+                          semester_id: this.selectedSemester,
+                          active: 1,
+                        },
+                        headers: {
+                          'Authorization': 'Bearer ' + this.$store.getters.getToken
+                        }
+                      })
+                      .then(response => {
+                        var availabilities = response.data;
+                        if(availabilities.length > 0){
+                          for(var i = 0; i < availabilities.length; i++){
+                            this.day_options.push({
+                              value: {
+                                day: availabilities[i].day,
+                                time_start: availabilities[i].time_start,
+                                time_end: availabilities[i].time_end,
+                              },
+                              text: availabilities[i].day
+                            });
+                          }
+
+                        }else{
+                          alert("No Time Availability set for the selected instructor")
+                          this.day_options = [];
+                          this.selectedDay = null;
+                        }
+                      })
+                  }else {
+
+                  }
                     // .catch(function (error) {
                     //   console.log(error.response.status); console.log(error);
                     // })
@@ -874,6 +928,58 @@ thead tr th{
 
                 // gets all instructor that prefers the selected subject
                 getInstructors: function(){
+                  this.setRooms();
+                  this.day_options =
+                  [
+                    {
+                      value: {
+                        day: "Monday",
+                        time_start: "7:00:00",
+                        time_end: "21:30:00",
+                      },
+                      text : "Monday"
+                    },
+                    {
+                      value : {
+                        day: "Tuesday",
+                        time_start: "7:00:00",
+                        time_end: "21:30:00",
+                      },
+                      text : "Tuesday"
+                    },
+                    {
+                      value : {
+                        day: "Wednesday",
+                        time_start: "7:00:00",
+                        time_end: "21:30:00",
+                      },
+                      text : "Wednesday"
+                    },
+                    {
+                      value : {
+                        day: "Thursday",
+                        time_start: "7:00:00",
+                        time_end: "21:30:00",
+                      },
+                      text : "Thursday"
+                    },
+                    {
+                      value : {
+                        day: "Friday",
+                        time_start: "7:00:00",
+                        time_end: "21:30:00",
+                      },
+                      text : "Friday"
+                    },
+                    {
+                      value : {
+                        day: "Saturday",
+                        time_start: "7:00:00",
+                        time_end: "21:30:00",
+                      },
+                      text : "Saturday"
+                    },
+                  ];
                   this.disableAddBtn = false;
                   this.instructorRow = null
                   // console.log(this.selectedSubject.instructors);
@@ -901,8 +1007,8 @@ thead tr th{
 
                   this.getFilteredClassSchedule();
 
-                    this.roomRow = null;
-                    this.day_options = [];
+                    // this.roomRow = null;
+                    // this.day_options = [];
                     this.time_start_options = []
 
 
@@ -916,10 +1022,14 @@ thead tr th{
 
                 // pass fetched rooms into roomRow vairable
                 setRooms: function(){
-                  this.disableAddBtn = true
-                  this.day_options = [];
-                  this.selectedDay = null;
-                  this.selectedRoom = null;
+                  if (this.selectedInstructor != null || "") {
+                    this.disableAddBtn = true
+                    this.day_options = [];
+                    this.selectedDay = null;
+                    this.selectedRoom = null;
+                  }else {
+
+                  }
                   this.roomRow = this.$store.getters.getRooms;
                 },
 
