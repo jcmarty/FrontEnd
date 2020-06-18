@@ -15,6 +15,11 @@
         <transition name="fade">
           <div id="" class="mx-3 mb-4 p-4 bg-white shadow rounded" v-if="GuidesForm">
             <!-- Make Instruction after successfully pre-register -->
+            <strong>Proceed to Enrollment!</strong>
+            <p>Read and Follow the process from the link below.</p>
+            <b-link class="Stud_about" to="/AdmissionCollege">
+              <center>Requirements/Process</center>
+            </b-link>
           </div>
         </transition>
       </div>
@@ -111,7 +116,7 @@
               <b-col cols="12" md="6" lg="6">
                 <b-form-group
                   class="schoollastattended"
-                  label="School Last Attended"
+                  label="School Last Attended(High School)"
                   label-for="schoolLastAttended">
                   <b-form-input
                     type="text"
@@ -1483,7 +1488,7 @@ methods: {
           mother_name: null,
           contact_person: null,
           contact_address: null,
-          contact_number: 0,
+          contact_number: null,
           blood_type: null,
           photo_url: null,
           user_id: null,
