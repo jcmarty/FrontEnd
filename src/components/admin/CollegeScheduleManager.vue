@@ -1,7 +1,7 @@
 <template>
 <div>
   <div id="pageHeader">
-    <h1 class="font-weight-bold text-dark">Class Schedule Manager</h1>
+    <h1 class="font-weight-bold text-dark">Class Schedule asdasd</h1>
   </div>
   <hr />
 
@@ -90,7 +90,7 @@
             <b-form-group class="subject" label="Subject" label-for="Subject">
               <b-form-select id="Subject" @change="onChangeSubject" v-model="selectedSubject">
                 <option value="null" hidden>Select Subject</option>
-                <option v-if="SubjectsRow === null" value="null" disabled>No Subjects</option>
+                <option v-if="SubjectsRow == null || SubjectsRow.length == 0" value="null" disabled>No Subjects</option>
                 <option v-else v-for="data in SubjectsRow" v-bind:value="{id: data.id, subject_code: data.subject.subject_code ,subject_id: data.subject_id, instructors: data.subject.instructors, lab:  data.subject.lab}">
                   {{data.subject.subject_code}} - {{data.subject.subject_title}}
                 </option>
@@ -100,7 +100,7 @@
 
           <b-col cols="12" md="6" lg="1">
             <b-form-group class="block" label="Block" label-for="Block">
-              <b-form-input type="text" list="blockList" id="block" @change="" v-bind:value="blockData" v-model="selectedBlock" :disabled="blockStatus">
+              <b-form-input type="text" list="blockList" id="block" @change="onChangeBlock" v-bind:value="blockData" v-model="selectedBlock" :disabled="blockStatus">
               </b-form-input>
               <datalist id="blockList">
                 <option value="1" >1</option>
@@ -131,7 +131,7 @@
         <b-form-row>
           <b-col cols="12" md="4" lg="2">
             <b-form-group class="instructor" label="Instructor" label-for="Instructor">
-              <b-form-select id="Instructor" @change="" v-model="selectedInstructor">
+              <b-form-select id="Instructor" @change="onChangeInstructor" v-model="selectedInstructor">
                 <option value="null" hidden>Select Instructor</option>
                 <option v-if="instructorRow === null" value="null" disabled>No Instructors</option>
                 <option v-else v-for="data in instructorRow" v-bind:value="data.instructor_id">{{data.instructor.first_name}} {{data.instructor.last_name}}</option>
@@ -141,7 +141,7 @@
 
           <b-col cols="12" md="4" lg="2">
             <b-form-group class="room" label="Room" label-for="Room">
-              <b-form-select id="Room" @change="" v-model="selectedRoom">
+              <b-form-select id="Room" @change="onChangeRoom" v-model="selectedRoom">
                 <option value="null" hidden>Select Room</option>
                 <option v-if="roomRow === null" value="null" disabled>No Rooms</option>
                 <option v-else v-for="room in roomRow" v-bind:value="room.id">{{room.room_number}} - {{room.room_name}}</option>
@@ -154,7 +154,7 @@
               <b-form-select id="Day" @change="" v-model="selectedDay" :options="day_options">
                 <option value="null" hidden>Select Day</option>
                 <option v-if="selectedRoom == null" value="null" disabled>No Days</option>
-                <option v-if="day_options == []" value="null" disabled>No Days</option>
+                <option v-else-if="day_options == [] || day_options.length == 0" value="null" disabled>No Days</option>
               </b-form-select>
             </b-form-group>
           </b-col>
@@ -366,8 +366,59 @@
               }, // end of mounted
 
               methods: {
+                onChangeDay: function(){
+
+                }, // end of function onChangeDay
+
+                onChangeRoom: function(){
+                  if (!this.selectedInstructor) {
+                    this.day_options = [
+                      {
+                        text : "Monday",
+                        value : "Monday"
+                      },
+                      {
+                        text : "Tuesday",
+                        value : "Tuesday"
+                      },
+                      {
+                        text : "Wednesday",
+                        value : "Wednesday"
+                      },
+                      {
+                        text : "Thursday",
+                        value : "Thursday"
+                      },
+                      {
+                        text : "Friday",
+                        value : "Friday"
+                      },
+                      {
+                        text : "Saturday",
+                        value : "Saturday"
+                      },
+                    ];
+                  }
+                }, // end of function onChangeRoom
+
+                onChangeInstructor: function(){
+                  this.selectedRoom = null;
+                  this.day_options = [];
+                  this.selectedDay = null;
+                }, // end of function onChangeInstructor
+
+                onChangeBlock: function(){
+                  this.selectedInstructor = null;
+                  this.selectedRoom = null;
+                  this.day_options = [];
+                  this.selectedDay = null;
+                }, // end of function onChangeBlock
 
                 onChangeSubject: function(){
+                  this.selectedInstructor = null;
+                  this.selectedRoom = null;
+                  this.day_options = [];
+                  this.selectedDay = null;
                   var instructors = this.selectedSubject.instructors;
                   var ay = this.selectedAcademicYear
                   var sem = this.selectedSemester
@@ -382,6 +433,7 @@
                       }
                     });
                     this.instructorRow = x;
+                    this.roomRow = this.$store.getters.getRooms;
                   }
                   // console.log(instructors)
 
@@ -403,6 +455,14 @@
                 onChangeYearLevel: function(){
                   this.selectedSubject = null;
                   this.SubjectsRow = [];
+                  this.blockStatus = true;
+                  this.batchStatus = true;
+                  this.selectedBlock = null;
+                  this.selectedBatch = null;
+                  this.selectedInstructor = null;
+                  this.instructorRow = [];
+                  this.selectedRoom = null;
+                  this.selectedDay = null;
 
                   var year = this.selectedYearLevel
                   var sem = this.selectedSemester
@@ -424,6 +484,15 @@
                   this.selectedYearLevel = null;
                   this.selectedSubject = null;
                   this.SubjectsRow = [];
+                  this.blockStatus = true;
+                  this.batchStatus = true;
+                  this.selectedBlock = null;
+                  this.selectedBatch = null;
+                  this.selectedInstructor = null;
+                  this.instructorRow = [];
+                  this.selectedRoom = null;
+                  this.day_options = [];
+                  this.selectedDay = null;
 
                   //set year level selection base on the year duration of selected course
                   if (this.selectedCourse.year == 4) {
@@ -447,6 +516,15 @@
                   this.selectedYearLevel = null;
                   this.selectedSubject = null;
                   this.SubjectsRow = [];
+                  this.blockStatus = true;
+                  this.batchStatus = true;
+                  this.selectedBlock = null;
+                  this.selectedBatch = null;
+                  this.selectedInstructor = null;
+                  this.instructorRow = [];
+                  this.selectedRoom = null;
+                  this.day_options = [];
+                  this.selectedDay = null;
                   // pass curriculums of the selected course
                   this.Curriculumrow = this.selectedCourse.curriculum
                 }, // end of function onChangeCourse
