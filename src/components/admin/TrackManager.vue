@@ -315,6 +315,7 @@
      }
     },
 
+
     mounted () {
       this.getTracks();
     },

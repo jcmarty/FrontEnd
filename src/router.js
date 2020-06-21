@@ -233,6 +233,7 @@ export default new Router({
     // Start of Admin routes
     {
       path: "/admin",
+      name:"admin",
       component: Admin,
       meta: {
         requiresAuth: true,
@@ -560,6 +561,7 @@ export default new Router({
         },
         {
           path: "login",
+          nameL: "login",
           component: AdminLogin,
           meta: {
             guest: true

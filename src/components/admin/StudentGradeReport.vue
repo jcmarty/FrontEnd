@@ -22,7 +22,7 @@
         </b-col>
       </b-form-row>
 
-      <b-form-row class="d-print-none">
+      <!-- <b-form-row class="d-print-none">
         <b-col  cols="12" md="6" lg="2">
           <b-form-group class="academicyear" label="Academic Year" label-for="academicYear">
             <b-form-select id="academicYear" v-model="selectedAcademicYear" @change="">
@@ -62,24 +62,8 @@
             </b-form-select>
           </b-form-group>
         </b-col>
-      </b-form-row>
+      </b-form-row> -->
 
-      <!-- Alert Message -->
-      <b-alert variant="success"
-        :show="dismissSuccessCountDown"
-        @dismissed="dismissSuccessCountDown=0"
-        dismissible fade>
-          {{alertMessage}}
-      </b-alert>
-      <b-alert variant="danger"
-        :show="dismissErrorCountDown"
-        @dismissed="dismissErrorCountDown=0"
-        dismissible fade>
-          <p>{{alertMessage}}</p>
-          <ul>
-            <li v-for="error in errors">{{ error }}</li>
-          </ul>
-      </b-alert>
       <!-- Main table element -->
       <b-overlay :show="isLoading" rounded="sm">
       <b-table
@@ -245,6 +229,7 @@ import Axios from "axios";
         name: 'StudentReport',
         data() {
             return {
+              isLoading: false,
               items: [],
               fields: [
                 { key: 'number', label: 'Number', sortable: true, class: 'text-center',
@@ -297,11 +282,22 @@ import Axios from "axios";
         },
 
           mounted () {
-            this.GetAllStudents(),
-            this.GetCourse()
+            this.getStudentSchedule();
+            // this.GetAllStudents(),
+            // this.GetCourse()
           },
 
           methods: {
+            getStudentSchedule: function(){
+              Axios
+                .get('http://localhost/api/v1/student_schedules', {
+                  headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+                })
+                .then(response => {
+                  console.log(response.data);
+                })
+            },
+
             GetAllStudents: function(){
               Axios.get('http://localhost/api/v1/enrollments', {
                 // add more params

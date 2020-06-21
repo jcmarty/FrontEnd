@@ -10,7 +10,6 @@
     <b-form class="col-sm justify-content-center align-items-center" method="post" v-on:submit.prevent="login">
       <div class="container" id="loginContainer">
         <h1>Login</h1>
-        <!--<p v-bind:class="{alert:hasError, 'alert-danger':hasError}">{{loginMessage}}</p>-->
         <b-alert variant="danger" v-model="hasError">{{loginMessage}}</b-alert>
         <b-form-group
           class="mb-3"
