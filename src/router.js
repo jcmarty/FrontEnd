@@ -52,7 +52,7 @@ import OnlineRegHome from "./components/onlineRegistration/OnlineRegHome.vue";
 import OnlineRegAbout from "./components/onlineRegistration/OnlineRegAbout.vue";
 import OnlineRegAchievements from "./components/onlineRegistration/OnlineRegAchievements.vue";
 import OnlineRegAdmissionCollege from "./components/onlineRegistration/OnlineRegAdmissionCollege.vue";
-import OnlineRegAdmissionSHS from "./components/onlineRegistration/OnlineRegAdmissionCollege.vue";
+import OnlineRegAdmissionSHS from "./components/onlineRegistration/OnlineRegAdmissionSHS.vue";
 import OnlineRegCollegeEnrollment from "./components/onlineRegistration/OnlineRegCollegeEnrollment.vue";
 import OnlineRegCourse from "./components/onlineRegistration/OnlineRegCourse.vue";
 import OnlineRegEvents from "./components/onlineRegistration/OnlineRegEvents.vue";
