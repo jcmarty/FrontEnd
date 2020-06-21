@@ -55,7 +55,7 @@
           <b-form-group class="subject" label="Subject" label-for="Subject">
             <b-form-select id="Subject" @change="filterStudentSchedule" v-model="selectedSubject">
               <option value="null" hidden>Select Subject</option>
-              <option v-if="SubjectsRow === null" value="null" disabled>No Subjects</option>
+              <option v-if="SubjectsRow.length == 0" value="null" disabled>No Subjects</option>
               <option v-else v-for="data in SubjectsRow" v-bind:value="{id: data.id, subject_code: data.subject_code ,subject_id: data.subject_id}">
                 {{data.subject_code}} - {{data.subject.subject.subject_title}}
               </option>
@@ -101,7 +101,7 @@
         </template> -->
 
         <template v-slot:cell(prelim_grade)="row" >
-          <input type="number" class="Grade" v-model="row.item.prelim_grade" :disabled="input_status.prelim_disabled" max="100"/>
+          <input type="number" class="Grade" v-model="row.item.prelim_grade" :disabled="input_status.prelim_disabled" min="0" max="100"/>
         </template>
 
         <template v-slot:head(prelim_grade)="row" >
@@ -125,7 +125,7 @@
         </template>
 
         <template v-slot:cell(midterm_grade)="row" >
-          <input type="number" class="Grade" v-model="row.item.midterm_grade" :disabled="input_status.midterm_disabled" max="100"></input>
+          <input type="number" class="Grade" v-model="row.item.midterm_grade" :disabled="input_status.midterm_disabled" min="0" max="100"></input>
         </template>
 
         <template v-slot:head(midterm_grade)="row" >
@@ -149,7 +149,7 @@
         </template>
 
         <template v-slot:cell(prefinal_grade)="row" >
-          <input type="number" class="Grade" v-model="row.item.prefinal_grade" :disabled="input_status.prefinal_disabled" max="100"></input>
+          <input type="number" class="Grade" v-model="row.item.prefinal_grade" :disabled="input_status.prefinal_disabled" min="0" max="100"></input>
         </template>
 
         <template v-slot:head(prefinal_grade)="row" >
@@ -173,7 +173,7 @@
         </template>
 
         <template v-slot:cell(final_grade)="row" >
-            <input type="number" class="Grade" v-model="row.item.final_grade" :disabled="input_status.final_disabled" max="100"></input>
+            <input type="number" class="Grade" v-model="row.item.final_grade" :disabled="input_status.final_disabled" min="0" max="100"></input>
         </template>
 
         <template v-slot:head(final_grade)="row" >
@@ -299,7 +299,7 @@
                 var num  = 5.00;
                 num = num.toFixed( 2 )
                 item.figure = num;
-                // return(5.00);
+                return(5.00);
               }
               else if (semestralGrade >= 75 && semestralGrade < 78) {
                 var num  = 3.00;
@@ -413,7 +413,7 @@
         academicYearOptions: this.$store.getters.getAcademicYears,
         semesterOptions: this.$store.getters.getSemesters,
 
-        SubjectsRow: null,
+        SubjectsRow: [],
         instructorRow: null,
         StudentScheduleRow: null,
         dataFilter: null,
@@ -492,6 +492,8 @@
           }
         }
         this.SubjectsRow = filtered_subject;
+        this.selectedSubject = null;
+        console.log(this.SubjectsRow );
 
     },
 

@@ -20,8 +20,38 @@
         </ul>
     </b-alert>
     <!-- End of Alert Message -->
+    <b-modal id="RegisterModal" ref="RegisterModal" title="Register" size="md"  no-close-on-backdrop>
+      <center><h6>Are you sure you want to register <br/><b> {{ this.PreRegStudents.last_name }}, {{ this.PreRegStudents.first_name }} {{ this.PreRegStudents.middle_name }}?</b></h6></center>
+      <template v-slot:modal-footer="{ cancel, ok }">
+        <b-col>
+        <!-- Emulate built in modal footer ok and cancel button actions -->
+          <b-button class="float-left"  variant="danger" @click="$bvModal.hide('RegisterModal')">
+            No
+          </b-button>
+          <b-button class="float-right" variant="success" @click="RegStudents">
+            Yes
+          </b-button>
+        </b-col>
+      </template>
+    </b-modal>
+
+    <b-modal id="DeleteRegModal" ref="DeleteRegModal" title="Delete Information" size="md"  no-close-on-backdrop>
+      <center><h6>Are you sure you want to delete <br/><b> {{ this.PreRegStudents.last_name }}, {{ this.PreRegStudents.first_name }} {{ this.PreRegStudents.middle_name }}?</b></h6></center>
+      <template v-slot:modal-footer="{ cancel, ok }">
+        <b-col>
+        <!-- Emulate built in modal footer ok and cancel button actions -->
+          <b-button class="float-left"  variant="danger" @click="$bvModal.hide('DeleteRegModal')">
+            No
+          </b-button>
+          <b-button class="float-right" variant="success" @click="DeletePreRegStudents">
+            Yes
+          </b-button>
+        </b-col>
+      </template>
+    </b-modal>
+
     <transition name="fade">
-      <div class="px-4 py-3 mt-4 mx-3 shadow rounded bg-white" v-if="RegisterTableForm">
+      <div class="px-4 py-3 mt-4 mx-3 shadow rounded bg-white" v-if="PreRegisterTableForm">
       <!-- Adding Form Start  -->
       <b-row>
         <b-col lg="4" class="my-1 ">
@@ -38,7 +68,7 @@
 
 
       <!-- Main table element -->
-      <b-overlay :show="registerOverlay" rounded="sm">
+      <b-overlay :show="PreRegisterOverlay" rounded="sm">
       <b-table
         class="my-3 table-striped"
         responsive
@@ -52,12 +82,16 @@
         :filter="filter">
 
         <template v-slot:cell(actions)="row">
-          <b-button variant="danger" size="sm" @click="DeleteModal(row.item, $event.target)" v-b-tooltip.hover title="Delete">
+          <b-button variant="danger" size="sm" @click="DeleteModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Delete">
             <b-icon-trash/>
           </b-button>
 
           <b-button variant="info" size="sm"  @click="ViewInfo(row.item, row.index, $event.target)" v-b-tooltip.hover title="View Information">
             <b-icon-info/>
+          </b-button>
+
+          <b-button variant="info" size="sm"  @click="RegisterInfo(row.item, row.index, $event.target)" v-b-tooltip.hover title="Register">
+            <b-icon-people/>
           </b-button>
         </template>
 
@@ -98,7 +132,6 @@
 </template>
 <script>
   import Axios from "axios";
-  import { required, minLength, between } from 'vuelidate/lib/validators';
   export default{
     name: 'StudentRegistrationManager',
     data() {
@@ -113,13 +146,18 @@
           { key: 'city', label: 'City', class: 'text-center'},
           { key: 'actions', label: 'Actions' , class: 'text-center' }
         ],
-
+        full_name: null,
         PreRegStudents: {
           id: null,
+          student_number: null,
           first_name: null,
           middle_name: null,
           last_name: null,
           suffix_name: null,
+          school_last_attended: null,
+          school_address: null,
+          college_last_attended: null,
+          college_address: null,
           gender: null,
           civil_status: null,
           citizenship:null,
@@ -129,7 +167,7 @@
           postal: null,
           province: null,
           telephone: null,
-          cellphone: 0,
+          cellphone: null,
           email: null,
           birth_date: null,
           birth_place: null,
@@ -137,14 +175,10 @@
           mother_name: null,
           contact_person: null,
           contact_address: null,
-          contact_number: 0,
+          contact_number: null,
           blood_type: null,
           photo_url: null,
           user_id: null,
-          school_last_attended: null,
-          school_address: null,
-          college_last_attended: null,
-          college_address: null,
           active: 1,
         },
 
@@ -154,7 +188,7 @@
         pageOptions: [5, 10, 15, 20, 25],
         filter: null,
 
-        RegisterTableForm: true,
+        PreRegisterTableForm: true,
         alertMessage: "",
         errors: [],
         dismissSecs: 7,
@@ -163,7 +197,7 @@
         updateSuccessCountDown: 0,
         updateErrorCountDown: 0,
         studentsrowdata: null,
-        registerOverlay: false,
+        PreRegisterOverlay: false,
 
       }
     },
@@ -173,19 +207,26 @@
     },
 
     methods:{
+      DeleteModal: function(item){
+        this.PreRegStudents = {
+          id: item.id,
+          first_name: item.first_name,
+          middle_name: item.middle_name,
+          last_name: item.last_name,
+        },
+        this.$root.$emit('bv::show::modal', 'DeleteRegModal')
 
-      RegStudents: function(){
+      },
 
+      DeletePreRegStudents: function(){
           Axios
-            .post('http://localhost/api/v1/pre_registers', this.PreRegStudents, {
+            .delete('http://localhost/api/v1/delete/pre_registers?id=' + this.PreRegStudents.id, {
               headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
             })
             .then(response => {
-              console.log(response.message);
-              this.alertMessage = "New student record successfully created.";
-              this.getStudents();
+              this.alertMessage = "successfully Registered";
               this.dismissSuccessCountDown = this.dismissSecs;
-              this.showForm = false;
+              this.getStudents();
             })
             .catch(error => {
               this.alertMessage = error.response.data.message;
@@ -197,16 +238,54 @@
               }
               this.dismissErrorCountDown = this.dismissSecs;
             })
+            this.$refs['DeleteRegModal'].hide();
+        },
+
+
+      DeleteRegStudents: function(){
+          Axios
+            .delete('http://localhost/api/v1/delete/pre_registers?id=' + this.PreRegStudents.id, {
+              headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+            })
+            .then(response => {
+
+                this.getStudents();
+            })
+        },
+
+      RegStudents: function(){
+        Axios
+          .post('http://localhost/api/v1/students', this.PreRegStudents, {
+            headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+          })
+          .then(response => {
+            console.log(this.PreRegStudents)
+            this.alertMessage = "successfully Registered";
+            this.dismissSuccessCountDown = this.dismissSecs;
+            this.DeleteRegStudents();
+
+          })
+          .catch(error => {
+            this.alertMessage = error.response.data.message;
+            const values = Object.values(error.response.data.errors);
+            for(const val of values){
+              for(const err of val){
+                this.errors.push(err);
+              }
+            }
+            this.dismissErrorCountDown = this.dismissSecs;
+          })
+          this.$refs['RegisterModal'].hide();
         },
 
       getStudents: function(){
-        this.registerOverlay = true;
+        this.PreRegisterOverlay = true;
         Axios
           .get('http://localhost/api/v1/pre_registers', {
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
-            this.registerOverlay = false;
+            this.PreRegisterOverlay = false;
             this.items = response.data;
             this.totalRows = this.items.length;
             for (var i = 0; i < this.items.length; i++) {
@@ -221,13 +300,18 @@
 
 
 
-      Register: function(item){
+      RegisterInfo: function(item){
         this.PreRegStudents = {
           id: item.id,
+          student_number: null,
           first_name: item.first_name,
           middle_name: item.middle_name,
           last_name: item.last_name,
           suffix_name: item.suffix_name,
+          school_last_attended: item.school_last_attended,
+          school_address: item.school_address,
+          college_last_attended: item.college_last_attended,
+          college_address: item.college_address,
           gender: item.gender,
           civil_status: item.civil_status,
           citizenship:item.citizenship,
@@ -246,20 +330,11 @@
           contact_person: item.contact_person,
           contact_address: item.contact_address,
           contact_number: item.contact_number,
-          blood_type: item.blood_type,
-          photo_url: item.photo_url,
-          user_id: item.user_id,
-          school_last_attended: item.school_last_attended,
-          school_address: item.school_address,
-          college_last_attended: item.college_last_attended,
-          college_address: item.college_address,
-          active: 1,
+          photo_url: null,
+          user_id: null,
+          active: item.active,
         },
-
-        this.$router.replace({
-          name: 'StudentRegistrationManager',
-          params: item
-        })
+        this.$root.$emit('bv::show::modal', 'RegisterModal')
       },
 
       ViewInfo: function(item) {
@@ -289,14 +364,13 @@
             contact_person: item.contact_person,
             contact_address: item.contact_address,
             contact_number: item.contact_number,
-            blood_type: item.blood_type,
-            photo_url: item.photo_url,
-            user_id: item.user_id,
+            photo_url: null,
+            user_id: null,
             school_last_attended: item.school_last_attended,
             school_address: item.school_address,
             college_last_attended: item.college_last_attended,
             college_address: item.college_address,
-            active: 1,
+            active: item.active,
           }
         })
       },

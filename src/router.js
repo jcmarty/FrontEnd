@@ -39,6 +39,7 @@ import StudentInformationManager from "./components/admin/StudentInformationMana
 import InstructorInformationManager from "./components/admin/InstructorInformationManager.vue";
 import StudentPerSubjectReport from "./components/admin/StudentPerSubjectReport.vue";
 import StudentReport from "./components/admin/StudentReport.vue";
+import StudentGradeReport from "./components/admin/StudentGradeReport.vue";
 import AlumniReport from "./components/admin/AlumniReports.vue";
 // for testing only
 import RequirementsTesting from "./components/admin/RequirementsTesting.vue";
@@ -472,6 +473,16 @@ export default new Router({
                 setTimeout(() => next(), 2000);
               },
             },
+
+            {
+              path: '/reports/student/grades',
+              name: 'StudentGradeReport',
+              component: StudentGradeReport,
+              beforeEnter(to, from, next){
+                setTimeout(() => next(), 2000);
+              },
+            },
+
             {
               path: '/reports/student',
               name: 'StudentReport',

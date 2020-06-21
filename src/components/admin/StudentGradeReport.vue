@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="d-print-none font-weight-bold text-dark">Manage Student Grades</h1>
+    <h1 class="d-print-none font-weight-bold text-dark">Student Grades Report</h1>
     <hr class="d-print-none"/>
 
     <div class="px-4 py-3 mt-4 mx-3 shadow rounded bg-white">

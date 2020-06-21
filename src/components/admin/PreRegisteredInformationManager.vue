@@ -9,71 +9,11 @@
 
 
     <div id="" class="mx-3 mb-4 p-4 bg-white shadow rounded">
-      <b-alert variant="success"
-        :show="dismissSuccessCountDown"
-        @dismissed="dismissSuccessCountDown=0"
-        dismissible fade>
-          {{alertMessage}}
-      </b-alert>
-      <b-alert variant="danger"
-        :show="dismissErrorCountDown"
-        @dismissed="dismissErrorCountDown=0"
-        dismissible fade>
-          <p>{{alertMessage}}</p>
-          <ul>
-            <li v-for="error in errors">{{ error }}</li>
-          </ul>
-      </b-alert>
 
-      <b-modal id="confirmUpdate" ref="confirmUpdate" size="md" no-close-on-backdrop>
-        <center><h6>Are you sure you want to update ?</b></h6></center>
 
-          <!-- Modal Footer Template -->
-          <template v-slot:modal-footer="{ cancel, ok }">
-            <!-- Emulate built in modal footer ok and cancel button actions -->
-            <b-col>
-              <b-button  class="float-left" variant="danger" @click="$bvModal.hide('confirmUpdate')">
-                No
-              </b-button>
-              <b-button class="float-right" variant="success" @click="StudInfoUpdate">
-                Yes
-              </b-button>
-            </b-col>
-          </template>
-      </b-modal>
-
-    <div class=" h5 font-weight-bold text-dark">Student Information
-
-          <b-button
-            class="float-right"
-            v-if="information_disable"
-            variant="warning"
-            @click="information_disable = false"
-            v-b-tooltip.hover title="Edit">
-              <i class="fa fa-pencil"/>
-          </b-button>
-
-          <b-button
-            class="float-right"
-            v-if="!information_disable"
-            variant="danger"
-            @click="cancelForm"
-            v-b-tooltip.hover title="Cancel">
-            <i class="fa fa-times-circle"></i>
-          </b-button>
-
-          <b-button
-            class="float-right"
-            v-if="!information_disable"
-            variant="success"
-            @click="confirmUpdateModal"
-            v-b-tooltip.hover title="Update">
-            <i class="fa fa-save"/>
-          </b-button>
-
-    </div>
+    <div class=" h5 font-weight-bold text-dark">Student Information</div>
     <hr/>
-    <div class="">
+    <div>
       <b-form-row>
 
         <b-col cols="12" md="6" lg="3">
@@ -83,15 +23,9 @@
             label-for="lastName">
             <b-form-input
               type="text"
-              v-model="Students.last_name"
               id="lastName"
-              :state="last_name_state"
-              aria-describedby="last_name-feedback"
               :disabled="information_disable">
             </b-form-input>
-            <b-form-invalid-feedback id="last_name-feedback">
-              Last name is required!
-            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
 
@@ -102,15 +36,9 @@
             label-for="firstName">
             <b-form-input
               type="text"
-              v-model="Students.first_name"
               id="firstName"
-              :state="first_name_state"
-              aria-describedby="first_name-feedback"
               :disabled="information_disable">
             </b-form-input>
-            <b-form-invalid-feedback id="first_name-feedback">
-              First name is required!
-            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
 
@@ -121,7 +49,6 @@
             label-for="middleName">
             <b-form-input
               type="text"
-              v-model="Students.middle_name"
               id="middleName"
               :disabled="information_disable">
             </b-form-input>
@@ -135,7 +62,6 @@
             label-for="suffixName">
             <b-form-input
               type="text"
-              v-model="Students.suffix_name"
               id="suffixName"
               :disabled="information_disable">
             </b-form-input>
@@ -152,15 +78,9 @@
             label-for="schoolLastAttended">
             <b-form-input
               type="text"
-              v-model="Students.school_last_attended"
               id="schoolLastAttended"
-              :state="school_last_attended_state"
-              aria-describedby="school_last_attended-feedback"
               :disabled="information_disable">
             </b-form-input>
-            <b-form-invalid-feedback id="school_last_attended-feedback">
-              School last attended is required!
-            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
 
@@ -171,15 +91,9 @@
               label-for="schoolAddress">
               <b-form-input
                 type="text"
-                v-model="Students.school_address"
                 id="schoolAddress"
-                :state="school_address_state"
-                aria-describedby="school_address-feedback"
                 :disabled="information_disable">
               </b-form-input>
-              <b-form-invalid-feedback id="school_address-feedback">
-                School Address is required!
-              </b-form-invalid-feedback>
             </b-form-group>
           </b-col>
 
@@ -194,7 +108,6 @@
               label-for="universityCollege">
               <b-form-input
                 type="text"
-                v-model="Students.college_last_attended"
                 id="universityCollege"
                 :disabled="information_disable">
               </b-form-input>
@@ -207,7 +120,6 @@
                 label-for="universityAddress">
                 <b-form-input
                   type="text"
-                  v-model="Students.college_address"
                   id="universityAddress"
                   :disabled="information_disable">
                 </b-form-input>
@@ -231,15 +143,9 @@
             label-for="presentAddress">
             <b-form-input
               type="text"
-              v-model="Students.address"
               id="presentAddress"
-              :state="present_address_state"
-              aria-describedby="present_address-feedback"
               :disabled="information_disable">
             </b-form-input>
-            <b-form-invalid-feedback id="present_address-feedback">
-              Present Address is required!
-            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
 
@@ -250,15 +156,9 @@
             label-for="Barangay">
             <b-form-input
               type="text"
-              v-model="Students.barangay"
               id="Barangay"
-              :state="barangay_state"
-              aria-describedby="barangay-feedback"
               :disabled="information_disable">
             </b-form-input>
-            <b-form-invalid-feedback id="barangay-feedback">
-              Barangay is required!
-            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
 
@@ -269,15 +169,9 @@
             label-for="cityMunicipality">
             <b-form-input
               type="text"
-              v-model="Students.city"
               id="cityMunicipality"
-              :state="cityMunicipality_state"
-              aria-describedby="cityMunicipality-feedback"
               :disabled="information_disable">
             </b-form-input>
-            <b-form-invalid-feedback id="cityMunicipality-feedback">
-              City / Municipality is required!
-            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
 
@@ -288,15 +182,9 @@
             label-for="Province">
             <b-form-input
               type="text"
-              v-model="Students.province"
               id="Province"
-              :state="province_state"
-              aria-describedby="province-feedback"
               :disabled="information_disable">
             </b-form-input>
-            <b-form-invalid-feedback id="province-feedback">
-              Province is required!
-            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
 
@@ -307,15 +195,9 @@
             label-for="postalCode">
             <b-form-input
               type="text"
-              v-model="Students.postal"
               id="postalCode"
-              :state="postalCode_state"
-              aria-describedby="postalCode-feedback"
               :disabled="information_disable">
             </b-form-input>
-            <b-form-invalid-feedback id="postalCode-feedback">
-              Postal code is required!
-            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
       </b-form-row>
@@ -327,20 +209,14 @@
             label="Birth Date"
             label-for="birthDate">
             <datepicker
-              v-model="Students.birth_date"
               id="birthDate"
               :clear-button="true"
               :calendar-button="true"
               :calendar-button-icon="calendarIcon"
               :bootstrap-styling="true"
               :format="birthDateFormat"
-              :state="birthDate_state"
-              aria-describedby="birthDate-feedback"
               :disabled="information_disable">
             </datepicker>
-            <b-form-invalid-feedback id="birthDate-feedback">
-              Birthdate is required!
-            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
 
@@ -350,15 +226,9 @@
             label="Gender"
             label-for="Gender">
             <b-form-select
-              v-model="Students.gender"
               :options="genderOptions"
-              :state="gender_state"
-              aria-describedby="gender-feedback"
               :disabled="information_disable">
             </b-form-select>
-            <b-form-invalid-feedback id="gender-feedback">
-              Gender is required!
-            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
 
@@ -369,7 +239,6 @@
             label-for="emailAddress">
             <b-form-input
               type="email"
-              v-model="Students.email"
               id="emailAddress"
               :disabled="information_disable">
             </b-form-input>
@@ -385,15 +254,9 @@
             label-for="cellphoneNo">
             <b-form-input
               type="number"
-              v-model="Students.cellphone"
               id="cellphoneNo"
-              :state="cellphone_state"
-              aria-describedby="cellphone-feedback"
               :disabled="information_disable">
             </b-form-input>
-            <b-form-invalid-feedback id="cellphone-feedback">
-              Cellphone number is required!
-            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
 
@@ -404,15 +267,9 @@
             label-for="placeofBirth">
             <b-form-input
               type="text"
-              v-model="Students.birth_place"
               id="placeofBirth"
-              :state="placeofBirth_state"
-              aria-describedby="placeofBirth-feedback"
               :disabled="information_disable">
             </b-form-input>
-            <b-form-invalid-feedback id="placeofBirth-feedback">
-              Place of birth is required!
-            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
 
@@ -423,15 +280,9 @@
             label-for="citizenShip">
             <b-form-input
               type="text"
-              v-model="Students.citizenship"
               id="citizenShip"
-              :state="citizenShip_state"
-              aria-describedby="citizenShip-feedback"
               :disabled="information_disable">
             </b-form-input>
-            <b-form-invalid-feedback id="citizenShip-feedback">
-              Citizenship is required!
-            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
 
@@ -442,15 +293,9 @@
             label-for="civilStatus">
             <b-form-input
               type="text"
-              v-model="Students.civil_status"
               id="civilStatus"
-              :state="civilStatus_state"
-              aria-describedby="civilStatus-feedback"
               :disabled="information_disable">
             </b-form-input>
-            <b-form-invalid-feedback id="civilStatus-feedback">
-              Civil status is required!
-            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
 
@@ -461,7 +306,6 @@
             label-for="telephoneNo">
             <b-form-input
               type="text"
-              v-model="Students.telephone"
               id="telephoneNo"
               :disabled="information_disable">
             </b-form-input>
@@ -481,15 +325,9 @@
             label-for="fathersName">
             <b-form-input
               type="text"
-              v-model="Students.father_name"
               id="fathersName"
-              :state="fathersName_state"
-              aria-describedby="father_name-feedback"
               :disabled="information_disable">
             </b-form-input>
-            <b-form-invalid-feedback id="father_name-feedback">
-              Father's name is required!
-            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
 
@@ -500,15 +338,9 @@
             label-for="mothersName">
             <b-form-input
               type="text"
-              v-model="Students.mother_name"
               id="mothersName"
-              :state="mothersName_state"
-              aria-describedby="mother_name-feedback"
               :disabled="information_disable">
             </b-form-input>
-            <b-form-invalid-feedback id="mother_name-feedback">
-              Mother's name is required!
-            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
       </b-form-row>
@@ -527,15 +359,9 @@
             label-for="guardianName">
             <b-form-input
               type="text"
-              v-model="Students.contact_person"
               id="guardianName"
-              :state="guardianName_state"
-              aria-describedby="guardianName-feedback"
               :disabled="information_disable">
             </b-form-input>
-            <b-form-invalid-feedback id="guardianName-feedback">
-              Guardian's name is required!
-            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
 
@@ -546,15 +372,9 @@
             label-for="contactAddress">
             <b-form-input
               type="text"
-              v-model="Students.contact_address"
               id="contactAddress"
-              :state="guardianContactAddress_state"
-              aria-describedby="contact_address-feedback"
               :disabled="information_disable">
             </b-form-input>
-            <b-form-invalid-feedback id="contact_address-feedback">
-              Contact address is required!
-            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
 
@@ -565,15 +385,9 @@
           label-for="contactNumber">
           <b-form-input
             type="number"
-            v-model="Students.contact_number"
             id="contactNumber"
-            :state="guardianContactNumber_state"
-            aria-describedby="contact_number-feedback"
             :disabled="information_disable">
           </b-form-input>
-          <b-form-invalid-feedback id="contact_number-feedback">
-            Contact number is required!
-          </b-form-invalid-feedback>
         </b-form-group>
       </b-col>
     </b-form-row>
@@ -672,26 +486,7 @@
 
         information_disable: true,
 
-        last_name_state: null,
-        first_name_state: null,
-        school_last_attended_state: null,
-        school_address_state: null,
-        present_address_state: null,
-        barangay_state: null,
-        cityMunicipality_state: null,
-        province_state: null,
-        postalCode_state: null,
-        birthDate_state: null,
-        gender_state: null,
-        cellphone_state: null,
-        placeofBirth_state: null,
-        citizenShip_state: null,
-        civilStatus_state: null,
-        fathersName_state: null,
-        mothersName_state: null,
-        guardianName_state: null,
-        guardianContactAddress_state: null,
-        guardianContactNumber_state: null,
+
       }
     },
     mounted: function(){
@@ -726,7 +521,7 @@
           contact_address: this.$route.params.contact_address,
           contact_number: this.$route.params.contact_number,
           blood_type: this.$route.params.blood_type,
-          photo_url: "sample.jpg",
+          photo_url: this.$route.params.photo_url,
           user_id: this.$route.params.user_id,
           school_last_attended: this.$route.params.school_last_attended,
           school_address: this.$route.params.school_address,
@@ -747,38 +542,10 @@
           })
           .then(response => {
             this.student = response.data;
-            console.log(this.student)
           })
       },
-      // Update Room Function
-      StudInfoUpdate: function(){
-        this.errors = [];
-        Axios
-        .put('http://localhost/api/v1/pre_registers/'+ this.Students.id, this.Students, {
-          headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-        })
-        .then(response => {
-          this.getStudents();
-          this.information_disable = true;
-          this.alertMessage = "successfully Updated";
-          this.dismissSuccessCountDown = this.dismissSecs;
-        })
-        .catch(error => {
-          this.alertMessage = error.response.data.message;
-          const values = Object.values(error.response.data.errors);
-          for(const val of values){
-            for(const err of val){
-              this.errors.push(err);
-            }
-          }
-          this.dismissErrorCountDown = this.dismissSecs;
-        });
-        this.$refs['confirmUpdate'].hide();
-      }, // End of Update Room Function
 
-      confirmUpdateModal: function(){
-        this.$refs['confirmUpdate'].show();
-      },
+
 
       cancelForm: function(){
         this.information_disable = true;
@@ -808,7 +575,7 @@
           contact_address: this.student.contact_address,
           contact_number: this.student.contact_number,
           blood_type: this.student.blood_type,
-          photo_url: "sample.jpg",
+          photo_url: this.$route.params.photo_url,
           user_id: this.student.user_id,
           school_last_attended: this.student.school_last_attended,
           school_address: this.student.school_address,

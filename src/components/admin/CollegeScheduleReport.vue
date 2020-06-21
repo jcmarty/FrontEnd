@@ -249,6 +249,18 @@
             this.totalRows = this.items.length;
             console.log(response.data)
           })
+          .catch(error => {
+            this.isLoading = false;
+            this.alertMessage = error.response.data.message;
+            const values = Object.values(error.response.data.errors);
+            for(const val of values){
+              for(const err of val){
+                this.errors.push(err);
+              }
+            }
+            this.dismissErrorCountDown = this.dismissSecs;
+          });
+
       },
 
       // clears selected values when semester select box has changed

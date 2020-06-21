@@ -94,6 +94,7 @@
           this.$store.dispatch('loadAcademicYears', this.$store.getters.getToken);
           this.$store.dispatch('loadSemesters', this.$store.getters.getToken);
           this.$store.dispatch('loadRooms', this.$store.getters.getToken);
+          this.$store.dispatch('loadCourses', this.$store.getters.getToken);
         },
 
 

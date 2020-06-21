@@ -329,6 +329,7 @@
               </b-form-input>
               <div class="invalid-feedback">
                 <span v-if="!$v.StudPersonal.email.required">Email Address is required!</span>
+                <span v-if="!$v.StudPersonal.email.email">You have entered an invalid email address!</span>
               </div>
             </b-form-group>
           </b-col>
@@ -347,7 +348,9 @@
                 :class="{'is-invalid' :$v.StudPersonal.cellphone.$error}">
               </b-form-input>
               <div class="invalid-feedback">
-                <span v-if="!$v.StudPersonal.cellphone.required">Cellphone No. is required!</span>
+                <span v-if="!$v.StudPersonal.cellphone.required">Contact No is required!</span>
+                <span v-if="!$v.StudPersonal.cellphone.maxLength">Maximum of 11 digits!</span>
+                <span v-if="!$v.StudPersonal.cellphone.minLength">Minimum of 11 digits!</span>
               </div>
             </b-form-group>
           </b-col>
@@ -495,7 +498,7 @@
                 :class="{'is-invalid' :$v.StudParents.contact_person.$error}">
               </b-form-input>
               <div class="invalid-feedback">
-                <span v-if="!$v.StudParents.contact_person.required">Guardian's Name is required!</span>
+                <span v-if="!$v.StudParents.contact_person.required">Contact No is required!</span>
               </div>
             </b-form-group>
           </b-col>
@@ -530,6 +533,8 @@
             </b-form-input>
             <div class="invalid-feedback">
               <span v-if="!$v.StudParents.contact_number.required">Contact Number is required!</span>
+              <span v-if="!$v.StudParents.contact_number.maxLength">Maximum of 11 digits!</span>
+              <span v-if="!$v.StudParents.contact_number.minLength">Minimum of 11 digits!</span>
             </div>
           </b-form-group>
         </b-col>
@@ -655,7 +660,7 @@
   import moment from 'moment';
   import Datepicker from 'vuejs-datepicker';
   import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue';
-  import { required, minLength, between } from 'vuelidate/lib/validators';
+  import { required, minLength, maxLength, between, email } from 'vuelidate/lib/validators';
   export default{
     name: 'StudentRegistrationManager',
     components: {
@@ -697,7 +702,7 @@
           postal: null,
           province: null,
           telephone: null,
-          cellphone: 0,
+          cellphone: null,
           email: null,
           birth_date: null,
           birth_place: null,
@@ -705,7 +710,7 @@
           mother_name: null,
           contact_person: null,
           contact_address: null,
-          contact_number: 0,
+          contact_number: null,
           blood_type: null,
           photo_url: null,
           user_id: null,
@@ -722,7 +727,7 @@
           postal: null,
           province: null,
           telephone: null,
-          cellphone: 0,
+          cellphone: null,
           email: null,
           birth_date: null,
           birth_place: null,
@@ -733,7 +738,7 @@
           mother_name: null,
           contact_person: null,
           contact_address: null,
-          contact_number: 0,
+          contact_number: null,
         },
 
         totalRows: 1,
@@ -808,8 +813,8 @@
        city: {required},
        postal: {required},
        province: {required},
-       cellphone: {required},
-       email: {required},
+       cellphone: {required, minLength: minLength(11), maxLength: maxLength(11)},
+       email: {required, email},
        birth_date: {required},
        birth_place: {required},
      },
@@ -818,7 +823,7 @@
        mother_name: {required},
        contact_person: {required},
        contact_address: {required},
-       contact_number: {required},
+       contact_number: {required, minLength: minLength(11), maxLength: maxLength(11)},
      },
     },
 
@@ -917,7 +922,7 @@
             .then(response => {
               console.log(response.message);
 
-              this.alertMessage = "New student record successfully created.";
+              this.alertMessage = "New student record successfully registered";
               this.getStudents();
               this.dismissSuccessCountDown = this.dismissSecs;
               this.showForm = false;
@@ -990,36 +995,11 @@
 
 
             for (var i = 0; i < this.items.length; i++) {
-              // this.items[i].full_name = this.items[i].last_name;
-
               var sn, mn = null;
               sn = this.items[i].suffix_name != null ? " " +this.items[i].suffix_name : '',
               mn = this.items[i].middle_name != null ? this.items[i].middle_name : '',
-
               this.items[i].full_name = this.items[i].last_name + sn + ", " + this.items[i].first_name + " " + mn;
-              // if(this.items[i].suffix_name != null){
-              //
-              // last_suffix = this.items[i].last_name + " " + this.items[i].suffix_name + ", " ;
-              // }
-              // else {
-              //   last_suffix = this.items[i].last_name + ", "
-              // }
-              //
-              // var first_middle = null;
-              // if(this.items[i].middle_name != null){
-              //   first_middle = this.items[i].first_name + " " + this.items[i].middle_name;
-              // }
-              // else {
-              //   first_middle = this.items[i].first_name
-              // }
-              //
-              // this.items[i].full_name = last_suffix + first_middle;
-
-
             }
-            // console.log(this.items)
-            // console.log(response.data[0].fullname = 'john christopher marty')
-            // console.log(response.data[0])
           })
       },
 
@@ -1072,7 +1052,7 @@
           mother_name: null,
           contact_person: null,
           contact_address: null,
-          contact_number: 0,
+          contact_number: null,
           blood_type: null,
           photo_url: null,
           user_id: null,
@@ -1082,27 +1062,9 @@
           college_address: null,
           active: 1,
         };
-
-        this.last_name_state = null;
-        this.first_name_state = null;
-        this.school_last_attended_state = null;
-        this.school_address_state = null;
-        this.present_address_state = null;
-        this.barangay_state = null;
-        this.cityMunicipality_state = null;
-        this.province_state = null;
-        this.postalCode_state = null;
-        this.birthDate_state = null;
-        this.gender_state = null;
-        this.cellphone_state = null;
-        this.placeofBirth_state = null;
-        this.citizenShip_state = null;
-        this.civilStatus_state = null;
-        this.fathersName_state = null;
-        this.mothersName_state = null;
-        this.guardianName_state = null;
-        this.guardianContactAddress_state = null;
-        this.guardianContactNumber_state = null;
+        this.$nextTick(() => {
+          this.$v.$reset();
+        });
       },
 
       CancelRegister: function(){

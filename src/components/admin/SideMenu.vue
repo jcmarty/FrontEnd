@@ -66,6 +66,7 @@
                 </b-collapse>
               </li>
               <router-link tag="li" to="/reports/student" v-if="isAuthorized(this.$store.getters.getSettings.student_management, 2)"><a>Student Reports</a></router-link>
+              <router-link tag="li" to="/reports/student/grades" v-if="isAuthorized(this.$store.getters.getSettings.student_management, 2)"><a>Student Grades</a></router-link>
               <router-link tag="li" to="/reports/schedule/room" v-if="isAuthorized(this.$store.getters.getSettings.room_management, 2)"><a>Room Schedule</a></router-link>
               <router-link tag="li" to="/reports/schedule/instructor" v-if="isAuthorized(this.$store.getters.getSettings.instructor_management, 2)"><a>Instructor Schedule</a></router-link>
               <router-link tag="li" to="#" v-if="isAuthorized(this.$store.getters.getSettings.instructor_management, 2)"><a>Instructors List</a></router-link>

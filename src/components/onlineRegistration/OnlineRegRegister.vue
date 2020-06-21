@@ -116,7 +116,7 @@
               <b-col cols="12" md="6" lg="6">
                 <b-form-group
                   class="schoollastattended"
-                  label="School Last Attended(High School)"
+                  label="School Last Attended (High School)"
                   label-for="schoolLastAttended">
                   <b-form-input
                     type="text"
@@ -1145,7 +1145,7 @@ data() {
       postal: null,
       province: null,
       telephone: null,
-      cellphone: 0,
+      cellphone: null,
       email: null,
       birth_date: null,
       birth_place: null,
@@ -1153,7 +1153,7 @@ data() {
       mother_name: null,
       contact_person: null,
       contact_address: null,
-      contact_number: 0,
+      contact_number: null,
       blood_type: null,
       photo_url: null,
       user_id: null,
@@ -1427,7 +1427,7 @@ methods: {
         }
 
         // Guardian Name
-        if (this.Students.contact_number == 0 || this.Students.contact_number == "") {
+        if (this.Students.contact_number == null || this.Students.contact_number == "") {
             this.guardianContactNumber_state = false;
             checker = true;
         } else {

@@ -805,8 +805,7 @@
        address: {required},
        city: {required},
        province: {required},
-       postal_code: {
-       },
+       postal_code: {required},
      },
      ins: {
        educational_attainment: {required},
