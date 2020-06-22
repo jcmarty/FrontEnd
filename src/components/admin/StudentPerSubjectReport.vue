@@ -98,19 +98,19 @@
           <div class="row mx-5">
             <!-- student status -->
             <div class="mb-3 column w-25">
-              <h6 >Student Status :</h6>
+              <h6 >Course/Year :</h6>
             </div>
             <div class="column w-25">
-              <h6 class="font-weight-bold">{{$route.params.schedule.course_code}}</h6>
+              <h6 class="font-weight-bold">{{$route.params.schedule.course_code}} - {{$route.params.schedule.year_level}}</h6>
             </div>
             <!-- end of student status -->
 
             <!-- academic status -->
             <div class="mb-3 column w-25">
-              <h6>Year Level :</h6>
+              <h6>Block :</h6>
             </div>
             <div class="column w-25">
-              <h6 class="font-weight-bold">{{$route.params.schedule.year_level}}</h6>
+              <h6 class="font-weight-bold">BLK - {{$route.params.schedule.block}}</h6>
             </div>
             <!-- end of academic status -->
           </div>
@@ -124,7 +124,7 @@
                       class="text-white pull-left"
                       size=""
                       variant="info"
-                      @click="$router.replace({name: 'InstructorScheduleReport'})"
+                      @click="$router.replace({name: 'viewInstructorSchedule'})"
                       ><i class="fa fa-arrow-left" aria-hidden="true"/> Go Back
             </b-button>
           </b-col>
@@ -223,7 +223,7 @@
       <div class="content d-none d-print-block ">
         <div class="d-print-block mt-4 mb-4 px-4 pt-4 pb-3 border border-dark">
           <!-- form title -->
-          <div class=" h5 font-weight-bold text-dark mb-3">Schedule Information</div>
+          <div class="text-center h2 font-weight-bold text-dark mb-4">Schedule Information</div>
             <table border="0" style="width: 100%">
               <tr class="">
                 <td class="pb-3">
@@ -424,7 +424,7 @@ export default {
     filterStudetSubject: function(schedule, enrollments){
       enrollments.forEach((enrollment, i) => {
         enrollment.student_schedule.forEach((subject, i) => {
-              subject.subject_id == schedule.subject_id && subject.status == "ENROLLED"? this.items.push(subject): "";
+              subject.subject_id == schedule.subject_id && subject.status == "ENROLLED" && enrollment.block == schedule.block? this.items.push(subject): "";
         });
       });
 

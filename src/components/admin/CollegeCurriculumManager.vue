@@ -157,10 +157,13 @@
           :filter="filter">
 
           <template v-slot:cell(active)="row" >
-            <b-form-checkbox switch size="sm" :checked="row.item.status"  @change="StatusUpdate(row.item, $event.target)">
-              <b-badge variant="success" pill v-if="row.item.active">Active</b-badge>
-              <b-badge variant="danger"  pill v-else>Inactive</b-badge>
-            </b-form-checkbox>
+            <b-button v-if="row.item.active" variant="danger" size="sm" @click="StatusUpdate(row.item, $event.target)" v-b-tooltip.hover title=" Deactivate">
+              Deactivate
+            </b-button>
+
+            <b-button v-else="row.item.active" variant="success" size="sm" @click="StatusUpdate(row.item, $event.target)" v-b-tooltip.hover title="Activate">
+              Activate
+            </b-button>
           </template>
 
           <template v-slot:cell(actions)="row">

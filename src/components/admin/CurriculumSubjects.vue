@@ -24,6 +24,11 @@
     <input type="checkbox" id="currID" @click="onDeleteSubject" hidden>
     <input id="deleteID" hidden >
     <!-- start of adding form  -->
+    <b-row class="ml-4">
+      <b-button variant="info" size="" :to="{ name: 'manageCollegeCurriculum'}" class="toggleFormBtn" v-if="!showForm">
+        <i class="fa fa-arrow-left" aria-hidden="true"/> Go Back
+      </b-button>
+    </b-row>
     <div class="adding_form">
       <transition name="fade">
         <div id="" class="px-4 pt-4 pb-3 mx-4 my-4 bg-white shadow rounded" v-if="showForm">
