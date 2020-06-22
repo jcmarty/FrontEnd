@@ -74,11 +74,12 @@
           :filter="filter">
 
           <template v-slot:cell(actions)="row" class="d-print-none">
-            <!-- <b-button size="sm" variant="info" @click="" v-b-tooltip.hover title="View Students"
-              :to="{ name: '', params: { id: 'asdasd' } }"
-            > -->
-              <a :to="{ name: 'manageCurriculumSubjects', params: { data: this.selectedInstructor } }" href="#" v-b-tooltip.hover title="View Students"><i class="fa fa-eye fa-lg"/></a>
-            <!-- </b-button> -->
+            <b-button size="sm" variant="info" @click="" v-b-tooltip.hover title="View Students"
+              :to="{ name: 'StudentPerSubjectReport', params: { instructor : selectedInstructor, schedule : row.item, academic_year : selectedAcademicYear, semester : selectedSemester} }"
+            >
+              <i class="fa fa-eye" />
+              <!-- <a :to="{ name: 'manageCurriculumSubjects', params: { data: this.selectedInstructor? this.selectedInstructor: false } }" href="#" v-b-tooltip.hover title="View Students"><i class="fa fa-eye fa-lg"/></a> -->
+            </b-button>
           </template>
 
         </b-table>
