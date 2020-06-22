@@ -59,14 +59,14 @@
 
           <li v-bind:class="{active : currentCategory=='reports'}" v-if="hasReadActivity()"><a v-b-toggle.reports><i class="fa fa-desktop"></i>View Report<span class="fa fa-chevron-down"></span></a>
             <b-collapse tag="ul" class="nav child_menu" id="reports" accordion="sideMenuAccordion">
-              <li v-b-toggle.classSchedules v-if="isAuthorized(this.$store.getters.getSettings.schedule_management, 2)"><a> Class Schedule<span class="fa fa-chevron-down"></span></a>
+              <li v-b-toggle.classSchedules v-if="isAuthorized(this.$store.getters.getSettings.enrollment_management, 2)"><a> Class Schedule<span class="fa fa-chevron-down"></span></a>
                 <b-collapse tag="ul" class="nav child_menu" id="classSchedules" accordion="sideMenuSubAccordion">
                   <router-link tag="li" to="/reports/schedule/college"><a class="super_child_menu">College</a></router-link>
                   <router-link tag="li" to="/reports/schedule/shs"><a class="super_child_menu">Senior High</a></router-link>
                 </b-collapse>
               </li>
               <router-link tag="li" to="/reports/student" v-if="isAuthorized(this.$store.getters.getSettings.student_management, 2)"><a>Student Reports</a></router-link>
-              <router-link tag="li" to="/reports/student/grades" v-if="isAuthorized(this.$store.getters.getSettings.student_schedule_management, 2)"><a>Student Grades</a></router-link>
+
               <router-link tag="li" to="/reports/schedule/room" v-if="isAuthorized(this.$store.getters.getSettings.room_management, 2)"><a>Room Schedule</a></router-link>
               <router-link tag="li" to="/reports/schedule/instructor" v-if="isAuthorized(this.$store.getters.getSettings.instructor_management, 2)"><a>Instructor Schedule</a></router-link>
               <router-link tag="li" to="#" v-if="isAuthorized(this.$store.getters.getSettings.instructor_management, 2)"><a>Instructors List</a></router-link>

@@ -878,7 +878,7 @@
               e.checked = false;
             }
           }
-          console.log("selected : " + this.selected.length + " | items : " + this.items.length)
+          // console.log("selected : " + this.selected.length + " | items : " + this.items.length)
       }
     },
 
@@ -913,7 +913,7 @@
             this.enrollTableOverLay = false;
           })
           .catch(error => {
-            console.log(error.response)
+            // console.log(error.response)
           })
       },
 
@@ -976,10 +976,10 @@
 
              // clears all input fields and checkboxes
              this.clearForm();
-             console.log(response.data);
+             // console.log(response.data);
            })
            .catch(error => {
-             console.log(error.response)
+             // console.log(error.response)
            })
       }, // end of function enrollStudent
 
@@ -996,7 +996,7 @@
             this.rowData = response.data
           })
           .catch(error => {
-            console.log(error.response)
+            // console.log(error.response)
           })
       }, // end of function getRegisteredStudents
 

@@ -80,7 +80,7 @@
 import Axios from "axios";
 
     export default {
-        name: 'StudentGradeReport',
+        name: 'StudentAcademicReport',
         data() {
             return {
               isLoading: false,

@@ -883,7 +883,7 @@
             }
           })
           .catch(error => {
-            console.log(error.response);
+            // console.log(error.response);
           })
       },
       getAcademicYears: function(){
@@ -898,7 +898,7 @@
             }
           })
           .catch(error => {
-            console.log(error.response.data.message);
+            // console.log(error.response.data.message);
           })
       },
 
@@ -913,7 +913,7 @@
             }
           })
           .catch(error => {
-            console.log(error.response.data.message);
+            // console.log(error.response.data.message);
           })
       },
 
@@ -967,9 +967,9 @@
             this.getPreferredSubjects();
             this.getTimeAvailabilities();
             this.getInstructors();
-            console.log(
-              this.instructor.id
-            )
+            // console.log(
+            //   this.instructor.id
+            // )
           })
           .catch(error => {
             this.alertMessage = error.response.data.message;
@@ -1190,7 +1190,7 @@
           })
           .catch(error => {
             this.isLoading = false;
-            console.log(error.response);
+            // console.log(error.response);
           })
       },
       addTimeAvailability: function(){
@@ -1249,7 +1249,7 @@
           })
           .catch(error => {
             this.isLoading = false;
-            console.log(error.response);
+            // console.log(error.response);
           })
       },
       addPreferredSubject: function($source){

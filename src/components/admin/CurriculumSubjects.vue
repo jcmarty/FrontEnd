@@ -448,7 +448,7 @@ export default {
         this.dismissErrorCountDown = this.dismissSecs;
       } else{
         this.selectedSubjects.forEach(element => {
-          console.log(element.units)
+          // console.log(element.units)
           this.totalUnits += parseInt(element.units)
         });
         this.showForm = false;
@@ -464,7 +464,7 @@ export default {
       // this.alertMessage = error.response.data.message;
       //   this.dismissErrorCountDown = this.dismissSecs;
 
-      console.log(this.selectedSubjects);
+      // console.log(this.selectedSubjects);
       // if(this.selectedSubject == null){
       //   this.alertMessage = "Subject field is requied.";
       //   this.dismissErrorCountDown = this.dismissSecs;
@@ -800,7 +800,7 @@ export default {
 
     // sets year level select box
     getYearLevel: function() {
-      console.log(this.$route.params)
+      // console.log(this.$route.params)
 
       if (this.curriculum_data.course.year_duration == 4) {
         this.year_options = [{
@@ -876,9 +876,9 @@ export default {
           // console.log(this.filteredSubjects);
           var subjects = response.data;
           //
-
-          console.log(subjects)
-          console.log(this.filteredSubjects)
+          //
+          // console.log(subjects)
+          // console.log(this.filteredSubjects)
           var container = [];
           if(this.filteredSubjects.length > 0){
             for (var i = 0; i < subjects.length; i++) {
@@ -891,10 +891,10 @@ export default {
                 }
               }
               if(checker){
-                console.log(1)
+                // console.log(1)
               }else{
                 container.push(subjects[i]);
-                console.log(container)
+                // console.log(container)
               }
             }
             this.items = container;

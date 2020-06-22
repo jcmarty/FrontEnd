@@ -394,7 +394,7 @@
           })
           .then(response => {
             this.isLoading = false;
-            console.log(response.data);
+            // console.log(response.data);
             this.items = response.data;
             this.totalRows = this.items.length;
           })
@@ -425,7 +425,7 @@
             headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
           })
           .then(response => {
-            console.log(response);
+            // console.log(response);
             this.getCurriculums();
             this.alertMessage = response.data.message;
             this.dismissSuccessCountDown = this.dismissSecs;
@@ -448,7 +448,7 @@
               }
             }
             this.dismissErrorCountDown = this.dismissSecs;
-            console.log(error.response.data)
+            // console.log(error.response.data)
             //console.log(error);
           })
       },

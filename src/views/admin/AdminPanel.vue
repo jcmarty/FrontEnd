@@ -47,7 +47,7 @@
             })
             .then(response => {
                 this.$store.dispatch('setAppSettings', response.data);
-                console.log(response.data);
+                // console.log(response.data);
             });
           }, // end of function getSettings
 

@@ -418,11 +418,11 @@
                 // this.current_ay = this.$store.getters.getCurrentAcademicYear.academic_year;
                 // this.current_sem = this.$store.getters.getCurrentSemester.semester;
               // }, 4000);
-              console.log(this.selectedAcademicYear)
-              console.log(this.selectedSemester)
+              // console.log(this.selectedAcademicYear)
+              // console.log(this.selectedSemester)
             })
             .catch(error => {
-              console.log(error.response.data)
+              // console.log(error.response.data)
               const values = Object.values(error.response.data.errors);
               for(const val of values){
                 for(const err of val){
@@ -445,10 +445,10 @@
             this.alertMessage = response.data.message;
             this.makeToast();
             this.dismissSuccessCountDown = this.dismissSecs;
-            console.log(this.alertMessage)
+            // console.log(this.alertMessage)
             })
             .catch(error => {
-              console.log(error.response.data)
+              // console.log(error.response.data)
               this.alertMessage = error.response.data.message;
               this.makeToast();
               const values = Object.values(error.response.data.errors);
@@ -473,7 +473,7 @@
               this.makeToast();
             })
             .catch(error => {
-              console.log(error.response.data)
+              // console.log(error.response.data)
               this.alertMessage = error.response.data.message;
               this.makeToast();
               const values = Object.values(error.response.data.errors);
@@ -563,7 +563,7 @@
                 active: this.user_data.active
               };
               this.$root.$emit('bv::show::modal', 'ProfileModal')
-              console.log(this.profile_data);
+              // console.log(this.profile_data);
             },
 
 

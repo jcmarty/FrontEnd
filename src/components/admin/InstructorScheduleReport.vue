@@ -251,7 +251,7 @@ export default {
           this.items = response.data;
           this.totalRows = this.items.length
           this.isLoading = false;
-          console.log(response.data)
+          // console.log(response.data)
         })
     }, // end of function onChangeInstructor
 
@@ -281,7 +281,7 @@ export default {
       })
       .then(response => {
           this.$store.dispatch('setAppSettings', response.data);
-          console.log(response.data);
+          // console.log(response.data);
       });
     }, // end of function getSettings
 
