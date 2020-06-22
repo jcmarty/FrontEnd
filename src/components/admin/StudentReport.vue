@@ -197,8 +197,15 @@ import Axios from "axios";
 
             }
         },
+          beforeMount(){
+            if (this.$route.path == "/admin") {
+              this.$router.replace({name: this.$route.name})
+            }
+          },
 
           mounted () {
+            console.log(this.$route.path)
+
             this.GetAllStudents(),
             this.GetCourse()
           },
@@ -206,7 +213,7 @@ import Axios from "axios";
           methods: {
             ViewAcadRecord: function(item) {
               this.$router.replace({
-                name: 'StudentGradeReport',
+                name: 'StudentAcademicReport',
                 params: {
                   id: item.id,
                   student_number: item.student.student_number,
@@ -220,7 +227,7 @@ import Axios from "axios";
 
             ViewStudSchedule: function(item) {
               this.$router.replace({
-                name: 'StudentGradeReport',
+                name: 'StudentScheduleReport',
                 params: {
                   id: item.id,
                   student_number: item.student.student_number,

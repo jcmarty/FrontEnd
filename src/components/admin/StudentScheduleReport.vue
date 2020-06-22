@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="d-print-none font-weight-bold text-dark">Student Grades Report</h1>
+    <h1 class="d-print-none font-weight-bold text-dark">Student Schedule Report</h1>
     <hr class="d-print-none"/>
     <b-breadcrumb>
       <b-breadcrumb-item to="/reports/student">Student Reports</b-breadcrumb-item>
@@ -88,8 +88,6 @@ import Axios from "axios";
               fields: [
                 { key: 'curriculum_subject.subject.subject_code', label: 'Suject Code', sortable: true, class: 'text-center' },
                 { key: 'curriculum_subject.subject.subject_title', label: 'Suject Title', sortable: true, class: 'text-center' },
-                { key: 'curriculum_subject.subject.subject_title', label: 'Suject Title', sortable: true, class: 'text-center' },
-
               ],
 
               Students: {

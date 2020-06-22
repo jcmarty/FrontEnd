@@ -25,12 +25,12 @@ import Axios from 'axios';
             this.$router.replace("/admin/login");
           }
           else {
-            this.$router.replace("/admin");
+            this.$router.replace(this.$route.path);
           }
 
         },
 
-    
+
         methods: {
             logout(){
               this.$store.dispatch('logout');

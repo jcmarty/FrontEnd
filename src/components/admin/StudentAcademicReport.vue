@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="d-print-none font-weight-bold text-dark">Student Grades Report</h1>
+    <h1 class="d-print-none font-weight-bold text-dark">Student Academic Record Report</h1>
     <hr class="d-print-none"/>
     <b-breadcrumb>
       <b-breadcrumb-item to="/reports/student">Student Reports</b-breadcrumb-item>
@@ -88,14 +88,9 @@ import Axios from "axios";
               fields: [
                 { key: 'curriculum_subject.subject.subject_code', label: 'Suject Code', sortable: true, class: 'text-center' },
                 { key: 'curriculum_subject.subject.subject_title', label: 'Suject Title', sortable: true, class: 'text-center' },
-                { key: 'prelim_grade', label: 'Prelim Grade', sortable: true, class: 'text-center' },
-                { key: 'midterm_grade', label: 'Midterm Grade', sortable: true, class: 'text-center' },
-                { key: 'prefinal_grade', label: 'Pre Final Grade', sortable: true, class: 'text-center' },
-                { key: 'final_grade', label: 'Final Grade', sortable: true, class: 'text-center' },
-                { key: 'semestral', label: 'Semestral', sortable: true, class: 'text-center' },
-                { key: 'figure', label: 'Figure', sortable: true, class: 'text-center' },
-                { key: 'remarks', label: 'Remarks', sortable: true, class: 'text-center' },
-
+                { key: 'curriculum_subject.subject.units', label: 'Units', sortable: true, class: 'text-center' },
+                { key: 'curriculum_subject.subject.lec', label: 'Lec', sortable: true, class: 'text-center' },
+                { key: 'curriculum_subject.subject.lab', label: 'Lab', sortable: true, class: 'text-center' },
 
               ],
 
