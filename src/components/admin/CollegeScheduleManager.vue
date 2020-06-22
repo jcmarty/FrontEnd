@@ -178,7 +178,7 @@
           </b-col>
 
           <b-col class="">
-            <b-button class="mt-4" @click="" variant="primary" block :disabled="disableAddBtn" id="Add_Semester_Btn">
+            <b-button class="mt-4" @click="onChangeDay" variant="primary" block :disabled="false" id="Add_Semester_Btn">
               Add
             </b-button>
           </b-col>
@@ -237,6 +237,7 @@
 
 <script>
     import Axios from "axios";
+    import moment from 'moment';
     const baseUrl = "http://localhost/api/v1/";
       export default {
             name: 'CollegeClassSchedule',
@@ -367,7 +368,10 @@
 
               methods: {
                 onChangeDay: function(){
-
+                  // var asd = moment('09:00','h:mm a').format('h:mm a');
+                  // var asd= moment("19:00" + A, ["hh:mm A"]).format("HH:mm");
+                  // var time = 
+                  console.log(moment('14:00:00', 'HH:mm:ss'))
                 }, // end of function onChangeDay
 
                 onChangeRoom: function(){
