@@ -1171,6 +1171,15 @@
 
           this.UserPriv.push({
             user_id: this.LastUser,
+            activity_id: user_activities.data[2].id,
+            create_priv: 0,
+            read_priv: 1,
+            update_priv: 0,
+            delete_priv: 0,
+          });
+
+          this.UserPriv.push({
+            user_id: this.LastUser,
             activity_id: user_activities.data[0].id,
             create_priv: 0,
             read_priv: 1,

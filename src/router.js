@@ -41,6 +41,9 @@ import StudentPerSubjectReport from "./components/admin/StudentPerSubjectReport.
 import StudentReport from "./components/admin/StudentReport.vue";
 import StudentGradeReport from "./components/admin/StudentGradeReport.vue";
 import AlumniReport from "./components/admin/AlumniReports.vue";
+import StudentInformationReport from "./components/admin/StudentInformationReport.vue";
+import StudentAcademicReport from "./components/admin/StudentAcademicReport.vue";
+import StudentScheduleReport from "./components/admin/StudentScheduleReport.vue";
 // for testing only
 import RequirementsTesting from "./components/admin/RequirementsTesting.vue";
 // End of Admin Routes
@@ -479,6 +482,33 @@ export default new Router({
               path: '/reports/student/grades',
               name: 'StudentGradeReport',
               component: StudentGradeReport,
+              beforeEnter(to, from, next){
+                setTimeout(() => next(), 2000);
+              },
+            },
+
+            {
+              path: '/reports/student/Information',
+              name: 'StudentInformationReport',
+              component: StudentInformationReport,
+              beforeEnter(to, from, next){
+                setTimeout(() => next(), 2000);
+              },
+            },
+
+            {
+              path: '/reports/student/academic',
+              name: 'StudentAcademicReport',
+              component: StudentAcademicReport,
+              beforeEnter(to, from, next){
+                setTimeout(() => next(), 2000);
+              },
+            },
+
+            {
+              path: '/reports/student/schedule',
+              name: 'StudentScheduleReport',
+              component: StudentScheduleReport,
               beforeEnter(to, from, next){
                 setTimeout(() => next(), 2000);
               },

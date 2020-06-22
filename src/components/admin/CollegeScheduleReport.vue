@@ -247,7 +247,7 @@
             this.isLoading = false;
             this.items = response.data;
             this.totalRows = this.items.length;
-            console.log(response.data)
+            // console.log(response.data)
           })
           .catch(error => {
             this.isLoading = false;

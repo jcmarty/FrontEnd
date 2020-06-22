@@ -42,6 +42,16 @@
           </b-form-group>
         </b-col>
 
+        <!-- yearLevel -->
+        <b-col cols="12" md="6" lg="3">
+          <b-form-group class="block"label="Block" label-for="Block">
+            <b-form-select v-model="selectedBlock" id="Block"
+                           @change="filterTable">
+              <option value="null" hidden>Select Year Level</option>
+            </b-form-select>
+          </b-form-group>
+        </b-col>
+
         <b-col class="py-4">
           <!-- Add New Room Button -->
           <b-button variant="primary" onclick="window.print()">
@@ -79,7 +89,32 @@
       :per-page="perPage"
       :filter-function="filterTable">
 
+      <template v-slot:cell(number)="data">
+        {{ data.index + 1 }}
+      </template>
+
+      <template v-slot:cell(actions)="row">
+
+        <b-button variant="info" size="sm"  @click="ViewGrades(row.item, row.index, $event.target)" v-b-tooltip.hover title="Grades">
+          <b-icon-clipboard-data/>
+        </b-button>
+
+        <b-button variant="info" size="sm"  @click="ViewPerosnalInfo(row.item, row.index, $event.target)" v-b-tooltip.hover title="Personal Information">
+          <b-icon-person/>
+        </b-button>
+
+        <b-button variant="info" size="sm"  @click="ViewStudSchedule(row.item, row.index, $event.target)" v-b-tooltip.hover title="Schedule">
+            <b-icon-clock/>
+        </b-button>
+
+        <b-button variant="info" size="sm"  @click="ViewAcadRecord(row.item, row.index, $event.target)" v-b-tooltip.hover title="Academic Record">
+            <b-icon-card-list/>
+        </b-button>
+
+      </template>
+
     </b-table>
+
 
     <hr class="d-print-none"/>
     <b-row class="d-print-none">
@@ -124,16 +159,7 @@ import Axios from "axios";
             return {
               items: [],
               fields: [
-                { key: 'number', label: 'Number', sortable: true, class: 'text-center',
-                sortByFormatted: true,
-                formatter: (value, key, item, index) => {
-                   // this.counter = this.counter + 1;
-
-
-                   return index;
-                  // return item.time_start  + "-" + item.time_end;
-                  }
-                },
+                { key: 'number', label: 'Number', sortable: true, class: 'text-center'},
                 { key: 'full_name', label: 'Name', class: 'text-center', sortable: true,
                 sortByFormatted: true,
                 formatter: (value, key, item) => {
@@ -147,9 +173,7 @@ import Axios from "axios";
                 { key: 'student.address', label: 'Address', sortable: true, class: 'text-center' },
                 { key: 'student.contact_number', label: 'Contact Number', sortable: true, class: 'text-center' },
                 { key: 'student.birth_date', label: 'Birthday', sortable: true, class: 'text-center' },
-                { key: 'student.birth_place', label: 'Birth Place', sortable: true, class: 'text-center' },
-                { key: 'course.course_code', label: 'Course', sortable: true, class: 'text-center' },
-                { key: 'year_level', label: 'Year Level', sortable: true, class: 'text-center' },
+                { key: 'actions', label: 'Actions' , class: 'text-center' }
               ],
 
               rowData: null,
@@ -161,6 +185,7 @@ import Axios from "axios";
 
               academicYearOptions: this.$store.getters.getAcademicYears,
               semesterOptions: this.$store.getters.getSemesters,
+              selectedBlock: 1,
               selectedAcademicYear: this.$store.getters.getCurrentAcademicYear,
               selectedSemester: this.$store.getters.getCurrentSemester,
               courseOption:null,
@@ -179,6 +204,85 @@ import Axios from "axios";
           },
 
           methods: {
+            ViewAcadRecord: function(item) {
+              this.$router.replace({
+                name: 'StudentGradeReport',
+                params: {
+                  id: item.id,
+                  student_number: item.student.student_number,
+                  first_name: item.student.first_name,
+                  middle_name: item.student.middle_name,
+                  last_name: item.student.last_name,
+                  suffix_name: item.student.suffix_name,
+                }
+              })
+            },
+
+            ViewStudSchedule: function(item) {
+              this.$router.replace({
+                name: 'StudentGradeReport',
+                params: {
+                  id: item.id,
+                  student_number: item.student.student_number,
+                  first_name: item.student.first_name,
+                  middle_name: item.student.middle_name,
+                  last_name: item.student.last_name,
+                  suffix_name: item.student.suffix_name,
+                }
+              })
+            },
+
+            ViewPerosnalInfo: function(item) {
+              this.$router.replace({
+                name: 'StudentInformationReport',
+                params: {
+                  id: item.id,
+                  student_number: item.student.student_number,
+                  first_name: item.student.first_name,
+                  middle_name: item.student.middle_name,
+                  last_name: item.student.last_name,
+                  suffix_name: item.student.suffix_name,
+                  gender: item.student.gender,
+                  civil_status: item.student.civil_status,
+                  citizenship:item.student.citizenship,
+                  address: item.student.address,
+                  barangay: item.student.barangay,
+                  city: item.student.city,
+                  postal: item.student.postal,
+                  province: item.student.province,
+                  telephone: item.student.telephone,
+                  cellphone: item.student.cellphone,
+                  email: item.student.email,
+                  birth_date: item.student.birth_date,
+                  birth_place: item.student.birth_place,
+                  father_name: item.student.father_name,
+                  mother_name: item.student.mother_name,
+                  contact_person: item.student.contact_person,
+                  contact_address: item.student.contact_address,
+                  contact_number: item.student.contact_number,
+                  school_last_attended: item.student.school_last_attended,
+                  school_address: item.student.school_address,
+                  college_last_attended: item.student.college_last_attended,
+                  college_address: item.student.college_address,
+
+                }
+              })
+            },
+
+            ViewGrades: function(item) {
+              this.$router.replace({
+                name: 'StudentGradeReport',
+                params: {
+                  id: item.id,
+                  student_number: item.student.student_number,
+                  first_name: item.student.first_name,
+                  middle_name: item.student.middle_name,
+                  last_name: item.student.last_name,
+                  suffix_name: item.student.suffix_name,
+                }
+              })
+            },
+
             GetAllStudents: function(){
               Axios.get('http://localhost/api/v1/enrollments', {
                 // add more params
@@ -186,13 +290,15 @@ import Axios from "axios";
                 headers: { Authorization: 'Bearer ' + this.$store.getters.getToken }
               })
                 .then(response => {
+                  console.log(response.data)
                   this.items = response.data;
+                    // console.log(this.items);
                   this.filteredItems = response.data;
                   this.totalRows = this.items.length;
-                  console.log(response.data)
+                  // console.log(response.data)
                 })
                 .catch(error => {
-                  console.log(error.response)
+                  // console.log(error.response)
                 })
             },
 
@@ -238,7 +344,8 @@ import Axios from "axios";
               for(var index in this.items) {
                   var obj = this.items[index];
                   var course = this.selectedCourse.course;
-                  var year = this.selectedYearLevel
+                  var year = this.selectedYearLevel;
+                  var block = this.selectedBlock;
                   if (year == null) {
                     if (obj.course.course_code == course) {
                       container.push(obj)
@@ -248,6 +355,15 @@ import Axios from "axios";
                       container.push(obj)
                     }
                   }
+                  // if (year == null) {
+                  //
+                  // }else {
+                  //   if (block == null) {
+                  //
+                  //   }else {
+                  //
+                  //   }
+                  // }
 
 
               }
@@ -257,7 +373,7 @@ import Axios from "axios";
               this.currentPage = 1;
               this.totalRows = this.filteredItems.length;
 
-            }, // end of function filterTable
+             }, // end of function filterTable
 
           }
 

@@ -80,7 +80,7 @@
 import Axios from "axios";
 
     export default {
-        name: 'StudentGradeReport',
+        name: 'StudentScheduleReport',
         data() {
             return {
               isLoading: false,
@@ -88,14 +88,7 @@ import Axios from "axios";
               fields: [
                 { key: 'curriculum_subject.subject.subject_code', label: 'Suject Code', sortable: true, class: 'text-center' },
                 { key: 'curriculum_subject.subject.subject_title', label: 'Suject Title', sortable: true, class: 'text-center' },
-                { key: 'prelim_grade', label: 'Prelim Grade', sortable: true, class: 'text-center' },
-                { key: 'midterm_grade', label: 'Midterm Grade', sortable: true, class: 'text-center' },
-                { key: 'prefinal_grade', label: 'Pre Final Grade', sortable: true, class: 'text-center' },
-                { key: 'final_grade', label: 'Final Grade', sortable: true, class: 'text-center' },
-                { key: 'semestral', label: 'Semestral', sortable: true, class: 'text-center' },
-                { key: 'figure', label: 'Figure', sortable: true, class: 'text-center' },
-                { key: 'remarks', label: 'Remarks', sortable: true, class: 'text-center' },
-
+                { key: 'curriculum_subject.subject.subject_title', label: 'Suject Title', sortable: true, class: 'text-center' },
 
               ],
 
