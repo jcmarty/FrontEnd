@@ -73,6 +73,8 @@ import StudentProfile from './components/student/student_profile.vue';
 import StudentAccountSetting from './components/student/student_account_setting.vue';
 //  End of Student Dashboard
 
+import NotFound from './components/admin/404.vue';
+
 
 Vue.use(Router);
 
@@ -82,6 +84,7 @@ or used a middleware*/
 export default new Router({
   mode: 'history',
   routes: [
+    { path: '*', component: NotFound },
     {
       path: "/dashboard",
       name: "StudentDashboard",
@@ -591,7 +594,7 @@ export default new Router({
         },
         {
           path: "login",
-          nameL: "login",
+          name: "login",
           component: AdminLogin,
           meta: {
             guest: true
