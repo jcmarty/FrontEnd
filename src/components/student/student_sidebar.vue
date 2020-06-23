@@ -11,22 +11,126 @@
       </center>
       <!-- <router-link tag="li" to="/dashboard/student/account_setting"><a>Requirements Testing</a></router-link> -->
       <a class="dash_navs active" @click="$router.replace({name: 'StudentProfile'})" to="/dashboard/student/profile" href="#"><i class="fa fa-user" aria-hidden="true"/><span>Profile</span></a>
-      <a class="dash_navs" href="#"><i class="fa fa-book" aria-hidden="true"/><span>Enrollment</span></a>
-      <a class="dash_navs" href="#"><i class="fa fa-calendar" aria-hidden="true"/><span>Schedule</span></a>
-      <a class="dash_navs" @click="$router.replace({name: 'StudentAccountSetting'})" href="#"><i class="fa fa-cog" aria-hidden="true"/><span>Account Setting</span></a>
+      <a class="dash_navs" @click="$router.replace({name: 'StudentOnlineEnrollment'})" href="#"><i class="fa fa-book" aria-hidden="true"/><span>Enrollment</span></a>
+      <a class="dash_navs" href="#"><i class="fa fa-info pr-3" aria-hidden="true"/><span>Assesment</span></a>
+      <a class="dash_navs" @click="showAccountSettingModal" href="#"><i class="fa fa-cog" aria-hidden="true"/><span>Account Setting</span></a>
     </div>
+
+    <b-modal id="accountSettingModal" ref="accountSettingModal" title="Account Settings" size="sm" no-close-on-backdrop>
+
+    <!-- First Name -->
+    <b-form-row>
+      <b-col cols="12" md="6" lg="12">
+        <b-form-group
+          :class="{'text-danger' : $v.account_info.student_username.$error}"
+          label="Username"
+          label-for="username">
+          <b-form-input
+            type="text"
+            id="username"
+            v-model.trim="$v.account_info.student_username.$model"
+            :class="{'is-invalid' :$v.account_info.student_username.$error}">
+          </b-form-input>
+          <div class="invalid-feedback">
+            <span v-if="!$v.account_info.student_username.required">Username is required!</span>
+          </div>
+        </b-form-group>
+      </b-col>
+
+      <b-col cols="12" md="6" lg="12">
+        <b-form-group
+          :class="{'text-danger' : $v.account_info.student_password.$error}"
+          label="Old Password"
+          label-for="old_password">
+          <b-form-input
+            type="text"
+            id="old_password"
+            v-model.trim="$v.account_info.student_password.$model"
+            :class="{'is-invalid' :$v.account_info.student_password.$error}">
+          </b-form-input>
+          <div class="invalid-feedback">
+            <span v-if="!$v.account_info.student_password.required">Civil Status is required!</span>
+          </div>
+        </b-form-group>
+      </b-col>
+
+      <b-col cols="12" md="6" lg="12">
+        <b-form-group
+          :class="{'text-danger' : $v.account_info.student_new_password.$error}"
+          label="New Password"
+          label-for="new_password">
+          <b-form-input
+            type="text"
+            id="new_password"
+            v-model.trim="$v.account_info.student_new_password.$model"
+            :class="{'is-invalid' :$v.account_info.student_new_password.$error}">
+          </b-form-input>
+          <div class="invalid-feedback">
+            <span v-if="!$v.account_info.student_new_password.required">Civil Status is required!</span>
+          </div>
+        </b-form-group>
+      </b-col>
+
+      <b-col cols="12" md="6" lg="12">
+        <b-form-group
+          :class="{'text-danger' : $v.account_info.student_confirm_password.$error}"
+          label="Confirm Password"
+          label-for="confirm_password">
+          <b-form-input
+            type="text"
+            id="confirm_password"
+            v-model.trim="$v.account_info.student_confirm_password.$model"
+            :class="{'is-invalid' :$v.account_info.student_confirm_password.$error}">
+          </b-form-input>
+          <div class="invalid-feedback">
+            <span v-if="!$v.account_info.student_confirm_password.required">Civil Status is required!</span>
+          </div>
+        </b-form-group>
+      </b-col>
+    </b-form-row>
+
+      <!-- Modal Footer Template -->
+      <template v-slot:modal-footer="{ cancel, ok }">
+        <!-- Emulate built in modal footer ok and cancel button actions -->
+      <b-col>
+        <b-button class="float-left"  variant="danger" @click="hideAccountSettingModal">
+          Cancel
+        </b-button>
+        <b-button class="float-right"  variant="success" @click="">
+          Update
+        </b-button>
+      </b-col>
+      </template>
+
+    </b-modal> <!-- End of Edit settings -->
+
   </div>
 </template>
 
 <script>
   import Axios from "axios";
+  import { required, minLength, between, sameAs, email } from 'vuelidate/lib/validators';
   export default{
     name: '',
 
     data() {
       return {
-
+        account_info : {
+          student_username: "",
+          student_password: "",
+          student_new_password: "",
+          student_confirm_password: ""
+        },
       }
+    }, // End of Data
+
+    validations: {
+       account_info:{
+         student_username: {required},
+         student_password: {required},
+         student_new_password: {required},
+         student_confirm_password: {required},
+       }
     }, // End of Data
 
     mounted () {
@@ -35,6 +139,14 @@
     }, // End of Mounted
 
     methods:{
+      showAccountSettingModal(){
+        this.$refs['accountSettingModal'].show();
+      },
+
+      hideAccountSettingModal(){
+        this.$refs['accountSettingModal'].hide();
+      },
+
       activeState: function(target){
         // Get the container element
         var btnContainer = document.getElementById("dashboard_sidebar");

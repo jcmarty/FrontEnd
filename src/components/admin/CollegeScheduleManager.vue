@@ -1,7 +1,7 @@
 <template>
 <div>
   <div id="pageHeader">
-    <h1 class="font-weight-bold text-dark">Class Schedule asdasd</h1>
+    <h1 class="font-weight-bold text-dark">Class Schedule Manager</h1>
   </div>
   <hr />
 
@@ -370,7 +370,7 @@
                 onChangeDay: function(){
                   // var asd = moment('09:00','h:mm a').format('h:mm a');
                   // var asd= moment("19:00" + A, ["hh:mm A"]).format("HH:mm");
-                  // var time = 
+                  // var time =
                   console.log(moment('14:00:00', 'HH:mm:ss'))
                 }, // end of function onChangeDay
 

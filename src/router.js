@@ -70,7 +70,7 @@ import OnlineRegVisionMission from "./components/onlineRegistration/OnlineRegVis
 //  Start of Student Dashboard
 import StudentDashboard from "./views/student/StudentPanel.vue";
 import StudentProfile from './components/student/student_profile.vue';
-import StudentAccountSetting from './components/student/student_account_setting.vue';
+import StudentOnlineEnrollment from './components/student/student_online_enrollment.vue';
 //  End of Student Dashboard
 
 import NotFound from './components/admin/404.vue';
@@ -102,9 +102,9 @@ export default new Router({
           }
         },
         {
-          path: "/dashboard/student/account_setting",
-          name: "StudentAccountSetting",
-          component: StudentAccountSetting,
+          path: "/dashboard/student/enrollment",
+          name: "StudentOnlineEnrollment",
+          component: StudentOnlineEnrollment,
           meta: {
             guest: true
           }
