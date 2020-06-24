@@ -14,21 +14,6 @@
       <div class="Stud_container">
         <transition name="fade">
           <div id="" class="mx-3 mb-4 p-4 bg-white shadow rounded" v-if="GuidesForm">
-            <!-- Make Instruction after successfully pre-register -->
-            <strong>Proceed to Enrollment!</strong>
-            <p>Read and Follow the process from the link below.</p>
-            <b-link class="Stud_about" to="/AdmissionCollege">
-              <center>Requirements/Process</center>
-            </b-link>
-          </div>
-        </transition>
-      </div>
-
-
-      <!-- Student Information -->
-      <div class="Stud_container">
-        <transition name="fade">
-          <div id="" class="mx-3 mb-4 p-4 bg-white shadow rounded" v-if="StudentInfoshowForm">
             <b-alert variant="success"
                 :show="dismissSuccessCountDown"
                 @dismissed="dismissSuccessCountDown=0"
@@ -44,6 +29,21 @@
                     <li v-for="error in errors">{{ error }}</li>
                   </ul>
               </b-alert>
+
+            <strong>Proceed to Enrollment!</strong>
+            <p>Read and Follow the process from the link below.</p>
+            <b-link class="Stud_about" to="/AdmissionCollege">
+              <center>Requirements/Process</center>
+            </b-link>
+          </div>
+        </transition>
+      </div>
+
+
+      <!-- Student Information -->
+      <div class="Stud_container">
+        <transition name="fade">
+          <div id="" class="mx-3 mb-4 p-4 bg-white shadow rounded" v-if="StudentInfoshowForm">
           <div class="h5 font-weight-bold text-dark text-center">Student Information</div>
           <hr/>
           <div class="Stud_form_text">
@@ -477,13 +477,8 @@
                       <b-form-input
                         type="text"
                         v-model="Students.father_name"
-                        id="fathersName"
-                        :state="fathersName_state"
-                        aria-describedby="father_name-feedback">
+                        id="fathersName">
                       </b-form-input>
-                      <b-form-invalid-feedback id="father_name-feedback">
-                        Father's name is required!
-                      </b-form-invalid-feedback>
                     </b-form-group>
                   </b-col>
 
@@ -995,13 +990,8 @@
                     type="text"
                     v-model="Students.father_name"
                     id="fathersName"
-                    :state="fathersName_state"
-                    aria-describedby="father_name-feedback"
                     :disabled="information_disable">
                   </b-form-input>
-                  <b-form-invalid-feedback id="father_name-feedback">
-                    Father's name is required!
-                  </b-form-invalid-feedback>
                 </b-form-group>
               </b-col>
 
@@ -1215,7 +1205,6 @@ data() {
       placeofBirth_state: null,
       citizenShip_state: null,
       civilStatus_state: null,
-      fathersName_state: null,
       mothersName_state: null,
       guardianName_state: null,
       guardianContactAddress_state: null,

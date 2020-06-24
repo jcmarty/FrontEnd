@@ -39,7 +39,6 @@
                   <b-form-input
                     type="text"
                     id="academicYear"
-                    required
                     autofocus
                     v-model.trim="$v.AcademicYears.academic_year.$model"
                     :class="{'is-invalid' :$v.AcademicYears.academic_year.$error}">
@@ -165,7 +164,7 @@
             No
           </b-button>
           <b-button class="float-right" variant="success" @click="updateAY">
-            Update
+            Yes
           </b-button>
         </b-col>
       </template>
@@ -182,7 +181,6 @@
             <b-form-input
               type="text"
               id="academicYear"
-              required
               autofocus
               v-model.trim="$v.AcademicYears.academic_year.$model"
               :class="{'is-invalid' :$v.AcademicYears.academic_year.$error}">
@@ -202,7 +200,7 @@
             Cancel
           </b-button>
           <b-button class="float-right" size="sm" variant="success" @click="confirmUpdateModal">
-            Finish
+            Update
           </b-button>
         </b-col>
       </template>

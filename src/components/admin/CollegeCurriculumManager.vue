@@ -168,7 +168,7 @@
 
           <template v-slot:cell(actions)="row">
             <b-button variant="info" size="sm"  @click="viewSubjects(row.item, row.index, $event.target)" v-b-tooltip.hover title="View Subjects">
-              <b-icon-info/>
+              <b-icon-book/>
             </b-button>
 
             <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)" v-b-tooltip.hover title="Edit Curriculum">

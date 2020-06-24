@@ -1,16 +1,11 @@
 <template>
 <div>
-  <h1 class="font-weight-bold text-dark">Manage {{curriculum.curriculum_title}} Subjects</h1>
+  <h1 class="font-weight-bold text-dark">Manage Curriculum Subjects</h1>
   <hr />
-  <!-- <h2>Title: {{ curriculum.curriculum_title }}</h2>
-    <p>Description: {{ curriculum.curriculum_desc }}</p>
-    <p v-if="curriculum.course !== null">
-      Course: {{ curriculum.course.course_desc }}
-      <span v-if="curriculum.course.course_major !== null">Major in {{ curriculum.course.course_major }}</span>
-    </p>
-    <p v-if="curriculum.strand !== null">Strand: {{ curriculum.strand.strand }}</p> -->
-  <!--  TODO:  Place a form for adding curriculum subject here -->
-
+  <b-breadcrumb>
+    <b-breadcrumb-item to="/manage/curriculum/college">Student Registration</b-breadcrumb-item>
+    <b-breadcrumb-item :active="true">{{curriculum.curriculum_title}}</b-breadcrumb-item>
+  </b-breadcrumb>
   <b-alert class="mx-4" variant="success" :show="dismissSuccessCountDown" @dismissed="dismissSuccessCountDown=0" dismissible fade>
     {{alertMessage}}
   </b-alert>
@@ -24,26 +19,14 @@
     <input type="checkbox" id="currID" @click="onDeleteSubject" hidden>
     <input id="deleteID" hidden >
     <!-- start of adding form  -->
-    <b-row class="ml-4">
-      <b-button variant="info" size="" :to="{ name: 'manageCollegeCurriculum'}" class="toggleFormBtn" v-if="!showForm">
-        <i class="fa fa-arrow-left" aria-hidden="true"/> Go Back
-      </b-button>
-    </b-row>
+
     <div class="adding_form">
       <transition name="fade">
         <div id="" class="px-4 pt-4 pb-3 mx-4 my-4 bg-white shadow rounded" v-if="showForm">
           <div class=" h5 font-weight-bold text-dark" >Add Curriculum Subject</div>
           <hr/>
             <b-row>
-              <!-- start year level -->
-              <!-- <b-col cols="12" md="6" lg="3">
-                <b-form-group class="mb-4" label="Year Level" label-for="year_level">
-                  <b-form-select id="year_level" v-model="selectedYearLevel" :options="year_options" @change="onChangeYearLevel">
-                    <option value="null" v-if="showForm" hidden>Select Year level</option>
-                    <option value="All" v-if="!showForm">All Year level</option>
-                  </b-form-select>
-                </b-form-group>
-              </b-col> -->
+
 
               <b-col cols="12" md="6" lg="3">
                 <b-form-group
@@ -67,17 +50,7 @@
                   </div>
                 </b-form-group>
               </b-col>
-              <!-- end year level select box -->
 
-              <!-- semester select box -->
-              <!-- <b-col cols="12" md="6" lg="3">
-                <b-form-group class="semester mb-4" label="Semester" label-for="Semester">
-                  <b-form-select id="Semester" v-model="selectedSemester" @change="onChangeSemester" :disabled="sem_status">
-                    <option :value="{id: null, semester:null}" hidden>Select Semester</option>
-                    <option v-for="sem in SemRow" v-bind:value="{id: sem.id, semester: sem.semester}">{{sem.semester}}</option>
-                  </b-form-select>
-                </b-form-group>
-              </b-col> -->
 
               <b-col cols="12" md="6" lg="3">
                 <b-form-group
@@ -97,15 +70,6 @@
                 </b-form-group>
               </b-col>
 
-              <!-- semester select box -->
-              <!-- <b-col cols="12" md="12" lg="6">
-                <b-form-group class="mb-4" label="Subject" label-for="Subject">
-                  <b-form-select id="Subject" v-model="selectedSubject" @change="" :disabled="subject_status">
-                    <option :value="null" hidden>Select Subject</option>
-                    <option v-for="subject in SubjectRow" v-bind:value="subject.id">{{subject.subject_code}} - {{subject.subject_description}}</option>
-                  </b-form-select>
-                </b-form-group>
-              </b-col> -->
 
               <b-col lg="4" class="">
                 <b-form-group

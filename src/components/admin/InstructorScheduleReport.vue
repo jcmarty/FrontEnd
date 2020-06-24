@@ -48,7 +48,7 @@
       <!-- print button -->
       <b-col cols="12" md="6" lg="3">
         <!-- <b-button v-if="selectedInstructor" class="mt-4"  variant="info" onclick="window.print()"> -->
-        <b-button v-if="selectedInstructor" class="mt-4"  variant="info" onclick="window.print()">
+        <b-button v-if="selectedInstructor" class="mt-4"  variant="dark" onclick="window.print()">
           Print <i class="fa fa-print"/>
         </b-button>
       </b-col>

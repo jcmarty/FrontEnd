@@ -2,12 +2,12 @@
   <div>
     <h1 class="d-print-none font-weight-bold text-dark">Student Schedule Report</h1>
     <hr class="d-print-none"/>
-    <b-breadcrumb>
+    <b-breadcrumb  class="d-print-none">
       <b-breadcrumb-item to="/reports/student">Student Reports</b-breadcrumb-item>
       <b-breadcrumb-item :active="true">{{ this.Students.first_name }} {{ this.Students.last_name }}</b-breadcrumb-item>
     </b-breadcrumb>
 
-    <div class="px-4 py-3 mt-4 mx-3 shadow rounded bg-white">
+    <div class="px-4 py-3 mt-4 mx-3 shadow rounded bg-white d-print-none">
       <b-form-row class="d-print-none">
         <b-col  cols="12" md="6" lg="4">
           <b-form-group
@@ -24,6 +24,12 @@
             </b-input-group>
           </b-form-group>
         </b-col>
+        <b-col >
+          <!-- Add New Room Button -->
+          <b-button class="mt-4 float-right"  variant="dark" onclick="window.print()">
+            Print <i class="fa fa-print"/>
+          </b-button>
+        </b-col>
       </b-form-row>
 
       <!-- Main table element -->
@@ -39,8 +45,8 @@
         :current-page="currentPage"
         :per-page="perPage"
         :filter="filter">
-
       </b-table>
+
     </b-overlay>
 
 
@@ -71,8 +77,70 @@
           ></b-pagination>
         </b-col>
       </b-row>
+    </div><!-- end of table -->
+
+    <!-- for printing only -->
+    <div id="to_print">
+      <div class="header d-none d-print-block">
+        <img src="../../assets/images/header_logo.png" alt="Comteq Logo" class="logo"/>
+      </div>
+      <div class="content d-none d-print-block ">
+        <div class="d-print-block mt-4 mb-4 px-4 pt-4 pb-3 border border-dark">
+          <!-- form title -->
+          <div class="text-center h2 font-weight-bold text-dark mb-4">Student Schedule Report</div>
+            <table border="0" style="width: 100%">
+              <tr class="">
+                <td class="pb-3">
+                  <span class="h5 pl-5">Student Number : </span>
+                  <span class="h5 font-weight-normal">{{Students.student_number}}</span>
+                </td>
+                <td class="pb-3">
+                  <span class="h5 pl-5">Academic Year : </span>
+                  <span class="h5 font-weight-normal">{{Students.ay}}</span>
+                </td>
+              </tr>
+
+              <tr class="">
+                <td class="pb-3">
+                  <span class="h5 pl-5">Full Name : </span>
+
+                  <span class="h5 font-weight-normal">{{Students.name}}</span>
+                </td>
+                <td class="pb-3">
+                  <span class="h5 pl-5">Semester : </span>
+                  <span class="h5 font-weight-normal">{{Students.sem}}</span>
+                </td>
+              </tr>
+
+              <tr>
+                <td class="pb-3">
+                  <span class="h5 pl-5">Course / Year : </span>
+                  <span class="h5 font-weight-normal">{{Students.course}} - {{Students.year}}</span>
+                </td>
+                <td class="pb-3">
+                  <span class="h5 pl-5">Block : </span>
+                  <span class="h5 font-weight-normal">{{Students.block}}</span>
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <b-table
+            class="my-3 table-striped"
+            show-empty
+            responsive
+            bordered
+            hover
+            :items="items"
+            :fields="fields"
+            :current-page="currentPage"
+            :per-page="perPage"
+            :filter="filter">
+          </b-table>
+
+      </div>
+      <!-- <div class="footer  d-none d-print-block text-center">This is the Footer</div> -->
     </div>
-      <!-- end of table -->
   </div>
 </template>
 
@@ -84,10 +152,59 @@ import Axios from "axios";
         data() {
             return {
               isLoading: false,
+              schedule: [],
               items: [],
               fields: [
                 { key: 'curriculum_subject.subject.subject_code', label: 'Suject Code', sortable: true, class: 'text-center' },
                 { key: 'curriculum_subject.subject.subject_title', label: 'Suject Title', sortable: true, class: 'text-center' },
+                { key: 'instructor', label: 'instructor', sortable: true, class: 'text-center',
+                sortByFormatted: true,
+                formatter: (value, key, item) => {
+                  for (var i = 0; i < this.schedule.length; i++) {
+                    if (this.schedule[i].subject_id == item.subject_id) {
+                      return this.schedule[i].instructor.last_name + ", " +this.schedule[i].instructor.first_name;
+                    }
+                  }
+
+                },
+              },
+                { key: 'day', label: 'Day', sortable: true, class: 'text-center' ,
+                  sortByFormatted: true,
+                  formatter: (value, key, item) => {
+                    for (var i = 0; i < this.schedule.length; i++) {
+                      if (this.schedule[i].subject_id == item.subject_id) {
+                        return this.schedule[i].day;
+                      }
+                    }
+
+                  },
+                },
+                { key: 'time', label: 'Time Start/Time End', sortable: true, class: 'text-center',
+                  sortByFormatted: true,
+                  formatter: (value, key, item) => {
+                    for (var i = 0; i < this.schedule.length; i++) {
+
+                      if (this.schedule[i].subject_id == item.subject_id) {
+                        var start = this.schedule[i].time_start != null || "" ? this.timeFormatter(this.schedule[i].time_start) + " - " : "-- : ";
+                        var end = this.schedule[i].time_end != null || "" ? this.timeFormatter(this.schedule[i].time_end) : "--";
+                        return  start + end;
+                      }
+                    }
+
+                  },
+                 },
+                { key: 'room_number', label: 'Room Number', sortable: true, class: 'text-center',
+                  sortByFormatted: true,
+                  formatter: (value, key, item) => {
+                    for (var i = 0; i < this.schedule.length; i++) {
+                      if (this.schedule[i].subject_id == item.subject_id) {
+                        return  this.schedule[i].room.room_number;
+                      }
+                    }
+
+                  },
+                 },
+
               ],
 
               Students: {
@@ -97,6 +214,11 @@ import Axios from "axios";
                 middle_name: null,
                 last_name: null,
                 suffix_name: null,
+                course:null,
+                year:null,
+                block:null,
+                ay:null,
+                sem:null,
               },
 
 
@@ -107,29 +229,38 @@ import Axios from "axios";
               pageOptions: [5, 10, 15, 20, 25],
               filter: null,
 
-              academicYearOptions: this.$store.getters.getAcademicYears,
-              semesterOptions: this.$store.getters.getSemesters,
-              selectedAcademicYear: this.$store.getters.getCurrentAcademicYear,
-              selectedSemester: this.$store.getters.getCurrentSemester,
-              courseOption:null,
+
+              selectedAcademicYear: null,
+              selectedSemester: null,
+              selectedBlock :null,
               selectedCourse: null,
               selectedYearLevel: null,
-              yearOptions: [],
-              filteredItems: [],
-              counter: 0,
+
 
             }
         },
 
         created() {
+          this.items = this.$route.params.student_schedule;
+          this.selectedAcademicYear =  this.$route.params.academec_year_id;
+          this.selectedSemester = this.$route.params.semester_id;
+          this.selectedCourse = this.$route.params.course_id;
+          this.selectedYearLevel = this.$route.params.year_level;
+          this.selectedBlock =this.$route.params.block;
+          console.log(this.items);
             this.Students = {
-              id: this.$route.params.id,
-              name: this.$route.params.first_name + " " + this.$route.params.last_name,
-              student_number: this.$route.params.student_number,
-              first_name: this.$route.params.first_name,
-              middle_name: this.$route.params.middle_name,
-              last_name: this.$route.params.last_name,
-              suffix_name: this.$route.params.suffix_name,
+              id: this.$route.params.student.id,
+              name: this.$route.params.student.first_name + " " + this.$route.params.student.last_name,
+              student_number: this.$route.params.student.student_number,
+              first_name: this.$route.params.student.first_name,
+              middle_name: this.$route.params.student.middle_name,
+              last_name: this.$route.params.student.last_name,
+              suffix_name: this.$route.params.student.suffix_name,
+              course:this.$route.params.course.course_code,
+              year:this.$route.params.year_level,
+              block:this.$route.params.block,
+              ay:this.$route.params.academic_year.academic_year,
+              sem:this.$route.params.semester.semester,
             }
         },
 
@@ -138,18 +269,41 @@ import Axios from "axios";
           },
 
           methods: {
+            timeFormatter : function(time){
+
+              var split = time.split(":");
+              var hour = split[0];
+              var min = split[1];
+
+              var h = hour % 12 || 12;
+              var ampm = (hour < 12 || hour == 24) ? "AM" : "PM";
+              return h + ":" + min + ampm;
+            }, // end of function timeFormatter
             getStudentSchedule: function(){
               Axios
-                .get('http://localhost/api/v1/student_schedules', {
-                  params: {enrollment_id : this.Students.id},
+                .get('http://localhost/api/v1/class_schedules', {
+                  params: {
+                    academec_year_id : this.selectedAcademicYear,
+                    semester_id: this.selectedSemester,
+                    course_id: this.selectedCourse,
+                    year_level: this.selectedYearLevel,
+                    block: this.selectedBlock,
+                    active: 1,
+                  },
                   headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
                 })
                 .then(response => {
-                  this.items = response.data;
-                  this.totalRows = this.items.length;
-                  console.log(response.data);
+                  this.schedule = response.data;
+                  console.log(this.schedule)
                 })
             },
+
+            // getSchedule(){
+            //   .get('http://localhost/api/v1/class_schedule', {
+            //     params: {academec_year_id : this.items.id},
+            //     headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+            //   })
+            // },
           }
 
 }

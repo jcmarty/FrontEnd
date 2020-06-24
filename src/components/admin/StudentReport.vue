@@ -6,7 +6,7 @@
       <b-form-row class="d-print-none">
         <b-col  cols="12" md="6" lg="2">
           <b-form-group class="academicyear" label="Academic Year" label-for="academicYear">
-            <b-form-select id="academicYear" v-model="selectedAcademicYear" @change="">
+            <b-form-select id="academicYear" v-model="selectedAcademicYear" @change="onChangeAcademicYear">
               <option value="null" hidden>Select Academic Year</option>
               <option  :value="{id: ay.id, academic_year: ay.academic_year}" v-for="ay in academicYearOptions" >{{ay.academic_year}}</option>
             </b-form-select>
@@ -15,7 +15,7 @@
 
         <b-col  cols="12" md="6" lg="2">
           <b-form-group class="semester" label="Semester" label-for="Semester">
-            <b-form-select id="Semester" v-model="selectedSemester" @change="">
+            <b-form-select id="Semester" v-model="selectedSemester" @change="onChangeSemester">
               <option value="null" hidden>Select Semester</option>
               <option  :value="{id: sem.id, semester: sem.semester}" v-for="sem in semesterOptions" >{{sem.semester}}</option>
             </b-form-select>
@@ -32,7 +32,7 @@
         </b-col>
 
         <!-- yearLevel -->
-        <b-col cols="12" md="6" lg="3">
+        <b-col cols="12" md="6" lg="2">
           <b-form-group class="yearlevel"label="Year Level" label-for="yearLevel">
             <b-form-select v-model="selectedYearLevel" id="yearLevel"
                            :options="yearOptions"
@@ -43,19 +43,25 @@
         </b-col>
 
         <!-- yearLevel -->
-        <b-col cols="12" md="6" lg="3">
+        <b-col cols="12" md="6" lg="2">
           <b-form-group class="block"label="Block" label-for="Block">
-            <b-form-select v-model="selectedBlock" id="Block"
-                           @change="filterTable">
-              <option value="null" hidden>Select Year Level</option>
-            </b-form-select>
+            <b-form-input
+            id="Block"
+            v-model="selectedBlock"
+            @change="filterTable"
+            list="BlockType"
+            :placeholder="selectedBlock ? '' : 'Select Block'  ">
+            </b-form-input>
+            <datalist id="BlockType">
+              <option v-for="block in blockOption">{{ block }}</option>
+            </datalist>
           </b-form-group>
         </b-col>
 
-        <b-col class="py-4">
+        <b-col cols="12" md="6" lg="2">
           <!-- Add New Room Button -->
-          <b-button variant="primary" onclick="window.print()">
-            Print
+          <b-button class="mt-4"  variant="dark" onclick="window.print()">
+            Print <i class="fa fa-print"/>
           </b-button>
         </b-col>
     </b-form-row>
@@ -65,16 +71,6 @@
 
 
   <div class="d-print-none mt-4 mb-4 px-4 pt-4 bg-white shadow rounded">
-    <center>
-      <img src="../../assets/images/comteq_logo.png" alt="Comteq Logo" class="responsive d-none d-print-block" id="ComteqLogoPrint"/>
-    </center>
-
-    <b-form-row class="d-none d-print-block">
-        <center>
-          <h5>COMTEQ Computer & Business College</h5>
-          <h6>1200 4th floor Savers Appliance Depot, Rizal Ave, East Tapinac Olongapo City Zambales. </h6>
-      </center>
-    </b-form-row>
 
     <!-- Main table element -->
     <b-table
@@ -95,19 +91,35 @@
 
       <template v-slot:cell(actions)="row">
 
-        <b-button variant="info" size="sm"  @click="ViewGrades(row.item, row.index, $event.target)" v-b-tooltip.hover title="Grades">
-          <b-icon-clipboard-data/>
+        <b-button
+          variant="info" size="sm"
+          @click="ViewGrades(row.item, row.index, $event.target)"
+          v-b-tooltip.hover title="Grades"
+          v-if="isAuthorized($store.getters.getSettings.student_schedule_management, 2)" >
+            <b-icon-clipboard-data/>
         </b-button>
 
-        <b-button variant="info" size="sm"  @click="ViewPerosnalInfo(row.item, row.index, $event.target)" v-b-tooltip.hover title="Personal Information">
-          <b-icon-person/>
+        <b-button
+          variant="info" size="sm"
+          @click="ViewPerosnalInfo(row.item, row.index, $event.target)"
+          v-b-tooltip.hover title="Personal Information"
+          v-if="isAuthorized($store.getters.getSettings.enrollment_management, 2)" >
+            <b-icon-person/>
         </b-button>
 
-        <b-button variant="info" size="sm"  @click="ViewStudSchedule(row.item, row.index, $event.target)" v-b-tooltip.hover title="Schedule">
+        <b-button
+          variant="info" size="sm"
+          @click="ViewStudSchedule(row.item, row.index, $event.target)"
+          v-b-tooltip.hover title="Schedule"
+          v-if="isAuthorized($store.getters.getSettings.student_schedule_management, 2)" >
             <b-icon-clock/>
         </b-button>
 
-        <b-button variant="info" size="sm"  @click="ViewAcadRecord(row.item, row.index, $event.target)" v-b-tooltip.hover title="Academic Record">
+        <b-button
+          variant="info" size="sm"
+          @click="ViewAcadRecord(row.item, row.index, $event.target)"
+          v-b-tooltip.hover title="Academic Record"
+          v-if="isAuthorized($store.getters.getSettings.student_schedule_management, 2)">
             <b-icon-card-list/>
         </b-button>
 
@@ -145,6 +157,43 @@
     </b-row>
   </div>
 </div>
+
+<!-- for printing only -->
+<div id="to_print">
+  <div class="header d-none d-print-block">
+    <img src="../../assets/images/header_logo.png" alt="Comteq Logo" class="logo"/>
+  </div>
+  <div class="content d-none d-print-block ">
+    <p  style="color: #002060" class="h2 font-weight-bold text-center mt-3">{{selectedAcademicYear.academic_year}}</p>
+    <p  style="color: #ff0000" class="h4 font-weight-bold text-center">{{selectedSemester.semester}}</p>
+    <p  class="h3 font-weight-bold text-center" >
+      <span v-if="selectedCourse">{{selectedCourse.course}} - </span>
+      <span v-if="selectedYearLevel">{{selectedYearLevel}} | </span>
+      <span v-if="selectedBlock">Block {{selectedBlock}}</span>
+    </p>
+
+    <b-table
+      class="my-3 table-striped"
+      show-empty
+      responsive
+      bordered
+      hover
+      :items="filteredItems"
+      :fields="fieldsForPrint"
+      :current-page="currentPage"
+      :per-page="perPage"
+      :filter-function="filterTable">
+
+      <template v-slot:cell(number)="data">
+        {{ data.index + 1 }}
+      </template>
+
+    </b-table>
+
+  </div>
+  <!-- <div class="footer  d-none d-print-block text-center">This is the Footer</div> -->
+</div>
+
     <!-- end of table -->
 
   </div>
@@ -157,6 +206,7 @@ import Axios from "axios";
         name: 'StudentReport',
         data() {
             return {
+              user: this.$store.getters.getUser,
               items: [],
               fields: [
                 { key: 'number', label: 'Number', sortable: true, class: 'text-center'},
@@ -176,12 +226,31 @@ import Axios from "axios";
                 { key: 'actions', label: 'Actions' , class: 'text-center' }
               ],
 
+              fieldsForPrint: [
+                { key: 'number', label: 'Number', sortable: true, class: 'text-center'},
+                { key: 'full_name', label: 'Name', class: 'text-center', sortable: true,
+                sortByFormatted: true,
+                formatter: (value, key, item) => {
+                  var suffix = item.student.suffix_name? " " + item.student.suffix_name : "";
+                  var middle = item.student.middle_name? " " + item.student.middle_name: "";
+                  return item.student.last_name  + suffix + ', ' + item.student.first_name + middle;
+                  }
+                },
+
+                { key: 'student.student_number', label: 'Student Number', sortable: true, class: 'text-center' },
+                { key: 'student.address', label: 'Address', sortable: true, class: 'text-center' },
+                { key: 'student.contact_number', label: 'Contact Number', sortable: true, class: 'text-center' },
+                { key: 'student.birth_date', label: 'Birthday', sortable: true, class: 'text-center' },
+              ],
+
               rowData: null,
               totalRows: 1,
               currentPage: 1,
               perPage: 5,
               pageOptions: [5, 10, 15, 20, 25],
               filter: null,
+
+              blockOption: [1,2,3,4,5],
 
               academicYearOptions: this.$store.getters.getAcademicYears,
               semesterOptions: this.$store.getters.getSemesters,
@@ -191,26 +260,114 @@ import Axios from "axios";
               courseOption:null,
               selectedCourse: null,
               selectedYearLevel: null,
+              selectedBlock: null,
               yearOptions: [],
               filteredItems: [],
               counter: 0,
 
             }
         },
-          beforeMount(){
-            if (this.$route.path == "/admin") {
-              this.$router.replace({name: this.$route.name})
-            }
-          },
 
           mounted () {
-            console.log(this.$route.path)
 
             this.GetAllStudents(),
             this.GetCourse()
           },
 
           methods: {
+            isAuthorized (activity, priv) {
+            // activity level
+            if (priv == 0) {
+              // check if user has a privilege in this activity
+              if (this.user.activities.some(a => a.privileges.activity_id === activity)) {
+                return true
+              }
+              return false
+            }
+
+
+            // privilege level
+            else {
+              // check if user has the exact privilege (CRUD) to do this activity
+              for (var a of this.user.activities) {
+                if (a.privileges.activity_id === activity) {
+                  switch (priv) {
+                    // create
+                    case 1:
+                      if (a.privileges.create_priv == 1) {
+                        return true
+                      }
+                      return false
+                    // read
+                    case 2:
+                      if (a.privileges.read_priv == 1) {
+                        return true
+                      }
+                      return false
+                    // update
+                    case 3:
+                      if (a.privileges.update_priv == 1) {
+                        return true
+                      }
+                      return false
+                    case 4:
+                      if (a.privileges.delete_priv == 1) {
+                        return true
+                      }
+                      return false
+                  } // end switch
+                } // end of if (a.activity_id === activity)
+              }
+            }
+          },
+
+            onChangeSemester(){
+              document.body.scrollTop = 0;
+              document.documentElement.scrollTop = 0;
+
+              // this.isLoading = true;
+              this.filteredItems = [];
+              var sem = this.selectedSemester.id;
+              var ay = this.selectedAcademicYear.id;
+              var container = [];
+              for(var index in this.items) {
+                  var obj = this.items[index];
+
+                  if (obj.academic_year_id == ay && obj.semester_id == sem) {
+                    container.push(obj);
+                  }
+              }
+
+              this.filteredItems = container
+              this.currentPage = 1;
+              this.totalRows = this.filteredItems.length;
+              this.GetAllStudents();
+            },
+
+            onChangeAcademicYear(){
+              document.body.scrollTop = 0;
+              document.documentElement.scrollTop = 0;
+
+              // this.isLoading = true;
+              this.filteredItems = [];
+              var sem = this.selectedSemester.id;
+              var ay = this.selectedAcademicYear.id;
+              var container = [];
+              for(var index in this.items) {
+                  var obj = this.items[index];
+
+                  if (obj.academic_year_id == ay && obj.semester_id == sem) {
+                    container.push(obj);
+                  }
+              }
+
+              this.filteredItems = container
+              this.currentPage = 1;
+              this.totalRows = this.filteredItems.length;
+              this.GetAllStudents();
+
+            },
+
             ViewAcadRecord: function(item) {
               this.$router.replace({
                 name: 'StudentAcademicReport',
@@ -223,20 +380,15 @@ import Axios from "axios";
                   suffix_name: item.student.suffix_name,
                 }
               })
+
             },
 
             ViewStudSchedule: function(item) {
               this.$router.replace({
                 name: 'StudentScheduleReport',
-                params: {
-                  id: item.id,
-                  student_number: item.student.student_number,
-                  first_name: item.student.first_name,
-                  middle_name: item.student.middle_name,
-                  last_name: item.student.last_name,
-                  suffix_name: item.student.suffix_name,
-                }
+                params: item
               })
+              // console.log(item)
             },
 
             ViewPerosnalInfo: function(item) {
@@ -279,30 +431,25 @@ import Axios from "axios";
             ViewGrades: function(item) {
               this.$router.replace({
                 name: 'StudentGradeReport',
-                params: {
-                  id: item.id,
-                  student_number: item.student.student_number,
-                  first_name: item.student.first_name,
-                  middle_name: item.student.middle_name,
-                  last_name: item.student.last_name,
-                  suffix_name: item.student.suffix_name,
-                }
+                params: item
               })
+              console.log(item)
+
+
             },
 
             GetAllStudents: function(){
               Axios.get('http://localhost/api/v1/enrollments', {
                 // add more params
-                params: {active : 1},
+                params: {academic_year_id: this.selectedAcademicYear.id, active : 1, },
                 headers: { Authorization: 'Bearer ' + this.$store.getters.getToken }
               })
                 .then(response => {
-                  console.log(response.data)
+
                   this.items = response.data;
-                    // console.log(this.items);
                   this.filteredItems = response.data;
                   this.totalRows = this.items.length;
-                  // console.log(response.data)
+
                 })
                 .catch(error => {
                   // console.log(error.response)
@@ -329,11 +476,13 @@ import Axios from "axios";
                   { value: '4th Year', text: '4th Year' }
                 ]
               } else if (this.selectedCourse.year == '2') {
+
                 this.yearOptions = [
                   { value: '1st Year', text: '1st Year' },
                   { value: '2nd Year', text: '2nd Year' }
                 ]
               }
+
               // clears values in select boxes
               this.selectedYearLevel = null;
               this.filterTable();
@@ -346,31 +495,32 @@ import Axios from "axios";
 
               // this.isLoading = true;
               this.filteredItems = [];
-
+              var sem = this.selectedSemester.id;
+              var ay = this.selectedAcademicYear.id;
+              var course = this.selectedCourse.course;
+              var year = this.selectedYearLevel;
+              var block = this.selectedBlock;
               var container = [];
               for(var index in this.items) {
                   var obj = this.items[index];
-                  var course = this.selectedCourse.course;
-                  var year = this.selectedYearLevel;
-                  var block = this.selectedBlock;
+
+              console.log(year);
                   if (year == null) {
-                    if (obj.course.course_code == course) {
-                      container.push(obj)
-                    }
+                    if (obj.course.course_code == course && obj.academic_year_id == ay && obj.semester_id == sem) {
+                       container.push(obj)
+
+                     }
                   }else {
-                    if (obj.course.course_code == course && obj.year_level == year) {
-                      container.push(obj)
+                    if (block == null) {
+                      if (obj.course.course_code == course && obj.year_level == year && obj.academic_year_id == ay && obj.semester_id == sem) {
+                          container.push(obj)
+                      }
+                    }else {
+                      if (obj.course.course_code == course && obj.year_level == year && obj.block == block && obj.academic_year_id == ay && obj.semester_id == sem) {
+                          container.push(obj)
+                      }
                     }
                   }
-                  // if (year == null) {
-                  //
-                  // }else {
-                  //   if (block == null) {
-                  //
-                  //   }else {
-                  //
-                  //   }
-                  // }
 
 
               }

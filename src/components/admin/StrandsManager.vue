@@ -57,7 +57,7 @@
               <b-col cols="12" md="6" lg="12">
                 <b-form-group
                   :class="{'text-danger' : $v.strand.strand_code.$error}"
-                  label="Strand Code"
+                  label="Strand Code *"
                   label-for="strandCode">
                   <b-form-input
                     type="text"
@@ -256,7 +256,7 @@
         <b-col cols="12" md="6" lg="12">
           <b-form-group
             :class="{'text-danger' : $v.strand.strand_code.$error}"
-            label="Strand Code"
+            label="Strand Code *"
             label-for="strandCode">
             <b-form-input
               type="text"

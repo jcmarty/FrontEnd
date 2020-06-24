@@ -22,19 +22,12 @@
             <b-collapse tag="ul" class="nav child_menu" id="manageOptions" accordion="sideMenuAccordion">
 
 
-              <li v-b-toggle.schedules v-if="isAuthorized(this.$store.getters.getSettings.schedule_management, 1)"><a> Class Schedule<span class="fa fa-chevron-down"></span></a>
-                <b-collapse tag="ul" class="nav child_menu" id="schedules" accordion="sideMenuSubAccordion">
-                  <router-link tag="li" to="/manage/schedule/college"><a class="super_child_menu">College</a></router-link>
-                  <router-link tag="li" to="/manage/schedule/shs"><a class="super_child_menu">Senior High</a></router-link>
-                </b-collapse>
-              </li>
 
-              <li v-b-toggle.curriculum v-if="isAuthorized(this.$store.getters.getSettings.curriculum_management, 1)"><a>Curriculum<span class="fa fa-chevron-down"></span></a>
-                <b-collapse tag="ul" class="nav child_menu" id="curriculum" accordion="sideMenuSubAccordion">
-                  <router-link tag="li" to="/manage/curriculum/college"><a class="super_child_menu">College</a></router-link>
-                  <router-link tag="li" to="/manage/curriculum/shs"><a class="super_child_menu">Senior High</a></router-link>
-                </b-collapse>
-              </li>
+
+
+
+              <router-link tag="li" to="/manage/curriculum/college"><a class="super_child_menu"v-if="isAuthorized(this.$store.getters.getSettings.curriculum_management, 1)">Curriculum</a></router-link>
+              <router-link tag="li" to="/manage/schedule/college" v-if="isAuthorized(this.$store.getters.getSettings.schedule_management, 1)"><a class="super_child_menu">Class Schedule</a></router-link>
               <router-link tag="li" to="/manage/instructor" v-if="isAuthorized(this.$store.getters.getSettings.instructor_management, 1)"><a>Instructor</a></router-link>
               <router-link tag="li" to="/manage/useraccount" v-if="isAuthorized(this.$store.getters.getSettings.user_management, 1)"><a>User Accounts</a></router-link>
               <router-link tag="li" to="/manage/subject" v-if="isAuthorized(this.$store.getters.getSettings.subject_management, 1)"><a>Subject</a></router-link>
@@ -47,7 +40,7 @@
               <router-link tag="li" to="/manage/student/preregistration" v-if="isAuthorized(this.$store.getters.getSettings.student_management, 1)"><a class="super_child_menu">Pre registration</a></router-link>
               <router-link tag="li" to="/manage/student/registration" ><a class="super_child_menu" v-if="isAuthorized(this.$store.getters.getSettings.student_management, 1)">Registration</a></router-link>
               <router-link tag="li" to="/manage/student/enrollment"><a class="super_child_menu" v-if="isAuthorized(this.$store.getters.getSettings.enrollment_management, 1)">Enrollment</a></router-link>
-              <router-link tag="li" v-b-toggle.classSchedules v-if="isAuthorized(this.$store.getters.getSettings.requirements_management, 1)" to="/manage/student/requirements"><a>Requirements</a></router-link>
+              <!-- <router-link tag="li" v-b-toggle.classSchedules v-if="isAuthorized(this.$store.getters.getSettings.requirements_management, 1)" to="/manage/student/requirements"><a>Requirements</a></router-link> -->
               <router-link tag="li" to="/manage/student/grades"><a class="super_child_menu" v-if="isAuthorized(this.$store.getters.getSettings.student_schedule_management, 1)">Grades</a></router-link>
 
 
@@ -59,10 +52,10 @@
 
           <li v-bind:class="{active : currentCategory=='reports'}" v-if="hasReadActivity()"><a v-b-toggle.reports><i class="fa fa-desktop"></i>View Report<span class="fa fa-chevron-down"></span></a>
             <b-collapse tag="ul" class="nav child_menu" id="reports" accordion="sideMenuAccordion">
-              <li v-b-toggle.classSchedules v-if="isAuthorized(this.$store.getters.getSettings.enrollment_management, 2)"><a> Class Schedule<span class="fa fa-chevron-down"></span></a>
+              <li v-b-toggle.classSchedules v-if="isAuthorized(this.$store.getters.getSettings.schedule_management, 2)"><a> Class Schedule<span class="fa fa-chevron-down"></span></a>
                 <b-collapse tag="ul" class="nav child_menu" id="classSchedules" accordion="sideMenuSubAccordion">
                   <router-link tag="li" to="/reports/schedule/college"><a class="super_child_menu">College</a></router-link>
-                  <router-link tag="li" to="/reports/schedule/shs"><a class="super_child_menu">Senior High</a></router-link>
+                  <!-- <router-link tag="li" to="/reports/schedule/shs"><a class="super_child_menu">Senior High</a></router-link> -->
                 </b-collapse>
               </li>
               <router-link tag="li" to="/reports/student" v-if="isAuthorized(this.$store.getters.getSettings.student_management, 2)"><a>Student Reports</a></router-link>

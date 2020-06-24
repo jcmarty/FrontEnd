@@ -251,7 +251,7 @@
 
         <template v-slot:cell(actions)="row">
           <b-button variant='info' size='sm' @click="PrivPage(row.item, $event.target)" v-b-tooltip.hover title="Privileges">
-            <b-icon-clock/>
+            <b-icon-card-checklist/>
           </b-button>
 
           <b-button variant="warning" size="sm"  @click="EditModal(row.item, row.index, $event.target)"  v-b-tooltip.hover title="Edit User account">
