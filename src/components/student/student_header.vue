@@ -5,7 +5,7 @@
         <img src="https://www.comteq.edu.ph/portal/student/www/image/comteq_logo3.png" alt="Comteq Logo">
       </div>
       <div class="dash_logout">
-        <b-button  class="dash_logout_btn" size="sm" variant="primary" href="">
+        <b-button  @click="logout" class="dash_logout_btn" size="sm" variant="primary" href="">
             Logout
         </b-button>
       </div>
@@ -29,7 +29,9 @@
     }, // End of Mounted
 
     methods:{
-
+      logout(){
+        this.$store.dispatch('studentLogOut');
+      }
     } // End of Methods
 
   } //End of Export Default
@@ -46,6 +48,7 @@
     padding-left: 10px;
     width: calc(100vw - 220px);
     height: 55px;
+    z-index: 1;
   }
 
   .dash_header .dash_logo img{

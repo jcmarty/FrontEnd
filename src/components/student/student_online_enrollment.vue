@@ -9,6 +9,98 @@
     <div id="" class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded" v-if="courseSetupForm">
       <div class=" h5 font-weight-bold text-dark" >Course Setup</div>
       <hr/>
+      <b-form-row>
+        <!-- Course -->
+        <b-col cols="12" md="3" lg="3">
+          <b-form-group class="course"
+                        label="Course"
+                        label-for="Course">
+            <b-form-select v-model="selectedCourse"
+                           id="Course"
+                           @change="getCurriculum"
+                           aria-describedby="course-feedback">
+              <option value="null" hidden>Select Course</option>
+              <option v-for="c in courseRow" :value="{
+                id : c.id,
+                year : c.year_duration,
+                course_code : c.course_code,
+                curriculum : c.curriculum
+                }">{{c.course_code}}
+              </option>
+            </b-form-select>
+
+          </b-form-group>
+        </b-col>
+        <!-- Course -->
+
+        <!-- Curriculum -->
+        <b-col cols="12" md="6" lg="3">
+          <b-form-group class="curriculum"
+                        label="Curriculum"
+                        label-for="Curriculum">
+            <b-form-select v-model="selectedCurriculum"
+                           id="Curriculum"
+                           @change="setYearLevel"
+                           aria-describedby="curriculum-feedback">
+              <option value="null" hidden>Select Curriculum</option>
+              <option v-for="curriculum in curriculumOptions " v-bind:value="{id: curriculum.id, subjects: curriculum.curriculum_subjects, curriculum: curriculum}">{{curriculum.curriculum_title}}</option>
+            </b-form-select>
+
+          </b-form-group>
+        </b-col>
+        <!-- Curriculum -->
+
+        <!-- yearLevel -->
+        <b-col cols="12" md="6" lg="3">
+          <b-form-group class="yearlevel"
+                        label="Year Level"
+                        label-for="yearLevel">
+            <b-form-select v-model="selectedYearLevel"
+                           id="yearLevel"
+                           :options="yearOptions"
+                           @change=""
+                           aria-describedby="yearLevel-feedback">
+              <option value="null" hidden>Select Year Level</option>
+            </b-form-select>
+          </b-form-group>
+        </b-col>
+        <!-- yearLevel -->
+
+        <!-- block -->
+        <!-- <b-col cols="12" md="6" lg="3">
+          <b-form-group class="block"
+                        label="Block"
+                        label-for="block">
+            <b-form-select v-model="selectedBlock"
+                           id="block"
+                           @change=""
+                           :state="blockState"
+                           aria-describedby="block-feedback">
+              <option value="null" hidden>Select Block</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </b-form-select>
+            <b-form-invalid-feedback id="block-feedback">
+              Block is required.
+            </b-form-invalid-feedback>
+          </b-form-group>
+        </b-col> -->
+        <!-- block -->
+      </b-form-row>
+      <b-form-row>
+        <b-col>
+          <b-button variant="danger" @click="cancelEnrollment">
+            Cancel
+          </b-button>
+        </b-col>
+        <b-col class="d-flex justify-content-end">
+          <b-button variant="primary" @click="showSubjectsForm">
+            Next
+          </b-button>
+        </b-col>
+      </b-form-row>
     </div>
     <!-- end of course setup form -->
 
@@ -16,6 +108,18 @@
     <div id="" class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded" v-if="subjectSetupForm">
       <div class=" h5 font-weight-bold text-dark" >Subject Setup</div>
       <hr/>
+      <b-form-row>
+        <b-col>
+          <b-button variant="danger" @click="showCourseForm">
+            cancel
+          </b-button>
+        </b-col>
+        <b-col class="d-flex justify-content-end">
+          <b-button variant="primary" @click="showPreviewForm">
+            Next
+          </b-button>
+        </b-col>
+      </b-form-row>
     </div>
     <!-- end of course setup form -->
 
@@ -23,6 +127,18 @@
     <div id="" class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded" v-if="previewForm">
       <div class=" h5 font-weight-bold text-dark" >Preview Enrollment</div>
       <hr/>
+      <b-form-row>
+        <b-col>
+          <b-button variant="danger" @click="showSubjectsForm">
+            cancel
+          </b-button>
+        </b-col>
+        <b-col class="d-flex justify-content-end">
+          <b-button variant="primary" @click="">
+            Enroll
+          </b-button>
+        </b-col>
+      </b-form-row>
     </div>
     <!-- end of course setup form -->
 
@@ -48,7 +164,7 @@
 
         <b-col class="pt-4">
           <!-- Add New Room Button -->
-          <b-button variant="primary" @click="" class="toggleFormBtn" v-if="!courseSetupForm">
+          <b-button variant="primary" @click="showCourseForm" class="toggleFormBtn" v-if="addbtn">
             New Enrollment
           </b-button>
         </b-col>
@@ -103,28 +219,141 @@
 </template>
 
 <script>
+import Axios from "axios";
 export default {
   name: 'StudentOnlineEnrollment',
 
   data() {
     return {
+
+      isLoading: false,
+      items : [],
+      fields : [],
       totalRows: 1,
       currentPage: 1,
       perPage: 5,
       pageOptions: [5, 10, 15, 20, 25],
       filter: null,
 
-      courseSetupForm: true,
-      subjectSetupForm: true,
-      previewForm: true,
+      courseRow : [],
+
+      courseSetupForm: false,
+      subjectSetupForm: false,
+      previewForm: false,
+      addbtn : true,
+
       showForm: false,
       alertMessage: "",
       errors: [],
       dismissSecs: 7,
       dismissSuccessCountDown: 0,
       dismissErrorCountDown: 0,
+
+      selectedAcademicYear: null,
+      selectedSemester: null,
+      selectedStudentStatus: null,
+      selectedAcademicStatus: null,
+      selectedCourse: null,
+      selectedCurriculum: null,
+      selectedYearLevel: null,
+      selectedDate: null,
+      selectedBlock: null,
+      full_name: null,
+      address: "",
+
+      curriculumOptions: null,
+      yearOptions: [],
+      subjectOptions: [],
+      addedSubjects: [],
     }
   }, // End of Data
+  mounted(){
+    this.getCourses();
+  },
+
+  methods:{
+
+    getCourses: function(){
+
+      Axios
+        .get('http://localhost/api/v1/online/courses', {
+          headers: {'Authorization': 'Bearer ' + this.$store.getters.getStudentToken}
+        })
+        .then(response => {
+          this.courseRow = response.data;
+        })
+        .catch(error => {
+          alert(error.response.data.message)
+          this.alertMessage = error.response.data.message;
+          const values = Object.values(error.response.data.errors);
+          for(const val of values){
+            for(const err of val){
+              this.errors.push(err);
+            }
+          }
+          this.dismissErrorCountDown = this.dismissSecs;
+        });
+    },
+
+    // gets all curriculum record
+    getCurriculum: function() {
+      this.courseState = null;
+      var curriculums = this.selectedCourse.curriculum
+      if (curriculums.length == 0) {
+        this.curriculumOptions = null
+      } else {
+        this.curriculumOptions = curriculums
+      }
+      // clears values in select boxes
+      this.selectedCurriculum = null;
+      this.selectedYearLevel = null;
+      this.yearOptions = [];
+    }, // end of function getCurriculum
+
+    // SET YEAR LEVEL BASED ON SELECTED COURSE
+    setYearLevel: function() {
+      this.curriculumState = null;
+      if (this.selectedCourse.year == '4') {
+        this.yearOptions = [
+          { value: '1st Year', text: '1st Year' },
+          { value: '2nd Year', text: '2nd Year' },
+          { value: '3rd Year', text: '3rd Year' },
+          { value: '4th Year', text: '4th Year' }
+        ]
+      } else if (this.selectedCourse.year == '2') {
+        this.yearOptions = [
+          { value: '1st Year', text: '1st Year' },
+          { value: '2nd Year', text: '2nd Year' }
+        ]
+      }
+      // clears values in select boxes
+      this.selectedYearLevel = null;
+    }, // end of function setYearLevel
+
+    cancelEnrollment: function(){
+      this.courseSetupForm = false;
+      this.addbtn = true;
+    },
+
+    showCourseForm : function(){
+      this.courseSetupForm = true;
+      this.subjectSetupForm = false;
+      this.addbtn = false;
+    },
+
+    showSubjectsForm : function(){
+      this.courseSetupForm = false;
+      this.subjectSetupForm = true;
+      this.previewForm = false;
+      this.addbtn = false;
+    },
+
+    showPreviewForm : function(){
+      this.subjectSetupForm = false;
+      this.previewForm = true;
+      this.addbtn = false;
+    },
+  }
 }
 </script>
 

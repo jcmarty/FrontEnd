@@ -30,7 +30,6 @@
     }, // End of Data
 
     mounted () {
-
     }, // End of Mounted
 
     methods:{
