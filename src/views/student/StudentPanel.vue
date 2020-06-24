@@ -30,7 +30,6 @@
     }, // End of Data
 
     mounted () {
-
     }, // End of Mounted
 
     methods:{
@@ -45,7 +44,8 @@
     background: #fff;
     margin-left: 220px;
     margin-top: 55px;
-    height: 100vh;
-    padding: 20px 30px;
+    min-height: calc(100vh);
+    height: auto;
+    padding: 20px 30px 50px 30px;
   }
 </style>

@@ -12,6 +12,9 @@ export default new Vuex.Store({
     authenticated: false,
     user: null,
     token: null,
+    studentAuthenticated: false,
+    studentUser: null,
+    studentToken: null,
     settings: {
       user_activities: []
     },
@@ -37,6 +40,18 @@ export default new Vuex.Store({
 
     setToken(state, payload){
       state.token = payload;
+    },
+
+    setStudentAuthenticated(state, payload) {
+      state.studentAuthenticated = payload;
+    },
+
+    setStudentUser(state, payload){
+      state.studentUser = payload;
+    },
+
+    setStudentToken(state, payload){
+      state.studentToken = payload;
     },
 
     setCurrentAcademicYear(state, payload){
@@ -111,6 +126,7 @@ export default new Vuex.Store({
       // to this
       router.replace("/admin/login");
     },
+
     setAuthenticated(context, payload){
       context.commit('setAuthenticated', payload);
     },
@@ -119,6 +135,23 @@ export default new Vuex.Store({
     },
     setToken(context, payload){
       context.commit('setToken', payload);
+    },
+
+    studentLogOut(context){
+      localStorage.removeItem("ccbc_token");
+      context.commit('setStudentAuthenticated', false);
+      context.commit('setStudentUser', null);
+      context.commit('setStudentToken', null);
+      router.replace("/student/login");
+    },
+    setStudentAuthenticated(context, payload){
+      context.commit('setStudentAuthenticated', payload);
+    },
+    setStudentUser(context, payload){
+      context.commit('setStudentUser', payload);
+    },
+    setStudentToken(context, payload){
+      context.commit('setStudentToken', payload);
     },
     setAppSettings(context, payload){
       context.commit('setAppSettings', payload);
@@ -214,6 +247,17 @@ export default new Vuex.Store({
     getToken(state){
       return state.token;
     },
+
+    isStudentAuthenticated(state){
+      return state.studentAuthenticated;
+    },
+    getStudentUser(state){
+      return state.studentUser;
+    },
+    getStudentToken(state){
+      return state.studentToken;
+    },
+
     getAcademicYears(state){
       return state.academic_years;
     },

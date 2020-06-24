@@ -5,7 +5,7 @@
     </div>
     <div class="col-sm justify-content-center align-items-center align-content-center">
       <img src="../../assets/images/comteq_logo.png" id="loginComteqLogo" alt="COMTEQ LOGO">
-      <h1>{{systemTitle}}</h1>
+      <h1>Online Enrollment</h1>
     </div>
     <b-form class="col-sm justify-content-center align-items-center" method="post" v-on:submit.prevent="login">
       <div class="container" id="loginContainer">
@@ -50,7 +50,7 @@
   const baseUrl = "http://localhost/api/v1/";
 
   export default {
-    name: 'Login',
+    name: 'StudentLogin',
     data() {
       return {
         systemTitle: this.$store.state.systemTitle,
@@ -63,10 +63,14 @@
         hasError: false,
       }
     },
-    mounted(){
-      if(this.$store.state.authenticated){
-        this.$router.replace("/admin");
+
+    beforeMount(){
+      if(this.$store.state.studentAuthenticated){
+        this.$router.replace("/dashboard/student/profile");
       }
+    },
+    mounted(){
+
       this.toggleBodyClass('removeClass', 'nav-md');
     },
     destroyed(){
@@ -89,32 +93,29 @@
         this.logginIn = true;
         Axios.post(baseUrl + "login", {username: this.input.username, password: this.input.password})
         .then(response => {
-            console.log(response.data.user)
-
-            if(response.data.user.role != "Student"){
-              //save user details in localStorage
-              localStorage.setItem('ccbc_token', JSON.stringify({ user: response.data.user, token: response.data.token}));
-              //save token in store
-              this.$store.dispatch('setToken', response.data.token);
-              //set global state authenticated to true
-              this.$store.dispatch('setAuthenticated', true);
-              //save state user in store
-              this.$store.dispatch('setUser', response.data.user);
-              //redirect page to admin page
-              this.$router.replace("/admin");
-            }else{
-              //save user details in localStorage
-              localStorage.setItem('ccbc_token', JSON.stringify({ user: response.data.user, token: response.data.token}));
-              //save token in store
-              this.$store.dispatch('setStudentToken', response.data.token);
-              //set global state authenticated to true
-              this.$store.dispatch('setStudentAuthenticated', true);
-              //save state user in store
-              this.$store.dispatch('setStudentUser', response.data.user);
-              //redirect page to admin page
-              this.$router.replace("/dashboard/student/profile");
-            }
-            // console.log(this.$store.getters.getUser)
+          if(response.data.user.role != "Student"){
+            //save user details in localStorage
+            localStorage.setItem('ccbc_token', JSON.stringify({ user: response.data.user, token: response.data.token}));
+            //save token in store
+            this.$store.dispatch('setToken', response.data.token);
+            //set global state authenticated to true
+            this.$store.dispatch('setAuthenticated', true);
+            //save state user in store
+            this.$store.dispatch('setUser', response.data.user);
+            //redirect page to admin page
+            this.$router.replace("/admin");
+          }else{
+            //save user details in localStorage
+            localStorage.setItem('ccbc_token', JSON.stringify({ user: response.data.user, token: response.data.token}));
+            //save token in store
+            this.$store.dispatch('setStudentToken', response.data.token);
+            //set global state authenticated to true
+            this.$store.dispatch('setStudentAuthenticated', true);
+            //save state user in store
+            this.$store.dispatch('setStudentUser', response.data.user);
+            //redirect page to admin page
+            this.$router.replace("/dashboard/student/profile");
+          }
         })
         .catch(error => {
           this.logginIn = false;

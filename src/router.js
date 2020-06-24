@@ -68,9 +68,11 @@ import OnlineRegVisionMission from "./components/onlineRegistration/OnlineRegVis
 // End Of Student routes
 
 //  Start of Student Dashboard
+import StudentAdmin from "./views/student/StudentAdmin.vue";
+import StudentLogin from "./views/student/Login.vue";
 import StudentDashboard from "./views/student/StudentPanel.vue";
 import StudentProfile from './components/student/student_profile.vue';
-import StudentAccountSetting from './components/student/student_account_setting.vue';
+import StudentOnlineEnrollment from './components/student/student_online_enrollment.vue';
 //  End of Student Dashboard
 
 import NotFound from './components/admin/404.vue';
@@ -86,33 +88,46 @@ export default new Router({
   routes: [
     { path: '*', component: NotFound },
     {
-      path: "/dashboard",
-      name: "StudentDashboard",
-      component: StudentDashboard,
+      path: "/student/login",
+      name: "StudentLogin",
+      component: StudentLogin,
       meta: {
         guest: true
       },
+    },
+    {
+      path: "/student/admin",
+      name: "StudentAdmin",
+      component: StudentAdmin,
+      meta: {
+        requiresAuth: true,
+        is_admin: true
+      },
       children: [
         {
-          path: "/dashboard/student/profile",
-          name: "StudentProfile",
-          component: StudentProfile,
+          path: "/dashboard",
+          name: "StudentDashboard",
+          component: StudentDashboard,
           meta: {
-            guest: true
-          }
-        },
-        {
-          path: "/dashboard/student/account_setting",
-          name: "StudentAccountSetting",
-          component: StudentAccountSetting,
-          meta: {
-            guest: true
-          }
-        },
+            requiresAuth: true,
+            is_admin: true
+          },
+          children: [
+            {
+              path: "/dashboard/student/profile",
+              name: "StudentProfile",
+              component: StudentProfile,
+            },
+            {
+              path: "/dashboard/student/enrollment",
+              name: "StudentOnlineEnrollment",
+              component: StudentOnlineEnrollment,
+            },
 
+          ]
+        },
       ]
     },
-
     {
       path: "/",
       name: "Home",
