@@ -36,7 +36,7 @@
 
         <b-col class=""  cols="12" md="6" lg="2">
           <b-form-group class="academicyear" label="" label-for="academicYear">
-            <b-form-select id="academicYear" v-model="selectedAcademicYear" @change="">
+            <b-form-select id="academicYear" v-model="selectedAcademicYear" @change="onChangeAySem">
               <option value="null" hidden>Select Academic Year</option>
               <option  :value="ay.id" v-for="ay in academicYearOptions" >{{ay.academic_year}}</option>
             </b-form-select>
@@ -45,7 +45,7 @@
 
         <b-col class="" cols="12" md="6" lg="2">
           <b-form-group class="semester" label="" label-for="Semester">
-            <b-form-select id="Semester" v-model="selectedSemester" @change="changeSemester">
+            <b-form-select id="Semester" v-model="selectedSemester" @change="onChangeAySem">
               <option value="null" hidden>Select Semester</option>
               <option  :value="sem.id" v-for="sem in semesterOptions" >{{sem.semester}}</option>
             </b-form-select>
@@ -58,7 +58,7 @@
         <b-form-row>
           <b-col cols="12" md="6" lg="2">
             <b-form-group class="course" label="Course" label-for="Course">
-              <b-form-select id="Course" v-model="selectedCourse" @change="getCurriculum()">
+              <b-form-select id="Course" v-model="selectedCourse" @change="onChangeCourse">
                 <option value="null" hidden>Select Course</option>
                 <option v-for="course in CourseRow"
                   v-bind:value="{id:course.id, course_code:course.course_code, year:course.year_duration, curriculum: course.curriculum}">{{course.course_code}}</option>
@@ -68,7 +68,7 @@
 
           <b-col cols="12" md="6" lg="2">
             <b-form-group class="curriculum" label="Curriculum" label-for="Curriculum">
-              <b-form-select id="Curriculum" v-model="selectedCurriculum" @change="changeCurr">
+              <b-form-select id="Curriculum" v-model="selectedCurriculum" @change="onChangeCurriculum">
                 <option value="null" hidden>Select Curriculum</option>
                 <option v-if="Curriculumrow === null" value="null" disabled>No Curriculums</option>
                 <option v-else v-for="curriculum in Curriculumrow " v-bind:value="{id: curriculum.id, subjects: curriculum.curriculum_subjects}">{{curriculum.curriculum_title}}</option>
@@ -78,7 +78,7 @@
 
           <b-col cols="12" md="6" lg="2">
             <b-form-group class="yearlevel" label="Year Level" label-for="yearLevel">
-              <b-form-select id="yearLevel" v-model="selectedYearLevel" @change="getSubject()" :options="year_options">
+              <b-form-select id="yearLevel" v-model="selectedYearLevel" @change="onChangeYearLevel" :options="year_options">
                 <option value="null" hidden>Select Year Level</option>
                 <option v-if="selectedCurriculum === null" value="null" disabled>No year levels</option>
               </b-form-select>
@@ -87,7 +87,7 @@
 
           <b-col cols="12" md="6" lg="4">
             <b-form-group class="subject" label="Subject" label-for="Subject">
-              <b-form-select id="Subject" @change="getInstructors" v-model="selectedSubject">
+              <b-form-select id="Subject" @change="onChangeSubject" v-model="selectedSubject">
                 <option value="null" hidden>Select Subject</option>
                 <option v-if="SubjectsRow === null" value="null" disabled>No Subjects</option>
                 <option v-else v-for="data in SubjectsRow" v-bind:value="{id: data.id, subject_code: data.subject.subject_code ,subject_id: data.subject_id, instructors: data.subject.instructors, lab:  data.subject.lab}">
@@ -99,7 +99,7 @@
 
           <b-col cols="12" md="6" lg="1">
             <b-form-group class="block" label="Block" label-for="Block">
-              <b-form-input type="text" list="blockList" id="block" @change="getFilteredClassSchedule" v-bind:value="blockData" v-model="selectedBlock" :disabled="blockStatus">
+              <b-form-input type="text" list="blockList" id="block" @change="onChangeBlock" v-bind:value="blockData" v-model="selectedBlock" :disabled="blockStatus">
               </b-form-input>
               <datalist id="blockList">
                 <option value="1" >1</option>
@@ -130,7 +130,7 @@
         <b-form-row>
           <b-col cols="12" md="4" lg="2">
             <b-form-group class="instructor" label="Instructor" label-for="Instructor">
-              <b-form-select id="Instructor" @change="setRooms" v-model="selectedInstructor">
+              <b-form-select id="Instructor" @change="onChangeInstructor" v-model="selectedInstructor">
                 <option value="null" hidden>Select Instructor</option>
                 <option v-if="instructorRow === null" value="null" disabled>No Instructors</option>
                 <option v-else v-for="data in instructorRow" v-bind:value="data.instructor_id">{{data.instructor.first_name}} {{data.instructor.last_name}}</option>
@@ -140,7 +140,7 @@
 
           <b-col cols="12" md="4" lg="2">
             <b-form-group class="room" label="Room" label-for="Room">
-              <b-form-select id="Room" @change="getDays" v-model="selectedRoom">
+              <b-form-select id="Room" @change="onChangeRoom" v-model="selectedRoom">
                 <option value="null" hidden>Select Room</option>
                 <option v-if="roomRow === null" value="null" disabled>No Rooms</option>
                 <option v-else v-for="room in roomRow" v-bind:value="room.id">{{room.room_number}} - {{room.room_name}}</option>
@@ -150,7 +150,7 @@
 
           <b-col cols="12" md="4" lg="2">
             <b-form-group class="day" label="Day" label-for="Day">
-              <b-form-select id="Day" @change="getTimes" v-model="selectedDay" :options="day_options">
+              <b-form-select id="Day" @change="onChangeDay" v-model="selectedDay" :options="day_options">
                 <option value="null" hidden>Select Day</option>
                 <option v-if="selectedRoom == null" value="null" disabled>No Days</option>
                 <option v-if="day_options == []" value="null" disabled>No Days</option>
@@ -279,6 +279,7 @@ thead tr th{
                   dismissWarningCountDown: 0,
                   dismissErrorCountDown: 0,
 
+                  all_schedules: [],
                   current_ay: [],
                   current_sem: [],
                   available_time_start : [],
@@ -371,17 +372,534 @@ thead tr th{
             },
 
               beforeMount() {
-              // this.getClassSchedule();
               },
 
               mounted () {
                 this.getCourses();
-
+                this.getClassSchedule();
               },
 
               methods: {
 
+                // this function will enable add btn
+                onChangeTimeEnd : function(){
+                  this.disableAddBtn = false;
+                },
 
+                // this function will set time end
+                onChangeTimeStart: function(){
+                  this.selectedTimeEnd = null;
+                  this.available_time_end = [];
+                  var index = this.available_time_start.indexOf(this.selectedTimeStart)
+
+                  // console.log(index)
+                  for (var i = index; i < this.available_time_start.length-1; i++) {
+                    var time = this.available_time_start[i+1];
+                    this.available_time_end.push(time)
+                  }
+                },
+
+
+                filterTimeStart: function(){
+
+                },
+
+                filterCourseSchedule: function(){
+
+                },
+
+                filterCourseSchedule: function(){
+
+                },
+
+                filterCourseSchedule: function(){
+
+                },
+
+                // this will declare static time start end time end
+                setTimeStart: function(){
+
+                  this.available_time_start = [];
+
+                  var time_start = this.selectedDay.time_start;
+                  var split_start = time_start.split(":");
+                  var hour_start = parseInt(split_start[0]);
+                  var h = "";
+
+                  var time_end = this.selectedDay.time_end;
+                  var split_end = time_end.split(":");
+                  var hour_end = parseInt(split_end[0]);
+
+                  var ampm = "";
+                  var converted = "";
+
+
+                  console.log(hour_start)
+
+                  for (var i = hour_start; i <= hour_end; i++) {
+                    // console.log(i)
+                    for (var j = 0; j < 2; j++) {
+                      // this.timeConverter(j,i);
+                      if (j == 0){
+                        var minutes_start = "00";
+                        h = i % 12 || 12;
+                        ampm = (i < 12 || i == 24) ? " AM" : " PM";
+                        converted = h + ":" +  minutes_start + ampm;
+
+                        this.available_time_start.push(converted)
+                      }
+                      else if(j == 1){
+                        if(i == hour_end){
+
+                        }else{
+                          var minutes_start = "30";
+                          h = i % 12 || 12;
+                          ampm = (i < 12 || i == 24) ? " AM" : " PM";
+                          converted = h + ":" +  minutes_start + ampm;
+
+                          this.available_time_start.push(converted)
+                        }
+                      }
+                    }
+                  }
+                },
+
+                // this function will set time start
+                onChangeDay: function(){
+                  if (this.selectedInstructor == null) {
+                    this.setTimeStart();
+                  }else{
+                    alert("filter time star bitch")
+                  }
+                }, // end of function onChangeDay
+
+                // this function will get availability of selected instructor
+                onChangeRoom: function(){
+                  if (this.selectedInstructor != null || "") {
+                    this.selectedDay = null;
+                    this.day_options = [];
+                    this.available_time_start = [];
+                    this.available_time_end = [];
+
+                    Axios
+                      .get('http://localhost/api/v1/instructors/' + this.selectedInstructor
+                            + '/availabilities',{
+                        params: {
+                          academic_year_id: this.selectedAcademicYear,
+                          semester_id: this.selectedSemester,
+                          active: 1,
+                        },
+                        headers: {
+                          'Authorization': 'Bearer ' + this.$store.getters.getToken
+                        }
+                      })
+                      .then(response => {
+                        var availabilities = response.data;
+                        if(availabilities.length > 0){
+                          for(var i = 0; i < availabilities.length; i++){
+                            this.day_options.push({
+                              value: {
+                                day: availabilities[i].day,
+                                time_start: availabilities[i].time_start,
+                                time_end: availabilities[i].time_end,
+                              },
+                              text: availabilities[i].day
+                            });
+                          }
+
+                        }else{
+                          alert("No Time Availability set for the selected instructor")
+                          this.day_options = [];
+                          this.selectedDay = null;
+                        }
+                      })
+                  }else {
+                    this.day_options =
+                    [
+                      {
+                        value: {
+                          day: "Monday",
+                          time_start: "7:00:00",
+                          time_end: "21:30:00",
+                        },
+                        text : "Monday"
+                      },
+                      {
+                        value : {
+                          day: "Tuesday",
+                          time_start: "7:00:00",
+                          time_end: "21:30:00",
+                        },
+                        text : "Tuesday"
+                      },
+                      {
+                        value : {
+                          day: "Wednesday",
+                          time_start: "7:00:00",
+                          time_end: "21:30:00",
+                        },
+                        text : "Wednesday"
+                      },
+                      {
+                        value : {
+                          day: "Thursday",
+                          time_start: "7:00:00",
+                          time_end: "21:30:00",
+                        },
+                        text : "Thursday"
+                      },
+                      {
+                        value : {
+                          day: "Friday",
+                          time_start: "7:00:00",
+                          time_end: "21:30:00",
+                        },
+                        text : "Friday"
+                      },
+                      {
+                        value : {
+                          day: "Saturday",
+                          time_start: "7:00:00",
+                          time_end: "21:30:00",
+                        },
+                        text : "Saturday"
+                      },
+                    ];
+                  }
+                    // .catch(function (error) {
+                    //   console.log(error.response.status); console.log(error);
+                    // })
+                },
+
+                // this function will set room options
+                onChangeInstructor: function(){
+                  if (this.selectedInstructor != null || "") {
+                    this.disableAddBtn = true
+                    this.day_options = [];
+                    this.available_time_start = [];
+                    this.available_time_end = [];
+                    this.selectedDay = null;
+                    this.selectedRoom = null;
+                  }else {
+
+                  }
+                  this.roomRow = this.$store.getters.getRooms;
+                }, // end of function onChangeInstructor
+
+                // this function will get class schedule, filtered using
+                // ay, sem, course, year level, and block
+                onChangeBlock: function(){
+                  Axios
+                    .get('http://localhost/api/v1/class_schedules', {
+                      params: {
+                        academic_year_id: this.selectedAcademicYear,
+                        semester_id: this.selectedSemester,
+                        course_id: this.selectedCourse.id,
+                        year_level: this.selectedYearLevel,
+                        block : this.selectedBlock,
+                        active: 1,
+                      },
+                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+                    })
+                    .then(response => {
+                      // console.log(response.data);
+                      this.items = response.data;
+                      this.totalRows = this.items.length;
+                    })
+                },
+
+                // this function will get instructors that prefers on the selected subject
+                onChangeSubject: function(){
+                  this.onChangeInstructor();
+
+                  this.instructorRow = null
+                  // console.log(this.selectedSubject.instructors);
+                  var instructors = this.selectedSubject.instructors;
+
+                    if( instructors.length == 0){
+                      this.instructorRow = null;
+                    }else{
+                      this.instructorRow = instructors;
+                    }
+
+                  var lab = this.selectedSubject.lab
+                  // check if subject has laboratory
+                  if(lab > 0){
+                    this.blockStatus = false;
+                    this.batchStatus = false;
+                    this.selectedBlock = 1;
+                    this.selectedBatch = 1;
+                  } else{
+                    this.blockStatus = false;
+                    this.batchStatus = true;
+                    this.selectedBlock = 1;
+                    this.selectedBatch = 0;
+                  }
+                  this.onChangeBlock();
+                  // this.time_start_options = []
+                  this.available_time_start = [];
+                  this.available_time_end = [];
+                  this.selectedInstructor = null;
+                  this.selectedRoom = null;
+                  this.selectedDay = null;
+                  this.selectedTimeStart = null;
+                },
+
+                // this function will get all subjects from the selected curriculum
+                // and filter it using selected year level
+                onChangeYearLevel: function(){
+                  // clears subject select box
+                  this.SubjectsRow = [];
+                  var year = this.selectedYearLevel
+                  var sem = this.selectedSemester
+                  var subjects = this.selectedCurriculum.subjects
+
+                  if(subjects.length == 0){
+                    this.SubjectsRow = [];
+                  }else{
+                    for(var i = 0; i < subjects.length; i++){
+                      if(subjects[i].year_level == year && subjects[i].semester_id == sem){
+                          this.SubjectsRow.push(subjects[i])
+                      }
+                    }
+                  }
+
+                      this.instructorRow = null;
+                      this.roomRow = null;
+                      this.day_options = [];
+                      // this.time_start_options = []
+                      this.available_time_start = [];
+                      this.available_time_end = [];
+
+                      this.selectedSubject = null;
+                      this.selectedBlock = null;
+                      this.selectedBatch = null;
+                      this.selectedInstructor = null;
+                      this.selectedRoom = null;
+                      this.selectedDay = null;
+                      this.selectedTimeStart = null;
+                },
+
+                // this function will set year level option based on the selected course
+                onChangeCurriculum: function(){
+                  if(this.selectedCourse.year == "4"){
+                    this.year_options = [
+                      { value: '1st Year', text: '1st Year' },
+                      { value: '2nd Year', text: '2nd Year' },
+                      { value: '3rd Year', text: '3rd Year' },
+                      { value: '4th Year', text: '4th Year' },
+                    ];
+                  }
+                 else if(this.selectedCourse.year == "2"){
+                   this.year_options = [
+
+                     { value: '1st Year', text: '1st Year' },
+                     { value: '2nd Year', text: '2nd Year' },
+                   ];
+                 }
+                 this.SubjectsRow = [];
+                 // this.time_start_options = []
+                 this.available_time_start = [];
+                 this.available_time_end = [];
+                 this.instructorRow = null;
+                 this.roomRow = null;
+                 this.day_options = [];
+
+                 this.selectedYearLevel = null;
+                 this.selectedSubject = null;
+                 this.selectedBlock = null;
+                 this.selectedBatch = null;
+                 this.selectedInstructor = null;
+                 this.selectedRoom = null;
+                 this.selectedDay = null;
+                 this.selectedTimeStart = null;
+                },
+
+                // this function will get curriculums from the selected course
+                onChangeCourse: function(){
+                  var curriculums = this.selectedCourse.curriculum
+                      if( curriculums.length == 0){
+                        this.Curriculumrow = null;
+                      }else{
+                        this.Curriculumrow = curriculums;
+                      }
+                      // clears select boxes
+                      this.day_options = [];
+                      this.year_options = [];
+                      this.SubjectsRow = [];
+                      // this.time_start_options = []
+                      this.available_time_start = [];
+                      this.available_time_end = [];
+                      this.instructorRow = null;
+                      this.roomRow = null;
+
+                      // clear select box selected values
+                      this.selectedCurriculum = null;
+                      this.selectedYearLevel = null;
+                      this.selectedSubject = null;
+                      this.selectedBlock = null;
+                      this.selectedBatch = null;
+                      this.selectedInstructor = null;
+                      this.selectedRoom = null;
+                      this.selectedDay = null;
+                      this.selectedTimeStart = null;
+                    // });
+                },
+
+                // this function clears selected values when ay and semester select box has changed
+                onChangeAySem: function(){
+                  // clears select boxes
+                  this.day_options = [];
+                  // this.time_start_options = []
+                  this.available_time_start = [];
+                  this.available_time_end = [];
+                  this.SubjectsRow = [];
+                  this.instructorRow = null;
+                  this.roomRow = null;
+
+                  // clear select box selected values
+                  // this.selectedCurriculum = null;
+                  this.selectedYearLevel = null;
+                  this.selectedSubject = null;
+                  this.selectedBlock = null;
+                  this.selectedBatch = null;
+                  this.selectedInstructor = null;
+                  this.selectedRoom = null;
+                  this.selectedDay = null;
+                  this.selectedTimeStart = null;
+                },
+
+                // create class schedule
+                createSchedule: function(){
+                  this.errors = [];
+                  var newSchedule = {
+                              day : this.selectedDay? this.selectedDay.day : "",
+                              time_start : this.selectedTimeStart? this.selectedTimeStart : "",
+                              time_end : this.selectedTimeEnd? this.selectedTimeEnd : "",
+                              subject_id : this.selectedSubject.id,
+                              subject_code : this.selectedSubject.subject_code,
+                              room_id : this.selectedRoom,
+                              instructor_id : this.selectedInstructor? this.selectedInstructor : "",
+                              block : this.selectedBlock,
+                              batch : this.selectedBatch,
+                              academic_year_id : this.selectedAcademicYear,
+                              semester_id : this.selectedSemester,
+                              course_id : this.selectedCourse.id,
+                              course_code : this.selectedCourse.course_code,
+                              year_level : this.selectedYearLevel,
+                              active : 1
+                            };
+
+                  Axios
+                    .post('http://localhost/api/v1/class_schedules', newSchedule,{
+                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+                    })
+                    .then(response => {
+                      this.alertMessage = response.data.message;
+                      this.dismissSuccessCountDown = this.dismissSecs;
+                      this.onChangeBlock();
+                      this.backToTop();
+                    })
+                    .catch(error => {
+                      this.alertMessage = error.response.data.message;
+                      this.errors = error.response.data.conflicts;
+                      this.dismissWarningCountDown = this.dismissSecs;
+                      console.log(error.response.data)
+                    })
+                  // console.log(newSchedule)
+                },
+
+                // gets all created schedule
+                getClassSchedule: function(){
+                  Axios
+                    .get('http://localhost/api/v1/class_schedules', {
+                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+                    })
+                    .then(response => {
+                      // console.log(response.data);
+                      this.all_schedules = response.data;
+                      // this.totalRows = this.items.length;
+                    })
+                    .catch(function (error) {
+                      console.log(error.response.status); console.log(error);
+                    })
+                },
+
+                // Get course Function
+                getCourses: function(){
+                  this.isLoading = true;
+                  Axios
+                    .get('http://localhost/api/v1/courses', {
+                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
+                    })
+                    .then(response => {
+                      this.isLoading = false;
+                      this.CourseRow = response.data;
+                      console.log(this.CourseRow)
+                      this.backToTop();
+                    })
+                    .catch(error => {
+                      this.alertMessage = error.response.data.message;
+                      this.dismissErrorCountDown = this.dismissSecs;
+                      this.backToTop();
+                    })
+                }, // End of Get Course function
+
+                backToTop: function(){
+                  document.body.scrollTop = 0;
+                  document.documentElement.scrollTop = 0;
+                },
+
+                timeFormatter : function(time){
+
+                  var split = time.split(":");
+                  var hour = split[0];
+                  var min = split[1];
+
+                  var h = hour % 12 || 12;
+                  var ampm = (hour < 12 || hour == 24) ? "AM" : "PM";
+                  return h + ":" + min + ampm;
+                },
+
+                // for clearing forms
+                toggleForm: function(){
+                  // clears select boxes
+                  this.CourseRow = null;
+                  this.Curriculumrow = null;
+                  this.year_options = [];
+                  this.SubjectsRow = [];
+                  this.instructorRow = null;
+                  this.roomRow = null;
+                  this.day_options = [];
+                  this.time = [];
+                  this.time_start_options = [];
+                  this.availabilities = [];
+
+                  // clear select box selected values
+                  // this.selectedCurriculum = null;
+                  this.selectedCourse = null;
+                  this.selectedCurriculum = null;
+                  this.selectedYearLevel = null;
+                  this.selectedSubject = null;
+                  this.selectedBlock = null;
+                  this.selectedBatch = null;
+                  this.selectedInstructor = null;
+                  this.selectedRoom = null;
+                  this.selectedDay = null;
+                  this.selectedTimeStart = null;
+                  this.selectedTimeEnd = null;
+
+
+                  if(this.showForm){
+                    this.showForm = false;
+                  } else {
+                    this.showForm = true;
+                  }
+                },
+
+
+                // ======================================================
+                // reference functions
                 getTimeConflicts: function(){
                   // this.conflicts = [];
                   var conflicts = [];
@@ -454,91 +972,11 @@ thead tr th{
                       alert("Instructor has no schedule for this day");
                     }
                   })
-
-                  // get selected instructor availability
-                  // Axios
-                  //   .get('http://localhost/api/v1/instructors',
-                  //   {
-                  //     headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-                  //   }).then(response => {
-                  //     // push time conflicts to this array time_conflicts
-                  //   })
-                  // // get selected course availability
-                  // Axios
-                  //   .get('http://localhost/api/v1/course',
-                  //   {
-                  //     headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-                  //   }).then(response => {
-                  //     // push time conflicts to this array time_conflicts
-                  //   })
-
-                  // console.log(conflicts);
-
-                  // console.log(conflicts.length);
-                  // this.getTimes();
-                },
-
-                getTimes: function(){
-                  // this.getTimeConflicts();
-                  // this.selectedTimeStart = null;
-                  // this.time_start_options = [];
-                  this.available_time_start = [];
-                  // console.log(this.selectedDay)
-                  var time_start = this.selectedDay.time_start;
-                  var split_start = time_start.split(":");
-                  var hour_start = parseInt(split_start[0]);
-                  var h = "";
-
-                  var time_end = this.selectedDay.time_end;
-                  var split_end = time_end.split(":");
-                  var hour_end = parseInt(split_end[0]);
-
-                  var ampm = "";
-                  var converted = "";
-
-
-                  console.log(hour_start)
-
-                  for (var i = hour_start; i <= hour_end; i++) {
-                    // console.log(i)
-                    for (var j = 0; j < 2; j++) {
-                      // this.timeConverter(j,i);
-                      if (j == 0){
-                        var minutes_start = "00";
-                        h = i % 12 || 12;
-                        ampm = (i < 12 || i == 24) ? " AM" : " PM";
-                        converted = h + ":" +  minutes_start + ampm;
-
-                        this.available_time_start.push(converted)
-                      }
-                      else if(j == 1){
-                        if(i == hour_end){
-
-                        }else{
-                          var minutes_start = "30";
-                          h = i % 12 || 12;
-                          ampm = (i < 12 || i == 24) ? " AM" : " PM";
-                          converted = h + ":" +  minutes_start + ampm;
-
-                          this.available_time_start.push(converted)
-                        }
-                      }
-                    }
-                  }
-
-                  this.filter_available_time_start = this.available_time_start;
-                  // this.available_time_end = this.available_time_start;
-
-                  // console.log(this.selectedDay)
-
-                  // console.log(this.availabilities)
-                  // this.getAvailabilities();
-                  // this.getTimeStart();
                 },
 
                 // get the available time start
                 // based on the time time availability of selected room, instructor, and course
-                getTimeStart: function(){
+                onChangeDaytart: function(){
                   var used = [
                     {
                       start: "09:00:00",
@@ -659,48 +1097,6 @@ thead tr th{
                 },
 
 
-                onChangeTimeStart: function(){
-
-
-
-                  this.getTimes();
-                  // var start = this.filter_available_time_start;
-                  // this.available_time_end = this.filter_available_time_start;
-                  // var end = this.available_time_end;
-                  // var selected_time_start = this.selectedTimeStart
-                  // console.log(this.available_time_start)
-                  this.available_time_end = [];
-                  var index = this.available_time_start.indexOf(this.selectedTimeStart)
-
-                  // console.log(index)
-                  for (var i = index; i < this.available_time_start.length-1; i++) {
-                    var time = this.available_time_start[i+1];
-                    this.available_time_end.push(time)
-                  }
-                  // this.available_time_end.splice(0, index);
-
-
-                  // var reserv = new Date(selected_time_start)
-                  //
-                  // console.log(reserv)
-
-                  // var array = end;
-                  // var filtered = end.filter(function(value, index, arr){
-                  //   // var reserv = new Date(year,month,day,hour,min)
-                  //   // var reserv = new Date(year,month,day,hour,min)
-                  //   return value > selected_time_start;
-                  // });//filtered => [6, 7, 8, 9]//array => [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
-                  // console.log(filtered)
-                },
-
-                onChangeTimeEnd : function(){
-                  this.disableAddBtn = false;
-                },
-
-
-
-
-
                 getAvailabilities : function (data){
                   // this.aaaaaa()
                   var used = [
@@ -799,426 +1195,6 @@ thead tr th{
                   // }
 
                   // this.time_start_options = this.availabilities
-                },
-
-                // gets all created schedule
-                getFilteredClassSchedule: function(){
-                  Axios
-                    .get('http://localhost/api/v1/class_schedules', {
-                      params: {
-                        academic_year_id: this.selectedAcademicYear,
-                        semester_id: this.selectedSemester,
-                        course_id: this.selectedCourse.id,
-                        year_level: this.selectedYearLevel,
-                        block : this.selectedBlock,
-                        active: 1,
-                      },
-                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-                    })
-                    .then(response => {
-                      // console.log(response.data);
-                      this.items = response.data;
-                      this.totalRows = this.items.length;
-                    })
-                },
-
-                // create class schedule
-                createSchedule: function(){
-                  this.errors = [];
-                  var newSchedule = {
-                              day : this.selectedDay? this.selectedDay.day : "",
-                              time_start : this.selectedTimeStart? this.selectedTimeStart : "",
-                              time_end : this.selectedTimeEnd? this.selectedTimeEnd : "",
-                              subject_id : this.selectedSubject.id,
-                              subject_code : this.selectedSubject.subject_code,
-                              room_id : this.selectedRoom,
-                              instructor_id : this.selectedInstructor? this.selectedInstructor : "",
-                              block : this.selectedBlock,
-                              batch : this.selectedBatch,
-                              academic_year_id : this.selectedAcademicYear,
-                              semester_id : this.selectedSemester,
-                              course_id : this.selectedCourse.id,
-                              course_code : this.selectedCourse.course_code,
-                              year_level : this.selectedYearLevel,
-                              active : 1
-                            };
-
-                  Axios
-                    .post('http://localhost/api/v1/class_schedules', newSchedule,{
-                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-                    })
-                    .then(response => {
-                      this.alertMessage = response.data.message;
-                      this.dismissSuccessCountDown = this.dismissSecs;
-                      this.getFilteredClassSchedule();
-                      this.backToTop();
-                    })
-                    .catch(error => {
-                      this.alertMessage = error.response.data.message;
-                      this.errors = error.response.data.conflicts;
-                      this.dismissWarningCountDown = this.dismissSecs;
-                      console.log(error.response.data)
-                    })
-                  // console.log(newSchedule)
-                },
-
-                // gets all created schedule
-                getClassSchedule: function(){
-                  Axios
-                    .get('http://localhost/api/v1/class_schedules', {
-                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-                    })
-                    .then(response => {
-                      // console.log(response.data);
-                      this.items = response.data;
-                      this.totalRows = this.items.length;
-                    })
-                    .catch(function (error) {
-                      console.log(error.response.status); console.log(error);
-                    })
-                },
-
-
-
-                // get days of availability of an instructor
-                getDays: function(){
-                  if (this.selectedInstructor != null || "") {
-                    this.selectedDay = null;
-                    this.day_options = [];
-
-                    Axios
-                      .get('http://localhost/api/v1/instructors/' + this.selectedInstructor
-                            + '/availabilities',{
-                        params: {
-                          academic_year_id: this.selectedAcademicYear,
-                          semester_id: this.selectedSemester,
-                          active: 1,
-                        },
-                        headers: {
-                          'Authorization': 'Bearer ' + this.$store.getters.getToken
-                        }
-                      })
-                      .then(response => {
-                        var availabilities = response.data;
-                        if(availabilities.length > 0){
-                          for(var i = 0; i < availabilities.length; i++){
-                            this.day_options.push({
-                              value: {
-                                day: availabilities[i].day,
-                                time_start: availabilities[i].time_start,
-                                time_end: availabilities[i].time_end,
-                              },
-                              text: availabilities[i].day
-                            });
-                          }
-
-                        }else{
-                          alert("No Time Availability set for the selected instructor")
-                          this.day_options = [];
-                          this.selectedDay = null;
-                        }
-                      })
-                  }else {
-
-                  }
-                    // .catch(function (error) {
-                    //   console.log(error.response.status); console.log(error);
-                    // })
-                },
-
-                // gets all instructor that prefers the selected subject
-                getInstructors: function(){
-                  this.setRooms();
-                  this.day_options =
-                  [
-                    {
-                      value: {
-                        day: "Monday",
-                        time_start: "7:00:00",
-                        time_end: "21:30:00",
-                      },
-                      text : "Monday"
-                    },
-                    {
-                      value : {
-                        day: "Tuesday",
-                        time_start: "7:00:00",
-                        time_end: "21:30:00",
-                      },
-                      text : "Tuesday"
-                    },
-                    {
-                      value : {
-                        day: "Wednesday",
-                        time_start: "7:00:00",
-                        time_end: "21:30:00",
-                      },
-                      text : "Wednesday"
-                    },
-                    {
-                      value : {
-                        day: "Thursday",
-                        time_start: "7:00:00",
-                        time_end: "21:30:00",
-                      },
-                      text : "Thursday"
-                    },
-                    {
-                      value : {
-                        day: "Friday",
-                        time_start: "7:00:00",
-                        time_end: "21:30:00",
-                      },
-                      text : "Friday"
-                    },
-                    {
-                      value : {
-                        day: "Saturday",
-                        time_start: "7:00:00",
-                        time_end: "21:30:00",
-                      },
-                      text : "Saturday"
-                    },
-                  ];
-                  this.disableAddBtn = false;
-                  this.instructorRow = null
-                  // console.log(this.selectedSubject.instructors);
-                  var instructors = this.selectedSubject.instructors;
-
-                    if( instructors.length == 0){
-                      this.instructorRow = null;
-                    }else{
-                      this.instructorRow = instructors;
-                    }
-
-                  var lab = this.selectedSubject.lab
-                  // check if subject has laboratory
-                  if(lab > 0){
-                    this.blockStatus = false;
-                    this.batchStatus = false;
-                    this.selectedBlock = 1;
-                    this.selectedBatch = 1;
-                  } else{
-                    this.blockStatus = false;
-                    this.batchStatus = true;
-                    this.selectedBlock = 1;
-                    this.selectedBatch = 0;
-                  }
-
-                  this.getFilteredClassSchedule();
-
-                    // this.roomRow = null;
-                    // this.day_options = [];
-                    this.time_start_options = []
-
-
-                    this.selectedInstructor = null;
-                    this.selectedRoom = null;
-                    this.selectedDay = null;
-                    this.selectedTimeStart = null;
-
-
-                },
-
-                // pass fetched rooms into roomRow vairable
-                setRooms: function(){
-                  if (this.selectedInstructor != null || "") {
-                    this.disableAddBtn = true
-                    this.day_options = [];
-                    this.selectedDay = null;
-                    this.selectedRoom = null;
-                  }else {
-
-                  }
-                  this.roomRow = this.$store.getters.getRooms;
-                },
-
-                // gets all curriculum record
-                getCurriculum: function(){
-                  var curriculums = this.selectedCourse.curriculum
-                      if( curriculums.length == 0){
-                        this.Curriculumrow = null;
-                      }else{
-                        this.Curriculumrow = curriculums;
-                      }
-                      // clears select boxes
-                      this.day_options = [];
-                      this.year_options = [];
-                      this.SubjectsRow = [];
-                      this.time_start_options = []
-                      this.instructorRow = null;
-                      this.roomRow = null;
-
-                      // clear select box selected values
-                      this.selectedCurriculum = null;
-                      this.selectedYearLevel = null;
-                      this.selectedSubject = null;
-                      this.selectedBlock = null;
-                      this.selectedBatch = null;
-                      this.selectedInstructor = null;
-                      this.selectedRoom = null;
-                      this.selectedDay = null;
-                      this.selectedTimeStart = null;
-                    // });
-                },
-
-                // SET YEAR LEVEL BASED ON SELECTED COURSE
-                changeCurr: function(){
-                  if(this.selectedCourse.year == "4"){
-                    this.year_options = [
-                      { value: '1st Year', text: '1st Year' },
-                      { value: '2nd Year', text: '2nd Year' },
-                      { value: '3rd Year', text: '3rd Year' },
-                      { value: '4th Year', text: '4th Year' },
-                    ];
-                  }
-                 else if(this.selectedCourse.year == "2"){
-                   this.year_options = [
-
-                     { value: '1st Year', text: '1st Year' },
-                     { value: '2nd Year', text: '2nd Year' },
-                   ];
-                 }
-                 this.SubjectsRow = [];
-                 this.time_start_options = []
-                 this.instructorRow = null;
-                 this.roomRow = null;
-                 this.day_options = [];
-
-                 this.selectedYearLevel = null;
-                 this.selectedSubject = null;
-                 this.selectedBlock = null;
-                 this.selectedBatch = null;
-                 this.selectedInstructor = null;
-                 this.selectedRoom = null;
-                 this.selectedDay = null;
-                 this.selectedTimeStart = null;
-                },
-
-
-                // clears selected values when semester select box has changed
-                changeSemester: function(){
-                  // clears select boxes
-                  this.day_options = [];
-                  this.time_start_options = []
-                  this.SubjectsRow = [];
-                  this.instructorRow = null;
-                  this.roomRow = null;
-
-                  // clear select box selected values
-                  // this.selectedCurriculum = null;
-                  this.selectedYearLevel = null;
-                  this.selectedSubject = null;
-                  this.selectedBlock = null;
-                  this.selectedBatch = null;
-                  this.selectedInstructor = null;
-                  this.selectedRoom = null;
-                  this.selectedDay = null;
-                  this.selectedTimeStart = null;
-                },
-
-                // gets all subjects base on selected semester, curriculum and year level
-                getSubject: function(){
-                  // clears subject select box
-                  this.SubjectsRow = [];
-                  var year = this.selectedYearLevel
-                  var sem = this.selectedSemester
-                  var subjects = this.selectedCurriculum.subjects
-
-                  if(subjects.length == 0){
-                    this.SubjectsRow = [];
-                  }else{
-                    for(var i = 0; i < subjects.length; i++){
-                      if(subjects[i].year_level == year && subjects[i].semester_id == sem){
-                          this.SubjectsRow.push(subjects[i])
-                      }
-                    }
-                  }
-
-                      this.instructorRow = null;
-                      this.roomRow = null;
-                      this.day_options = [];
-                      this.time_start_options = []
-
-                      this.selectedSubject = null;
-                      this.selectedBlock = null;
-                      this.selectedBatch = null;
-                      this.selectedInstructor = null;
-                      this.selectedRoom = null;
-                      this.selectedDay = null;
-                      this.selectedTimeStart = null;
-                },
-
-                // Get course Function
-                getCourses: function(){
-                  this.isLoading = true;
-                  Axios
-                    .get('http://localhost/api/v1/courses', {
-                      headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
-                    })
-                    .then(response => {
-                      this.isLoading = false;
-                      this.CourseRow = response.data;
-                      console.log(this.CourseRow)
-                      this.backToTop();
-                    })
-                    .catch(error => {
-                      this.alertMessage = error.response.data.message;
-                      this.dismissErrorCountDown = this.dismissSecs;
-                      this.backToTop();
-                    })
-                }, // End of Get Course function
-
-                backToTop: function(){
-                  document.body.scrollTop = 0;
-                  document.documentElement.scrollTop = 0;
-                },
-
-                timeFormatter : function(time){
-
-                  var split = time.split(":");
-                  var hour = split[0];
-                  var min = split[1];
-
-                  var h = hour % 12 || 12;
-                  var ampm = (hour < 12 || hour == 24) ? "AM" : "PM";
-                  return h + ":" + min + ampm;
-                },
-
-                // for clearing forms
-                toggleForm: function(){
-                  // clears select boxes
-                  this.CourseRow = null;
-                  this.Curriculumrow = null;
-                  this.year_options = [];
-                  this.SubjectsRow = [];
-                  this.instructorRow = null;
-                  this.roomRow = null;
-                  this.day_options = [];
-                  this.time = [];
-                  this.time_start_options = [];
-                  this.availabilities = [];
-
-                  // clear select box selected values
-                  // this.selectedCurriculum = null;
-                  this.selectedCourse = null;
-                  this.selectedCurriculum = null;
-                  this.selectedYearLevel = null;
-                  this.selectedSubject = null;
-                  this.selectedBlock = null;
-                  this.selectedBatch = null;
-                  this.selectedInstructor = null;
-                  this.selectedRoom = null;
-                  this.selectedDay = null;
-                  this.selectedTimeStart = null;
-                  this.selectedTimeEnd = null;
-
-
-                  if(this.showForm){
-                    this.showForm = false;
-                  } else {
-                    this.showForm = true;
-                  }
                 },
               }
             }
