@@ -2,6 +2,34 @@ html, body, #app, #admin{
 	height: 100%;
 	scroll-behavior: smooth;
 }
+.Ssignature{
+	border: 0;
+  border-top: 1px solid #000;
+	margin-left: 150px;
+}
+.Rsignature{
+	border: 0;
+  border-top: 1px solid #000;
+	margin-right: 150px;
+}
+input {
+  text-transform: capitalize;
+}
+#emailAddress{
+	text-transform: none;
+}
+::-webkit-input-placeholder {
+    text-transform: none;
+}
+:-moz-placeholder {
+    text-transform: none;
+}
+::-moz-placeholder {
+    text-transform: none;
+}
+:-ms-input-placeholder {
+    text-transform: none;
+}
 /************************
  *        Login         *
  ************************/

@@ -301,28 +301,17 @@ export default {
 </script>
 
 <style>
-
 .reset{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-/* @page{
-  orientation: landscape;} */
 
 @media print {
+
   body {
     margin: 0 auto  ;
     padding: 0;
-  }
-  body * {
-    /* border: 1px solid red; */
-    margin: 0;
-    padding: 0;
-    }
-  @page {
-    size: landscape ;
-    margin-top: 1cm;
   }
   #to_print{
     position: absolute;
@@ -339,13 +328,6 @@ export default {
     top: 0;
     left: 0;
   }
-  /* @page :left {
-  margin-right: 200mm;
-  }
-
-  @page :right {
-    margin-left: 200mm;
-  } */
 
   .header .logo {
     position: relative;
@@ -365,8 +347,4 @@ export default {
     bottom: 0;
   }
 }
-
-
-
-
 </style>

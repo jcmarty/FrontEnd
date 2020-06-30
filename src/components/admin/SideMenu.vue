@@ -37,11 +37,11 @@
               <router-link tag="li" to="/manage/track" v-if="isAuthorized(this.$store.getters.getSettings.track_management, 1)"><a>Track</a></router-link>
               <router-link tag="li" to="/manage/academicyear" v-if="isAuthorized(this.$store.getters.getSettings.academic_year_management, 1)"><a>Academic Years</a></router-link>
               <router-link tag="li" to="/manage/semesters" v-if="isAuthorized(this.$store.getters.getSettings.semester_management, 1)"><a>Semester</a></router-link>
-              <router-link tag="li" to="/manage/student/preregistration" v-if="isAuthorized(this.$store.getters.getSettings.student_management, 1)"><a class="super_child_menu">Pre registration</a></router-link>
-              <router-link tag="li" to="/manage/student/registration" ><a class="super_child_menu" v-if="isAuthorized(this.$store.getters.getSettings.student_management, 1)">Registration</a></router-link>
-              <router-link tag="li" to="/manage/student/enrollment"><a class="super_child_menu" v-if="isAuthorized(this.$store.getters.getSettings.enrollment_management, 1)">Enrollment</a></router-link>
-              <!-- <router-link tag="li" v-b-toggle.classSchedules v-if="isAuthorized(this.$store.getters.getSettings.requirements_management, 1)" to="/manage/student/requirements"><a>Requirements</a></router-link> -->
-              <router-link tag="li" to="/manage/student/grades"><a class="super_child_menu" v-if="isAuthorized(this.$store.getters.getSettings.student_schedule_management, 1)">Grades</a></router-link>
+              <router-link tag="li" to="/manage/student/requirements"v-b-toggle.classSchedules v-if="isAuthorized(this.$store.getters.getSettings.requirements_management, 1)" ><a>Requirements</a></router-link>
+              <router-link tag="li" to="/manage/student/preregistration" v-if="isAuthorized(this.$store.getters.getSettings.student_management, 1)"><a>Pre registration</a></router-link>
+              <router-link tag="li" to="/manage/student/registration"  v-if="isAuthorized(this.$store.getters.getSettings.student_management, 1)"><a>Registration</a></router-link>
+              <router-link tag="li" to="/manage/student/enrollment"  v-if="isAuthorized(this.$store.getters.getSettings.enrollment_management, 1)"><a>Enrollment</a></router-link>
+              <router-link tag="li" to="/manage/student/grades" v-if="isAuthorized(this.$store.getters.getSettings.student_schedule_management, 1)"><a>Grades</a></router-link>
 
 
               <!-- <router-link tag="li" to="#"><a>Backup and Restore Database</a></router-link> -->
