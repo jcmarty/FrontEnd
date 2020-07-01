@@ -114,7 +114,7 @@
 
 
     <b-modal id="deleteAvailabilityModal" ref="deleteAvailabilityModal" title="Delete Time Availability" size="md">
-        <center><h6>Are you sure you want to delete  <br/><b> {{ timeAvailability.day }} {{ timeAvailability.time_start }} - {{ timeAvailability.time_end }} ?</b></h6></center>
+        <center><h6>Are you sure you want to delete  <br/><b> {{ timeAvailability.day }} {{time}} ?</b></h6></center>
       <template v-slot:modal-footer="{ cancel, ok }">
         <!-- Emulate built in modal footer ok and cancel button actions -->
         <b-button size="sm" variant="danger" @click="hideModal('deleteAvailabilityModal')">
@@ -196,16 +196,14 @@
         items: [],
         fields: [
           { key: 'day', label: 'Day', class: 'text-center', sortable: true},
-          { key: 'time_start', label: 'Time Start', sortable: true, class: 'text-center',
-          formatter: (value, key, item) => {
-              // item.time_start
-              //   = moment(item.time_start.hh + ":"
-              //     + item.time_start.mm + " "
-              //     + item.time_start.A, ["hh:mm A"]).format("HH:mm");
-                return item.time_start
-              },
+          { key: 'time', label: 'Time', sortable: true, class: 'text-center',
+            formatter: (value, key, item) => {
+              var start = item.time_start != null || "" ? this.timeFormatter(item.time_start) + " - " : "-- : ";
+              var end = item.time_end != null || "" ? this.timeFormatter(item.time_end) : "--";
+              return  start + end;
+            // return item.time_start  + "-" + item.time_end;
+            }
           },
-          { key: 'time_end', label: 'Time End', sortable: true, class: 'text-center' },
           { key: 'academic_year.academic_year', label: 'Academic Year', sortable: true, class: 'text-center' },
           { key: 'semester.semester', label: 'Semseter', sortable: true, class: 'text-center' },
           { key: 'actions', label: 'Actions' , class: 'text-center' }
@@ -235,6 +233,8 @@
           semester_id: null,
           active: 1
         },
+
+        time: null,
 
         dayOptions: [
           {value: 'Monday', text: 'Monday'},
@@ -273,6 +273,17 @@
     },
 
     methods: {
+      timeFormatter : function(time){
+
+        var split = time.split(":");
+        var hour = split[0];
+        var min = split[1];
+
+        var h = hour % 12 || 12;
+        var ampm = (hour < 12 || hour == 24) ? "AM" : "PM";
+        return h + ":" + min + ampm;
+      },
+
       hideModal: function($modal){
         this.$refs[$modal].hide();
       },
@@ -312,8 +323,6 @@
           .then(response => {
             this.alertMessage = response.data.message;
             this.dismissSuccessCountDown = this.dismissSecs;
-            this.timeAvailability.time_start = {"HH":"","H":"","hh":"","h":"","a":"","A":"","kk":"","k":"","m":"","mm":"","s":"","ss":""};
-            this.timeAvailability.time_end = {"HH":"","H":"","hh":"","h":"","a":"","A":"","kk":"","k":"","m":"","mm":"","s":"","ss":""};
             this.getTimeAvailabilities();
           })
           .catch(error => {
@@ -434,7 +443,8 @@
 
 
       DeleteModal: function(item){
-          this.id = item.id,
+        this.time = this.timeFormatter(item.time_start) +" - "+ this.timeFormatter(item.time_end),
+        this.id = item.id,
         this.timeAvailability = {
           day: item.day,
           time_start: item.time_start,

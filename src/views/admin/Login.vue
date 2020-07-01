@@ -19,6 +19,7 @@
               type="text"
               id="username"
               v-model="input.username"
+              class="noCaps"
               placeholder="username">
             </b-form-input>
         </b-form-group>
@@ -30,6 +31,7 @@
               type="password"
               id="password"
               v-model="input.password"
+              class="noCaps"
               placeholder="password">
             </b-form-input>
         </b-form-group>

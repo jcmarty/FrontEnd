@@ -141,6 +141,7 @@
                   type="email"
                   id="email"
                   v-model.trim="$v.instructor.email.$model"
+                  class="noCaps"
                   :class="{'is-invalid' :$v.instructor.email.$error}">
                 </b-form-input>
                 <div class="invalid-feedback">
@@ -158,6 +159,7 @@
                 <b-form-input
                   type="number"
                   id="contact_no"
+                  onKeyPress="if(this.value.length==11) return false;"
                   v-model.trim="$v.instructor.contact_no.$model"
                   :class="{'is-invalid' :$v.instructor.contact_no.$error}">
                 </b-form-input>
@@ -679,16 +681,15 @@
         TimeAvailItems: [],
         TimeAvailFields: [
           { key: 'day', label: 'Day', class: 'text-center', sortable: true},
-          { key: 'time_start', label: 'Time Start', sortable: true, class: 'text-center' ,
-          formatter: (value, key, item) => {
-            // item.time_start
-            //   = moment(item.time_start.hh + ":"
-            //     + item.time_start.mm + " "
-            //     + item.time_start.A, ["hh:mm A"]).format("HH:mm");
-              return item.time_start.hh
-            },
+          { key: 'time', label: 'Time', sortable: true, class: 'text-center',
+            formatter: (value, key, item) => {
+              var start = item.time_start != null || "" ? this.timeFormatter(item.time_start) + " - " : "-- : ";
+              var end = item.time_end != null || "" ? this.timeFormatter(item.time_end) : "--";
+              return  start + end;
+            // return item.time_start  + "-" + item.time_end;
+            }
           },
-          { key: 'time_end', label: 'Time End', sortable: true, class: 'text-center' },
+
           { key: 'academic_year.academic_year', label: 'Academic Year', sortable: true, class: 'text-center' },
           { key: 'semester.semester', label: 'Semester', sortable: true, class: 'text-center' },
         ],
@@ -828,6 +829,17 @@
       this.newTimeAvailability.semester_id = this.settings.current_sem;
     },
     methods:{
+      timeFormatter : function(time){
+
+        var split = time.split(":");
+        var hour = split[0];
+        var min = split[1];
+
+        var h = hour % 12 || 12;
+        var ampm = (hour < 12 || hour == 24) ? "AM" : "PM";
+        return h + ":" + min + ampm;
+      },
+      
       onSubmit() {
         this.$v.instructor.$touch();
         if (this.$v.instructor.$anyError) {

@@ -730,6 +730,7 @@
                   type="email"
                   id="emailAddress"
                   v-model.trim="$v.PersonalInformation.email.$model"
+                  class="noCaps"
                   :class="{'is-invalid' :$v.PersonalInformation.email.$error}">
                 </b-form-input>
                 <div class="invalid-feedback">

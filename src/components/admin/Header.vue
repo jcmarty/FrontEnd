@@ -119,6 +119,7 @@
             type="text"
             id="Username"
             v-model.trim="$v.profile_data.username.$model"
+            class="noCaps"
             :class="{'is-invalid' :$v.profile_data.username.$error}">
           </b-form-input>
           <div class="invalid-feedback">
@@ -137,6 +138,7 @@
           type="text"
           id="Email"
           v-model.trim="$v.profile_data.email.$model"
+          class="noCaps"
           :class="{'is-invalid' :$v.profile_data.email.$error}">
         </b-form-input>
         <div class="invalid-feedback">
@@ -246,6 +248,7 @@
           type="password"
           id="OldPass"
           v-model.trim="$v.user_password.old_password.$model"
+          class="noCaps"
           :class="{'is-invalid' :$v.user_password.old_password.$error}">
         </b-form-input>
         <div class="invalid-feedback">
@@ -264,6 +267,7 @@
           type="password"
           id="NewPassword"
           v-model.trim="$v.user_password.password.$model"
+          class="noCaps"
           :class="{'is-invalid' :$v.user_password.password.$error}">
         </b-form-input>
         <div class="invalid-feedback">
@@ -283,6 +287,7 @@
           type="password"
           id="ConfrimPassword"
           v-model.trim="$v.user_password.password_confirmation.$model"
+          class="noCaps"
           :class="{'is-invalid' :$v.user_password.password_confirmation.$error}">
         </b-form-input>
         <div class="invalid-feedback">
@@ -360,6 +365,9 @@
 
 
         mounted() {
+            if (this.$refs['ChangePasswordModal'].hide()) {
+              this.clearPass();
+            }
         },
         methods: {
 

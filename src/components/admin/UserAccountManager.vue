@@ -42,6 +42,7 @@
                     type="text"
                     id="Username"
                     v-model.trim="$v.users.username.$model"
+                    class="noCaps"
                     :class="{'is-invalid' :$v.users.username.$error}">
                   </b-form-input>
                   <div class="invalid-feedback">
@@ -60,11 +61,12 @@
                   type="password"
                   id="Password"
                   v-model.trim="$v.users.password.$model"
+                  class="noCaps"
                   :class="{'is-invalid' :$v.users.password.$error}">
                 </b-form-input>
                 <div class="invalid-feedback">
                   <span v-if="!$v.users.password.required">Password is required!</span>
-                  <span v-if="!$v.users.password.minLength">Password must have at least 6 characters.</span>
+                  <span v-if="!$v.users.password.minLength">Password must have at least 8 characters.</span>
                 </div>
               </b-form-group>
             </b-col>
@@ -78,6 +80,7 @@
                   type="password"
                   id="confirmPassword"
                   v-model.trim="$v.users.password_confirmation.$model"
+                  class="noCaps"
                   :class="{'is-invalid' :$v.users.password_confirmation.$error}">
                 </b-form-input>
                 <div class="invalid-feedback">
@@ -343,6 +346,7 @@
             type="text"
             id="Email"
             v-model.trim="$v.users_update.email.$model"
+            class="noCaps"
             :class="{'is-invalid' :$v.users_update.email.$error}">
           </b-form-input>
           <div class="invalid-feedback">
@@ -523,7 +527,7 @@
     validations: {
      users: {
        username: {required},
-       password: {required, minLength: minLength(6)},
+       password: {required, minLength: minLength(8)},
        password_confirmation: {sameAsPassword: sameAs('password'), required},
        email: {required, email},
        first_name: {required},

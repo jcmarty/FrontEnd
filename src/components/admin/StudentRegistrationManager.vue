@@ -325,6 +325,7 @@
                 type="email"
                 id="emailAddress"
                 v-model.trim="$v.StudPersonal.email.$model"
+                class="noCaps"
                 :class="{'is-invalid' :$v.StudPersonal.email.$error}">
               </b-form-input>
               <div class="invalid-feedback">
@@ -344,6 +345,7 @@
               <b-form-input
                 type="number"
                 id="cellphoneNo"
+                onKeyPress="if(this.value.length==11) return false;"
                 v-model.trim="$v.StudPersonal.cellphone.$model"
                 :class="{'is-invalid' :$v.StudPersonal.cellphone.$error}">
               </b-form-input>
@@ -528,6 +530,7 @@
             <b-form-input
               type="number"
               id="contactNumber"
+              onKeyPress="if(this.value.length==11) return false;"
               v-model.trim="$v.StudParents.contact_number.$model"
               :class="{'is-invalid' :$v.StudParents.contact_number.$error}">
             </b-form-input>

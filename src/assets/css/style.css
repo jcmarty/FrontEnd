@@ -15,7 +15,7 @@ html, body, #app, #admin{
 input {
   text-transform: capitalize;
 }
-#emailAddress{
+.noCaps{
 	text-transform: none;
 }
 ::-webkit-input-placeholder {
