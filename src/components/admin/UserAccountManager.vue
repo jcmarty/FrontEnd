@@ -100,6 +100,7 @@
                   type="text"
                   id="Email"
                   v-model.trim="$v.users.email.$model"
+                  class="noCaps"
                   :class="{'is-invalid' :$v.users.email.$error}">
                 </b-form-input>
                 <div class="invalid-feedback">
@@ -637,7 +638,7 @@
         .then(user_activities => {
           for (var i = 0; i < user_activities.data.length; i++) {
             // console.log(user_activities.data[i].id)
-            if (this.LastUserRole === 'System Administrator') {
+            if (this.LastUserRole === 'Super Administrator') {
               this.UserPriv.push({
                 user_id: this.LastUser,
                 activity_id: user_activities.data[i].id,
@@ -645,9 +646,10 @@
                 read_priv: 1,
                 update_priv: 1,
                 delete_priv: 1,
+                lock: 1
               });
             }
-            else if (this.LastUserRole === 'Super Administrator') {
+            else if (this.LastUserRole === 'System Administrator') {
               this.UserPriv.push({
                 user_id: this.LastUser,
                 activity_id: user_activities.data[i].id,
@@ -655,7 +657,10 @@
                 read_priv: 1,
                 update_priv: 1,
                 delete_priv: 1,
+                lock: 1
               });
+
+                console.log(this.UserPriv)
             }
           }
 
@@ -668,6 +673,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -677,6 +683,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -686,6 +693,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -695,6 +703,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -704,6 +713,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -713,6 +723,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -722,6 +733,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -731,6 +743,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -740,6 +753,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -749,6 +763,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
 
@@ -764,6 +779,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -773,6 +789,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -782,6 +799,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -791,6 +809,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -800,6 +819,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -809,6 +829,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -818,6 +839,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -827,6 +849,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
 
@@ -838,6 +861,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
 
@@ -849,6 +873,7 @@
             read_priv: 1,
             update_priv: 1,
             delete_priv: 1,
+            lock: 1
           });
 
           //enrollment management
@@ -859,6 +884,7 @@
             read_priv: 1,
             update_priv: 1,
             delete_priv: 1,
+            lock: 1
           });
 
           //requirements management
@@ -869,6 +895,7 @@
             read_priv: 1,
             update_priv: 1,
             delete_priv: 1,
+            lock: 1
           });
 
           //student schedule management
@@ -879,6 +906,7 @@
             read_priv: 1,
             update_priv: 1,
             delete_priv: 1,
+            lock: 1
           });
         }
 
@@ -891,6 +919,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -900,6 +929,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -909,6 +939,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -918,6 +949,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -927,6 +959,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -936,6 +969,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -945,6 +979,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -954,6 +989,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
 
@@ -965,6 +1001,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
 
@@ -976,6 +1013,7 @@
             read_priv: 1,
             update_priv: 1,
             delete_priv: 1,
+            lock: 1
           });
 
           //enrollment management
@@ -986,6 +1024,7 @@
             read_priv: 1,
             update_priv: 1,
             delete_priv: 1,
+            lock: 1
           });
 
           //requirements management
@@ -996,6 +1035,7 @@
             read_priv: 1,
             update_priv: 1,
             delete_priv: 1,
+            lock: 1
           });
 
           //student schedule management
@@ -1006,6 +1046,7 @@
             read_priv: 1,
             update_priv: 1,
             delete_priv: 1,
+            lock: 1
           });
         }
 
@@ -1019,6 +1060,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -1028,6 +1070,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -1037,6 +1080,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -1046,6 +1090,7 @@
             read_priv: 1,
             update_priv: 1,
             delete_priv: 1,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -1055,6 +1100,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -1064,6 +1110,7 @@
             read_priv: 1,
             update_priv: 1,
             delete_priv: 1,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -1073,6 +1120,7 @@
             read_priv: 1,
             update_priv: 1,
             delete_priv: 1,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -1082,6 +1130,7 @@
             read_priv: 1,
             update_priv: 1,
             delete_priv: 1,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -1091,6 +1140,7 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
           this.UserPriv.push({
@@ -1100,12 +1150,14 @@
             read_priv: 1,
             update_priv: 0,
             delete_priv: 0,
+            lock: 1
           });
 
         }
 
           this.GrantLastUser();
           this.UserPriv = []
+
 
         })
         .catch(error => {
@@ -1122,7 +1174,7 @@
             })
             .then(respone => {
 
-              // console.log(this.UserPriv[j])
+              console.log(this.UserPriv[j])
             })
             .catch(error => {
               this.alertMessage = error.response.data.message;

@@ -278,8 +278,9 @@
               var totalGrade = parseFloat(prelim) + parseFloat(midterm) + parseFloat(prefinal) + parseFloat(final);
               var semestralGrade = totalGrade / 4
               // limiting semestral grade to 2 decimal places
-              item.semestral = semestralGrade;
-              return parseFloat(semestralGrade).toFixed(2);
+              var roundedNumber = Math.round(semestralGrade, 0);
+              item.semestral = roundedNumber;
+              return parseFloat(roundedNumber).toFixed(2);
             },
           },
           {

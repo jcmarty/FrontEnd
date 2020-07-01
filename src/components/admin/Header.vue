@@ -235,7 +235,7 @@
   </b-modal>
 
   <!-- Start of Modal -->
-  <b-modal id="ChangePasswordModal" ref="ChangePasswordModal" title="Change Password" size="sm" no-close-on-backdrop>
+  <b-modal id="ChangePasswordModal" ref="ChangePasswordModal" title="Change Password" size="sm" no-close-on-backdrop @hidden="hide">
 
   <!-- First Name -->
   <b-form-row>
@@ -365,8 +365,20 @@
 
 
         mounted() {
+          if (this.$refs['ChangePasswordModal'].hide()) {
+            console.log('asdasdas')
+
+          }
+
         },
         methods: {
+          hide() {
+            this.$emit('hide')
+            this.clearPass();
+            this.$nextTick(() => {
+              this.$v.$reset();
+            });
+          },
 
           makeToast(append = false) {
             this.$nextTick(() => {
