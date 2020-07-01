@@ -365,9 +365,6 @@
 
 
         mounted() {
-            if (this.$refs['ChangePasswordModal'].hide()) {
-              this.clearPass();
-            }
         },
         methods: {
 
