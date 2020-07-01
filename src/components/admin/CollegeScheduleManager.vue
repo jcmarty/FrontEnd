@@ -404,16 +404,46 @@ thead tr th{
 
                 },
 
+                // this function will get schedules of selected course
+                // filtered using  yearlevel, block, and day
                 filterCourseSchedule: function(){
+                  var course_id = this.selectedCourse.id;
+                  var year_level = this.selectedYearLevel;
+                  var block = this.selectedBlock;
+                  var day = this.selectedDay.day;
 
+                  var courseSchedules =  this.all_schedules.filter(function(schedule) {
+                    return schedule.course_id == course_id && schedule.year_level == year_level && schedule.block == block && schedule.day == day;
+                  });
+
+                  return courseSchedules;
                 },
 
-                filterCourseSchedule: function(){
+                // this function will get all schedules of selected room
+                // filtered using
+                filterRoomSchedule: function(){
+                  // this.all_schedules
+                  var room_id = this.selectedRoom;
+                  var day = this.selectedDay.day;
 
+                  var roomSchedules =  this.all_schedules.filter(function(schedule) {
+                  	return schedule.room_id == room_id && schedule.day == day;
+                  });
+
+                  return roomSchedules;
                 },
 
-                filterCourseSchedule: function(){
+                // this function will get all schedule of selected instructor
+                // filtered using instructor_id and day
+                filterInstructorSchedule: function(){
+                  var instructor_id = this.selectedInstructor;
+                  var day = this.selectedDay.day;
 
+                  var instructorSchedules =  this.all_schedules.filter(function(schedule) {
+                    return schedule.instructor_id == instructor_id && schedule.day == day;
+                  });
+
+                  return instructorSchedules;
                 },
 
                 // this will declare static time start end time end
@@ -467,9 +497,38 @@ thead tr th{
                 // this function will set time start
                 onChangeDay: function(){
                   if (this.selectedInstructor == null) {
-                    this.setTimeStart();
+                    // filter static time start using course sched and room sched
+
                   }else{
-                    alert("filter time star bitch")
+                    this.setTimeStart();
+                    // console.log(this.available_time_start)
+
+                    var roomSchedules = this.filterRoomSchedule();
+                    var courseSchedules = this.filterCourseSchedule();
+                    var instructorSchedules = this.filterInstructorSchedule();
+
+                    // for (var i = 0; i < array.length; i++) {
+                    //   array[i]
+                    // }
+
+                    console.log(instructorSchedules.length)
+                    // filter time start using instructor sched, course sched and room sched
+                    // console.log(this.selectedDay)
+                    // var a = new Date (new Date().toDateString() + ' ' + '10:30:00');
+                    // var now = new Date (new Date().toDateString() + ' ' + '10:30:00');
+                    // // var now = new Date();
+                    // now.setMinutes(now.getMinutes() + 30); // timestamp
+                    // now = new Date(now); // Date object
+                    //
+                    // if(a > now){
+                    //   alert (now);
+                    // }else {
+                    //   alert (a.getHours() + ":" + a.getMinutes())
+                    // }
+
+
+
+
                   }
                 }, // end of function onChangeDay
 
