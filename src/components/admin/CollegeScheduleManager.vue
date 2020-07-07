@@ -312,6 +312,7 @@ thead tr th{
                   time_end_options: [],
                   notUsedTime: [],
                   conflicts: [],
+                  all_conflicts: [],
 
                   blockStatus: true,
                   batchStatus: true,
@@ -413,10 +414,15 @@ thead tr th{
                   var day = this.selectedDay.day;
 
                   var courseSchedules =  this.all_schedules.filter(function(schedule) {
-                    return schedule.course_id == course_id && schedule.year_level == year_level && schedule.block == block && schedule.day == day;
+                    var days = schedule.day;
+                    var split_days = days.split("/");
+                    var check_day = split_days.includes(day)
+                    return schedule.course_id == course_id && schedule.year_level == year_level && schedule.block == block && check_day == true;
                   });
 
-                  return courseSchedules;
+                  courseSchedules.forEach((schedule) => {
+                    this.getScheduleConflicts(schedule)
+                  })
                 },
 
                 // this function will get all schedules of selected room
@@ -427,10 +433,15 @@ thead tr th{
                   var day = this.selectedDay.day;
 
                   var roomSchedules =  this.all_schedules.filter(function(schedule) {
-                  	return schedule.room_id == room_id && schedule.day == day;
+                    var days = schedule.day;
+                    var split_days = days.split("/");
+                    var check_day = split_days.includes(day)
+                  	return schedule.room_id == room_id && check_day == true;
                   });
 
-                  return roomSchedules;
+                  roomSchedules.forEach((schedule) => {
+                    this.getScheduleConflicts(schedule)
+                  })
                 },
 
                 // this function will get all schedule of selected instructor
@@ -440,11 +451,37 @@ thead tr th{
                   var day = this.selectedDay.day;
 
                   var instructorSchedules =  this.all_schedules.filter(function(schedule) {
-                    return schedule.instructor_id == instructor_id && schedule.day == day;
+                    var days = schedule.day;
+                    var split_days = days.split("/");
+                    var check_day = split_days.includes(day)
+                    return schedule.instructor_id == instructor_id && check_day == true;
                   });
 
-                  return instructorSchedules;
+                  // return instructorSchedules;
+                  instructorSchedules.forEach((schedule) => {
+                    this.getScheduleConflicts(schedule)
+                  })
+
                 },
+
+                // this function will get all conflicts
+                getScheduleConflicts: function(conflict){
+                  var conflicts = [];
+                  var time_start = new Date (new Date().toDateString() + ' ' + conflict.time_start);
+                  var time_end = new Date (new Date().toDateString() + ' ' + conflict.time_end);
+
+                  for (var i = time_start; i < time_end; time_start.setMinutes(time_start.getMinutes() + 30)) {
+                    this.all_conflicts.push(new Date(time_start))
+                  }
+
+                  // filter time start using instructor sched, course sched and room sched
+                  // console.log(this.selectedDay)
+
+                  // var now = new Date();
+                  // now.setMinutes(now.getMinutes() + 30); // timestamp
+                  // now = new Date(now); // Date object
+
+                }, // end of function getScheduleConflicts
 
                 // this will declare static time start end time end
                 setTimeStart: function(){
@@ -464,7 +501,7 @@ thead tr th{
                   var converted = "";
 
 
-                  console.log(hour_start)
+                  // console.log(hour_start)
 
                   for (var i = hour_start; i <= hour_end; i++) {
                     // console.log(i)
@@ -494,24 +531,60 @@ thead tr th{
                   }
                 },
 
+                getInstructorAvailability: function(){
+                  var time_start = new Date (new Date().toDateString() + ' ' + this.selectedDay.time_start);
+                  var time_end = new Date (new Date().toDateString() + ' ' + this.selectedDay.time_end);
+
+                  for (var i = time_start; i <= time_end; time_start.setMinutes(time_start.getMinutes() + 30)) {
+                    var currentHours = ("0" + time_start.getHours()).slice(-2);
+                    var currentMinutes = ("0" + time_start.getMinutes()).slice(-2);
+                    var currentSeconds = ("0" + time_start.getSeconds()).slice(-2);
+                    var t = currentHours + ":" + currentMinutes + ":" + currentSeconds;
+                    // var t = time_start.getHours() + ":" + time_start.getMinutes() + ":" + time_start.getSeconds();
+                    this.available_time_start.push(this.timeFormatter(t))
+                  }
+                  console.log(this.available_time_start)
+                }, // end of function getInstructorAvailability
+
                 // this function will set time start
                 onChangeDay: function(){
                   if (this.selectedInstructor == null) {
                     // filter static time start using course sched and room sched
-
+                    // this.setTimeStart();
                   }else{
-                    this.setTimeStart();
+
                     // console.log(this.available_time_start)
 
-                    var roomSchedules = this.filterRoomSchedule();
-                    var courseSchedules = this.filterCourseSchedule();
-                    var instructorSchedules = this.filterInstructorSchedule();
+                    // var roomSchedules = this.filterRoomSchedule();
+                    // var courseSchedules = this.filterCourseSchedule();
+                    // var instructorSchedules = this.filterInstructorSchedule();
+                    this.all_conflicts = [];
+                    // gets all used schedules
+                    this.filterInstructorSchedule()
+                    this.filterCourseSchedule()
+                    this.filterRoomSchedule()
+
+                    // console.log(this.all_conflicts)
+                    var schedule_conflicts = [];
+                    this.all_conflicts.forEach((item) => {
+                      // var time_start = new Date (new Date().toDateString() + ' ' + this.selectedDay.time_start);
+
+                        var currentHours = ("0" + item.getHours()).slice(-2);
+                        var currentMinutes = ("0" + item.getMinutes()).slice(-2);
+                        var currentSeconds = ("0" + item.getSeconds()).slice(-2);
+                        var t = currentHours + ":" + currentMinutes + ":" + currentSeconds;
+                        // var t = time_start.getHours() + ":" + time_start.getMinutes() + ":" + time_start.getSeconds();
+                        schedule_conflicts.push(this.timeFormatter(t))
+                    });
+
+                    console.log(schedule_conflicts)
+                    // this.getInstructorAvailability()
 
                     // for (var i = 0; i < array.length; i++) {
                     //   array[i]
                     // }
 
-                    console.log(instructorSchedules.length)
+                    // console.log(instructorSchedules.length)
                     // filter time start using instructor sched, course sched and room sched
                     // console.log(this.selectedDay)
                     // var a = new Date (new Date().toDateString() + ' ' + '10:30:00');
