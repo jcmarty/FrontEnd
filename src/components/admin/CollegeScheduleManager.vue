@@ -254,6 +254,7 @@ thead tr th{
 </style>
 <script>
     import Axios from "axios";
+    import moment from 'moment';
       export default {
             name: 'CollegeClassSchedule',
             data() {
@@ -390,6 +391,7 @@ thead tr th{
                 // this function will set time end
                 onChangeTimeStart: function(){
                   this.selectedTimeEnd = null;
+                  this.disableAddBtn = true;
                   this.available_time_end = [];
                   var index = this.available_time_start.indexOf(this.selectedTimeStart)
 
@@ -398,6 +400,30 @@ thead tr th{
                     var time = this.available_time_start[i+1];
                     this.available_time_end.push(time)
                   }
+                  var time_ends = [];
+                  for (var i = 0; i < this.available_time_end.length-1; i++) {
+                    var x = this.available_time_end[i];
+
+                    var split_time = x.split(":");
+                    var min_ampm = split_time[1].split(" ")
+
+                    var hour = split_time[0];
+
+                    var s = this.available_time_end[i+1];
+
+                    var split_time_s = s.split(":");
+                    var min_ampm_s = split_time_s[1].split(" ")
+
+                    var hour_s = split_time_s[0];
+
+                    if (parseInt(hour + 1) == parseInt(hour_s)  ||  parseInt(hour) == parseInt(hour_s)) {
+                      time_ends.push(this.available_time_end[i])
+                    }else {
+
+                    }
+                  }
+
+                  console.log(time_ends)
                 },
 
 
@@ -469,10 +495,12 @@ thead tr th{
                   var conflicts = [];
                   var time_start = new Date (new Date().toDateString() + ' ' + conflict.time_start);
                   var time_end = new Date (new Date().toDateString() + ' ' + conflict.time_end);
-
-                  for (var i = time_start; i < time_end; time_start.setMinutes(time_start.getMinutes() + 30)) {
-                    this.all_conflicts.push(new Date(time_start))
+                  if (conflict) {
+                    for (var i = time_start; i < time_end; time_start.setMinutes(time_start.getMinutes() + 30)) {
+                      this.all_conflicts.push(new Date(time_start))
+                    }
                   }
+
 
                   // filter time start using instructor sched, course sched and room sched
                   // console.log(this.selectedDay)
@@ -543,29 +571,23 @@ thead tr th{
                     // var t = time_start.getHours() + ":" + time_start.getMinutes() + ":" + time_start.getSeconds();
                     this.available_time_start.push(this.timeFormatter(t))
                   }
-                  console.log(this.available_time_start)
+                  // console.log(this.available_time_start)
                 }, // end of function getInstructorAvailability
 
                 // this function will set time start
                 onChangeDay: function(){
                   if (this.selectedInstructor == null) {
                     // filter static time start using course sched and room sched
-                    // this.setTimeStart();
-                  }else{
-
-                    // console.log(this.available_time_start)
-
-                    // var roomSchedules = this.filterRoomSchedule();
-                    // var courseSchedules = this.filterCourseSchedule();
-                    // var instructorSchedules = this.filterInstructorSchedule();
+                    this.available_time_start = [];
                     this.all_conflicts = [];
-                    // gets all used schedules
-                    this.filterInstructorSchedule()
+
+
+
                     this.filterCourseSchedule()
                     this.filterRoomSchedule()
 
-                    // console.log(this.all_conflicts)
                     var schedule_conflicts = [];
+
                     this.all_conflicts.forEach((item) => {
                       // var time_start = new Date (new Date().toDateString() + ' ' + this.selectedDay.time_start);
 
@@ -578,11 +600,63 @@ thead tr th{
                     });
 
                     console.log(schedule_conflicts)
-                    // this.getInstructorAvailability()
+                    this.getInstructorAvailability();
+                    console.log(this.available_time_start)
 
-                    // for (var i = 0; i < array.length; i++) {
-                    //   array[i]
-                    // }
+
+                    // removes used time start
+                    for (var i = 0; i < schedule_conflicts.length; i++) {
+                      var time = schedule_conflicts[i];
+                      this.available_time_start = this.available_time_start.filter(function(item) {
+                        return item !== time
+                      })
+                    }
+
+                    console.log(this.available_time_start)
+                    this.disableAddBtn = false;
+                  }else{
+
+                    this.available_time_start = [];
+                    this.all_conflicts = [];
+                    // gets all used schedules
+                    this.filterInstructorSchedule()
+                    this.filterCourseSchedule()
+                    this.filterRoomSchedule()
+
+                    // console.log(this.all_conflicts)
+                    var schedule_conflicts = [];
+
+                    this.all_conflicts.forEach((item) => {
+                      // var time_start = new Date (new Date().toDateString() + ' ' + this.selectedDay.time_start);
+
+                        var currentHours = ("0" + item.getHours()).slice(-2);
+                        var currentMinutes = ("0" + item.getMinutes()).slice(-2);
+                        var currentSeconds = ("0" + item.getSeconds()).slice(-2);
+                        var t = currentHours + ":" + currentMinutes + ":" + currentSeconds;
+                        // var t = time_start.getHours() + ":" + time_start.getMinutes() + ":" + time_start.getSeconds();
+                        schedule_conflicts.push(this.timeFormatter(t))
+                    });
+
+                    console.log(schedule_conflicts)
+                    this.getInstructorAvailability()
+                    console.log(this.available_time_start)
+
+
+                    // removes used time start
+                    for (var i = 0; i < schedule_conflicts.length; i++) {
+                      var time = schedule_conflicts[i];
+                      // var checker = schedule_conflicts.includes(time);
+                      // if (checker) {
+                        // this.available_time_start.splice(time, 1);
+                        this.available_time_start = this.available_time_start.filter(function(item) {
+                            return item !== time
+                        })
+                      // }
+                      // console.log(checker)
+                    }
+
+                    // console.log(schedule_conflicts)
+                    console.log(this.available_time_start)
 
                     // console.log(instructorSchedules.length)
                     // filter time start using instructor sched, course sched and room sched
@@ -602,6 +676,7 @@ thead tr th{
 
 
 
+                    this.disableAddBtn = false;
                   }
                 }, // end of function onChangeDay
 
@@ -612,6 +687,9 @@ thead tr th{
                     this.day_options = [];
                     this.available_time_start = [];
                     this.available_time_end = [];
+                    this.selectedTimeStart = null;
+                    this.selectedTimeEnd = null;
+                    this.disableAddBtn = true;
 
                     Axios
                       .get('http://localhost/api/v1/instructors/' + this.selectedInstructor
@@ -712,6 +790,9 @@ thead tr th{
                     this.available_time_end = [];
                     this.selectedDay = null;
                     this.selectedRoom = null;
+                    this.selectedTimeStart = null;
+                    this.selectedTimeEnd = null;
+                    this.disableAddBtn = true;
                   }else {
 
                   }
@@ -738,6 +819,14 @@ thead tr th{
                       this.items = response.data;
                       this.totalRows = this.items.length;
                     })
+                    this.available_time_start = [];
+                    this.available_time_end = [];
+                    this.selectedInstructor = null;
+                    this.selectedRoom = null;
+                    this.selectedDay = null;
+                    this.selectedTimeStart = null;
+                    this.selectedTimeEnd = null;
+                    this.disableAddBtn = true;
                 },
 
                 // this function will get instructors that prefers on the selected subject
@@ -775,6 +864,8 @@ thead tr th{
                   this.selectedRoom = null;
                   this.selectedDay = null;
                   this.selectedTimeStart = null;
+                  this.selectedTimeEnd = null;
+                  this.disableAddBtn = true;
                 },
 
                 // this function will get all subjects from the selected curriculum
@@ -810,6 +901,8 @@ thead tr th{
                       this.selectedRoom = null;
                       this.selectedDay = null;
                       this.selectedTimeStart = null;
+                      this.selectedTimeEnd = null;
+                      this.disableAddBtn = true;
                 },
 
                 // this function will set year level option based on the selected course
@@ -845,6 +938,8 @@ thead tr th{
                  this.selectedRoom = null;
                  this.selectedDay = null;
                  this.selectedTimeStart = null;
+                 this.selectedTimeEnd = null;
+                 this.disableAddBtn = true;
                 },
 
                 // this function will get curriculums from the selected course
@@ -875,6 +970,8 @@ thead tr th{
                       this.selectedRoom = null;
                       this.selectedDay = null;
                       this.selectedTimeStart = null;
+                      this.selectedTimeEnd = null;
+                      this.disableAddBtn = true;
                     // });
                 },
 
@@ -899,6 +996,8 @@ thead tr th{
                   this.selectedRoom = null;
                   this.selectedDay = null;
                   this.selectedTimeStart = null;
+                  this.selectedTimeEnd = null;
+                  this.disableAddBtn = true;
                 },
 
                 // create class schedule
@@ -990,7 +1089,7 @@ thead tr th{
 
                   var h = hour % 12 || 12;
                   var ampm = (hour < 12 || hour == 24) ? "AM" : "PM";
-                  return h + ":" + min + ampm;
+                  return h + ":" + min + " " + ampm;
                 },
 
                 // for clearing forms
@@ -1020,6 +1119,7 @@ thead tr th{
                   this.selectedDay = null;
                   this.selectedTimeStart = null;
                   this.selectedTimeEnd = null;
+                  this.disableAddBtn = true
 
 
                   if(this.showForm){
@@ -1104,229 +1204,6 @@ thead tr th{
                       alert("Instructor has no schedule for this day");
                     }
                   })
-                },
-
-                // get the available time start
-                // based on the time time availability of selected room, instructor, and course
-                onChangeDaytart: function(){
-                  var used = [
-                    {
-                      start: "09:00:00",
-                      end: "10:30:00"
-                    },
-                    {
-                      start: "10:30:00",
-                      end: "11:30:00"
-                    },
-
-                    {
-                      start: "13:00:00",
-                      end: "14:00:00"
-                    },
-                    {
-                      start: "14:00:00",
-                      end: "15:30:00"
-                    },
-                  ];
-
-                  // console.log(used);
-                  var ampm = "";
-                  var converted = "";
-                  var h = "";
-                  var usedTime = [];
-                  var all_start = [];
-                  var all_end = [];
-
-                   for (var a = 0; a < used.length; a++) {
-
-                   	var split_used_start = used[a].start.split(":");
-                		var hour_used_start = split_used_start[0];
-                    var min_start = split_used_start[1]
-
-                    var split_used_end = used[a].end.split(":");
-                		var hour_used_end = split_used_end[0];
-                    var min_end = split_used_end[1];
-
-
-                    var minutes_start = min_start;
-                    var x = hour_used_start % 12 || 12;
-                    var start_ampm = (hour_used_start < 12 || hour_used_start == 24) ? "AM" : "PM";
-                    var start_converted = x + ":" +  minutes_start + start_ampm;
-
-                    all_start.indexOf(start_converted) === -1 ? all_start.push(start_converted) : console.log();
-
-                    var minutes_start = min_end;
-                    var y = hour_used_end % 12 || 12;
-                    var end_ampm = (hour_used_end < 12 || hour_used_end == 24) ? "AM" : "PM";
-                    var end_converted = y + ":" +  minutes_start + end_ampm;
-
-                    all_end.indexOf(end_converted) === -1 ? all_end.push(end_converted) : console.log();
-
-
-                    for (var b = hour_used_start; b <= hour_used_end; b++) {
-                			for (var j = 0; j < 2; j++) {
-                				if (j == 0){
-                				  var minutes_start = "00";
-                			  	h = b % 12 || 12;
-                			  	ampm = (b < 12 || b == 24) ? "AM" : "PM";
-                			   	converted = h + ":" +  minutes_start + ampm;
-                          // console.log(converted);
-                          usedTime.indexOf(converted) === -1 ? usedTime.push(converted) : console.log();
-                			   	// usedTime.push(converted);
-                       	}else if(j == 1){
-                        	if(b == hour_used_end){
-                            if(min_end == "30"){
-                              var minutes_start = min_end;
-                              h = b % 12 || 12;
-                              ampm = (b < 12 || b == 24) ? "AM" : "PM";
-                              converted = h + ":" +  minutes_start + ampm;
-
-                              usedTime.indexOf(converted) === -1 ? usedTime.push(converted) : console.log();
-                            }
-                          }else{
-                          	var minutes_start = "30";
-                				  	h = b % 12 || 12;
-                   				  ampm = (b < 12 || b == 24) ? "AM" : "PM";
-                            converted = h + ":" +  minutes_start + ampm;
-                            // console.log(converted);
-                   				  usedTime.indexOf(converted) === -1 ? usedTime.push(converted) : console.log();
-                          }
-                        }
-                			}
-                    }
-                	}
-
-                  //remove used time
-                  for(var n = 0; n < all_end.length; n++){
-                    for(var m = 0; m < all_start.length; m++){
-                      if(all_end[n] == all_start[m]){
-                        all_end.splice(n, 1)
-                      }
-                    }
-                  }
-
-                  // removes not used time
-                  for(var o = 0; o < usedTime.length; o++){
-                    for(var p = 0; p < all_end.length; p++){
-                      if(usedTime[o] == all_end[p]){
-                        usedTime.splice(o, 1)
-                      }
-                    }
-                  }
-
-                  var available = this.availabilities;
-                  // removes availibilities using used time
-                  for(var q = 0; q < available.length; q++){
-                    for(var w = 0; w < usedTime.length; w++){
-                      if(available[q] == usedTime[w]){
-                        available.splice(q, 1)
-                      }
-                    }
-                  }
-                  this.time_start_options = available;
-
-
-                },
-
-
-                getAvailabilities : function (data){
-                  // this.aaaaaa()
-                  var used = [
-                      {
-                        start: "8:00:00",
-                        end: "9:30:00",
-                      },
-                      {
-                        start: "10:30:00",
-                        end: "11:00:00",
-                      },
-                      {
-                        start: "11:00:00",
-                        end: "1:00:00",
-                      },
-
-                    ];
-                  var ampm = "";
-                  var converted = "";
-                  var h = "";
-                  var usedTime = [];
-                  var free = [];
-
-                   for (var a = 0; a < used.length; a++) {
-                   	var split_used_start = used[a].start.split(":");
-                		var hour_used_start = split_used_start[0];
-                    var min_start = split_used_start[1]
-
-                    var split_used_end = used[a].end.split(":");
-                		var hour_used_end = split_used_end[0];
-                    var min_end = split_used_end[1];
-
-                    var minutes_start = min_start;
-                    var x = hour_used_start % 12 || 12;
-                    var start_ampm = (hour_used_start < 12 || hour_used_start == 24) ? "AM" : "PM";
-                    var start_converted = x + ":" +  minutes_start + start_ampm;
-                    // this.time_start_options.push(start_converted);
-                    // var newItem = "OLD_ITEM_2";
-                    // var array = ["OLD_ITEM_1", "OLD_ITEM_2"];
-
-                    this.notUsedTime.indexOf(start_converted) === -1 ? this.notUsedTime.push(start_converted) : console.log();
-
-                    var minutes_start = min_end;
-                    var y = hour_used_end % 12 || 12;
-                    var end_ampm = (hour_used_end < 12 || hour_used_end == 24) ? "AM" : "PM";
-                    var end_converted = y + ":" +  minutes_start + end_ampm;
-
-                    this.notUsedTime.indexOf(end_converted) === -1 ? this.notUsedTime.push(end_converted) : console.log();
-
-
-                    for (var b = hour_used_start; b <= hour_used_end; b++) {
-                			for (var j = 0; j < 2; j++) {
-                				if (j == 0){
-                				  var minutes_start = "00";
-                			  	h = b % 12 || 12;
-                			  	ampm = (b < 12 || b == 24) ? "AM" : "PM";
-                			   	converted = h + ":" +  minutes_start + ampm;
-                          // console.log(converted);
-                          usedTime.indexOf(converted) === -1 ? usedTime.push(converted) : console.log();
-                			   	// usedTime.push(converted);
-                       	}else if(j == 1){
-                        	if(b == hour_used_end){
-                            if(min_end == "30"){
-                              var minutes_start = min_end;
-                              h = b % 12 || 12;
-                              ampm = (b < 12 || b == 24) ? "AM" : "PM";
-                              converted = h + ":" +  minutes_start + ampm;
-                              // console.log(converted);
-                              usedTime.indexOf(converted) === -1 ? usedTime.push(converted) : console.log();
-                              // usedTime.push(converted);
-                            }
-                          }else{
-                          	var minutes_start = "30";
-                				  	h = b % 12 || 12;
-                   				  ampm = (b < 12 || b == 24) ? "AM" : "PM";
-                            converted = h + ":" +  minutes_start + ampm;
-                            // console.log(converted);
-                   				  usedTime.push(converted);
-                          }
-                        }
-                			}
-                    }
-                	}
-                  //  all of used time
-                  // console.log(usedTime.sort());
-
-                  // for(var i = 0; i < this.notUsedTime.length; i++){
-                  //   var time = this.notUsedTime[i]
-                  //   // cuts the un used time
-                  //   usedTime.indexOf(time) !== -1 && usedTime.splice(usedTime.indexOf(time), 1)
-                  // }
-                  //
-                  // for(var i = 0; i < usedTime.length; i++){
-                  //   var used = usedTime[i]
-                  //     this.availabilities.indexOf(used) !== -1 &&   this.availabilities.splice(  this.availabilities.indexOf(used), 1)
-                  // }
-
-                  // this.time_start_options = this.availabilities
                 },
               }
             }
