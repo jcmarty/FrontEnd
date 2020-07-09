@@ -24,6 +24,7 @@
             <b-form-input
               type="text"
               id="lastName"
+              v-model="Students.last_name"
               :disabled="information_disable">
             </b-form-input>
           </b-form-group>
@@ -37,6 +38,7 @@
             <b-form-input
               type="text"
               id="firstName"
+                v-model="Students.first_name"
               :disabled="information_disable">
             </b-form-input>
           </b-form-group>
@@ -50,6 +52,7 @@
             <b-form-input
               type="text"
               id="middleName"
+                v-model="Students.middle_name"
               :disabled="information_disable">
             </b-form-input>
           </b-form-group>
@@ -63,6 +66,7 @@
             <b-form-input
               type="text"
               id="suffixName"
+                v-model="Students.suffix_name"
               :disabled="information_disable">
             </b-form-input>
           </b-form-group>
@@ -79,6 +83,7 @@
             <b-form-input
               type="text"
               id="schoolLastAttended"
+                v-model="Students.school_last_attended"
               :disabled="information_disable">
             </b-form-input>
           </b-form-group>
@@ -92,6 +97,7 @@
               <b-form-input
                 type="text"
                 id="schoolAddress"
+                  v-model="Students.school_address"
                 :disabled="information_disable">
               </b-form-input>
             </b-form-group>
@@ -109,6 +115,7 @@
               <b-form-input
                 type="text"
                 id="universityCollege"
+                  v-model="Students.college_last_attended"
                 :disabled="information_disable">
               </b-form-input>
             </b-form-group>
@@ -121,6 +128,7 @@
                 <b-form-input
                   type="text"
                   id="universityAddress"
+                    v-model="Students.college_address"
                   :disabled="information_disable">
                 </b-form-input>
               </b-form-group>
@@ -144,6 +152,7 @@
             <b-form-input
               type="text"
               id="presentAddress"
+                v-model="Students.address"
               :disabled="information_disable">
             </b-form-input>
           </b-form-group>
@@ -157,6 +166,7 @@
             <b-form-input
               type="text"
               id="Barangay"
+                v-model="Students.barangay"
               :disabled="information_disable">
             </b-form-input>
           </b-form-group>
@@ -170,6 +180,7 @@
             <b-form-input
               type="text"
               id="cityMunicipality"
+              v-model="Students.city"
               :disabled="information_disable">
             </b-form-input>
           </b-form-group>
@@ -183,6 +194,7 @@
             <b-form-input
               type="text"
               id="Province"
+                v-model="Students.province"
               :disabled="information_disable">
             </b-form-input>
           </b-form-group>
@@ -196,6 +208,7 @@
             <b-form-input
               type="text"
               id="postalCode"
+                v-model="Students.postal"
               :disabled="information_disable">
             </b-form-input>
           </b-form-group>
@@ -210,7 +223,7 @@
             label-for="birthDate">
             <datepicker
               id="birthDate"
-              :clear-button="true"
+              v-model="Students.birth_date"
               :calendar-button="true"
               :calendar-button-icon="calendarIcon"
               :bootstrap-styling="true"
@@ -226,6 +239,7 @@
             label="Gender"
             label-for="Gender">
             <b-form-select
+              v-model="Students.gender"
               :options="genderOptions"
               :disabled="information_disable">
             </b-form-select>
@@ -240,6 +254,7 @@
             <b-form-input
               type="email"
               id="emailAddress"
+              v-model="Students.email"
               :disabled="information_disable">
             </b-form-input>
           </b-form-group>
@@ -255,6 +270,7 @@
             <b-form-input
               type="number"
               id="cellphoneNo"
+                v-model="Students.cellphone"
               :disabled="information_disable">
             </b-form-input>
           </b-form-group>
@@ -268,6 +284,7 @@
             <b-form-input
               type="text"
               id="placeofBirth"
+              v-model="Students.birth_place"
               :disabled="information_disable">
             </b-form-input>
           </b-form-group>
@@ -281,6 +298,7 @@
             <b-form-input
               type="text"
               id="citizenShip"
+                v-model="Students.citizenship"
               :disabled="information_disable">
             </b-form-input>
           </b-form-group>
@@ -294,6 +312,7 @@
             <b-form-input
               type="text"
               id="civilStatus"
+                v-model="Students.civil_status"
               :disabled="information_disable">
             </b-form-input>
           </b-form-group>
@@ -307,6 +326,7 @@
             <b-form-input
               type="text"
               id="telephoneNo"
+                v-model="Students.telephone"
               :disabled="information_disable">
             </b-form-input>
           </b-form-group>
@@ -326,6 +346,7 @@
             <b-form-input
               type="text"
               id="fathersName"
+                v-model="Students.father_name"
               :disabled="information_disable">
             </b-form-input>
           </b-form-group>
@@ -339,6 +360,7 @@
             <b-form-input
               type="text"
               id="mothersName"
+                v-model="Students.mother_name"
               :disabled="information_disable">
             </b-form-input>
           </b-form-group>
@@ -360,6 +382,7 @@
             <b-form-input
               type="text"
               id="guardianName"
+                v-model="Students.contact_person"
               :disabled="information_disable">
             </b-form-input>
           </b-form-group>
@@ -373,6 +396,7 @@
             <b-form-input
               type="text"
               id="contactAddress"
+                v-model="Students.contact_address"
               :disabled="information_disable">
             </b-form-input>
           </b-form-group>
@@ -386,6 +410,7 @@
           <b-form-input
             type="number"
             id="contactNumber"
+              v-model="Students.contact_number"
             :disabled="information_disable">
           </b-form-input>
         </b-form-group>

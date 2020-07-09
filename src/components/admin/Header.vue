@@ -364,13 +364,6 @@
         },
 
 
-        mounted() {
-          if (this.$refs['ChangePasswordModal'].hide()) {
-            console.log('asdasdas')
-
-          }
-
-        },
         methods: {
           hide() {
             this.$emit('hide')
@@ -381,16 +374,16 @@
           },
 
           makeToast(append = false) {
-            this.$nextTick(() => {
-              this.$v.$reset();
-            });
-
             this.$bvToast.toast(`${this.alertMessage}` , {
               autoHideDelay: 2000,
               appendToast: append,
               variant: (this.alertMessage === "User profile successfully updated." || this.alertMessage === "Password successfully updated.")? 'success' : 'danger',
               toaster: "b-toaster-top-center",
             })
+
+            this.$nextTick(() => {
+              this.$v.$reset();
+            });
           },
 
           showUpdateSettingModal : function(){

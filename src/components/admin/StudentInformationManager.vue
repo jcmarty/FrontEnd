@@ -26,7 +26,7 @@
       </b-alert>
 
       <b-modal id="confirmUpdate" ref="confirmUpdate" size="md" no-close-on-backdrop>
-        <center><h6>Are you sure you want to update ?</b></h6></center>
+        <center><h6>Are you sure you want to update this information?</b></h6></center>
 
           <!-- Modal Footer Template -->
           <template v-slot:modal-footer="{ cancel, ok }">
