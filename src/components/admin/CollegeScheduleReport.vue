@@ -3,6 +3,7 @@
     <h1 class="d-print-none font-weight-bold text-dark">Class Schedule Report</h1>
     <hr class="d-print-none"/>
 
+    <div class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded d-print-none">
     <b-form-row class="d-print-none">
       <b-col  cols="12" md="6" lg="2">
         <b-form-group class="academicyear" label="Academic Year" label-for="academicYear">
@@ -51,7 +52,7 @@
         </b-form-group>
       </b-col>
 
-      <b-col cols="12" md="6" lg="2">
+      <b-col cols="12" md="6" lg="1">
         <b-form-group class="block" label="Block" label-for="Block">
           <b-form-select id="block" @change="getFilteredClassSchedule" v-bind:value="blockData" v-model="selectedBlock">
             <option value="null" hidden>Block</option>
@@ -62,43 +63,19 @@
           </b-form-select>
         </b-form-group>
       </b-col>
-    </b-form-row>
 
-    <b-form-row class="d-print-none">
-      <b-col class="py-4">
+      <b-col>
         <!-- Add New Room Button -->
-        <b-button variant="primary" onclick="window.print()" class="float-right">
+        <b-button class="mt-4"  variant="primary" onclick="window.print()">
           Print
         </b-button>
       </b-col>
     </b-form-row>
 
-
-    <div class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded">
-
-      <center>
-        <img src="../../assets/images/comteq_logo.png" alt="Comteq Logo" class="responsive d-none d-print-block" id="ComteqLogoPrint"/>
-      </center>
-
-      <b-form-row class="d-none d-print-block">
-          <center>
-            <h4>COMTEQ Computer & Business College</h4>
-            <h5>1200 4th floor Savers Appliance Depot, Rizal Ave, East Tapinac Olongapo City Zambales. </h5>
-        </center>
-      </b-form-row>
-
-      <b-form-row class="d-none d-print-block">
-          <center><br/><br/>
-            <h5>SY ({{selectedAcademicYear.academic_year}})</h5>
-            <h5>{{selectedSemester.semester}}</h5>
-            <h5 v-if="selectedCourse === null">" "</h5>
-            <h5 v-else>{{selectedCourse.course_code}}</h5>
-            <h5 v-if="selectedCurriculum === null">" "</h5>
-            <h5 v-else>{{selectedCurriculum.curriculum_title}} {{selectedYearLevel}}</h5>
-        </center>
-      </b-form-row>
+  </div>
 
 
+    <div class="mx-3 mt-4 mb-4 px-4 pt-4 pb-3 bg-white shadow rounded d-print-none">
       <!-- Main table element -->
       <b-overlay :show="isLoading" rounded="sm">
       <b-table
@@ -144,6 +121,34 @@
       </b-row>
     </div>
       <!-- end of table -->
+
+      <div class="to_print d-none d-print-block">
+        <div class="header d-none d-print-block">
+          <img src="../../assets/images/header_logo.png" alt="Comteq Logo" class="logo"/>
+        </div>
+        <div class="content d-none d-print-block ">
+          <p  style="color: #002060" class="h2 font-weight-bold text-center mt-3">{{selectedAcademicYear.academic_year}}</p>
+          <p  style="color: #ff0000" class="h4 font-weight-bold text-center">{{selectedSemester.semester}}</p>
+          <p  class="h3 font-weight-bold text-center" >
+            <span v-if="selectedCourse">{{selectedCourse.course_code}} - </span>
+            <span v-if="selectedYearLevel">{{selectedYearLevel}} | </span>
+            <span v-if="selectedBlock">Block {{selectedBlock}}</span>
+          </p>
+          
+        <b-table
+          class="my-3 table-striped"
+          show-empty
+          responsive
+          bordered
+          hover
+          :items="items"
+          :fields="fields"
+          :current-page="currentPage"
+          :per-page="perPage"
+          :filter="filter">
+        </b-table>
+      </div>
+    </div>
 
   </div> <!-- End of Main Div -->
 </template>
@@ -221,7 +226,7 @@
 
 
     mounted () {
-      this.getFilteredClassSchedule();
+      // this.getFilteredClassSchedule();
 
 
     }, // End of Mounted

@@ -366,8 +366,7 @@
 
         methods: {
           hide() {
-            this.$emit('hide')
-            this.clearPass();
+            this.$emit('hide');
             this.$nextTick(() => {
               this.$v.$reset();
             });
@@ -418,18 +417,7 @@
               var semester = {id : response.data.settings.current_sem, semester : this.selectedSemester.semester}
               this.$store.dispatch('loadCurrentAcademicYear', academic_year);
               this.$store.dispatch('loadCurrentSemester', semester);
-              // console.log(response.data.settings)
 
-              // alert("Success")
-
-              // setTimeout(() => {
-                // this.selectedAcademicYear = response.data.settings.current_ay;
-                // this.selectedSemester = response.data.settings.current_sem;
-                // this.current_ay = this.$store.getters.getCurrentAcademicYear.academic_year;
-                // this.current_sem = this.$store.getters.getCurrentSemester.semester;
-              // }, 4000);
-              // console.log(this.selectedAcademicYear)
-              // console.log(this.selectedSemester)
             })
             .catch(error => {
               // console.log(error.response.data)
@@ -474,18 +462,26 @@
 
           updateUserPass: function(){
             this.errors = [];
+            var new_pass = {
+              old_password: this.user_password.old_password,
+              password: this.user_password.password}
             Axios
-            .put('http://localhost/api/v1/update_password/' + this.user_data.id, this.user_password, {
+            .put('http://localhost/api/v1/update_password/' + this.user_data.id, new_pass, {
               headers: {'Authorization': 'Bearer ' + this.$store.getters.getToken}
             })
             .then(response => {
               this.alertMessage = response.data.message;
+              this.$refs['confirmPassUpdate'].hide();
               this.makeToast();
+              this.clearPass();
+
             })
             .catch(error => {
               // console.log(error.response.data)
               this.alertMessage = error.response.data.message;
+              this.$refs['confirmPassUpdate'].hide();
               this.makeToast();
+              this.clearPass();
               const values = Object.values(error.response.data.errors);
               for(const val of values){
                 for(const err of val){
@@ -493,8 +489,7 @@
                 }
               }
             });
-            this.clearPass();
-            this.$refs['confirmPassUpdate'].hide();
+
           }, // End of Update User Account Function
           clearProf(){
             this.profile_data ={
