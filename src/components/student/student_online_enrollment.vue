@@ -17,7 +17,7 @@
                         label-for="Course">
             <b-form-select v-model="selectedCourse"
                            id="Course"
-                           @change="getCurriculum"
+                           @change="onChangeCourse"
                            aria-describedby="course-feedback">
               <option value="null" hidden>Select Course</option>
               <option v-for="c in courseRow" :value="{
@@ -40,7 +40,7 @@
                         label-for="Curriculum">
             <b-form-select v-model="selectedCurriculum"
                            id="Curriculum"
-                           @change="setYearLevel"
+                           @change="onChangeYearLevel"
                            aria-describedby="curriculum-feedback">
               <option value="null" hidden>Select Curriculum</option>
               <option v-for="curriculum in curriculumOptions " v-bind:value="{id: curriculum.id, subjects: curriculum.curriculum_subjects, curriculum: curriculum}">{{curriculum.curriculum_title}}</option>
@@ -65,30 +65,8 @@
           </b-form-group>
         </b-col>
         <!-- yearLevel -->
-
-        <!-- block -->
-        <!-- <b-col cols="12" md="6" lg="3">
-          <b-form-group class="block"
-                        label="Block"
-                        label-for="block">
-            <b-form-select v-model="selectedBlock"
-                           id="block"
-                           @change=""
-                           :state="blockState"
-                           aria-describedby="block-feedback">
-              <option value="null" hidden>Select Block</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-            </b-form-select>
-            <b-form-invalid-feedback id="block-feedback">
-              Block is required.
-            </b-form-invalid-feedback>
-          </b-form-group>
-        </b-col> -->
-        <!-- block -->
       </b-form-row>
+
       <b-form-row>
         <b-col>
           <b-button variant="danger" @click="cancelEnrollment">
@@ -111,7 +89,7 @@
       <b-form-row>
         <b-col>
           <b-button variant="danger" @click="showCourseForm">
-            cancel
+            Previous
           </b-button>
         </b-col>
         <b-col class="d-flex justify-content-end">
@@ -130,7 +108,7 @@
       <b-form-row>
         <b-col>
           <b-button variant="danger" @click="showSubjectsForm">
-            cancel
+            Previous
           </b-button>
         </b-col>
         <b-col class="d-flex justify-content-end">
@@ -296,7 +274,7 @@ export default {
     },
 
     // gets all curriculum record
-    getCurriculum: function() {
+    onChangeCourse: function() {
       this.courseState = null;
       var curriculums = this.selectedCourse.curriculum
       if (curriculums.length == 0) {
@@ -308,10 +286,10 @@ export default {
       this.selectedCurriculum = null;
       this.selectedYearLevel = null;
       this.yearOptions = [];
-    }, // end of function getCurriculum
+    }, // end of function onChangeCourse
 
     // SET YEAR LEVEL BASED ON SELECTED COURSE
-    setYearLevel: function() {
+    onChangeYearLevel: function() {
       this.curriculumState = null;
       if (this.selectedCourse.year == '4') {
         this.yearOptions = [
@@ -328,7 +306,7 @@ export default {
       }
       // clears values in select boxes
       this.selectedYearLevel = null;
-    }, // end of function setYearLevel
+    }, // end of function onChangeYearLevel
 
     cancelEnrollment: function(){
       this.courseSetupForm = false;
