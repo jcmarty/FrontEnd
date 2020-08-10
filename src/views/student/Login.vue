@@ -18,6 +18,7 @@
             <b-form-input
               type="text"
               id="username"
+              class="noCaps"
               v-model="input.username"
               placeholder="username">
             </b-form-input>
@@ -29,6 +30,7 @@
             <b-form-input
               type="password"
               id="password"
+              class="noCaps"
               v-model="input.password"
               placeholder="password">
             </b-form-input>

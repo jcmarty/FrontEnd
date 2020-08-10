@@ -40,7 +40,7 @@
                         label-for="Curriculum">
             <b-form-select v-model="selectedCurriculum"
                            id="Curriculum"
-                           @change="onChangeYearLevel"
+                           @change="onChangeCurriculum"
                            aria-describedby="curriculum-feedback">
               <option value="null" hidden>Select Curriculum</option>
               <option v-for="curriculum in curriculumOptions " v-bind:value="{id: curriculum.id, subjects: curriculum.curriculum_subjects, curriculum: curriculum}">{{curriculum.curriculum_title}}</option>
@@ -58,13 +58,29 @@
             <b-form-select v-model="selectedYearLevel"
                            id="yearLevel"
                            :options="yearOptions"
-                           @change=""
+                           @change="onChangeYearLevel"
                            aria-describedby="yearLevel-feedback">
               <option value="null" hidden>Select Year Level</option>
             </b-form-select>
           </b-form-group>
         </b-col>
         <!-- yearLevel -->
+
+        <!-- block -->
+        <b-col cols="12" md="6" lg="3">
+          <b-form-group class="block"
+                        label="Block"
+                        label-for="block">
+            <b-form-select v-model="selectedBlock"
+                           id="block"
+                           @change="onChangeBlock"
+                           aria-describedby="yearLevel-feedback">
+              <option value="null" hidden>Select Block</option>
+              <option v-for="block in blockOptions " value="block">BLOCK {{block}}</option>
+            </b-form-select>
+          </b-form-group>
+        </b-col>
+        <!-- block -->
       </b-form-row>
 
       <b-form-row>
@@ -241,6 +257,7 @@ export default {
 
       curriculumOptions: null,
       yearOptions: [],
+      blockOptions : [],
       subjectOptions: [],
       addedSubjects: [],
     }
@@ -288,8 +305,8 @@ export default {
       this.yearOptions = [];
     }, // end of function onChangeCourse
 
-    // SET YEAR LEVEL BASED ON SELECTED COURSE
-    onChangeYearLevel: function() {
+
+    onChangeCurriculum: function() {
       this.curriculumState = null;
       if (this.selectedCourse.year == '4') {
         this.yearOptions = [
@@ -306,7 +323,57 @@ export default {
       }
       // clears values in select boxes
       this.selectedYearLevel = null;
+    }, // end of function onChangeCurriculum()
+
+    // SET YEAR LEVEL BASED ON SELECTED COURSE
+    onChangeYearLevel: function(){
+      this.setBlock();
     }, // end of function onChangeYearLevel
+
+
+   setBlock: function() {
+      const myParams = {
+        academic_year_id : this.$store.getters.getCurrentAcademicYear,
+        semester_id : this.$store.getters.getCurrentSemester,
+        course_id : this.selectedCourse.id,
+        year_level : this.selectedYearLevel,
+        active : 1
+      };
+      this.getSchedulePerCourse(myParams);
+    },
+    getSchedulePerCourse: function(myParams){
+      Axios
+        .get('http://localhost/api/v1/class_schedules', {
+          headers: {'Authorization': 'Bearer ' + this.$store.getters.getStudentToken},
+          params : myParams
+        })
+        .then(response => {
+          var schedules = response.data;
+          if(schedules){
+            var blockOptions = [];
+            schedules.forEach((schedule) => {
+              blockOptions.indexOf(schedule.block) === -1 ? blockOptions.push(schedule.block) : console.log();
+              this.blockOptions = blockOptions;
+              this.blockOptions.sort();
+            })
+          }
+        })
+        .catch(error => {
+          alert(error.response.data.message)
+          this.alertMessage = error.response.data.message;
+          const values = Object.values(error.response.data.errors);
+          for(const val of values){
+            for(const err of val){
+              this.errors.push(err);
+            }
+          }
+          this.dismissErrorCountDown = this.dismissSecs;
+        });
+    }, // end of function getSchedulePerCourse()
+
+    onChangeBlock: function(){
+
+    },
 
     cancelEnrollment: function(){
       this.courseSetupForm = false;
@@ -324,6 +391,11 @@ export default {
       this.subjectSetupForm = true;
       this.previewForm = false;
       this.addbtn = false;
+
+
+
+      // const curriculum = this.selectedCurriculum
+      // console.log(curriculum);
     },
 
     showPreviewForm : function(){
