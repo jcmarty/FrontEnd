@@ -280,7 +280,7 @@
               // limiting semestral grade to 2 decimal places
               var roundedNumber = Math.round(semestralGrade, 0);
               item.semestral = roundedNumber;
-              return parseFloat(roundedNumber).toFixed(2);
+              return parseFloat(item.semestral).toFixed(2);
             },
           },
           {
@@ -294,8 +294,7 @@
               var midterm = item.midterm_grade? item.midterm_grade : 0;
               var prefinal = item.prefinal_grade? item.prefinal_grade : 0;
               var final = item.final_grade? item.final_grade : 0;
-              var totalGrade = parseFloat(prelim) + parseFloat(midterm) + parseFloat(prefinal) + parseFloat(final);
-              var semestralGrade = totalGrade / 4;
+              var semestralGrade = item.semestral;
               if (semestralGrade < 75 ) {
                 var num  = 5.00;
                 num = num.toFixed( 2 )
@@ -370,8 +369,7 @@
               var midterm = item.midterm_grade? item.midterm_grade : 0;
               var prefinal = item.prefinal_grade? item.prefinal_grade : 0;
               var final = item.final_grade? item.final_grade : 0;
-              var totalGrade = parseFloat(prelim) + parseFloat(midterm) + parseFloat(prefinal) + parseFloat(final);
-              var semestralGrade = totalGrade / 4;
+              var semestralGrade = item.semestral;
               var fa = "FAILED";
               var ps = "PASSED";
               var inc = "INCOMPLETE";

@@ -26,8 +26,8 @@
         </b-col>
         <b-col >
           <!-- Add New Room Button -->
-          <b-button class="mt-4 float-right"  variant="dark" onclick="window.print()">
-            Print <i class="fa fa-print"/>
+          <b-button class="mt-4 float-right"  variant="primary" onclick="window.print()">
+            Print
           </b-button>
         </b-col>
       </b-form-row>

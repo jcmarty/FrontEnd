@@ -60,8 +60,8 @@
 
         <b-col cols="12" md="6" lg="2">
           <!-- Add New Room Button -->
-          <b-button class="mt-4"  variant="dark" onclick="window.print()">
-            Print <i class="fa fa-print"/>
+          <b-button class="mt-4"  variant="primary" onclick="window.print()">
+            Print
           </b-button>
         </b-col>
     </b-form-row>

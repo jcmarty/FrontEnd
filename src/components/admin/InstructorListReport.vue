@@ -1,13 +1,13 @@
 <template>
   <div>
     <!-- page title -->
-    <h1 class="d-print-none font-weight-bold text-dark">Instructors Schedule Report</h1>
+    <h1 class="d-print-none font-weight-bold text-dark">Instructors List Report</h1>
     <hr class="d-print-none"/>
     <div class="px-4">
     <!-- start of filters -->
     <b-row class="d-print-none">
-      <!-- Academic Year -->
-      <b-col cols="12" md="6" lg="3">
+
+      <!-- <b-col cols="12" md="6" lg="3">
         <b-form-group class="Academic text-dark"
                       label="Academic Year"
                       label-for="Academic">
@@ -16,11 +16,9 @@
             <option :value="{ id: ay.id, academic_year: ay.academic_year}" v-for="ay in this.$store.getters.getAcademicYears">{{ay.academic_year}}</option>
           </b-form-select>
         </b-form-group>
-      </b-col>
-      <!-- Academic Year -->
+      </b-col> -->
 
-      <!-- Semester  -->
-      <b-col cols="12" md="6" lg="3">
+      <!-- <b-col cols="12" md="6" lg="3">
         <b-form-group class="semester text-dark"
                       label="Semester"
                       label-for="Semester">
@@ -29,11 +27,9 @@
             <option :value="{ id: sem.id, semester: sem.semester}" v-for="sem in this.$store.getters.getSemesters">{{sem.semester}}</option>
           </b-form-select>
         </b-form-group>
-      </b-col>
-      <!-- Semester  -->
+      </b-col> -->
 
-      <!-- Semester  -->
-      <b-col cols="12" md="6" lg="3">
+      <!-- <b-col cols="12" md="6" lg="3">
         <b-form-group class="instructor text-dark"
                       label="Instructor"
                       label-for="Instructor">
@@ -42,13 +38,13 @@
             <option :value="ins" v-for="ins in instructorOptions">{{ins.first_name}} {{ins.last_name}}</option>
           </b-form-select>
         </b-form-group>
-      </b-col>
+      </b-col> -->
       <!-- Semester  -->
 
       <!-- print button -->
       <b-col cols="12" md="6" lg="3">
         <!-- <b-button v-if="selectedInstructor" class="mt-4"  variant="info" onclick="window.print()"> -->
-        <b-button v-if="selectedInstructor" class="mt-4"  variant="primary" onclick="window.print()">
+        <b-button class="mt-4"  variant="primary" onclick="window.print()">
           Print
         </b-button>
       </b-col>
@@ -72,15 +68,6 @@
           :current-page="currentPage"
           :per-page="perPage"
           :filter="filter">
-
-          <template v-slot:cell(actions)="row" class="d-print-none">
-            <b-button size="sm" variant="info" @click="" v-b-tooltip.hover title="View Students"
-              :to="{ name: 'StudentPerSubjectReport', params: { instructor : selectedInstructor, schedule : row.item, academic_year : selectedAcademicYear, semester : selectedSemester} }"
-            >
-              <i class="fa fa-eye" />
-              <!-- <a :to="{ name: 'manageCurriculumSubjects', params: { data: this.selectedInstructor? this.selectedInstructor: false } }" href="#" v-b-tooltip.hover title="View Students"><i class="fa fa-eye fa-lg"/></a> -->
-            </b-button>
-          </template>
 
         </b-table>
       </b-overlay>
@@ -123,17 +110,11 @@
 
     <!-- for printing only -->
     <div id="to_print">
-      <div class="header d-none d-print-block">
-        <!-- <img src="../../assets/images/comteq_logo.png" alt="Comteq Logo" class="logo"/> -->
-        <img src="../../assets/images/header_logo.png" alt="Comteq Logo" class="logo"/>
-      </div>
       <div class="content d-none d-print-block ">
 
         <!-- dark blue #002060 -->
         <!-- red #ff0000 -->
-        <p v-if="selectedInstructor" style="color: #002060" class="h2 font-weight-bold text-center mt-3">SY {{selectedAcademicYear.academic_year}}</p>
-        <p v-if="selectedInstructor" style="color: #ff0000" class="h4 font-weight-bold text-center">{{selectedSemester.semester}}</p>
-        <p v-if="selectedInstructor" class="h1 font-weight-bold text-center">{{selectedInstructor.last_name}}, {{selectedInstructor.first_name}}</p>
+
         <b-table
           id="print_table"
           class=" table-striped "
@@ -168,34 +149,7 @@ export default {
       // variables for table
       isLoading: false,
       items: [],
-      fields: [
-        { key: 'day', label: 'Day', class: 'text-center', sortable: true},
-        { key: 'time', label: 'Time', sortable: true, class: 'text-center' ,
-          sortByFormatted: true,
-          formatter: (value, key, item) => {
-            return this.timeFormatter(item.time_start) + "-" + this.timeFormatter(item.time_end);
-            // return item.time_start  + "-" + item.time_end;
-          }
-        },
-        { key: 'subject', label: 'Subject', sortable: true, class: 'text-center' ,
-          sortByFormatted: true,
-          formatter: (value, key, item) => {
-            return item.subject.subject.subject_code + " - " + item.subject.subject.subject_title;
-          }
-        },
-        { key: 'course', label: 'Course', sortable: true, class: 'text-center',
-          sortByFormatted: true,
-          formatter: (value, key, item) => {
-            if(item.batch == 1){
-              return item.course_code + " - BLK " + item.block + " - Batch " + item.batch;
-            }else{
-              return item.course_code + " - BLK " + item.block;
-            }
-          }
-        },
-        { key: 'room.room_number', label: 'Room' , class: 'text-center' },
-        { key: 'actions', label: 'Action' , class: 'text-center d-print-none' }
-      ],
+
       totalRows: 1,
       currentPage: 1,
       perPage: 5,
