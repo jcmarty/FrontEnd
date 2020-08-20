@@ -102,7 +102,7 @@
       <!-- red #ff0000 -->
       <p  style="color: #002060" class="h2 font-weight-bold text-center mt-3">SY {{selectedAcademicYear.academic_year}}</p>
       <p  style="color: #ff0000" class="h4 font-weight-bold text-center">{{selectedSemester.semester}}</p>
-      <p  class="h1 font-weight-bold text-center">Room #{{selectedRoom.number}}</p>
+      <p  class="h1 font-weight-bold text-center" v-if="selectedRoom">Room #{{selectedRoom.number}}</p>
       <b-table
         id="print_table"
         class=" table-striped "

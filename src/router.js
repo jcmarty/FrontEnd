@@ -37,6 +37,7 @@ import ResetPassword from "./components/admin/ResetPassword.vue";
 import StudentSubjectManager from "./components/admin/StudentSubjectManager.vue";
 import StudentInformationManager from "./components/admin/StudentInformationManager.vue";
 import InstructorInformationManager from "./components/admin/InstructorInformationManager.vue";
+import InstructorsListReport from "./components/admin/InstructorsListReport.vue";
 import StudentPerSubjectReport from "./components/admin/StudentPerSubjectReport.vue";
 import StudentReport from "./components/admin/StudentReport.vue";
 import StudentGradeReport from "./components/admin/StudentGradeReport.vue";
@@ -403,6 +404,14 @@ export default new Router({
               path: '/reports/schedule/instructor',
               name: 'viewInstructorSchedule',
               component: InstructorScheduleReport,
+              beforeEnter(to, from, next){
+                setTimeout(() => next(), 2000);
+              },
+            },
+            {
+              path: '/reports/instructor/list',
+              name: 'InstructorsListReport',
+              component: InstructorsListReport,
               beforeEnter(to, from, next){
                 setTimeout(() => next(), 2000);
               },

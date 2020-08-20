@@ -62,7 +62,7 @@
 
               <router-link tag="li" to="/reports/schedule/room" v-if="isAuthorized(this.$store.getters.getSettings.room_management, 2)"><a>Room Schedule</a></router-link>
               <router-link tag="li" to="/reports/schedule/instructor" v-if="isAuthorized(this.$store.getters.getSettings.instructor_management, 2)"><a>Instructor Schedule</a></router-link>
-              <router-link tag="li" to="#" v-if="isAuthorized(this.$store.getters.getSettings.instructor_management, 2)"><a>Instructors List</a></router-link>
+              <router-link tag="li" to="/reports/instructor/list" v-if="isAuthorized(this.$store.getters.getSettings.instructor_management, 2)"><a>Instructors List</a></router-link>
               <router-link tag="li" to="/reports/Graduates" v-if="isAuthorized(this.$store.getters.getSettings.student_management, 2)"><a>Alumni Members / Graduates</a></router-link>
               <router-link tag="li" to="/ActivityLogs" v-if="isAuthorized(this.$store.getters.getSettings.activity_log, 2)" ><a>Activity Logs</a></router-link>
             </b-collapse>
