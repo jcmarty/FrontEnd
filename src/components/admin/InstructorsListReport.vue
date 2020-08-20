@@ -4,14 +4,9 @@
     <hr class="d-print-none"/>
     <div class="px-4">
 
-
         <b-button variant="primary" onclick="window.print()">
           Print
         </b-button>
-
-
-
-
 
   <div class="d-print-none mt-4 mb-4 px-4 pt-4 bg-white shadow rounded">
 
